@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  /* Paleta de acento de marca: base blanca en toda la app, estos verdes
+     solo se usan como toques de estilo (activo del menú, botones
+     primarios, badges de éxito, acentos de tarjetas). */
+  --color-brand-light: #88ec9b;
+  --color-brand-mid: #5bd191;
+  --color-brand-dark: #4bb58b;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-white text-slate-900 antialiased;
+}
