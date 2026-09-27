@@ -1,14 +1,112 @@
 @import "tailwindcss";
 
-@theme {
+/* 
+   `@theme inline` es deliberado: hace que las utilidades apunten a la variable
+   en vez de al hex literal, para que respondan al cambio de modo. Con
+   `@theme` normal quedarían congeladas en el valor claro.
+
+   Regla: los componentes NO llevan colores fijos. Si falta un token, se
+   agrega aquí, no un `bg-slate-200` en el JSX.
+ */
+
+/* El modo oscuro se activa con la clase `.dark` en <html>. Todavía no hay
+   toggle en la app, pero la guía define valores para los dos modos, así que
+   los tokens quedan listos: agregar el toggle no requiere tocar componentes. 
+   */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  /* Globales (guía › Variables CSS Globales) */
+  --bg: #f8fafc;
+  --panel: #ffffff;
+  --muted: #6b7280;
+  --fg: #0f172a;
+  --border: #e5e7eb;
+  --accent: #4f46e5; /* indigo-600 */
+  --hover-bg: #f3f4f6;
+
+  /* Acento: estados. La guía no da variantes oscuras de estos, así que son
+     iguales en ambos modos. */
+  --accent-hover: #6366f1; /* indigo-500 — hover del botón primario */
+  --accent-active: #4338ca; /* indigo-700 — hover del confirmar de diálogo */
+  --accent-ring: #a5b4fc; /* indigo-300 — anillo de foco */
+
+  /* Semánticos de estado (guía › Dialog / SavingStateDialog / Login) */
+  --success: #16a34a; /* green-600 */
+  --success-hover: #15803d; /* green-700 */
+  --success-soft: #dcfce7; /* green-100 */
+  --warning: #d97706; /* amber-600 */
+  --warning-hover: #b45309; /* amber-700 */
+  --warning-soft: #fffbeb;
+  --danger: #dc2626; /* red-600 */
+  --danger-hover: #b91c1c; /* red-700 */
+  --danger-soft: #fef2f2;
+
+  /* Navegación (guía › Sidebar) — el verde vive solo aquí. */
+  --nav-active-bg: #15803d; /* green-700 */
+  --nav-active-hover-bg: #166534; /* green-800 */
+  --nav-inactive-fg: #374151; /* gray-700 */
+  --nav-inactive-hover-bg: #dcfce7; /* green-100 */
+  --nav-subitem-fg: #4b5563; /* gray-600 */
+  --nav-subitem-hover-fg: #16a34a; /* green-600 */
+
+  /* "Cerrar sesión" usa rosa, no el rojo de error (guía › menú de usuario). */
+  --logout: #e11d48; /* rose-600 */
+  --logout-soft: #fff1f2; /* rose-50 */
+
+  /* Marca (guía › logo TopBar y gradiente del login) */
+  --brand-teal: #059e9e;
+  --brand-green: #9fff98;
+}
+
+.dark {
+  --bg: #0b1220;
+  --panel: #0f1724;
+  --muted: #9ca3af;
+  --fg: #e6eef8;
+  --border: #374151;
+  --accent: #6366f1; /* indigo-500 */
+  --hover-bg: #2d3644;
+}
+
+@theme inline {
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
 
-  /* Paleta de acento de marca: base blanca en toda la app, estos verdes
-     solo se usan como toques de estilo (activo del menú, botones
-     primarios, badges de éxito, acentos de tarjetas). */
-  --color-brand-light: #88ec9b;
-  --color-brand-mid: #5bd191;
-  --color-brand-dark: #4bb58b;
+  --color-bg: var(--bg);
+  --color-panel: var(--panel);
+  --color-muted: var(--muted);
+  --color-fg: var(--fg);
+  /* Se llama `line` y no `border` para no generar el confuso `border-border`. */
+  --color-line: var(--border);
+  --color-hover: var(--hover-bg);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-active: var(--accent-active);
+  --color-accent-ring: var(--accent-ring);
+
+  --color-success: var(--success);
+  --color-success-hover: var(--success-hover);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-hover: var(--warning-hover);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-hover: var(--danger-hover);
+  --color-danger-soft: var(--danger-soft);
+
+  --color-nav-active: var(--nav-active-bg);
+  --color-nav-active-hover: var(--nav-active-hover-bg);
+  --color-nav-inactive: var(--nav-inactive-fg);
+  --color-nav-inactive-hover: var(--nav-inactive-hover-bg);
+  --color-nav-subitem: var(--nav-subitem-fg);
+  --color-nav-subitem-hover: var(--nav-subitem-hover-fg);
+
+  --color-logout: var(--logout);
+  --color-logout-soft: var(--logout-soft);
+
+  --color-brand-teal: var(--brand-teal);
+  --color-brand-green: var(--brand-green);
 }
 
 html,
@@ -18,5 +116,5 @@ body,
 }
 
 body {
-  @apply bg-white text-slate-900 antialiased;
+  @apply bg-bg text-fg antialiased;
 }

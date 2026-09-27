@@ -2,6 +2,11 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import { CargaMasivaPage } from "@/features/configuracion-alertas/pages/CargaMasivaPage";
 import { ConsultaBloqueadosPage } from "@/features/configuracion-alertas/pages/ConsultaBloqueadosPage";
+import { ActividadesEconomicasPage } from "@/features/configuraciones/actividad-economica/pages/ActividadesEconomicasPage";
+import { EdadesPage } from "@/features/configuraciones/edades/rangos-edad/pages/EdadesPage";
+import { TiemposConstitucionPage } from "@/features/configuraciones/edades/tiempo-constitucion/pages/TiemposConstitucionPage";
+import { ExperienciasActividadPage } from "@/features/configuraciones/experiencia-actividad/pages/ExperienciasActividadPage";
+import { TiposPersonaPage } from "@/features/configuraciones/personas/pages/TiposPersonaPage";
 import { EntidadesPage } from "@/features/configuraciones/ubicacion-geografica/entidades/pages/EntidadesPage";
 import { LocalidadesPage } from "@/features/configuraciones/ubicacion-geografica/localidades/pages/LocalidadesPage";
 import { PaisesPage } from "@/features/configuraciones/ubicacion-geografica/paises/pages/PaisesPage";
@@ -55,12 +60,23 @@ export const router = createBrowserRouter([
           },
           {
             path: "configuraciones/personas",
-            element: (
-              <PlaceholderPage
-                title="Configuración de personas"
-                description="Parámetros de personas del sistema. Pendiente de definir."
-              />
-            ),
+            element: <TiposPersonaPage />,
+          },
+          {
+            path: "configuraciones/edades/rangos-edad",
+            element: <EdadesPage />,
+          },
+          {
+            path: "configuraciones/edades/tiempo-constitucion",
+            element: <TiemposConstitucionPage />,
+          },
+          {
+            path: "configuraciones/experiencia-actividad",
+            element: <ExperienciasActividadPage />,
+          },
+          {
+            path: "configuraciones/actividad-economica",
+            element: <ActividadesEconomicasPage />,
           },
           {
             path: "configuracion-alertas",

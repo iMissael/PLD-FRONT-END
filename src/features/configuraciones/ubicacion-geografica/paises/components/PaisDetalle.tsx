@@ -12,28 +12,31 @@ interface PaisDetalleProps {
  * botón de edición). Es de solo lectura; la edición completa (incluyendo
  * tipo, nacionalidad, código ISO y las zonas) se hace en `PaisForm`, que se
  * abre con el botón de lápiz.
+ *
+ * Usa el ámbar de la guía (`warning`) porque es un panel de atención: marca
+ * el registro sobre el que se va a actuar, no un estado normal de lectura.
  */
 export function PaisDetalle({ pais, nombresZonas, onEditar }: PaisDetalleProps) {
+  const etiqueta = "w-16 shrink-0 text-sm font-medium text-warning";
+  const valor =
+    "flex-1 rounded-md border border-warning/40 bg-panel px-3 py-1.5 text-sm text-fg";
+
   return (
-    <div className="flex flex-col gap-3 rounded-lg border border-amber-300 bg-amber-50/40 p-4">
+    <div className="flex flex-col gap-3 rounded-lg border border-warning/40 bg-warning-soft p-4">
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <div className="flex items-center gap-2">
-          <span className="w-16 shrink-0 text-sm font-medium text-amber-700">Clave</span>
-          <span className="flex-1 rounded-md border border-amber-300 bg-white px-3 py-1.5 text-sm text-slate-800">
-            {pais.idPais}
-          </span>
+          <span className={etiqueta}>Clave</span>
+          <span className={valor}>{pais.idPais}</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="w-16 shrink-0 text-sm font-medium text-amber-700">País</span>
-          <span className="flex-1 rounded-md border border-amber-300 bg-white px-3 py-1.5 text-sm text-slate-800">
-            {pais.nombre}
-          </span>
+          <span className={etiqueta}>País</span>
+          <span className={valor}>{pais.nombre}</span>
         </div>
       </div>
 
       <div className="flex items-center gap-2">
-        <span className="w-16 shrink-0 text-sm font-medium text-amber-700">Zona</span>
-        <span className="flex-1 rounded-md border border-amber-300 bg-white px-3 py-1.5 text-sm text-slate-800">
+        <span className={etiqueta}>Zona</span>
+        <span className={valor}>
           {nombresZonas.length > 0 ? nombresZonas.join(", ") : "Sin zona asignada"}
         </span>
       </div>
@@ -43,7 +46,7 @@ export function PaisDetalle({ pais, nombresZonas, onEditar }: PaisDetalleProps) 
         onClick={onEditar}
         title="Editar país"
         aria-label="Editar país"
-        className="self-center rounded-full border border-slate-300 bg-white p-2 text-slate-600 hover:bg-slate-50"
+        className="self-center rounded-full border border-line bg-panel p-2 text-muted hover:bg-hover hover:text-fg focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:outline-none"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

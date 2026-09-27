@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 
+import { Alert } from "@/shared/components/ui/Alert";
+import { Button } from "@/shared/components/ui/Button";
+import { card, field, label } from "@/shared/components/ui/styles";
+
 import { useMexicoPaisId } from "../hooks/useMexicoPaisId";
 import type { CrearEntidadInput, EsEntidad, EntidadResponse } from "../types/entidad";
 import { ZonaSelect } from "./ZonaSelect";
@@ -71,24 +75,21 @@ export function EntidadForm({
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-col gap-4 rounded-lg border border-slate-200 bg-white p-4"
-    >
-      <h3 className="text-sm font-semibold text-slate-900">
+    <form onSubmit={handleSubmit} className={`flex flex-col gap-4 p-4 ${card}`}>
+      <h3 className="text-sm font-semibold text-fg">
         {esNueva ? "Nueva entidad" : `Editar entidad: ${entidad.nombre}`}
       </h3>
 
       {!cargandoPais && !mexicoPaisId ? (
-        <p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">
+        <Alert tono="advertencia">
           No se encontró "México" en el catálogo de países. Registra ese país antes de
           crear entidades.
-        </p>
+        </Alert>
       ) : null}
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-1">
-          <label htmlFor="claveCurp" className="text-sm font-medium text-slate-700">
+          <label htmlFor="claveCurp" className={label}>
             Clave CURP
           </label>
           <input
@@ -100,12 +101,12 @@ export function EntidadForm({
             onChange={(event) =>
               setForm((prev) => ({ ...prev, claveCurp: event.target.value }))
             }
-            className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none"
+            className={field}
           />
         </div>
 
         <div className="flex flex-col gap-1">
-          <label htmlFor="nombreEntidad" className="text-sm font-medium text-slate-700">
+          <label htmlFor="nombreEntidad" className={label}>
             Nombre
           </label>
           <input
@@ -116,13 +117,13 @@ export function EntidadForm({
             onChange={(event) =>
               setForm((prev) => ({ ...prev, nombre: event.target.value }))
             }
-            className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none"
+            className={field}
           />
         </div>
 
         <div className="flex flex-col gap-1">
-          <label htmlFor="preBuro" className="text-sm font-medium text-slate-700">
-            Pre-buró <span className="font-normal text-slate-400">(opcional)</span>
+          <label htmlFor="preBuro" className={label}>
+            Pre-buró <span className="font-normal text-muted">(opcional)</span>
           </label>
           <input
             id="preBuro"
@@ -132,12 +133,12 @@ export function EntidadForm({
             onChange={(event) =>
               setForm((prev) => ({ ...prev, preBuro: event.target.value }))
             }
-            className="rounded-md border border-slate-300 px-3 py-2 text-sm uppercase focus:border-slate-500 focus:outline-none"
+            className={`${field} uppercase`}
           />
         </div>
 
         <div className="flex flex-col gap-1">
-          <label htmlFor="esEntidad" className="text-sm font-medium text-slate-700">
+          <label htmlFor="esEntidad" className={label}>
             ¿Es entidad federativa?
           </label>
           <select
@@ -146,7 +147,7 @@ export function EntidadForm({
             onChange={(event) =>
               setForm((prev) => ({ ...prev, esEntidad: event.target.value as EsEntidad }))
             }
-            className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none"
+            className={field}
           >
             <option value="S">Sí</option>
             <option value="N">No</option>
@@ -154,7 +155,7 @@ export function EntidadForm({
         </div>
 
         <div className="flex flex-col gap-1 sm:col-span-2">
-          <label htmlFor="zonaEntidad" className="text-sm font-medium text-slate-700">
+          <label htmlFor="zonaEntidad" className={label}>
             Zona geográfica
           </label>
           <ZonaSelect
@@ -167,20 +168,12 @@ export function EntidadForm({
       </div>
 
       <div className="flex justify-end gap-2">
-        <button
-          type="button"
-          onClick={onCancelar}
-          className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-        >
+        <Button variante="secundario" onClick={onCancelar}>
           Cancelar
-        </button>
-        <button
-          type="submit"
-          disabled={isPending || !mexicoPaisId}
-          className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-50"
-        >
+        </Button>
+        <Button type="submit" disabled={isPending || !mexicoPaisId}>
           {isPending ? "Guardando..." : "Guardar"}
-        </button>
+        </Button>
       </div>
     </form>
   );

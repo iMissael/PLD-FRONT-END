@@ -1,3 +1,5 @@
+import { emptyState, table } from "@/shared/components/ui/styles";
+
 import type { PaisResponse } from "../types/pais";
 
 interface PaisesTableProps {
@@ -23,34 +25,24 @@ export function PaisesTable({
   onSeleccionar,
 }: PaisesTableProps) {
   if (isLoading) {
-    return (
-      <p className="rounded-lg border border-slate-200 bg-white p-6 text-center text-sm text-slate-500">
-        Cargando países...
-      </p>
-    );
+    return <p className={emptyState}>Cargando países...</p>;
   }
 
   if (!paises || paises.length === 0) {
-    return (
-      <p className="rounded-lg border border-slate-200 bg-white p-6 text-center text-sm text-slate-500">
-        No hay países registrados.
-      </p>
-    );
+    return <p className={emptyState}>No hay países registrados.</p>;
   }
 
   return (
-    <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
-      <table className="min-w-full divide-y divide-slate-200 text-sm">
-        <thead className="bg-slate-700">
+    <div className={table.wrapper}>
+      <table className={table.root}>
+        <thead className={table.head}>
           <tr>
-            <th className="px-3 py-2 text-left font-medium text-white">Clave</th>
-            <th className="px-3 py-2 text-left font-medium text-white">País</th>
-            <th className="px-3 py-2 text-left font-medium text-white">
-              PLD Zona Geográfica
-            </th>
+            <th className={table.headCell}>Clave</th>
+            <th className={table.headCell}>País</th>
+            <th className={table.headCell}>PLD Zona Geográfica</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-100">
+        <tbody className={table.body}>
           {paises.map((pais) => {
             const nombresZonas = pais.zonasAsignadas
               .map((id) => nombresDeZona[id])
@@ -60,15 +52,11 @@ export function PaisesTable({
               <tr
                 key={pais.idPais}
                 onClick={() => onSeleccionar(pais)}
-                className={
-                  pais.idPais === seleccionadoId
-                    ? "cursor-pointer bg-emerald-50"
-                    : "cursor-pointer hover:bg-slate-50"
-                }
+                className={table.row(pais.idPais === seleccionadoId)}
               >
-                <td className="px-3 py-2 font-medium text-slate-800">{pais.idPais}</td>
-                <td className="px-3 py-2 text-slate-700">{pais.nombre}</td>
-                <td className="px-3 py-2 text-slate-700">
+                <td className={table.cellStrong}>{pais.idPais}</td>
+                <td className={table.cell}>{pais.nombre}</td>
+                <td className={table.cell}>
                   {nombresZonas.length > 0 ? nombresZonas.join(", ") : "—"}
                 </td>
               </tr>

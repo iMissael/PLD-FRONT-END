@@ -1,3 +1,5 @@
+import { field } from "@/shared/components/ui/styles";
+
 import { useZonasGeograficasSelect } from "../../zonas-geograficas/hooks/useZonasGeograficas";
 
 interface ZonaSelectProps {
@@ -19,7 +21,7 @@ export function ZonaSelect({ id, value, onChange, disabled, required }: ZonaSele
       disabled={disabled || isLoading}
       required={required}
       onChange={(event) => onChange(event.target.value)}
-      className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none disabled:opacity-50"
+      className={field}
     >
       <option value="">{isLoading ? "Cargando..." : "Selecciona una zona"}</option>
       {zonas?.map((zona) => (

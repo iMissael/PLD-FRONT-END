@@ -21,27 +21,28 @@ export function ZonasMultiSelect({ value, onChange, disabled }: ZonasMultiSelect
   };
 
   if (isLoading) {
-    return <p className="text-sm text-slate-500">Cargando zonas...</p>;
+    return <p className="text-sm text-muted">Cargando zonas...</p>;
   }
 
   return (
-    <div className="max-h-40 overflow-y-auto rounded-md border border-slate-300 p-2">
+    <div className="max-h-40 overflow-y-auto rounded-md border border-line p-2">
       {zonas?.map((zona) => (
         <label
           key={zona.id}
-          className="flex items-center gap-2 rounded px-2 py-1 text-sm hover:bg-slate-50"
+          className="flex items-center gap-2 rounded px-2 py-1 text-sm text-fg hover:bg-hover"
         >
           <input
             type="checkbox"
             disabled={disabled}
             checked={value.includes(zona.id)}
             onChange={() => toggle(zona.id)}
+            className="rounded border-line accent-accent"
           />
           {zona.nombre}
         </label>
       ))}
       {zonas?.length === 0 ? (
-        <p className="px-2 py-1 text-sm text-slate-400">No hay zonas registradas.</p>
+        <p className="px-2 py-1 text-sm text-muted">No hay zonas registradas.</p>
       ) : null}
     </div>
   );

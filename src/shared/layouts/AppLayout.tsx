@@ -17,6 +17,7 @@ import {
   ShieldSearchIcon,
   UserCircleIcon,
 } from "@/shared/components/icons";
+import { field } from "@/shared/components/ui/styles";
 
 interface NavLeaf {
   label: string;
@@ -76,6 +77,24 @@ const NAV_ITEMS: NavNode[] = [
         ],
       },
       { label: "Configuración de personas", to: "configuraciones/personas" },
+      {
+        label: "Configuración de edades",
+        children: [
+          { label: "Edades", to: "configuraciones/edades/rangos-edad" },
+          {
+            label: "Tiempo de constitución",
+            to: "configuraciones/edades/tiempo-constitucion",
+          },
+        ],
+      },
+      {
+        label: "Configuración de experiencia de actividad",
+        to: "configuraciones/experiencia-actividad",
+      },
+      {
+        label: "Configuración de actividad económica",
+        to: "configuraciones/actividad-economica",
+      },
     ],
   },
   {
@@ -136,9 +155,12 @@ function isNodeActive(node: NavNode, pathname: string): boolean {
 
 /**
  * Layout base de la app: barra superior (menú hamburguesa, logo, y accesos
- * de usuario) + menú lateral colapsable + contenido de la página activa. El
- * acento verde de marca se usa solo en el logo y en la sección de menú
- * abierta — el resto de la UI sigue en blanco.
+ * de usuario) + menú lateral colapsable + contenido de la página activa.
+ *
+ * Colores: todos vienen de los tokens del tema (`estilos/paleta_colores.md`).
+ * Según esa guía el verde vive **solo en el menú lateral** (item activo en
+ * `nav-active`, hover de inactivos en `nav-inactive-hover`); el acento indigo
+ * se usa para foco y el logo combina indigo con el teal de marca.
  */
 export function AppLayout() {
   const [collapsed, setCollapsed] = useState(false);
@@ -154,52 +176,45 @@ export function AppLayout() {
   );
 
   return (
-    <div className="flex h-full flex-col bg-white">
-      <header className="flex h-16 shrink-0 items-center justify-between border-b border-slate-100 bg-white px-4">
+    <div className="flex h-full flex-col bg-bg">
+      <header className="flex h-16 shrink-0 items-center justify-between border-b border-line bg-panel px-4">
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={() => setCollapsed((value) => !value)}
             aria-label={collapsed ? "Mostrar menú" : "Ocultar menú"}
-            className="rounded-md p-2 text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+            className="rounded-md p-2 text-nav-inactive hover:bg-hover focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:outline-none"
           >
             <MenuIcon className="h-5 w-5" />
           </button>
 
-          <span
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xs font-bold text-white"
-            style={{
-              background:
-                "linear-gradient(160deg, #88EC9B 0%, #5BD191 55%, #4BB58B 100%)",
-            }}
-          >
+          {/* Logo: gradiente indigo → teal de marca (guía › logo TopBar). */}
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-accent-hover to-brand-teal text-xs font-bold text-white">
             SC
           </span>
-          <span className="truncate text-sm font-semibold text-slate-900">
-            SICANET SC
-          </span>
+          <span className="truncate text-sm font-semibold text-fg">SICANET SC</span>
         </div>
 
         <div className="flex items-center gap-2">
           <button
             type="button"
             title="Notificaciones"
-            className="rounded-full p-2 text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+            className="rounded-full p-2 text-nav-inactive hover:bg-hover focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:outline-none"
           >
             <BellIcon className="h-5 w-5" />
           </button>
           <button
             type="button"
             title="Perfil"
-            className="flex items-center gap-2 rounded-md px-2 py-1.5 text-slate-700 hover:bg-slate-50"
+            className="flex items-center gap-2 rounded-md px-2 py-1.5 text-nav-inactive hover:bg-hover focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:outline-none"
           >
-            <UserCircleIcon className="h-7 w-7 text-slate-400" />
+            <UserCircleIcon className="h-7 w-7 text-muted" />
             <span className="text-sm font-medium">Nombre</span>
           </button>
           <button
             type="button"
             title="Más opciones"
-            className="rounded-full p-2 text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+            className="rounded-full p-2 text-nav-inactive hover:bg-hover focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:outline-none"
           >
             <DotsVerticalIcon className="h-5 w-5" />
           </button>
@@ -208,20 +223,20 @@ export function AppLayout() {
 
       <div className="flex min-h-0 flex-1">
         <aside
-          className={`flex shrink-0 flex-col overflow-y-auto border-r border-slate-100 bg-white transition-[width] duration-200 ${
+          className={`flex shrink-0 flex-col overflow-y-auto border-r border-line bg-panel transition-[width] duration-200 ${
             collapsed ? "w-[4.5rem]" : "w-64"
           }`}
         >
           {!collapsed && (
-            <div className="border-b border-slate-100 p-3">
+            <div className="border-b border-line p-3">
               <label className="relative block">
-                <SearchIcon className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <SearchIcon className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
                 <input
                   type="search"
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder="Buscar en el menú..."
-                  className="w-full rounded-md border border-slate-200 bg-slate-50 py-2 pl-8 pr-3 text-sm text-slate-700 placeholder:text-slate-400 focus:border-[#5BD191] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#88EC9B]/40"
+                  className={`w-full pl-8 ${field} placeholder:text-muted`}
                 />
               </label>
             </div>
@@ -263,7 +278,9 @@ export function AppLayout() {
                       // Pendiente: aún no hay lógica real de sesión que cerrar.
                     }}
                     className={[
-                      "flex items-center gap-3 rounded-md text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900",
+                      // La guía pide rosa para "cerrar sesión", distinto del
+                      // rojo de error.
+                      "flex items-center gap-3 rounded-md text-sm font-medium text-logout transition-colors hover:bg-logout-soft",
                       collapsed ? "mx-2 justify-center px-0 py-2.5" : "mx-2 px-3 py-2.5",
                     ].join(" ")}
                   >
@@ -286,29 +303,37 @@ export function AppLayout() {
 
 function SectionLabel({ children }: { children: string }) {
   return (
-    <p className="px-4 pb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
+    <p className="px-4 pb-2 text-xs font-semibold uppercase tracking-wide text-muted">
       {children}
     </p>
   );
 }
 
+/**
+ * Item de primer nivel. La guía lo define sólido: activo en verde con texto
+ * blanco, inactivo en gris con hover verde muy claro.
+ */
 function navLinkClassName(collapsed: boolean) {
   return ({ isActive }: { isActive: boolean }) =>
     [
       "flex items-center gap-3 rounded-md text-sm font-medium transition-colors",
       collapsed ? "mx-2 justify-center px-0 py-2.5" : "mx-2 px-3 py-2.5",
       isActive
-        ? "bg-gradient-to-r from-[#88EC9B]/25 to-[#5BD191]/15 text-[#1f6b4d]"
-        : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
+        ? "bg-nav-active text-white hover:bg-nav-active-hover"
+        : "text-nav-inactive hover:bg-nav-inactive-hover",
     ].join(" ");
 }
 
+/**
+ * Sub-item: la guía no lo pinta de fondo, solo cambia el color del texto —
+ * verde cuando está activo, gris con hover verde cuando no.
+ */
 function nestedLinkClassName({ isActive }: { isActive: boolean }) {
   return [
     "rounded-md px-3 py-2 text-sm transition-colors",
     isActive
-      ? "bg-gradient-to-r from-[#88EC9B]/25 to-[#5BD191]/15 font-medium text-[#1f6b4d]"
-      : "text-slate-500 hover:bg-slate-50 hover:text-slate-800",
+      ? "font-medium text-nav-active hover:text-nav-active-hover"
+      : "text-nav-subitem hover:text-nav-subitem-hover",
   ].join(" ");
 }
 
@@ -318,7 +343,7 @@ function nestedLinkClassName({ isActive }: { isActive: boolean }) {
  *   se muestra como un ícono suelto (usando el ícono del nodo raíz).
  * - Expandido, una hoja es un NavLink; un grupo es una sección plegable
  *   cuyos hijos se renderizan recursivamente, indentados. El grupo abierto
- *   se resalta en verde sólido (como "Procesos" en la referencia).
+ *   se resalta en el verde sólido que la guía define para el item activo.
  */
 function NavNodeRenderer({
   node,
@@ -386,7 +411,7 @@ function NavGroupSection({ node, depth }: { node: NavGroup; depth: number }) {
   const destacado = depth === 0 && open;
 
   return (
-    <div className={depth === 0 ? "" : ""}>
+    <div>
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
@@ -395,27 +420,22 @@ function NavGroupSection({ node, depth }: { node: NavGroup; depth: number }) {
             ? [
                 "mx-2 flex w-[calc(100%-1rem)] items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors",
                 destacado
-                  ? "text-white shadow-sm"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
+                  ? "bg-nav-active text-white hover:bg-nav-active-hover"
+                  : "text-nav-inactive hover:bg-nav-inactive-hover",
               ].join(" ")
-            : "flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-800"
-        }
-        style={
-          destacado
-            ? { background: "linear-gradient(135deg, #5BD191 0%, #4BB58B 100%)" }
-            : undefined
+            : "flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-nav-subitem hover:text-nav-subitem-hover"
         }
       >
         {Icon && <Icon className="h-5 w-5 shrink-0" />}
         <span className="flex-1 truncate text-left">{node.label}</span>
         <ChevronDownIcon
           className={`h-4 w-4 shrink-0 transition-transform ${
-            destacado ? "text-white" : "text-slate-400"
+            destacado ? "text-white" : "text-muted"
           } ${open ? "" : "-rotate-90"}`}
         />
       </button>
       {open && (
-        <div className="ml-4 mt-0.5 flex flex-col gap-0.5 border-l border-slate-100 pl-2">
+        <div className="ml-4 mt-0.5 flex flex-col gap-0.5 border-l border-line pl-2">
           {node.children.map((child) => (
             <NavNodeRenderer
               key={child.label}

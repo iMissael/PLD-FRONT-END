@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
+import { Alert } from "@/shared/components/ui/Alert";
+import { Button } from "@/shared/components/ui/Button";
 
 import { ZonaAsignaciones } from "../components/ZonaAsignaciones";
 import { ZonaForm } from "../components/ZonaForm";
@@ -76,31 +78,25 @@ export function ZonasGeograficasPage() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-slate-900">Zonas geográficas</h2>
-          <p className="text-sm text-slate-500">
+          <h2 className="text-xl font-semibold text-fg">Zonas geográficas</h2>
+          <p className="text-sm text-muted">
             Administra las zonas de riesgo PLD y las entidades/países asignados a cada
             una.
           </p>
         </div>
-        <button
-          type="button"
+        <Button
           onClick={() => {
             setCreandoNueva(true);
             setSeleccionada(null);
             setVerZona(null);
             setMensajeError(null);
           }}
-          className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
         >
           Nueva zona
-        </button>
+        </Button>
       </div>
 
-      {mensajeError ? (
-        <p className="rounded-md border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-700">
-          {mensajeError}
-        </p>
-      ) : null}
+      {mensajeError ? <Alert>{mensajeError}</Alert> : null}
 
       <ZonasTable
         zonas={zonas}
@@ -134,14 +130,14 @@ export function ZonasGeograficasPage() {
             isPending={crear.isPending || actualizar.isPending}
           />
           {seleccionada ? (
-            <button
-              type="button"
+            <Button
+              variante="peligro"
+              className="self-start"
               onClick={handleEliminar}
               disabled={eliminar.isPending}
-              className="self-start rounded-md border border-red-300 px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50 disabled:opacity-50"
             >
               {eliminar.isPending ? "Eliminando..." : "Eliminar zona"}
-            </button>
+            </Button>
           ) : null}
         </div>
       ) : null}
