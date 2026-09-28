@@ -70,8 +70,6 @@ function fallbackMessage(status: number): string {
  * un AppError. Se usa como interceptor de respuesta, así que siempre debe
  * terminar en un `Promise.reject`.
  */
-import { setAuthToken } from "@/features/auth/authStore";
-
 export function errorInterceptor(error: AxiosError<ProblemDetailBody>): Promise<never> {
   if (!error.response) {
     // Sin respuesta: caída de red, CORS, timeout, backend no disponible, etc.
@@ -87,15 +85,6 @@ export function errorInterceptor(error: AxiosError<ProblemDetailBody>): Promise<
   }
 
   const { status, data } = error.response;
-
-  if (status === 401) {
-    setAuthToken(null);
-    if (typeof window !== "undefined") {
-      sessionStorage.removeItem("pld_auth_user");
-      sessionStorage.removeItem("pld_auth_role");
-      sessionStorage.removeItem("pld_auth_permissions");
-    }
-  }
 
   return Promise.reject(
     new AppError({

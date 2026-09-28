@@ -15,8 +15,12 @@ export function setAuthToken(token: string | null): void {
 }
 
 export function getAuthToken(): string | null {
-  if (!memoryToken && typeof window !== "undefined") {
-    memoryToken = sessionStorage.getItem(TOKEN_KEY);
+  if (typeof window !== "undefined") {
+    const tokenFromStorage = sessionStorage.getItem(TOKEN_KEY);
+    if (tokenFromStorage) {
+      memoryToken = tokenFromStorage;
+      return tokenFromStorage;
+    }
   }
   return memoryToken;
 }

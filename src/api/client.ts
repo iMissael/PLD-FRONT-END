@@ -22,6 +22,7 @@ apiClient.interceptors.request.use((config) => {
   const token = getAuthToken();
   if (token) {
     config.headers.set("Authorization", `Bearer ${token}`);
+    config.headers["Authorization"] = `Bearer ${token}`;
   }
   return tenantInterceptor(config);
 });
