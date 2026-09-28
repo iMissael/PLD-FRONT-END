@@ -1,3 +1,5 @@
+import { emptyState, table } from "@/shared/components/ui/styles";
+
 import type { LocalidadResponse } from "../types/localidad";
 
 interface LocalidadesTableProps {
@@ -14,51 +16,37 @@ export function LocalidadesTable({
   onSeleccionar,
 }: LocalidadesTableProps) {
   if (isLoading) {
-    return (
-      <p className="rounded-lg border border-slate-200 bg-white p-6 text-center text-sm text-slate-500">
-        Cargando localidades...
-      </p>
-    );
+    return <p className={emptyState}>Cargando localidades...</p>;
   }
 
   if (!localidades || localidades.length === 0) {
     return (
-      <p className="rounded-lg border border-slate-200 bg-white p-6 text-center text-sm text-slate-500">
-        No hay localidades registradas.
-      </p>
+      <p className={emptyState}>No hay localidades que coincidan con los filtros.</p>
     );
   }
 
   return (
-    <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
-      <table className="min-w-full divide-y divide-slate-200 text-sm">
-        <thead className="bg-slate-50">
+    <div className={table.wrapper}>
+      <table className={table.root}>
+        <thead className={table.head}>
           <tr>
-            <th className="px-3 py-2 text-left font-medium text-slate-500">Nombre</th>
-            <th className="px-3 py-2 text-left font-medium text-slate-500">Municipio</th>
-            <th className="px-3 py-2 text-left font-medium text-slate-500">
-              Tipo de asentamiento
-            </th>
-            <th className="px-3 py-2 text-left font-medium text-slate-500">
-              Nivel de riesgo
-            </th>
+            <th className={table.headCell}>Nombre</th>
+            <th className={table.headCell}>Municipio</th>
+            <th className={table.headCell}>Tipo de asentamiento</th>
+            <th className={table.headCell}>Nivel de riesgo</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-100">
+        <tbody className={table.body}>
           {localidades.map((localidad) => (
             <tr
               key={localidad.idLocalidad}
               onClick={() => onSeleccionar(localidad)}
-              className={
-                localidad.idLocalidad === seleccionadaId
-                  ? "cursor-pointer bg-success-soft/50"
-                  : "cursor-pointer hover:bg-slate-50"
-              }
+              className={table.row(localidad.idLocalidad === seleccionadaId)}
             >
-              <td className="px-3 py-2 font-medium text-slate-800">{localidad.nombre}</td>
-              <td className="px-3 py-2 text-slate-700">{localidad.nombreMunicipio}</td>
-              <td className="px-3 py-2 text-slate-700">{localidad.tipoAsentamiento}</td>
-              <td className="px-3 py-2 text-slate-700">
+              <td className={table.cellStrong}>{localidad.nombre}</td>
+              <td className={table.cell}>{localidad.nombreMunicipio}</td>
+              <td className={table.cell}>{localidad.tipoAsentamiento}</td>
+              <td className={table.cell}>
                 {localidad.nivelRiesgoDescripcion} ({localidad.nivelRiesgoValor})
               </td>
             </tr>

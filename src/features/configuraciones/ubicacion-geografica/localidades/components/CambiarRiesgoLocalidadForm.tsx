@@ -1,5 +1,8 @@
 import { useState } from "react";
 
+import { Button } from "@/shared/components/ui/CatalogoButton";
+import { card, label } from "@/shared/components/ui/styles";
+
 import { NivelRiesgoSelect } from "../../niveles-riesgo/components/NivelRiesgoSelect";
 import type { LocalidadResponse } from "../types/localidad";
 
@@ -28,16 +31,13 @@ export function CambiarRiesgoLocalidadForm({
   );
 
   return (
-    <div className="flex flex-col gap-4 rounded-lg border border-slate-200 bg-white p-4">
-      <h3 className="text-sm font-semibold text-slate-900">
+    <div className={`flex flex-col gap-4 p-4 ${card}`}>
+      <h3 className="text-sm font-semibold text-foreground">
         Cambiar nivel de riesgo: {localidad.nombre}
       </h3>
 
       <div className="flex flex-col gap-1 sm:max-w-xs">
-        <label
-          htmlFor="nivelRiesgoLocalidad"
-          className="text-sm font-medium text-slate-700"
-        >
+        <label htmlFor="nivelRiesgoLocalidad" className={label}>
           Nivel de riesgo
         </label>
         <NivelRiesgoSelect
@@ -49,21 +49,15 @@ export function CambiarRiesgoLocalidadForm({
       </div>
 
       <div className="flex justify-end gap-2">
-        <button
-          type="button"
-          onClick={onCancelar}
-          className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-        >
+        <Button variante="secundario" onClick={onCancelar}>
           Cancelar
-        </button>
-        <button
-          type="button"
+        </Button>
+        <Button
           disabled={isPending || nivelRiesgoId === ""}
           onClick={() => nivelRiesgoId !== "" && onGuardar(nivelRiesgoId)}
-          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-hover disabled:opacity-50"
         >
           {isPending ? "Guardando..." : "Guardar"}
-        </button>
+        </Button>
       </div>
     </div>
   );

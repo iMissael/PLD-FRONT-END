@@ -1,3 +1,5 @@
+import { card, emptyState } from "@/shared/components/ui/styles";
+
 import { useEntidadesDeZona, usePaisesDeZona } from "../hooks/useZonasGeograficas";
 import type { ZonaGeograficaResponse } from "../types/zonaGeografica";
 
@@ -35,15 +37,15 @@ export function ZonaAsignaciones({ zona, onCerrar }: ZonaAsignacionesProps) {
   );
 
   return (
-    <div className="flex flex-col gap-4 rounded-lg border border-slate-200 bg-white p-4">
+    <div className={`flex flex-col gap-4 p-4 ${card}`}>
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-slate-900">
+        <h3 className="text-sm font-semibold text-foreground">
           {esZonaDeEntidades ? "Entidades" : "Países"} de la zona: {zona.nombre}
         </h3>
         <button
           type="button"
           onClick={onCerrar}
-          className="text-sm font-medium text-slate-500 hover:text-slate-700"
+          className="text-sm font-medium text-muted-foreground hover:text-foreground"
         >
           Cerrar
         </button>
@@ -51,44 +53,40 @@ export function ZonaAsignaciones({ zona, onCerrar }: ZonaAsignacionesProps) {
 
       {esZonaDeEntidades ? (
         <div className="flex flex-col gap-2">
-          <p className="text-sm font-medium text-slate-700">
+          <p className="text-sm font-medium text-foreground">
             Entidades asignadas ({entidadesDeZona?.length ?? 0})
           </p>
           {cargandoEntidadesZona ? (
-            <p className="text-sm text-slate-500">Cargando...</p>
+            <p className="text-sm text-muted-foreground">Cargando...</p>
           ) : entidadesDeZona && entidadesDeZona.length > 0 ? (
-            <ul className="max-h-96 divide-y divide-slate-100 overflow-y-auto rounded-md border border-slate-200">
+            <ul className="max-h-96 divide-y divide-border overflow-y-auto rounded-md border border-border">
               {entidadesDeZona.map((entidad) => (
-                <li key={entidad.id} className="px-3 py-2 text-sm text-slate-800">
+                <li key={entidad.id} className="px-3 py-2 text-sm text-foreground">
                   {entidad.nombre}
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-500">
-              Esta zona no tiene entidades asignadas.
-            </p>
+            <p className={emptyState}>Esta zona no tiene entidades asignadas.</p>
           )}
         </div>
       ) : (
         <div className="flex flex-col gap-2">
-          <p className="text-sm font-medium text-slate-700">
+          <p className="text-sm font-medium text-foreground">
             Países asignados ({paisesDeZona?.length ?? 0})
           </p>
           {cargandoPaisesZona ? (
-            <p className="text-sm text-slate-500">Cargando...</p>
+            <p className="text-sm text-muted-foreground">Cargando...</p>
           ) : paisesDeZona && paisesDeZona.length > 0 ? (
-            <ul className="max-h-96 divide-y divide-slate-100 overflow-y-auto rounded-md border border-slate-200">
+            <ul className="max-h-96 divide-y divide-border overflow-y-auto rounded-md border border-border">
               {paisesDeZona.map((pais) => (
-                <li key={pais.id} className="px-3 py-2 text-sm text-slate-800">
+                <li key={pais.id} className="px-3 py-2 text-sm text-foreground">
                   {pais.nombre}
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-500">
-              Esta zona no tiene países asignados.
-            </p>
+            <p className={emptyState}>Esta zona no tiene países asignados.</p>
           )}
         </div>
       )}

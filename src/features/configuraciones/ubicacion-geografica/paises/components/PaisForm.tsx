@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 
+import { Button } from "@/shared/components/ui/CatalogoButton";
+import { card, field, label } from "@/shared/components/ui/styles";
+
 import { useZonaIdsDePais } from "../hooks/usePaises";
 import type { ActualizarPaisInput, PaisResponse } from "../types/pais";
 import { ZonasMultiSelect } from "./ZonasMultiSelect";
@@ -59,15 +62,14 @@ export function PaisForm({ pais, onGuardar, onCancelar, isPending }: PaisFormPro
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-col gap-4 rounded-lg border border-slate-200 bg-white p-4"
-    >
-      <h3 className="text-sm font-semibold text-slate-900">Editar país: {pais.nombre}</h3>
+    <form onSubmit={handleSubmit} className={`flex flex-col gap-4 p-4 ${card}`}>
+      <h3 className="text-sm font-semibold text-foreground">
+        Editar país: {pais.nombre}
+      </h3>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-1">
-          <label htmlFor="nombrePais" className="text-sm font-medium text-slate-700">
+          <label htmlFor="nombrePais" className={label}>
             Nombre
           </label>
           <input
@@ -78,12 +80,12 @@ export function PaisForm({ pais, onGuardar, onCancelar, isPending }: PaisFormPro
             onChange={(event) =>
               setForm((prev) => ({ ...prev, nombre: event.target.value }))
             }
-            className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none"
+            className={field}
           />
         </div>
 
         <div className="flex flex-col gap-1">
-          <label htmlFor="nacionalidad" className="text-sm font-medium text-slate-700">
+          <label htmlFor="nacionalidad" className={label}>
             Nacionalidad
           </label>
           <input
@@ -94,13 +96,14 @@ export function PaisForm({ pais, onGuardar, onCancelar, isPending }: PaisFormPro
             onChange={(event) =>
               setForm((prev) => ({ ...prev, nacionalidad: event.target.value }))
             }
-            className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none"
+            className={field}
           />
         </div>
 
         <div className="flex flex-col gap-1">
-          <label htmlFor="codigoIso" className="text-sm font-medium text-slate-700">
-            Código ISO <span className="font-normal text-slate-400">(opcional)</span>
+          <label htmlFor="codigoIso" className={label}>
+            Código ISO{" "}
+            <span className="font-normal text-muted-foreground">(opcional)</span>
           </label>
           <input
             id="codigoIso"
@@ -110,13 +113,13 @@ export function PaisForm({ pais, onGuardar, onCancelar, isPending }: PaisFormPro
             onChange={(event) =>
               setForm((prev) => ({ ...prev, codigoIso: event.target.value }))
             }
-            className="rounded-md border border-slate-300 px-3 py-2 text-sm uppercase focus:border-slate-500 focus:outline-none"
+            className={`${field} uppercase`}
           />
         </div>
 
         <div className="flex flex-col gap-1">
-          <label htmlFor="tipo" className="text-sm font-medium text-slate-700">
-            Tipo <span className="font-normal text-slate-400">(opcional)</span>
+          <label htmlFor="tipo" className={label}>
+            Tipo <span className="font-normal text-muted-foreground">(opcional)</span>
           </label>
           <input
             id="tipo"
@@ -126,12 +129,12 @@ export function PaisForm({ pais, onGuardar, onCancelar, isPending }: PaisFormPro
             onChange={(event) =>
               setForm((prev) => ({ ...prev, tipo: event.target.value }))
             }
-            className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none"
+            className={field}
           />
         </div>
 
         <div className="flex flex-col gap-1 sm:col-span-2">
-          <span className="text-sm font-medium text-slate-700">Zonas asignadas</span>
+          <span className={label}>Zonas asignadas</span>
           <ZonasMultiSelect
             value={form.zonaIds}
             onChange={(zonaIds) => setForm((prev) => ({ ...prev, zonaIds }))}
@@ -140,20 +143,12 @@ export function PaisForm({ pais, onGuardar, onCancelar, isPending }: PaisFormPro
       </div>
 
       <div className="flex justify-end gap-2">
-        <button
-          type="button"
-          onClick={onCancelar}
-          className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-        >
+        <Button variante="secundario" onClick={onCancelar}>
           Cancelar
-        </button>
-        <button
-          type="submit"
-          disabled={isPending}
-          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-hover disabled:opacity-50"
-        >
+        </Button>
+        <Button type="submit" disabled={isPending}>
           {isPending ? "Guardando..." : "Guardar"}
-        </button>
+        </Button>
       </div>
     </form>
   );

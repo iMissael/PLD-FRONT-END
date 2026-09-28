@@ -1,6 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
+import { Alert } from "@/shared/components/ui/Alert";
+import { Button } from "@/shared/components/ui/CatalogoButton";
+import { field, label } from "@/shared/components/ui/styles";
+import { useDebounce } from "@/shared/hooks/useDebounce";
 
 import { CambiarRiesgoLocalidadForm } from "../components/CambiarRiesgoLocalidadForm";
 import { EntidadMunicipioFiltro } from "../components/EntidadMunicipioFiltro";
@@ -9,18 +13,43 @@ import { useLocalidades } from "../hooks/useLocalidades";
 import { useCambiarNivelRiesgoLocalidad } from "../hooks/useLocalidadesMutations";
 import type { LocalidadResponse } from "../types/localidad";
 
-export function LocalidadesPage() {
-  const [busqueda, setBusqueda] = useState("");
-  const [busquedaAplicada, setBusquedaAplicada] = useState("");
-  const [idMunicipio, setIdMunicipio] = useState<string | null>(null);
+const LOCALIDADES_POR_PAGINA = 15;
 
-  const { data: localidades, isLoading } = useLocalidades({
-    ...(busquedaAplicada ? { busqueda: busquedaAplicada } : {}),
-    ...(idMunicipio ? { idMunicipio } : {}),
-  });
+/**
+ * Pantalla de Localidades: consulta + cambio de nivel de riesgo. No hay alta
+ * ni edición completa (el legacy tampoco las tiene aquí).
+ *
+ * A diferencia del resto de los catálogos, **la búsqueda y la paginación son
+ * del lado del servidor**: `cat_localidad` tiene ~296 mil filas activas, así
+ * que no se puede traer todo y filtrar en memoria. El texto de búsqueda pasa
+ * por un debounce para no disparar una petición por tecla.
+ */
+export function LocalidadesPage() {
+  const [textoBusqueda, setTextoBusqueda] = useState("");
+  const busqueda = useDebounce(textoBusqueda);
+  const [idEntidad, setIdEntidad] = useState<string | null>(null);
+  const [idMunicipio, setIdMunicipio] = useState<string | null>(null);
+  /** Índice base 0, igual que el backend. */
+  const [pagina, setPagina] = useState(0);
 
   const [seleccionada, setSeleccionada] = useState<LocalidadResponse | null>(null);
   const [mensajeError, setMensajeError] = useState<string | null>(null);
+
+  // Al cambiar de filtro, la página actual puede quedar fuera de rango del
+  // nuevo resultado; se vuelve al inicio.
+  useEffect(() => {
+    setPagina(0);
+  }, [busqueda, idEntidad, idMunicipio]);
+
+  // Los tres filtros se combinan en el backend: la búsqueda sobre el nombre de
+  // la localidad, y entidad/municipio como restricciones por separado.
+  const { data, isLoading, isFetching } = useLocalidades({
+    ...(busqueda.trim() ? { busqueda: busqueda.trim() } : {}),
+    ...(idEntidad ? { idEntidad } : {}),
+    ...(idMunicipio ? { idMunicipio } : {}),
+    pagina,
+    tamanio: LOCALIDADES_POR_PAGINA,
+  });
 
   const cambiarRiesgo = useCambiarNivelRiesgoLocalidad();
 
@@ -40,54 +69,46 @@ export function LocalidadesPage() {
     );
   };
 
+  const totalElementos = data?.totalElementos ?? 0;
+  const totalPaginas = data?.totalPaginas ?? 0;
+  const esUltimaPagina = totalPaginas === 0 || pagina >= totalPaginas - 1;
+
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="text-xl font-semibold text-slate-900">Localidades</h2>
-        <p className="text-sm text-slate-500">
+        <h2 className="text-xl font-semibold text-foreground">Localidades</h2>
+        <p className="text-sm text-muted-foreground">
           Consulta las localidades del catálogo y ajusta su nivel de riesgo PLD. El alta y
           la edición completa de localidades no están disponibles en esta vista.
         </p>
       </div>
 
-      {mensajeError ? (
-        <p className="rounded-md border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-700">
-          {mensajeError}
-        </p>
-      ) : null}
+      {mensajeError ? <Alert>{mensajeError}</Alert> : null}
 
-      <div className="flex flex-wrap items-end gap-3">
+      <div className="flex flex-wrap items-start gap-3">
         <div className="flex flex-col gap-1">
-          <label
-            htmlFor="busquedaLocalidad"
-            className="text-sm font-medium text-slate-700"
-          >
-            Buscar
+          <label htmlFor="busquedaLocalidad" className={label}>
+            Buscar localidad
           </label>
           <input
             id="busquedaLocalidad"
-            type="text"
-            placeholder="Nombre o clave..."
-            value={busqueda}
-            onChange={(event) => setBusqueda(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === "Enter") setBusquedaAplicada(busqueda.trim());
-            }}
-            className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none"
+            type="search"
+            placeholder="Nombre de la localidad..."
+            value={textoBusqueda}
+            onChange={(event) => setTextoBusqueda(event.target.value)}
+            className={field}
           />
         </div>
-        <button
-          type="button"
-          onClick={() => setBusquedaAplicada(busqueda.trim())}
-          className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-        >
-          Buscar
-        </button>
-        <EntidadMunicipioFiltro onCambiarMunicipio={setIdMunicipio} />
+        <EntidadMunicipioFiltro
+          onCambiar={({ idEntidad: entidad, idMunicipio: municipio }) => {
+            setIdEntidad(entidad);
+            setIdMunicipio(municipio);
+          }}
+        />
       </div>
 
       <LocalidadesTable
-        localidades={localidades}
+        localidades={data?.contenido}
         isLoading={isLoading}
         seleccionadaId={seleccionada?.idLocalidad ?? null}
         onSeleccionar={(localidad) => {
@@ -95,6 +116,36 @@ export function LocalidadesPage() {
           setMensajeError(null);
         }}
       />
+
+      {!isLoading && totalElementos > 0 ? (
+        <div className="flex items-center justify-between text-sm text-muted-foreground">
+          <span>
+            {totalElementos.toLocaleString("es-MX")} localidad
+            {totalElementos === 1 ? "" : "es"} — página {pagina + 1} de {totalPaginas}
+            {/* `keepPreviousData` deja la tabla anterior visible mientras
+                llega la nueva página; este aviso explica por qué no parpadea. */}
+            {isFetching ? " · actualizando..." : ""}
+          </span>
+          <div className="flex gap-2">
+            <Button
+              variante="secundario"
+              className="px-3 py-1.5"
+              onClick={() => setPagina((p) => Math.max(0, p - 1))}
+              disabled={pagina === 0 || isFetching}
+            >
+              Anterior
+            </Button>
+            <Button
+              variante="secundario"
+              className="px-3 py-1.5"
+              onClick={() => setPagina((p) => p + 1)}
+              disabled={esUltimaPagina || isFetching}
+            >
+              Siguiente
+            </Button>
+          </div>
+        </div>
+      ) : null}
 
       {seleccionada ? (
         <CambiarRiesgoLocalidadForm

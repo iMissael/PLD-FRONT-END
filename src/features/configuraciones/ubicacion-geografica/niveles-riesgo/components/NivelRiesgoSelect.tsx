@@ -1,3 +1,5 @@
+import { field } from "@/shared/components/ui/styles";
+
 import { useNivelesRiesgo } from "../hooks/useNivelesRiesgo";
 
 interface NivelRiesgoSelectProps {
@@ -10,7 +12,8 @@ interface NivelRiesgoSelectProps {
 
 /**
  * `<select>` compartido para el catálogo de Niveles de Riesgo. Lo usan los
- * formularios de Zonas geográficas, Países y Localidades (cambio de riesgo).
+ * formularios de Zonas geográficas, Países, Localidades (cambio de riesgo) y
+ * los catálogos de Configuraciones.
  */
 export function NivelRiesgoSelect({
   id,
@@ -28,12 +31,12 @@ export function NivelRiesgoSelect({
       disabled={disabled || isLoading}
       required={required}
       onChange={(event) => onChange(Number(event.target.value))}
-      className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none disabled:opacity-50"
+      className={field}
     >
       <option value="">{isLoading ? "Cargando..." : "Selecciona un nivel"}</option>
       {niveles?.map((nivel) => (
         <option key={nivel.id} value={nivel.id}>
-          {nivel.nivel_riesgo_descripcion} ({nivel.nivel_riesgo_valor})
+          {nivel.nivelRiesgoDescripcion} ({nivel.nivelRiesgoValor})
         </option>
       ))}
     </select>

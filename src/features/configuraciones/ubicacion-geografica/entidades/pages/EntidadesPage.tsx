@@ -1,7 +1,13 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
+import { Alert } from "@/shared/components/ui/Alert";
+import { Button } from "@/shared/components/ui/CatalogoButton";
 
+import {
+  BusquedaEntidadesForm,
+  type FiltroEntidades,
+} from "../components/BusquedaEntidadesForm";
 import { EntidadForm } from "../components/EntidadForm";
 import { EntidadesTable } from "../components/EntidadesTable";
 import { useEntidades } from "../hooks/useEntidades";
@@ -12,12 +18,57 @@ import {
 } from "../hooks/useEntidadesMutations";
 import type { CrearEntidadInput, EntidadResponse } from "../types/entidad";
 
+const ENTIDADES_POR_PAGINA = 15;
+
+/**
+ * Normaliza texto para comparar en la búsqueda: mayúsculas y sin acentos,
+ * así "mexico" encuentra "MÉXICO" sin que el usuario tenga que escribir el
+ * acento. Igual que en Países.
+ */
+function normalizar(texto: string): string {
+  return texto.normalize("NFD").replace(/[̀-ͯ]/g, "").toUpperCase();
+}
+
 export function EntidadesPage() {
   const [busqueda, setBusqueda] = useState("");
-  const [busquedaAplicada, setBusquedaAplicada] = useState("");
-  const { data: entidades, isLoading } = useEntidades(
-    busquedaAplicada ? { busqueda: busquedaAplicada } : undefined,
+  const [filtro, setFiltro] = useState<FiltroEntidades>("ENTIDAD");
+  const [pagina, setPagina] = useState(1);
+
+  // Se trae el catálogo completo una sola vez (es pequeño, un puñado de
+  // entidades) y el filtrado (por nombre/clave CURP o por nombre de zona)
+  // se hace aquí mismo, en memoria, para que la búsqueda responda al
+  // instante con cada letra en vez de ir al backend en cada tecla — igual
+  // que en Países.
+  const { data: entidadesBackend, isLoading } = useEntidades();
+
+  const entidadesFiltradas = useMemo(() => {
+    if (!entidadesBackend) return entidadesBackend;
+    const termino = normalizar(busqueda.trim());
+    if (!termino) return entidadesBackend;
+
+    if (filtro === "ZONA") {
+      return entidadesBackend.filter((entidad) =>
+        normalizar(entidad.nombreZona ?? "").includes(termino),
+      );
+    }
+
+    return entidadesBackend.filter(
+      (entidad) =>
+        normalizar(entidad.nombre).includes(termino) ||
+        normalizar(entidad.claveCurp ?? "").includes(termino),
+    );
+  }, [entidadesBackend, filtro, busqueda]);
+
+  const totalPaginas = Math.max(
+    1,
+    Math.ceil((entidadesFiltradas?.length ?? 0) / ENTIDADES_POR_PAGINA),
   );
+  const paginaActual = Math.min(pagina, totalPaginas);
+  const entidades = useMemo(() => {
+    if (!entidadesFiltradas) return entidadesFiltradas;
+    const inicio = (paginaActual - 1) * ENTIDADES_POR_PAGINA;
+    return entidadesFiltradas.slice(inicio, inicio + ENTIDADES_POR_PAGINA);
+  }, [entidadesFiltradas, paginaActual]);
 
   const [seleccionada, setSeleccionada] = useState<EntidadResponse | null>(null);
   const [creandoNueva, setCreandoNueva] = useState(false);
@@ -66,49 +117,31 @@ export function EntidadesPage() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-slate-900">Entidades</h2>
-          <p className="text-sm text-slate-500">
+          <h2 className="text-xl font-semibold text-foreground">Entidades</h2>
+          <p className="text-sm text-muted-foreground">
             Administra las entidades federativas y su zona de riesgo asignada.
           </p>
         </div>
-        <button
-          type="button"
+        <Button
           onClick={() => {
             setCreandoNueva(true);
             setSeleccionada(null);
             setMensajeError(null);
           }}
-          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-hover"
         >
           Nueva entidad
-        </button>
+        </Button>
       </div>
 
-      {mensajeError ? (
-        <p className="rounded-md border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-700">
-          {mensajeError}
-        </p>
-      ) : null}
+      {mensajeError ? <Alert>{mensajeError}</Alert> : null}
 
-      <div className="flex gap-2">
-        <input
-          type="text"
-          placeholder="Buscar por nombre de entidad..."
-          value={busqueda}
-          onChange={(event) => setBusqueda(event.target.value)}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") setBusquedaAplicada(busqueda.trim());
-          }}
-          className="w-full max-w-sm rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none"
-        />
-        <button
-          type="button"
-          onClick={() => setBusquedaAplicada(busqueda.trim())}
-          className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-        >
-          Buscar
-        </button>
-      </div>
+      <BusquedaEntidadesForm
+        onBuscar={(texto, nuevoFiltro) => {
+          setBusqueda(texto);
+          setFiltro(nuevoFiltro);
+          setPagina(1);
+        }}
+      />
 
       <EntidadesTable
         entidades={entidades}
@@ -120,6 +153,34 @@ export function EntidadesPage() {
           setMensajeError(null);
         }}
       />
+
+      {!isLoading && (entidadesFiltradas?.length ?? 0) > 0 ? (
+        <div className="flex items-center justify-between text-sm text-muted-foreground">
+          <span>
+            {entidadesFiltradas?.length} entidad
+            {entidadesFiltradas?.length === 1 ? "" : "es"} — página {paginaActual} de{" "}
+            {totalPaginas}
+          </span>
+          <div className="flex gap-2">
+            <Button
+              variante="secundario"
+              className="px-3 py-1.5"
+              onClick={() => setPagina((p) => Math.max(1, p - 1))}
+              disabled={paginaActual === 1}
+            >
+              Anterior
+            </Button>
+            <Button
+              variante="secundario"
+              className="px-3 py-1.5"
+              onClick={() => setPagina((p) => Math.min(totalPaginas, p + 1))}
+              disabled={paginaActual === totalPaginas}
+            >
+              Siguiente
+            </Button>
+          </div>
+        </div>
+      ) : null}
 
       {mostrarFormulario ? (
         <div className="flex flex-col gap-3">
@@ -134,14 +195,14 @@ export function EntidadesPage() {
             isPending={crear.isPending || actualizar.isPending}
           />
           {seleccionada ? (
-            <button
-              type="button"
+            <Button
+              variante="peligro"
+              className="self-start"
               onClick={handleEliminar}
               disabled={eliminar.isPending}
-              className="self-start rounded-md border border-red-300 px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50 disabled:opacity-50"
             >
               {eliminar.isPending ? "Eliminando..." : "Eliminar entidad"}
-            </button>
+            </Button>
           ) : null}
         </div>
       ) : null}

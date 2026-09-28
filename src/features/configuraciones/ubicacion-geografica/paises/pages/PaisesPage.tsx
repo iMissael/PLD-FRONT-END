@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
+import { Alert } from "@/shared/components/ui/Alert";
+import { Button } from "@/shared/components/ui/CatalogoButton";
 
 import { useZonasGeograficasSelect } from "../../zonas-geograficas/hooks/useZonasGeograficas";
 import { BusquedaPaisesForm, type FiltroPaises } from "../components/BusquedaPaisesForm";
@@ -132,18 +134,14 @@ export function PaisesPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="text-xl font-semibold text-slate-900">Configuración de países</h2>
-        <p className="text-sm text-slate-500">
+        <h2 className="text-xl font-semibold text-foreground">Configuración de países</h2>
+        <p className="text-sm text-muted-foreground">
           Consulta el catálogo de países y edita la nacionalidad, el código ISO y las
           zonas de riesgo asignadas.
         </p>
       </div>
 
-      {mensajeError ? (
-        <p className="rounded-md border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-700">
-          {mensajeError}
-        </p>
-      ) : null}
+      {mensajeError ? <Alert>{mensajeError}</Alert> : null}
 
       <BusquedaPaisesForm
         onBuscar={(texto, nuevoFiltro) => {
@@ -166,28 +164,28 @@ export function PaisesPage() {
       />
 
       {!isLoading && (paisesFiltrados?.length ?? 0) > 0 ? (
-        <div className="flex items-center justify-between text-sm text-slate-600">
+        <div className="flex items-center justify-between text-sm text-muted-foreground">
           <span>
             {paisesFiltrados?.length} país{paisesFiltrados?.length === 1 ? "" : "es"} —
             página {paginaActual} de {totalPaginas}
           </span>
           <div className="flex gap-2">
-            <button
-              type="button"
+            <Button
+              variante="secundario"
+              className="px-3 py-1.5"
               onClick={() => setPagina((p) => Math.max(1, p - 1))}
               disabled={paginaActual === 1}
-              className="rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Anterior
-            </button>
-            <button
-              type="button"
+            </Button>
+            <Button
+              variante="secundario"
+              className="px-3 py-1.5"
               onClick={() => setPagina((p) => Math.min(totalPaginas, p + 1))}
               disabled={paginaActual === totalPaginas}
-              className="rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Siguiente
-            </button>
+            </Button>
           </div>
         </div>
       ) : null}
@@ -211,14 +209,14 @@ export function PaisesPage() {
             }}
             isPending={actualizar.isPending}
           />
-          <button
-            type="button"
+          <Button
+            variante="peligro"
+            className="self-start"
             onClick={handleEliminar}
             disabled={eliminar.isPending}
-            className="self-start rounded-md border border-red-300 px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50 disabled:opacity-50"
           >
             {eliminar.isPending ? "Eliminando..." : "Eliminar país"}
-          </button>
+          </Button>
         </div>
       ) : null}
     </div>

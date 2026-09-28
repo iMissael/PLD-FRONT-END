@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 
+import { Button } from "@/shared/components/ui/CatalogoButton";
+import { card, field, label } from "@/shared/components/ui/styles";
+
 import { NivelRiesgoSelect } from "../../niveles-riesgo/components/NivelRiesgoSelect";
 import type {
   CrearZonaGeograficaInput,
@@ -65,17 +68,14 @@ export function ZonaForm({ zona, onGuardar, onCancelar, isPending }: ZonaFormPro
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-col gap-4 rounded-lg border border-slate-200 bg-white p-4"
-    >
-      <h3 className="text-sm font-semibold text-slate-900">
+    <form onSubmit={handleSubmit} className={`flex flex-col gap-4 p-4 ${card}`}>
+      <h3 className="text-sm font-semibold text-foreground">
         {esNueva ? "Nueva zona geográfica" : `Editar zona: ${zona.nombre}`}
       </h3>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-1">
-          <label htmlFor="nombre" className="text-sm font-medium text-slate-700">
+          <label htmlFor="nombre" className={label}>
             Nombre
           </label>
           <input
@@ -86,12 +86,12 @@ export function ZonaForm({ zona, onGuardar, onCancelar, isPending }: ZonaFormPro
             onChange={(event) =>
               setForm((prev) => ({ ...prev, nombre: event.target.value }))
             }
-            className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none"
+            className={field}
           />
         </div>
 
         <div className="flex flex-col gap-1">
-          <label htmlFor="nivelRiesgo" className="text-sm font-medium text-slate-700">
+          <label htmlFor="nivelRiesgo" className={label}>
             Nivel de riesgo
           </label>
           <NivelRiesgoSelect
@@ -103,7 +103,7 @@ export function ZonaForm({ zona, onGuardar, onCancelar, isPending }: ZonaFormPro
         </div>
 
         <div className="flex flex-col gap-1">
-          <label htmlFor="entidadPais" className="text-sm font-medium text-slate-700">
+          <label htmlFor="entidadPais" className={label}>
             Tipo de zona
           </label>
           <select
@@ -115,7 +115,7 @@ export function ZonaForm({ zona, onGuardar, onCancelar, isPending }: ZonaFormPro
                 entidadPais: event.target.value as EntidadPais,
               }))
             }
-            className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none"
+            className={field}
           >
             <option value="P">Países</option>
             <option value="E">Entidades</option>
@@ -123,7 +123,7 @@ export function ZonaForm({ zona, onGuardar, onCancelar, isPending }: ZonaFormPro
         </div>
 
         <div className="flex flex-col gap-1">
-          <label htmlFor="estatus" className="text-sm font-medium text-slate-700">
+          <label htmlFor="estatus" className={label}>
             Estatus
           </label>
           <select
@@ -132,7 +132,7 @@ export function ZonaForm({ zona, onGuardar, onCancelar, isPending }: ZonaFormPro
             onChange={(event) =>
               setForm((prev) => ({ ...prev, estatus: event.target.value as EstatusZona }))
             }
-            className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none"
+            className={field}
           >
             <option value="A">Activa</option>
             <option value="INA">Inactiva</option>
@@ -141,20 +141,12 @@ export function ZonaForm({ zona, onGuardar, onCancelar, isPending }: ZonaFormPro
       </div>
 
       <div className="flex justify-end gap-2">
-        <button
-          type="button"
-          onClick={onCancelar}
-          className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-        >
+        <Button variante="secundario" onClick={onCancelar}>
           Cancelar
-        </button>
-        <button
-          type="submit"
-          disabled={isPending}
-          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-hover disabled:opacity-50"
-        >
+        </Button>
+        <Button type="submit" disabled={isPending}>
           {isPending ? "Guardando..." : "Guardar"}
-        </button>
+        </Button>
       </div>
     </form>
   );

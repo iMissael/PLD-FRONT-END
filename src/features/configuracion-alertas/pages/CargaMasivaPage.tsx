@@ -133,9 +133,9 @@ export function CargaMasivaPage() {
                 <tbody className="divide-y divide-slate-100">
                   {resultado.detalleErrores.map((detalle, index) => (
                     // No hay id único en el DTO; fila+índice es estable para esta lista de solo lectura.
-                    <tr key={`${detalle.fila}-${index}`}>
-                      <td className="px-4 py-2 text-slate-800">{detalle.fila}</td>
-                      <td className="px-4 py-2 text-slate-800">{detalle.error}</td>
+                    <tr key={`${detalle.numeroFila}-${index}`}>
+                      <td className="px-4 py-2 text-slate-800">{detalle.numeroFila}</td>
+                      <td className="px-4 py-2 text-slate-800">{detalle.motivo}</td>
                     </tr>
                   ))}
                 </tbody>

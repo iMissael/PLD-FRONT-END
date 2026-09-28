@@ -16,6 +16,21 @@ export interface CambiarNivelRiesgoLocalidadInput {
 }
 
 /**
+ * Igual a `PaginaResponse<T>` del backend.
+ *
+ * `cat_localidad` tiene ~296 mil filas activas, así que el listado es
+ * paginado **del lado del servidor** — a diferencia de los catálogos chicos,
+ * aquí no se puede traer todo y filtrar en memoria.
+ */
+export interface PaginaResponse<T> {
+  contenido: T[];
+  pagina: number;
+  tamanio: number;
+  totalElementos: number;
+  totalPaginas: number;
+}
+
+/**
  * Igual a `CatLocalidadResponse`. `idLocalidad`/`idMunicipio` son texto
  * (consecutivo VARCHAR(10)), igual que el resto del catálogo geográfico.
  */

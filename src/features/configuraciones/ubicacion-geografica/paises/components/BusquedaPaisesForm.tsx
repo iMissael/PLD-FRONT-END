@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { card, field, label } from "@/shared/components/ui/styles";
+
 export type FiltroPaises = "PAIS" | "ZONA";
 
 interface BusquedaPaisesFormProps {
@@ -28,7 +30,7 @@ export function BusquedaPaisesForm({ onBuscar }: BusquedaPaisesFormProps) {
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-4 rounded-lg border border-slate-200 bg-white p-3">
+    <div className={`flex flex-wrap items-center gap-4 p-3 ${card}`}>
       <input
         type="text"
         placeholder={
@@ -38,26 +40,28 @@ export function BusquedaPaisesForm({ onBuscar }: BusquedaPaisesFormProps) {
         }
         value={valor}
         onChange={(event) => cambiarValor(event.target.value)}
-        className="w-full max-w-sm flex-1 rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none"
+        className={`w-full max-w-sm flex-1 ${field}`}
       />
 
       <div className="flex items-center gap-3">
-        <span className="text-sm font-medium text-slate-700">Filtrar por</span>
-        <label className="flex items-center gap-1.5 text-sm text-slate-700">
+        <span className={label}>Filtrar por</span>
+        <label className="flex items-center gap-1.5 text-sm text-foreground">
           <input
             type="radio"
             name="filtrarPor"
             checked={filtro === "PAIS"}
             onChange={() => cambiarFiltro("PAIS")}
+            className="accent-accent"
           />
           País
         </label>
-        <label className="flex items-center gap-1.5 text-sm text-slate-700">
+        <label className="flex items-center gap-1.5 text-sm text-foreground">
           <input
             type="radio"
             name="filtrarPor"
             checked={filtro === "ZONA"}
             onChange={() => cambiarFiltro("ZONA")}
+            className="accent-accent"
           />
           Zona Geográfica
         </label>

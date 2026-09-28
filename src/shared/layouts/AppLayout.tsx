@@ -81,6 +81,24 @@ const NAV_ITEMS: NavNode[] = [
         ],
       },
       { label: "Configuración de personas", to: "configuraciones/personas" },
+      {
+        label: "Configuración de edades",
+        children: [
+          { label: "Edades", to: "configuraciones/edades/rangos-edad" },
+          {
+            label: "Tiempo de constitución",
+            to: "configuraciones/edades/tiempo-constitucion",
+          },
+        ],
+      },
+      {
+        label: "Configuración de experiencia de actividad",
+        to: "configuraciones/experiencia-actividad",
+      },
+      {
+        label: "Configuración de actividad económica",
+        to: "configuraciones/actividad-economica",
+      },
     ],
   },
   {
@@ -156,9 +174,12 @@ function isNodeActive(node: NavNode, pathname: string): boolean {
 
 /**
  * Layout base de la app: barra superior (menú hamburguesa, logo, y accesos
- * de usuario) + menú lateral colapsable + contenido de la página activa. El
- * acento verde de marca se usa solo en el logo y en la sección de menú
- * abierta — el resto de la UI sigue en blanco.
+ * de usuario) + menú lateral colapsable + contenido de la página activa.
+ *
+ * Colores: todos vienen de los tokens de `src/index.css` (paleta 60/30/10).
+ * El verde vive solo en el menú lateral (item activo en `nav`/`nav-hover`,
+ * hover de inactivos en `nav-soft`); el acento indigo (`primary`) se usa
+ * para foco y avatar, y el logo combina indigo con el teal de marca.
  */
 export function AppLayout() {
   const [collapsed, setCollapsed] = useState(false);
@@ -323,6 +344,10 @@ function SectionLabel({ children }: { children: string }) {
   );
 }
 
+/**
+ * Item de primer nivel. La guía lo define sólido: activo en verde con texto
+ * blanco, inactivo en gris con hover verde muy claro.
+ */
 function navLinkClassName(collapsed: boolean) {
   return ({ isActive }: { isActive: boolean }) =>
     [
@@ -334,6 +359,10 @@ function navLinkClassName(collapsed: boolean) {
     ].join(" ");
 }
 
+/**
+ * Sub-item: la guía no lo pinta de fondo, solo cambia el color del texto —
+ * verde cuando está activo, gris con hover verde cuando no.
+ */
 function nestedLinkClassName({ isActive }: { isActive: boolean }) {
   return [
     "rounded-md px-3 py-2 text-sm transition-colors",
@@ -349,7 +378,7 @@ function nestedLinkClassName({ isActive }: { isActive: boolean }) {
  *   se muestra como un ícono suelto (usando el ícono del nodo raíz).
  * - Expandido, una hoja es un NavLink; un grupo es una sección plegable
  *   cuyos hijos se renderizan recursivamente, indentados. El grupo abierto
- *   se resalta en verde sólido (como "Procesos" en la referencia).
+ *   se resalta en el verde sólido que la guía define para el item activo.
  */
 function NavNodeRenderer({
   node,
@@ -417,7 +446,7 @@ function NavGroupSection({ node, depth }: { node: NavGroup; depth: number }) {
   const destacado = depth === 0 && open;
 
   return (
-    <div className={depth === 0 ? "" : ""}>
+    <div>
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
