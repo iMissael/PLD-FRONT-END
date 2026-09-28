@@ -1,12 +1,14 @@
 import { useMemo, useState } from "react";
-import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { NavLink, Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
+
+import { useAuth } from "@/features/auth/hooks/useAuth";
+import { ThemeToggle } from "@/shared/components/ThemeToggle";
 
 import {
   ActivityIcon,
   BellIcon,
   ChevronDownIcon,
   ClipboardCheckIcon,
-  DotsVerticalIcon,
   HelpCircleIcon,
   HomeIcon,
   InfoIcon,
@@ -42,11 +44,17 @@ function isGroup(node: NavNode): node is NavGroup {
  * relativos a la ruta del tenant (`/SICANETSC/PLD/:tenantId`), porque este
  * layout cuelga directamente de ella (ver routes/router.tsx) — nunca
  * hardcodear el tenant aquí.
- *
- * IMPORTANTE: estos 4 nombres (Configuraciones, Configuración de alertas,
- * Operación, Control) son los definidos por el negocio — no renombrar aquí.
  */
 const NAV_ITEMS: NavNode[] = [
+  {
+    label: "Buzón & Compliance",
+    icon: ShieldSearchIcon,
+    children: [
+      { label: "Gestión de Denuncias", to: "buzon/gestion" },
+      { label: "Alertas PLD", to: "buzon/alertas" },
+      { label: "Buzón Anónimo (Público)", to: "buzon/denuncias" },
+    ],
+  },
   {
     label: "Configuraciones",
     icon: SettingsIcon,
@@ -166,6 +174,10 @@ export function AppLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const [query, setQuery] = useState("");
 
+  const { tenantId } = useParams<{ tenantId: string }>();
+  const navigate = useNavigate();
+  const { user, role, logout } = useAuth();
+
   const itemsFiltrados = useMemo(() => filterTree(NAV_ITEMS, query), [query]);
   const otrosFiltrados = useMemo(
     () =>
@@ -174,6 +186,13 @@ export function AppLayout() {
         : OTHER_ITEMS,
     [query],
   );
+
+  const handleLogout = () => {
+    logout();
+    navigate(`/SICANETSC/PLD/${tenantId ?? "57b37f52-ecd6-483d-addb-1495e96e2492"}/login`, {
+      replace: true,
+    });
+  };
 
   return (
     <div className="flex h-full flex-col bg-bg">
@@ -195,7 +214,8 @@ export function AppLayout() {
           <span className="truncate text-sm font-semibold text-fg">SICANET SC</span>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
           <button
             type="button"
             title="Notificaciones"
@@ -205,18 +225,26 @@ export function AppLayout() {
           </button>
           <button
             type="button"
-            title="Perfil"
+            title={role?.nombre ? `Perfil (${role.nombre})` : "Perfil"}
             className="flex items-center gap-2 rounded-md px-2 py-1.5 text-nav-inactive hover:bg-hover focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:outline-none"
           >
             <UserCircleIcon className="h-7 w-7 text-muted" />
-            <span className="text-sm font-medium">Nombre</span>
+            <div className="flex flex-col text-left">
+              <span className="text-sm font-medium leading-none text-fg">
+                {user?.username ?? "Oficial PLD"}
+              </span>
+              {role?.nombre && (
+                <span className="text-[10px] text-muted">{role.nombre}</span>
+              )}
+            </div>
           </button>
           <button
             type="button"
-            title="Más opciones"
-            className="rounded-full p-2 text-nav-inactive hover:bg-hover focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:outline-none"
+            onClick={handleLogout}
+            title="Cerrar sesión"
+            className="rounded-full p-2 text-nav-inactive hover:bg-hover hover:text-red-500 focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:outline-none"
           >
-            <DotsVerticalIcon className="h-5 w-5" />
+            <LogOutIcon className="h-5 w-5" />
           </button>
         </div>
       </header>
@@ -274,9 +302,7 @@ export function AppLayout() {
                   <button
                     type="button"
                     title="Cerrar sesión"
-                    onClick={() => {
-                      // Pendiente: aún no hay lógica real de sesión que cerrar.
-                    }}
+                    onClick={handleLogout}
                     className={[
                       // La guía pide rosa para "cerrar sesión", distinto del
                       // rojo de error.
