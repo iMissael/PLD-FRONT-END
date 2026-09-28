@@ -178,7 +178,7 @@ export const router = createBrowserRouter([
                 path: "acerca-de",
                 element: (
                   <PlaceholderPage
-                    title="Acerca de"
+                    title="Inicio"
                     description="Información del sistema (versión, soporte, etc.). Pendiente de definir."
                   />
                 ),

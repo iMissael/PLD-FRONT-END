@@ -69,7 +69,7 @@ export function LoginPage() {
     try {
       const response = await loginUser(values, abortRef.current.signal);
       setSession(response);
-      navigate(`/SICANETSC/PLD/${tenantId}/buzon/denuncias`, {
+      navigate(`/SICANETSC/PLD/${tenantId}/acerca-de`, {
         replace: true,
       });
     } catch (err: unknown) {

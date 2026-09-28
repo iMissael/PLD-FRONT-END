@@ -47,7 +47,7 @@ function isGroup(node: NavNode): node is NavGroup {
  */
 const NAV_ITEMS: NavNode[] = [
   {
-    label: "Buzón & Compliance",
+    label: "Buzón de denuncias",
     icon: ShieldSearchIcon,
     children: [
       { label: "Gestión de Denuncias", to: "buzon/gestion" },
@@ -216,13 +216,7 @@ export function AppLayout() {
 
         <div className="flex items-center gap-3">
           <ThemeToggle />
-          <button
-            type="button"
-            title="Notificaciones"
-            className="rounded-full p-2 text-nav-inactive hover:bg-hover focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:outline-none"
-          >
-            <BellIcon className="h-5 w-5" />
-          </button>
+        
           <button
             type="button"
             title={role?.nombre ? `Perfil (${role.nombre})` : "Perfil"}
@@ -238,14 +232,7 @@ export function AppLayout() {
               )}
             </div>
           </button>
-          <button
-            type="button"
-            onClick={handleLogout}
-            title="Cerrar sesión"
-            className="rounded-full p-2 text-nav-inactive hover:bg-hover hover:text-red-500 focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:outline-none"
-          >
-            <LogOutIcon className="h-5 w-5" />
-          </button>
+          
         </div>
       </header>
 
