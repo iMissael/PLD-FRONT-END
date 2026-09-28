@@ -6,7 +6,6 @@ import { ThemeToggle } from "@/shared/components/ThemeToggle";
 
 import {
   ActivityIcon,
-  BellIcon,
   ChevronDownIcon,
   ClipboardCheckIcon,
   HelpCircleIcon,
