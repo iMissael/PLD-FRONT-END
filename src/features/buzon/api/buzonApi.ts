@@ -79,18 +79,38 @@ export async function cambiarEstatusDenuncia(
   input: CambiarEstatusInput,
   signal?: AbortSignal,
 ): Promise<Denuncia> {
-  const { data } = await apiClient.patch<Denuncia>(
-    `/buzon/denuncias/${id}/estatus`,
-    input,
-    {
-      params: {
-        nuevoEstatus: input.nuevoEstatus,
-        estatus: input.nuevoEstatus,
+  const payload = {
+    nuevoEstatus: input.nuevoEstatus,
+    estatus: input.nuevoEstatus,
+    estado: input.nuevoEstatus,
+  };
+  try {
+    const { data } = await apiClient.patch<Denuncia>(
+      `/buzon/denuncias/${id}/estatus`,
+      payload,
+      {
+        params: {
+          nuevoEstatus: input.nuevoEstatus,
+          estatus: input.nuevoEstatus,
+        },
+        signal,
       },
-      signal,
-    },
-  );
-  return data;
+    );
+    return data;
+  } catch {
+    const { data } = await apiClient.put<Denuncia>(
+      `/buzon/denuncias/${id}/estatus`,
+      payload,
+      {
+        params: {
+          nuevoEstatus: input.nuevoEstatus,
+          estatus: input.nuevoEstatus,
+        },
+        signal,
+      },
+    );
+    return data;
+  }
 }
 
 /** Listar evidencias asociadas */
@@ -147,7 +167,7 @@ export async function agregarObservacion(
 ): Promise<ObservacionDenuncia> {
   const { data } = await apiClient.post<ObservacionDenuncia>(
     `/buzon/denuncias/${denunciaId}/observaciones`,
-    { request: input },
+    input,
     { signal },
   );
   return data;
