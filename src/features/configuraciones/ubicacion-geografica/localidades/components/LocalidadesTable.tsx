@@ -51,7 +51,7 @@ export function LocalidadesTable({
               onClick={() => onSeleccionar(localidad)}
               className={
                 localidad.idLocalidad === seleccionadaId
-                  ? "cursor-pointer bg-emerald-50"
+                  ? "cursor-pointer bg-success-soft/50"
                   : "cursor-pointer hover:bg-slate-50"
               }
             >

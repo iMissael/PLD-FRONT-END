@@ -2,13 +2,15 @@ import axios from "axios";
 
 import { env } from "@/config/env";
 
+import { authInterceptor, unauthorizedInterceptor } from "./interceptors/authInterceptor";
 import { errorInterceptor } from "./interceptors/errorInterceptor";
 import { tenantInterceptor } from "./interceptors/tenantInterceptor";
 
 /**
  * Instancia única de Axios para toda la app. Los `features/*` NUNCA
  * importan Axios directamente: siempre pasan por esta instancia, para que
- * el header de tenant y la normalización de errores apliquen siempre.
+ * el header de tenant, el token de sesión y la normalización de errores
+ * apliquen siempre.
  */
 export const apiClient = axios.create({
   baseURL: env.VITE_API_BASE_URL,
@@ -18,4 +20,7 @@ export const apiClient = axios.create({
 });
 
 apiClient.interceptors.request.use(tenantInterceptor);
+apiClient.interceptors.request.use(authInterceptor);
+// El 401 se atiende antes de normalizar el error.
+apiClient.interceptors.response.use((response) => response, unauthorizedInterceptor);
 apiClient.interceptors.response.use((response) => response, errorInterceptor);

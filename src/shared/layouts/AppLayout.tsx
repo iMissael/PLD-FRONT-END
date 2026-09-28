@@ -1,5 +1,9 @@
 import { useMemo, useState } from "react";
-import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
+
+import { useAuthStore } from "@/shared/auth/authStore";
+import { useSucursalActivaStore } from "@/shared/auth/sucursalActivaStore";
+import { useRutaTenant } from "@/shared/tenant/useRutaTenant";
 
 import {
   ActivityIcon,
@@ -15,7 +19,7 @@ import {
   SearchIcon,
   SettingsIcon,
   ShieldSearchIcon,
-  UserCircleIcon,
+  UserPlusIcon,
 } from "@/shared/components/icons";
 
 interface NavLeaf {
@@ -54,6 +58,7 @@ const NAV_ITEMS: NavNode[] = [
         label: "Configuración del oficial de cumplimiento",
         to: "configuraciones/oficial-cumplimiento",
       },
+      { label: "Matriz de riesgo", to: "configuraciones/matriz-riesgo" },
       {
         label: "ubicación geográfica",
         children: [
@@ -89,12 +94,25 @@ const NAV_ITEMS: NavNode[] = [
   {
     label: "Operación",
     icon: ActivityIcon,
-    children: [{ label: "Resumen", to: "operacion" }],
+    children: [
+      { label: "Resumen", to: "operacion" },
+      { label: "Evaluación de riesgo", to: "operacion/evaluacion-riesgo" },
+      { label: "Consulta de listas", to: "operacion/consulta-listas" },
+    ],
   },
   {
     label: "Control",
     icon: ClipboardCheckIcon,
     children: [{ label: "Resumen", to: "control" }],
+  },
+  {
+    label: "Nuevos usuarios",
+    icon: UserPlusIcon,
+    children: [
+      { label: "Usuarios", to: "configuraciones/administracion/usuarios" },
+      { label: "Roles", to: "configuraciones/administracion/roles" },
+      { label: "Permisos", to: "configuraciones/administracion/permisos" },
+    ],
   },
   { label: "Acerca de", to: "acerca-de", icon: InfoIcon },
 ];
@@ -131,7 +149,9 @@ function collectLeaves(node: NavNode): NavLeaf[] {
  * comparten el mismo primer segmento (p.ej. "configuraciones/personas" y
  * "configuraciones/ubicacion-geografica/paises"). */
 function isNodeActive(node: NavNode, pathname: string): boolean {
-  return collectLeaves(node).some((hoja) => pathname.endsWith(`/${hoja.to}`));
+  return collectLeaves(node).some(
+    (hoja) => pathname.endsWith(`/${hoja.to}`) || pathname.includes(`/${hoja.to}/`),
+  );
 }
 
 /**
@@ -143,6 +163,16 @@ function isNodeActive(node: NavNode, pathname: string): boolean {
 export function AppLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const [query, setQuery] = useState("");
+  const navigate = useNavigate();
+  const rutaEnTenant = useRutaTenant();
+  const usuario = useAuthStore((estado) => estado.usuario);
+  const sucursalActiva = useSucursalActivaStore((estado) => estado.sucursalActiva);
+  const inicial = (usuario?.nombre ?? "U").trim().charAt(0).toUpperCase() || "U";
+
+  function cerrarSesion() {
+    useAuthStore.getState().logout();
+    navigate(rutaEnTenant("login"), { replace: true });
+  }
 
   const itemsFiltrados = useMemo(() => filterTree(NAV_ITEMS, query), [query]);
   const otrosFiltrados = useMemo(
@@ -154,28 +184,22 @@ export function AppLayout() {
   );
 
   return (
-    <div className="flex h-full flex-col bg-white">
-      <header className="flex h-16 shrink-0 items-center justify-between border-b border-slate-100 bg-white px-4">
+    <div className="bg-background flex h-full flex-col">
+      <header className="bg-muted/95 flex h-16 shrink-0 items-center justify-between border-b border-gray-300 px-4">
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={() => setCollapsed((value) => !value)}
             aria-label={collapsed ? "Mostrar menú" : "Ocultar menú"}
-            className="rounded-md p-2 text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+            className="hover:bg-secondary rounded-md p-2 text-gray-700"
           >
             <MenuIcon className="h-5 w-5" />
           </button>
 
-          <span
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xs font-bold text-white"
-            style={{
-              background:
-                "linear-gradient(160deg, #88EC9B 0%, #5BD191 55%, #4BB58B 100%)",
-            }}
-          >
+          <span className="from-primary-hover to-brand-teal flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br text-xs font-bold text-white">
             SC
           </span>
-          <span className="truncate text-sm font-semibold text-slate-900">
+          <span className="text-foreground truncate text-sm font-semibold">
             SICANET SC
           </span>
         </div>
@@ -184,22 +208,31 @@ export function AppLayout() {
           <button
             type="button"
             title="Notificaciones"
-            className="rounded-full p-2 text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+            className="hover:bg-secondary rounded-full p-2 text-gray-700"
           >
             <BellIcon className="h-5 w-5" />
           </button>
           <button
             type="button"
             title="Perfil"
-            className="flex items-center gap-2 rounded-md px-2 py-1.5 text-slate-700 hover:bg-slate-50"
+            className="hover:bg-secondary flex items-center gap-2 rounded-md px-2 py-1.5 text-gray-700"
           >
-            <UserCircleIcon className="h-7 w-7 text-slate-400" />
-            <span className="text-sm font-medium">Nombre</span>
+            <span className="from-primary-hover to-primary flex size-9 items-center justify-center rounded-full bg-gradient-to-br text-sm font-bold text-white">
+              {inicial}
+            </span>
+            <span className="flex flex-col items-start leading-tight">
+              <span className="text-sm font-medium">{usuario?.nombre ?? "Usuario"}</span>
+              {sucursalActiva && (
+                <span className="text-muted-foreground text-xs">
+                  {sucursalActiva.nombre}
+                </span>
+              )}
+            </span>
           </button>
           <button
             type="button"
             title="Más opciones"
-            className="rounded-full p-2 text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+            className="hover:bg-secondary rounded-full p-2 text-gray-700"
           >
             <DotsVerticalIcon className="h-5 w-5" />
           </button>
@@ -208,20 +241,20 @@ export function AppLayout() {
 
       <div className="flex min-h-0 flex-1">
         <aside
-          className={`flex shrink-0 flex-col overflow-y-auto border-r border-slate-100 bg-white transition-[width] duration-200 ${
+          className={`bg-card border-border flex shrink-0 flex-col overflow-y-auto border-r transition-[width] duration-200 ${
             collapsed ? "w-[4.5rem]" : "w-64"
           }`}
         >
           {!collapsed && (
-            <div className="border-b border-slate-100 p-3">
+            <div className="border-border border-b p-3">
               <label className="relative block">
-                <SearchIcon className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <SearchIcon className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                 <input
                   type="search"
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder="Buscar en el menú..."
-                  className="w-full rounded-md border border-slate-200 bg-slate-50 py-2 pl-8 pr-3 text-sm text-slate-700 placeholder:text-slate-400 focus:border-[#5BD191] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#88EC9B]/40"
+                  className="border-input bg-muted focus:border-ring focus:bg-card focus:ring-ring/30 w-full rounded-md border py-2 pl-8 pr-3 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none focus:ring-2"
                 />
               </label>
             </div>
@@ -259,11 +292,9 @@ export function AppLayout() {
                   <button
                     type="button"
                     title="Cerrar sesión"
-                    onClick={() => {
-                      // Pendiente: aún no hay lógica real de sesión que cerrar.
-                    }}
+                    onClick={cerrarSesion}
                     className={[
-                      "flex items-center gap-3 rounded-md text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900",
+                      "text-logout hover:bg-logout-soft flex items-center gap-3 rounded-md text-sm font-medium transition-colors",
                       collapsed ? "mx-2 justify-center px-0 py-2.5" : "mx-2 px-3 py-2.5",
                     ].join(" ")}
                   >
@@ -286,7 +317,7 @@ export function AppLayout() {
 
 function SectionLabel({ children }: { children: string }) {
   return (
-    <p className="px-4 pb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
+    <p className="px-4 pb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">
       {children}
     </p>
   );
@@ -298,8 +329,8 @@ function navLinkClassName(collapsed: boolean) {
       "flex items-center gap-3 rounded-md text-sm font-medium transition-colors",
       collapsed ? "mx-2 justify-center px-0 py-2.5" : "mx-2 px-3 py-2.5",
       isActive
-        ? "bg-gradient-to-r from-[#88EC9B]/25 to-[#5BD191]/15 text-[#1f6b4d]"
-        : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
+        ? "bg-nav hover:bg-nav-hover text-white"
+        : "hover:bg-nav-soft text-gray-700",
     ].join(" ");
 }
 
@@ -307,8 +338,8 @@ function nestedLinkClassName({ isActive }: { isActive: boolean }) {
   return [
     "rounded-md px-3 py-2 text-sm transition-colors",
     isActive
-      ? "bg-gradient-to-r from-[#88EC9B]/25 to-[#5BD191]/15 font-medium text-[#1f6b4d]"
-      : "text-slate-500 hover:bg-slate-50 hover:text-slate-800",
+      ? "text-nav hover:text-nav-hover font-bold"
+      : "hover:text-nav-link-hover text-gray-600",
   ].join(" ");
 }
 
@@ -395,27 +426,22 @@ function NavGroupSection({ node, depth }: { node: NavGroup; depth: number }) {
             ? [
                 "mx-2 flex w-[calc(100%-1rem)] items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors",
                 destacado
-                  ? "text-white shadow-sm"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
+                  ? "bg-nav hover:bg-nav-hover text-white shadow-sm"
+                  : "hover:bg-nav-soft text-gray-700",
               ].join(" ")
-            : "flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-800"
-        }
-        style={
-          destacado
-            ? { background: "linear-gradient(135deg, #5BD191 0%, #4BB58B 100%)" }
-            : undefined
+            : "hover:text-nav-link-hover flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-gray-600 transition-colors"
         }
       >
         {Icon && <Icon className="h-5 w-5 shrink-0" />}
         <span className="flex-1 truncate text-left">{node.label}</span>
         <ChevronDownIcon
           className={`h-4 w-4 shrink-0 transition-transform ${
-            destacado ? "text-white" : "text-slate-400"
+            destacado ? "text-white" : "text-gray-400"
           } ${open ? "" : "-rotate-90"}`}
         />
       </button>
       {open && (
-        <div className="ml-4 mt-0.5 flex flex-col gap-0.5 border-l border-slate-100 pl-2">
+        <div className="border-border ml-4 mt-0.5 flex flex-col gap-0.5 border-l pl-2">
           {node.children.map((child) => (
             <NavNodeRenderer
               key={child.label}

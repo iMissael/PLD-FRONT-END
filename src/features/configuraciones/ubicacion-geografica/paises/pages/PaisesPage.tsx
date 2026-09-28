@@ -19,10 +19,7 @@ const PAISES_POR_PAGINA = 15;
  * acento.
  */
 function normalizar(texto: string): string {
-  return texto
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .toUpperCase();
+  return texto.normalize("NFD").replace(/[̀-ͯ]/g, "").toUpperCase();
 }
 
 /**
@@ -102,7 +99,9 @@ export function PaisesPage() {
           setEditando(false);
         },
         onError: (error) => {
-          setMensajeError(isAppError(error) ? error.message : "Ocurrió un error inesperado.");
+          setMensajeError(
+            isAppError(error) ? error.message : "Ocurrió un error inesperado.",
+          );
         },
       },
     );

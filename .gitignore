@@ -1,3 +1,38 @@
+# Dependencias
 node_modules/
+.pnpm-store/
+
+# Build y reportes
 dist/
+coverage/
+
+# Variables de entorno: solo se versiona .env.example
 .env
+.env.*
+!.env.example
+*.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Cachés de herramientas
+.vite/
+.eslintcache
+*.tsbuildinfo
+
+# Editores y sistema operativo
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db

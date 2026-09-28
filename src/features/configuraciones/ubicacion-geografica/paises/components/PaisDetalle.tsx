@@ -15,25 +15,31 @@ interface PaisDetalleProps {
  */
 export function PaisDetalle({ pais, nombresZonas, onEditar }: PaisDetalleProps) {
   return (
-    <div className="flex flex-col gap-3 rounded-lg border border-amber-300 bg-amber-50/40 p-4">
+    <div className="flex flex-col gap-3 rounded-lg border border-primary/30 bg-primary-soft/40 p-4">
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <div className="flex items-center gap-2">
-          <span className="w-16 shrink-0 text-sm font-medium text-amber-700">Clave</span>
-          <span className="flex-1 rounded-md border border-amber-300 bg-white px-3 py-1.5 text-sm text-slate-800">
+          <span className="w-16 shrink-0 text-sm font-medium text-primary-strong">
+            Clave
+          </span>
+          <span className="flex-1 rounded-md border-primary/30 border bg-white px-3 py-1.5 text-sm text-slate-800">
             {pais.idPais}
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="w-16 shrink-0 text-sm font-medium text-amber-700">País</span>
-          <span className="flex-1 rounded-md border border-amber-300 bg-white px-3 py-1.5 text-sm text-slate-800">
+          <span className="w-16 shrink-0 text-sm font-medium text-primary-strong">
+            País
+          </span>
+          <span className="flex-1 rounded-md border-primary/30 border bg-white px-3 py-1.5 text-sm text-slate-800">
             {pais.nombre}
           </span>
         </div>
       </div>
 
       <div className="flex items-center gap-2">
-        <span className="w-16 shrink-0 text-sm font-medium text-amber-700">Zona</span>
-        <span className="flex-1 rounded-md border border-amber-300 bg-white px-3 py-1.5 text-sm text-slate-800">
+        <span className="w-16 shrink-0 text-sm font-medium text-primary-strong">
+          Zona
+        </span>
+        <span className="flex-1 rounded-md border-primary/30 border bg-white px-3 py-1.5 text-sm text-slate-800">
           {nombresZonas.length > 0 ? nombresZonas.join(", ") : "Sin zona asignada"}
         </span>
       </div>

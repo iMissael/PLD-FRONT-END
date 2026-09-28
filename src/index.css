@@ -1,14 +1,126 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:is(.dark *));
+
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
 
-  /* Paleta de acento de marca: base blanca en toda la app, estos verdes
-     solo se usan como toques de estilo (activo del menú, botones
-     primarios, badges de éxito, acentos de tarjetas). */
-  --color-brand-light: #88ec9b;
-  --color-brand-mid: #5bd191;
-  --color-brand-dark: #4bb58b;
+/*
+ * Paleta oficial de SICANET con la regla 60 / 30 / 10. Todo color de la app
+ * sale de estos tokens: no escribas hexadecimales en los componentes.
+ *
+ *  60 % superficies neutras: fondo de página (--background) y paneles blancos
+ *       (--card, --popover). Es lo que más se ve.
+ *  30 % estructura: grises de texto, bordes y hover (--foreground, --muted*,
+ *       --border, --secondary*) y el verde del menú lateral (--nav*).
+ *  10 % acento índigo, solo para lo que se puede accionar: botones primarios,
+ *       enlaces, foco, checkbox, avatar (--primary*, --ring).
+ *
+ * Aparte de la regla: los colores de estado (éxito, aviso, error) solo
+ * comunican resultado, y el gradiente menta→teal es de identidad (login,
+ * elegir sucursal, logo). Un color de estado o de identidad nunca decora.
+ *
+ * `--accent` es el de shadcn (fondo de hover en ghost, outline y opciones de
+ * select), no el "acento" de marca: ese es `--primary`.
+ */
+:root {
+  --radius: 0.625rem;
+
+  /* 60 % */
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+
+  /* 30 % */
+  --secondary: #e5e7eb;
+  --secondary-hover: #d1d5db;
+  --secondary-foreground: #1f2937;
+  --muted: #f3f4f6;
+  --muted-foreground: #6b7280;
+  --accent: #f3f4f6;
+  --accent-foreground: #0f172a;
+  --border: #e5e7eb;
+  --input: #d1d5db;
+  --nav: #15803d;
+  --nav-hover: #166534;
+  --nav-soft: #dcfce7;
+  --nav-link-hover: #16a34a;
+
+  /* 10 % */
+  --primary: #4f46e5;
+  --primary-hover: #6366f1;
+  --primary-strong: #4338ca;
+  --primary-soft: #e0e7ff;
+  --primary-foreground: #ffffff;
+  --ring: #6366f1;
+
+  /* Estado */
+  --success: #16a34a;
+  --success-hover: #15803d;
+  --success-soft: #dcfce7;
+  --warning: #d97706;
+  --warning-hover: #b45309;
+  --warning-soft: #fef3c7;
+  --destructive: #dc2626;
+  --destructive-hover: #b91c1c;
+  --destructive-soft: #fee2e2;
+  --destructive-foreground: #ffffff;
+  --logout: #e11d48;
+  --logout-soft: #fff1f2;
+
+  /* Identidad */
+  --brand-mint: #9fff98;
+  --brand-teal: #059e9e;
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-hover: var(--secondary-hover);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-nav: var(--nav);
+  --color-nav-hover: var(--nav-hover);
+  --color-nav-soft: var(--nav-soft);
+  --color-nav-link-hover: var(--nav-link-hover);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-strong: var(--primary-strong);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-success-hover: var(--success-hover);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-hover: var(--warning-hover);
+  --color-warning-soft: var(--warning-soft);
+  --color-destructive: var(--destructive);
+  --color-destructive-hover: var(--destructive-hover);
+  --color-destructive-soft: var(--destructive-soft);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-logout: var(--logout);
+  --color-logout-soft: var(--logout-soft);
+  --color-brand-mint: var(--brand-mint);
+  --color-brand-teal: var(--brand-teal);
 }
 
 html,
@@ -18,5 +130,56 @@ body,
 }
 
 body {
-  @apply bg-white text-slate-900 antialiased;
+  @apply bg-background text-foreground antialiased;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+}
+
+/*
+ * Animación del escudo en la pantalla de "entrando a <sucursal>": un único
+ * gesto de confirmación (aparece + un anillo que se expande una vez), no un
+ * spinner en loop. Respeta prefers-reduced-motion mostrando el estado final
+ * directamente.
+ */
+@layer utilities {
+  @keyframes shield-pop {
+    from {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes shield-ring {
+    from {
+      opacity: 0.45;
+      transform: scale(0.8);
+    }
+    to {
+      opacity: 0;
+      transform: scale(1.9);
+    }
+  }
+
+  .animate-shield-pop {
+    animation: shield-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  .animate-shield-ring {
+    animation: shield-ring 1.1s ease-out 0.15s both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-shield-pop,
+    .animate-shield-ring {
+      animation: none;
+    }
+  }
 }

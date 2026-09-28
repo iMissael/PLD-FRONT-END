@@ -34,9 +34,7 @@ export function EntidadesTable({
       <table className="min-w-full divide-y divide-slate-200 text-sm">
         <thead className="bg-slate-50">
           <tr>
-            <th className="px-3 py-2 text-left font-medium text-slate-500">
-              Clave CURP
-            </th>
+            <th className="px-3 py-2 text-left font-medium text-slate-500">Clave CURP</th>
             <th className="px-3 py-2 text-left font-medium text-slate-500">Nombre</th>
             <th className="px-3 py-2 text-left font-medium text-slate-500">País</th>
             <th className="px-3 py-2 text-left font-medium text-slate-500">Zona</th>
@@ -52,7 +50,7 @@ export function EntidadesTable({
               onClick={() => onSeleccionar(entidad)}
               className={
                 entidad.idEntidad === seleccionadaId
-                  ? "cursor-pointer bg-emerald-50"
+                  ? "cursor-pointer bg-success-soft/50"
                   : "cursor-pointer hover:bg-slate-50"
               }
             >

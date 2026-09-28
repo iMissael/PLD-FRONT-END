@@ -57,7 +57,7 @@ export function ZonasTable({
                 onClick={() => onSeleccionar(zona)}
                 className={
                   activa
-                    ? "cursor-pointer bg-emerald-50"
+                    ? "cursor-pointer bg-success-soft/50"
                     : "cursor-pointer hover:bg-slate-50"
                 }
               >
@@ -73,7 +73,7 @@ export function ZonasTable({
                   <span
                     className={
                       zona.estatus === "A"
-                        ? "rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-800"
+                        ? "rounded-full bg-success-soft text-success-hover px-2 py-0.5 text-xs font-medium"
                         : "rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600"
                     }
                   >

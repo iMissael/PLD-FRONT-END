@@ -123,7 +123,9 @@ export function PaisForm({ pais, onGuardar, onCancelar, isPending }: PaisFormPro
             type="text"
             maxLength={2}
             value={form.tipo}
-            onChange={(event) => setForm((prev) => ({ ...prev, tipo: event.target.value }))}
+            onChange={(event) =>
+              setForm((prev) => ({ ...prev, tipo: event.target.value }))
+            }
             className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none"
           />
         </div>
@@ -148,7 +150,7 @@ export function PaisForm({ pais, onGuardar, onCancelar, isPending }: PaisFormPro
         <button
           type="submit"
           disabled={isPending}
-          className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-50"
+          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-hover disabled:opacity-50"
         >
           {isPending ? "Guardando..." : "Guardar"}
         </button>

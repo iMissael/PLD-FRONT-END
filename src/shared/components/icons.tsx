@@ -128,6 +128,17 @@ export function UserCircleIcon(props: IconProps) {
   );
 }
 
+export function UserPlusIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="9.5" cy="8" r="3.2" />
+      <path d="M3.5 19.5v-1a4.5 4.5 0 0 1 4.5-4.5h3a4.5 4.5 0 0 1 4.5 4.5v1" />
+      <path d="M19 8.5v5" />
+      <path d="M16.5 11h5" />
+    </svg>
+  );
+}
+
 export function DotsVerticalIcon(props: IconProps) {
   return (
     <svg {...base} {...props}>

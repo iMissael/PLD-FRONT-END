@@ -62,7 +62,7 @@ export function PaisesTable({
                 onClick={() => onSeleccionar(pais)}
                 className={
                   pais.idPais === seleccionadoId
-                    ? "cursor-pointer bg-emerald-50"
+                    ? "cursor-pointer bg-success-soft/50"
                     : "cursor-pointer hover:bg-slate-50"
                 }
               >
