@@ -24,8 +24,7 @@ import {
   consultaListasSchema,
   type ConsultaListasFormValues,
 } from "@/features/operacion/consulta-listas/types/consultaListasSchema";
-import type { ConsultaLista } from "@/features/operacion/consulta-listas/types/consultaListas";
-import { SocioBuscador } from "@/features/operacion/consulta-listas/components/SocioBuscador";
+import type { ConsultaLista } from "@/features/operacion/consulta-listas/types/Quienesquien";
 import { useAuthStore } from "@/shared/auth/authStore";
 import { useSucursalActivaStore } from "@/shared/auth/sucursalActivaStore";
 
@@ -44,8 +43,6 @@ export function ConsultaListasForm({
   const form = useForm<ConsultaListasFormValues>({
     resolver: zodResolver(consultaListasSchema),
     defaultValues: {
-      socioRef: "",
-      socioNombre: "",
       nombreCompleto: "",
       nombre: "",
       primerApellido: "",
@@ -68,7 +65,6 @@ export function ConsultaListasForm({
     setEnviando(true);
     consultarListas.mutate(
       {
-        socioRef: values.socioRef,
         nombreCompleto: aTextoOIndefinido(values.nombreCompleto),
         nombre: aTextoOIndefinido(values.nombre),
         primerApellido: aTextoOIndefinido(values.primerApellido),
@@ -95,11 +91,6 @@ export function ConsultaListasForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <div className="space-y-2">
-          <FormLabel>Socio</FormLabel>
-          <SocioBuscador form={form} />
-        </div>
-
         <div className="grid gap-4 sm:grid-cols-3">
           <FormField
             control={form.control}

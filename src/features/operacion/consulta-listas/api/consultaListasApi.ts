@@ -3,7 +3,7 @@ import type {
   ConsultaLista,
   ConsultaListasRequest,
   ListaRestrictiva,
-} from "@/features/operacion/consulta-listas/types/consultaListas";
+} from "@/features/operacion/consulta-listas/types/Quienesquien";
 
 export async function consultarListas(payload: ConsultaListasRequest) {
   const { data } = await apiClient.post<ConsultaLista[]>("/consulta-listas", payload);

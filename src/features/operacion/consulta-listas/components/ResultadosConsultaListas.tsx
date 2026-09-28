@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/shared/components/ui/table";
 import { useListasRestrictivas } from "@/features/operacion/consulta-listas/hooks/useConsultaListas";
-import type { ConsultaLista } from "@/features/operacion/consulta-listas/types/consultaListas";
+import type { ConsultaLista } from "@/features/operacion/consulta-listas/types/Quienesquien";
 
 function formatearFecha(fecha: string | undefined) {
   if (!fecha) return "—";

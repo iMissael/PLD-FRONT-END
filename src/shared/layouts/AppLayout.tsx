@@ -115,13 +115,15 @@ const NAV_ITEMS: NavNode[] = [
     children: [
       { label: "Resumen", to: "operacion" },
       { label: "Evaluación de riesgo", to: "operacion/evaluacion-riesgo" },
-      { label: "Consulta de listas", to: "operacion/consulta-listas" },
     ],
   },
   {
     label: "Control",
     icon: ClipboardCheckIcon,
-    children: [{ label: "Resumen", to: "control" }],
+    children: [
+      { label: "Resumen", to: "control" },
+      { label: "Quien es quien", to: "control/quienesquien" },
+    ],
   },
   {
     label: "Nuevos usuarios",

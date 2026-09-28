@@ -1,8 +1,6 @@
 import { z } from "zod";
 
 export const consultaListasSchema = z.object({
-  socioRef: z.string().min(1, "Selecciona un socio"),
-  socioNombre: z.string().optional(),
   nombreCompleto: z.string().min(1, "El nombre completo es obligatorio"),
   nombre: z.string().optional(),
   primerApellido: z.string().optional(),

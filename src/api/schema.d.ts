@@ -3228,7 +3228,7 @@ export interface components {
             path: string;
         };
         ConsultaListasRequest: {
-            socioRef: string;
+            socioRef?: string;
             nombreCompleto?: string;
             curp?: string;
             rfc?: string;

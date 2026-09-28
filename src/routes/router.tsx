@@ -19,7 +19,7 @@ import { LocalidadesPage } from "@/features/configuraciones/ubicacion-geografica
 import { PaisesPage } from "@/features/configuraciones/ubicacion-geografica/paises/pages/PaisesPage";
 import { ZonasGeograficasPage } from "@/features/configuraciones/ubicacion-geografica/zonas-geograficas/pages/ZonasGeograficasPage";
 import { ControlPage } from "@/features/control/pages/ControlPage";
-import { ConsultaListasPage } from "@/features/operacion/consulta-listas/pages/ConsultaListasPage";
+import { ConsultaListasPage } from "@/features/operacion/consulta-listas/pages/Quienesquien";
 import { EvaluacionRiesgoPage } from "@/features/operacion/evaluacion-riesgo/pages/EvaluacionRiesgoPage";
 import { OperacionPage } from "@/features/operacion/pages/OperacionPage";
 import { SeleccionarSucursalPage } from "@/features/sucursales/pages/SeleccionarSucursalPage";
@@ -144,7 +144,7 @@ export const router = createBrowserRouter([
                         element: <EvaluacionRiesgoPage />,
                       },
                       {
-                        path: "operacion/consulta-listas",
+                        path: "control/quienesquien",
                         element: <ConsultaListasPage />,
                       },
                       {
