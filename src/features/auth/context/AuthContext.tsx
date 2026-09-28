@@ -3,17 +3,46 @@ import { setAuthToken } from "../authStore";
 import type { AuthState, LoginResponse } from "../types/auth";
 import { AuthContext } from "./authContextInstance";
 
+const USER_KEY = "pld_auth_user";
+const ROLE_KEY = "pld_auth_role";
+const PERM_KEY = "pld_auth_permissions";
+
+function getInitialState(): AuthState {
+  if (typeof window === "undefined") {
+    return { isAuthenticated: false, token: null, user: null, role: null, permissions: [] };
+  }
+  const token = localStorage.getItem("pld_auth_token");
+  const user = localStorage.getItem(USER_KEY);
+  const role = localStorage.getItem(ROLE_KEY);
+  const perms = localStorage.getItem(PERM_KEY);
+
+  if (token && user) {
+    try {
+      return {
+        isAuthenticated: true,
+        token,
+        user: JSON.parse(user),
+        role: role ? JSON.parse(role) : null,
+        permissions: perms ? JSON.parse(perms) : [],
+      };
+    } catch {
+      // Fallback if parsing fails
+    }
+  }
+
+  return { isAuthenticated: false, token: null, user: null, role: null, permissions: [] };
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<AuthState>({
-    isAuthenticated: false,
-    token: null,
-    user: null,
-    role: null,
-    permissions: [],
-  });
+  const [state, setState] = useState<AuthState>(getInitialState);
 
   const setSession = useCallback((response: LoginResponse) => {
     setAuthToken(response.token);
+    if (typeof window !== "undefined") {
+      localStorage.setItem(USER_KEY, JSON.stringify(response.usuario));
+      localStorage.setItem(ROLE_KEY, JSON.stringify(response.rol));
+      localStorage.setItem(PERM_KEY, JSON.stringify(response.permisos ?? []));
+    }
     setState({
       isAuthenticated: true,
       token: response.token,
@@ -25,6 +54,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = useCallback(() => {
     setAuthToken(null);
+    if (typeof window !== "undefined") {
+      localStorage.removeItem(USER_KEY);
+      localStorage.removeItem(ROLE_KEY);
+      localStorage.removeItem(PERM_KEY);
+    }
     setState({
       isAuthenticated: false,
       token: null,

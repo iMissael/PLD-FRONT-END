@@ -6,7 +6,7 @@ import type {
   PaginaResponse,
 } from "../types/localidad";
 
-const BASE_PATH = "/catalogos/localidades";
+const BASE_PATH = "/api/catalogos/localidades";
 
 export interface ListarLocalidadesParams {
   /** Aplica SOLO al nombre de la localidad; municipio y entidad van aparte. */

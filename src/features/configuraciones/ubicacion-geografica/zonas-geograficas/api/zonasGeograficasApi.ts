@@ -9,7 +9,7 @@ import type {
   ZonaGeograficaResponse,
 } from "../types/zonaGeografica";
 
-const BASE_PATH = "/catalogos/zonas-geograficas";
+const BASE_PATH = "/api/catalogos/zonas-geograficas";
 
 export async function listarZonas(
   estatus?: EstatusZona,

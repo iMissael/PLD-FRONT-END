@@ -6,7 +6,7 @@ import type {
   TiempoConstitucionResponse,
 } from "../types/tiempoConstitucion";
 
-const BASE_PATH = "/catalogos/tiempos-constitucion";
+const BASE_PATH = "/api/catalogos/tiempos-constitucion";
 
 /**
  * El backend hace soft-delete (`estatus = 'E'`) y ya filtra los eliminados

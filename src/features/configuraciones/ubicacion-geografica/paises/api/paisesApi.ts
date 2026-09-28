@@ -2,7 +2,7 @@ import { apiClient } from "@/api/client";
 
 import type { ActualizarPaisInput, CrearPaisInput, PaisResponse } from "../types/pais";
 
-const BASE_PATH = "/catalogos/paises";
+const BASE_PATH = "/api/catalogos/paises";
 
 export async function listarPaises(params?: {
   busqueda?: string;

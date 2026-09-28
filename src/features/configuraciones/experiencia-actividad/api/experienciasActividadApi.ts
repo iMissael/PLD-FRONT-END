@@ -6,7 +6,7 @@ import type {
   ExperienciaActividadResponse,
 } from "../types/experienciaActividad";
 
-const BASE_PATH = "/catalogos/experiencias-actividad";
+const BASE_PATH = "/api/catalogos/experiencias-actividad";
 
 /**
  * El backend hace soft-delete (`estatus = 'E'`) y ya filtra los eliminados

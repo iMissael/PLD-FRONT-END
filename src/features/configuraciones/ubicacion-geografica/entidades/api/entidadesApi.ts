@@ -6,7 +6,7 @@ import type {
   EntidadResponse,
 } from "../types/entidad";
 
-const BASE_PATH = "/catalogos/entidades";
+const BASE_PATH = "/api/catalogos/entidades";
 
 export async function listarEntidades(params?: {
   busqueda?: string;
