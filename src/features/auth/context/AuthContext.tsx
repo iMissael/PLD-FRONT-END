@@ -11,10 +11,10 @@ function getInitialState(): AuthState {
   if (typeof window === "undefined") {
     return { isAuthenticated: false, token: null, user: null, role: null, permissions: [] };
   }
-  const token = localStorage.getItem("pld_auth_token");
-  const user = localStorage.getItem(USER_KEY);
-  const role = localStorage.getItem(ROLE_KEY);
-  const perms = localStorage.getItem(PERM_KEY);
+  const token = sessionStorage.getItem("pld_auth_token");
+  const user = sessionStorage.getItem(USER_KEY);
+  const role = sessionStorage.getItem(ROLE_KEY);
+  const perms = sessionStorage.getItem(PERM_KEY);
 
   if (token && user) {
     try {
@@ -39,9 +39,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const setSession = useCallback((response: LoginResponse) => {
     setAuthToken(response.token);
     if (typeof window !== "undefined") {
-      localStorage.setItem(USER_KEY, JSON.stringify(response.usuario));
-      localStorage.setItem(ROLE_KEY, JSON.stringify(response.rol));
-      localStorage.setItem(PERM_KEY, JSON.stringify(response.permisos ?? []));
+      sessionStorage.setItem(USER_KEY, JSON.stringify(response.usuario));
+      sessionStorage.setItem(ROLE_KEY, JSON.stringify(response.rol));
+      sessionStorage.setItem(PERM_KEY, JSON.stringify(response.permisos ?? []));
     }
     setState({
       isAuthenticated: true,
@@ -55,9 +55,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = useCallback(() => {
     setAuthToken(null);
     if (typeof window !== "undefined") {
-      localStorage.removeItem(USER_KEY);
-      localStorage.removeItem(ROLE_KEY);
-      localStorage.removeItem(PERM_KEY);
+      sessionStorage.removeItem(USER_KEY);
+      sessionStorage.removeItem(ROLE_KEY);
+      sessionStorage.removeItem(PERM_KEY);
     }
     setState({
       isAuthenticated: false,
