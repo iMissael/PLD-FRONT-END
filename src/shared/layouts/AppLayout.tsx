@@ -1,12 +1,14 @@
 import { useMemo, useState } from "react";
-import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { NavLink, Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
+
+import { useAuth } from "@/features/auth/hooks/useAuth";
+import { ThemeToggle } from "@/shared/components/ThemeToggle";
 
 import {
   ActivityIcon,
   BellIcon,
   ChevronDownIcon,
   ClipboardCheckIcon,
-  DotsVerticalIcon,
   HelpCircleIcon,
   HomeIcon,
   InfoIcon,
@@ -41,11 +43,17 @@ function isGroup(node: NavNode): node is NavGroup {
  * relativos a la ruta del tenant (`/SICANETSC/PLD/:tenantId`), porque este
  * layout cuelga directamente de ella (ver routes/router.tsx) — nunca
  * hardcodear el tenant aquí.
- *
- * IMPORTANTE: estos 4 nombres (Configuraciones, Configuración de alertas,
- * Operación, Control) son los definidos por el negocio — no renombrar aquí.
  */
 const NAV_ITEMS: NavNode[] = [
+  {
+    label: "Buzón & Compliance",
+    icon: ShieldSearchIcon,
+    children: [
+      { label: "Gestión de Denuncias", to: "buzon/gestion" },
+      { label: "Alertas PLD", to: "buzon/alertas" },
+      { label: "Buzón Anónimo (Público)", to: "buzon/denuncias" },
+    ],
+  },
   {
     label: "Configuraciones",
     icon: SettingsIcon,
@@ -144,6 +152,10 @@ export function AppLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const [query, setQuery] = useState("");
 
+  const { tenantId } = useParams<{ tenantId: string }>();
+  const navigate = useNavigate();
+  const { user, role, logout } = useAuth();
+
   const itemsFiltrados = useMemo(() => filterTree(NAV_ITEMS, query), [query]);
   const otrosFiltrados = useMemo(
     () =>
@@ -153,15 +165,22 @@ export function AppLayout() {
     [query],
   );
 
+  const handleLogout = () => {
+    logout();
+    navigate(`/SICANETSC/PLD/${tenantId ?? "57b37f52-ecd6-483d-addb-1495e96e2492"}/login`, {
+      replace: true,
+    });
+  };
+
   return (
-    <div className="flex h-full flex-col bg-white">
-      <header className="flex h-16 shrink-0 items-center justify-between border-b border-slate-100 bg-white px-4">
+    <div className="flex h-full flex-col bg-white dark:bg-slate-950 dark:text-slate-100">
+      <header className="flex h-16 shrink-0 items-center justify-between border-b border-slate-100 bg-white px-4 dark:border-slate-800 dark:bg-slate-900">
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={() => setCollapsed((value) => !value)}
             aria-label={collapsed ? "Mostrar menú" : "Ocultar menú"}
-            className="rounded-md p-2 text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+            className="rounded-md p-2 text-slate-500 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
           >
             <MenuIcon className="h-5 w-5" />
           </button>
@@ -175,45 +194,46 @@ export function AppLayout() {
           >
             SC
           </span>
-          <span className="truncate text-sm font-semibold text-slate-900">
+          <span className="truncate text-sm font-semibold text-slate-900 dark:text-white">
             SICANET SC
           </span>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
           <button
             type="button"
             title="Notificaciones"
-            className="rounded-full p-2 text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+            className="rounded-full p-2 text-slate-500 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
           >
             <BellIcon className="h-5 w-5" />
           </button>
-          <button
-            type="button"
-            title="Perfil"
-            className="flex items-center gap-2 rounded-md px-2 py-1.5 text-slate-700 hover:bg-slate-50"
-          >
+          <div className="flex items-center gap-2 rounded-md px-2 py-1.5 text-slate-700 dark:text-slate-300">
             <UserCircleIcon className="h-7 w-7 text-slate-400" />
-            <span className="text-sm font-medium">Nombre</span>
-          </button>
+            <div className="flex flex-col text-left">
+              <span className="text-xs font-semibold">{user?.username || "Usuario"}</span>
+              <span className="text-[10px] text-slate-400 font-mono">{role?.nombre || "INVITADO"}</span>
+            </div>
+          </div>
           <button
             type="button"
-            title="Más opciones"
-            className="rounded-full p-2 text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+            title="Cerrar sesión"
+            onClick={handleLogout}
+            className="rounded-full p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40"
           >
-            <DotsVerticalIcon className="h-5 w-5" />
+            <LogOutIcon className="h-5 w-5" />
           </button>
         </div>
       </header>
 
       <div className="flex min-h-0 flex-1">
         <aside
-          className={`flex shrink-0 flex-col overflow-y-auto border-r border-slate-100 bg-white transition-[width] duration-200 ${
+          className={`flex shrink-0 flex-col overflow-y-auto border-r border-slate-100 bg-white transition-[width] duration-200 dark:border-slate-800 dark:bg-slate-900 ${
             collapsed ? "w-[4.5rem]" : "w-64"
           }`}
         >
           {!collapsed && (
-            <div className="border-b border-slate-100 p-3">
+            <div className="border-b border-slate-100 p-3 dark:border-slate-800">
               <label className="relative block">
                 <SearchIcon className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                 <input
@@ -221,7 +241,7 @@ export function AppLayout() {
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder="Buscar en el menú..."
-                  className="w-full rounded-md border border-slate-200 bg-slate-50 py-2 pl-8 pr-3 text-sm text-slate-700 placeholder:text-slate-400 focus:border-[#5BD191] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#88EC9B]/40"
+                  className="w-full rounded-md border border-slate-200 bg-slate-50 py-2 pl-8 pr-3 text-sm text-slate-700 placeholder:text-slate-400 focus:border-[#5BD191] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#88EC9B]/40 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 />
               </label>
             </div>
@@ -259,11 +279,9 @@ export function AppLayout() {
                   <button
                     type="button"
                     title="Cerrar sesión"
-                    onClick={() => {
-                      // Pendiente: aún no hay lógica real de sesión que cerrar.
-                    }}
+                    onClick={handleLogout}
                     className={[
-                      "flex items-center gap-3 rounded-md text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900",
+                      "flex items-center gap-3 rounded-md text-sm font-medium text-red-600 transition-colors hover:bg-red-50 hover:text-red-700 dark:text-red-400 dark:hover:bg-red-950/30",
                       collapsed ? "mx-2 justify-center px-0 py-2.5" : "mx-2 px-3 py-2.5",
                     ].join(" ")}
                   >
