@@ -82,7 +82,13 @@ export async function cambiarEstatusDenuncia(
   const { data } = await apiClient.patch<Denuncia>(
     `/buzon/denuncias/${id}/estatus`,
     input,
-    { signal },
+    {
+      params: {
+        nuevoEstatus: input.nuevoEstatus,
+        estatus: input.nuevoEstatus,
+      },
+      signal,
+    },
   );
   return data;
 }

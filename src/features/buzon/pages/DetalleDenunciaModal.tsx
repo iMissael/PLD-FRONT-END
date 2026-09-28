@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 import { CheckCircleIcon, PaperclipIcon, XIcon } from "@/shared/components/icons";
 import { es } from "@/shared/i18n/es";
 import {
@@ -23,6 +24,7 @@ const BADGE_STYLES: Record<EstadoDenuncia, string> = {
 };
 
 export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaModalProps) {
+  const { user } = useAuth();
   const { data: denuncia, isLoading: loadingDetalle } = useDenunciaDetalle(denunciaId);
   const { data: obsList = [], isLoading: loadingObs } = useObservaciones(denunciaId);
   const { data: evidList = [], isLoading: loadingEvid } = useEvidencias(denunciaId);
@@ -31,18 +33,45 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
   const agregarObs = useAgregarObservacion(denunciaId ?? 0);
 
   const [nuevaObservacion, setNuevaObservacion] = useState("");
-  const [feedback, setFeedback] = useState<{ msg: string; type: "success" | "error" } | null>(null);
+  const [feedback, setFeedback] = useState<{ msg: string; type: "success" | "error" | "warning" } | null>(null);
 
   if (!denunciaId) return null;
 
   const observacionesCombined = denuncia?.observaciones?.length ? denuncia.observaciones : obsList;
   const evidenciasCombined = denuncia?.evidencias?.length ? denuncia.evidencias : evidList;
+  const tieneObservaciones = observacionesCombined.length > 0;
 
   const handleStatusChange = async (nuevoEstatus: EstadoDenuncia) => {
     setFeedback(null);
+
+    // Regla de Negocio: En estado 'V', requiere al menos una observación antes de Aceptar (A) o Denegar (D)
+    if ((nuevoEstatus === "A" || nuevoEstatus === "D") && !tieneObservaciones) {
+      if (nuevaObservacion.trim()) {
+        try {
+          await agregarObs.mutateAsync({
+            observacion: nuevaObservacion.trim(),
+            verificoRef: user?.username ?? "Oficial PLD",
+          });
+          setNuevaObservacion("");
+        } catch {
+          setFeedback({
+            msg: "Ocurrió un error al guardar la observación requerida.",
+            type: "error",
+          });
+          return;
+        }
+      } else {
+        setFeedback({
+          msg: "Regla de Negocio: Debe agregar al menos una observación de revisión antes de Aceptar o Denegar la denuncia.",
+          type: "warning",
+        });
+        return;
+      }
+    }
+
     try {
       await cambiarEstatus.mutateAsync({ nuevoEstatus });
-      setFeedback({ msg: "Estatus de la denuncia actualizado correctamente.", type: "success" });
+      setFeedback({ msg: `Estatus actualizado a ${es.buzon.statusLabels[nuevoEstatus]} exitosamente.`, type: "success" });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "No se pudo actualizar el estatus.";
       setFeedback({ msg, type: "error" });
@@ -54,9 +83,12 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
     if (!nuevaObservacion.trim()) return;
     setFeedback(null);
     try {
-      await agregarObs.mutateAsync({ observacion: nuevaObservacion.trim() });
+      await agregarObs.mutateAsync({
+        observacion: nuevaObservacion.trim(),
+        verificoRef: user?.username ?? "Oficial PLD",
+      });
       setNuevaObservacion("");
-      setFeedback({ msg: "Observación agregada exitosamente.", type: "success" });
+      setFeedback({ msg: "Observación de seguimiento agregada exitosamente.", type: "success" });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Error al registrar observación.";
       setFeedback({ msg, type: "error" });
@@ -93,6 +125,8 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
             className={`mt-4 rounded-lg px-3.5 py-2 text-xs font-medium ${
               feedback.type === "success"
                 ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
+                : feedback.type === "warning"
+                ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20"
                 : "bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20"
             }`}
           >
@@ -107,45 +141,56 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
             {/* Status Header & Action Buttons */}
             <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-bg p-3.5">
               <div className="flex items-center gap-2">
-                <span className="text-muted font-medium">Estatus:</span>
+                <span className="text-muted font-medium">Estatus actual:</span>
                 <span className={`inline-block rounded-full px-3 py-0.5 text-xs font-semibold ${BADGE_STYLES[denuncia.estado]}`}>
                   {es.buzon.statusLabels[denuncia.estado]}
                 </span>
               </div>
 
-              {/* Status Action Buttons */}
+              {/* Status Actions based on Business Rules */}
               <div className="flex flex-wrap items-center gap-2">
+                {/* Rule: Recibido (R) -> SOLO puede pasar a Revision (V) */}
                 {denuncia.estado === "R" && (
                   <button
                     type="button"
                     onClick={() => handleStatusChange("V")}
                     disabled={cambiarEstatus.isPending}
-                    className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3.5 py-1.5 font-medium text-white hover:bg-blue-700 disabled:opacity-50"
                   >
                     Iniciar Revisión (V)
                   </button>
                 )}
-                {(denuncia.estado === "R" || denuncia.estado === "V") && (
+
+                {/* Rule: En Revision (V) -> Puede pasar a Aceptado (A) o Denegado (D) con al menos 1 observación */}
+                {denuncia.estado === "V" && (
                   <>
                     <button
                       type="button"
                       onClick={() => handleStatusChange("A")}
-                      disabled={cambiarEstatus.isPending}
-                      className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 font-medium text-white hover:bg-emerald-700 disabled:opacity-50"
+                      disabled={cambiarEstatus.isPending || (!tieneObservaciones && !nuevaObservacion.trim())}
+                      title={!tieneObservaciones && !nuevaObservacion.trim() ? "Requiere al menos 1 observación" : "Aceptar Denuncia"}
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-1.5 font-medium text-white hover:bg-emerald-700 disabled:opacity-50"
                     >
                       <CheckCircleIcon className="h-4 w-4" />
-                      Aceptar / Atender Denuncia (A)
+                      Aceptar Denuncia (A)
                     </button>
                     <button
                       type="button"
                       onClick={() => handleStatusChange("D")}
-                      disabled={cambiarEstatus.isPending}
-                      className="inline-flex items-center gap-1.5 rounded-lg bg-slate-700 px-3 py-1.5 font-medium text-white hover:bg-slate-800 disabled:opacity-50"
+                      disabled={cambiarEstatus.isPending || (!tieneObservaciones && !nuevaObservacion.trim())}
+                      title={!tieneObservaciones && !nuevaObservacion.trim() ? "Requiere al menos 1 observación" : "Denegar Denuncia"}
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-slate-700 px-3.5 py-1.5 font-medium text-white hover:bg-slate-800 disabled:opacity-50"
                     >
                       <XIcon className="h-4 w-4" />
-                      Desechar / Denegar (D)
+                      Denegar Denuncia (D)
                     </button>
                   </>
+                )}
+
+                {(denuncia.estado === "A" || denuncia.estado === "D") && (
+                  <span className="text-xs text-muted font-medium italic">
+                    Expediente finalizado ({es.buzon.statusLabels[denuncia.estado]})
+                  </span>
                 )}
               </div>
             </div>
@@ -207,34 +252,44 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
               )}
             </div>
 
-            {/* Observations Section */}
+            {/* Observations History & Input Form */}
             <div className="border-t border-line pt-5">
-              <h3 className="text-sm font-bold text-fg mb-3">
-                {es.buzon.observationsTitle}
-              </h3>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-sm font-bold text-fg">
+                  Historial de Observaciones ({observacionesCombined.length})
+                </h3>
+                {denuncia.estado === "V" && !tieneObservaciones && (
+                  <span className="text-[11px] font-medium text-amber-600 dark:text-amber-400">
+                    Obligatorio registrar al menos 1 observación en revisión
+                  </span>
+                )}
+              </div>
 
+              {/* Observation Timeline List displaying User ID & Date */}
               {observacionesCombined && observacionesCombined.length > 0 ? (
-                <ul className="space-y-2.5 mb-4">
+                <ul className="space-y-2.5 mb-4 max-h-60 overflow-y-auto pr-1">
                   {observacionesCombined.map((obs) => (
                     <li
                       key={obs.id}
                       className="rounded-xl border border-line bg-bg p-3 space-y-1"
                     >
                       <p className="text-fg leading-normal">{obs.observacion}</p>
-                      <div className="flex items-center justify-between text-[11px] text-muted pt-1">
-                        <span>Verificador: {obs.verificoRef || "Oficial PLD"}</span>
+                      <div className="flex items-center justify-between text-[11px] text-muted pt-1 border-t border-line/40">
+                        <span className="font-medium">
+                          Usuario: <span className="text-fg">{obs.verificoRef || user?.username || "Oficial PLD"}</span>
+                        </span>
                         <span>{new Date(obs.createdAt).toLocaleString("es-MX")}</span>
                       </div>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="text-muted italic mb-4">No se han registrado observaciones aún.</p>
+                <p className="text-muted italic mb-4">No hay observaciones registradas aún.</p>
               )}
 
-              {/* Form to add observations without requiring to close/change status */}
+              {/* Form to add more observations without requiring to close/change status */}
               {(denuncia.estado === "R" || denuncia.estado === "V") && (
-                <form onSubmit={handleAddObservation} className="space-y-2">
+                <form onSubmit={handleAddObservation} className="space-y-2 pt-2 border-t border-line">
                   <label htmlFor="nuevaObsInput" className="block text-xs font-semibold text-fg">
                     Agregar Observación de Seguimiento
                   </label>
@@ -244,7 +299,7 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                       type="text"
                       value={nuevaObservacion}
                       onChange={(e) => setNuevaObservacion(e.target.value)}
-                      placeholder="Escribe una observación sin cerrar el expediente..."
+                      placeholder="Escribe una observación de revisión (puedes agregar múltiples)..."
                       className="flex-1 rounded-lg border border-line bg-bg px-3 py-2 text-xs text-fg focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:outline-none"
                     />
                     <button
