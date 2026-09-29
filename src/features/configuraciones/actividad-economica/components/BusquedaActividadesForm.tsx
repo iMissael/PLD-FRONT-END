@@ -35,7 +35,7 @@ export function BusquedaActividadesForm({
           className={field}
         />
       </div>
-      <p className="text-sm text-muted">
+      <p className="text-sm text-muted-foreground">
         {valor.trim()
           ? `${totalFiltrado} de ${totalGeneral} actividades`
           : `${totalGeneral} actividades`}

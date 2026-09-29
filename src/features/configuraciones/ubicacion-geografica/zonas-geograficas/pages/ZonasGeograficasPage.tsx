@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
-import { Button } from "@/shared/components/ui/Button";
+import { Button } from "@/shared/components/ui/CatalogoButton";
 
 import { ZonaAsignaciones } from "../components/ZonaAsignaciones";
 import { ZonaForm } from "../components/ZonaForm";
@@ -78,8 +78,8 @@ export function ZonasGeograficasPage() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-fg">Zonas geográficas</h2>
-          <p className="text-sm text-muted">
+          <h2 className="text-xl font-semibold text-foreground">Zonas geográficas</h2>
+          <p className="text-sm text-muted-foreground">
             Administra las zonas de riesgo PLD y las entidades/países asignados a cada
             una.
           </p>

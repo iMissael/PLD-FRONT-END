@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Button } from "@/shared/components/ui/Button";
+import { Button } from "@/shared/components/ui/CatalogoButton";
 import { card, field, label } from "@/shared/components/ui/styles";
 
 import { useZonaIdsDePais } from "../hooks/usePaises";
@@ -63,7 +63,9 @@ export function PaisForm({ pais, onGuardar, onCancelar, isPending }: PaisFormPro
 
   return (
     <form onSubmit={handleSubmit} className={`flex flex-col gap-4 p-4 ${card}`}>
-      <h3 className="text-sm font-semibold text-fg">Editar país: {pais.nombre}</h3>
+      <h3 className="text-sm font-semibold text-foreground">
+        Editar país: {pais.nombre}
+      </h3>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-1">
@@ -100,7 +102,8 @@ export function PaisForm({ pais, onGuardar, onCancelar, isPending }: PaisFormPro
 
         <div className="flex flex-col gap-1">
           <label htmlFor="codigoIso" className={label}>
-            Código ISO <span className="font-normal text-muted">(opcional)</span>
+            Código ISO{" "}
+            <span className="font-normal text-muted-foreground">(opcional)</span>
           </label>
           <input
             id="codigoIso"
@@ -116,14 +119,16 @@ export function PaisForm({ pais, onGuardar, onCancelar, isPending }: PaisFormPro
 
         <div className="flex flex-col gap-1">
           <label htmlFor="tipo" className={label}>
-            Tipo <span className="font-normal text-muted">(opcional)</span>
+            Tipo <span className="font-normal text-muted-foreground">(opcional)</span>
           </label>
           <input
             id="tipo"
             type="text"
             maxLength={2}
             value={form.tipo}
-            onChange={(event) => setForm((prev) => ({ ...prev, tipo: event.target.value }))}
+            onChange={(event) =>
+              setForm((prev) => ({ ...prev, tipo: event.target.value }))
+            }
             className={field}
           />
         </div>

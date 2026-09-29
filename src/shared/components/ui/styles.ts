@@ -9,36 +9,34 @@
  */
 
 /** Panel/card: el contenedor blanco con borde que envuelve tablas y formularios. */
-export const card = "rounded-lg border border-line bg-panel";
+export const card = "rounded-lg border border-border bg-card";
 
 /** Campo de texto y `<select>`: misma caja para que se vean iguales. */
 export const field =
-  "rounded-md border border-line bg-panel px-3 py-2 text-sm text-fg " +
-  "focus:border-accent focus:ring-2 focus:ring-accent-ring focus:outline-none " +
-  "disabled:bg-hover disabled:text-muted";
+  "rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground " +
+  "focus:border-primary focus:ring-2 focus:ring-ring/50 focus:outline-none " +
+  "disabled:bg-muted disabled:text-muted-foreground";
 
 /** Etiqueta de un campo. */
-export const label = "text-sm font-medium text-fg";
+export const label = "text-sm font-medium text-foreground";
 
 /** Texto de apoyo debajo de un campo. */
-export const hint = "text-xs text-muted";
+export const hint = "text-xs text-muted-foreground";
 
 export const table = {
   /** Contenedor con el borde redondeado; la tabla va dentro. */
   wrapper: `overflow-hidden ${card}`,
-  root: "min-w-full divide-y divide-line text-sm",
-  head: "bg-hover",
-  headCell: "px-3 py-2 text-left font-medium text-muted",
-  body: "divide-y divide-line",
+  root: "min-w-full divide-y divide-border text-sm",
+  head: "bg-muted",
+  headCell: "px-3 py-2 text-left font-medium text-muted-foreground",
+  body: "divide-y divide-border",
   /** Fila clicable. `seleccionada` la resalta con un tinte del acento. */
   row: (seleccionada: boolean) =>
-    seleccionada
-      ? "cursor-pointer bg-accent/10"
-      : "cursor-pointer hover:bg-hover",
-  cell: "px-3 py-2 text-fg",
-  cellMuted: "px-3 py-2 text-muted",
-  cellStrong: "px-3 py-2 font-medium text-fg",
+    seleccionada ? "cursor-pointer bg-primary/10" : "cursor-pointer hover:bg-muted",
+  cell: "px-3 py-2 text-foreground",
+  cellMuted: "px-3 py-2 text-muted-foreground",
+  cellStrong: "px-3 py-2 font-medium text-foreground",
 };
 
 /** Mensaje de estado vacío o de carga, dentro de un panel. */
-export const emptyState = `${card} p-6 text-center text-sm text-muted`;
+export const emptyState = `${card} p-6 text-center text-sm text-muted-foreground`;

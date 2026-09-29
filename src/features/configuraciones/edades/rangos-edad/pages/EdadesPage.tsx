@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
-import { Button } from "@/shared/components/ui/Button";
+import { Button } from "@/shared/components/ui/CatalogoButton";
 
 import { EdadForm } from "../components/EdadForm";
 import { EdadesTable } from "../components/EdadesTable";
@@ -67,8 +67,8 @@ export function EdadesPage() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-fg">Edades</h2>
-          <p className="text-sm text-muted">
+          <h2 className="text-xl font-semibold text-foreground">Edades</h2>
+          <p className="text-sm text-muted-foreground">
             Rangos de edad y el nivel de riesgo PLD asociado a cada uno.
           </p>
         </div>

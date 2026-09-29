@@ -19,7 +19,7 @@ interface PaisDetalleProps {
 export function PaisDetalle({ pais, nombresZonas, onEditar }: PaisDetalleProps) {
   const etiqueta = "w-16 shrink-0 text-sm font-medium text-warning";
   const valor =
-    "flex-1 rounded-md border border-warning/40 bg-panel px-3 py-1.5 text-sm text-fg";
+    "flex-1 rounded-md border border-warning/40 bg-card px-3 py-1.5 text-sm text-foreground";
 
   return (
     <div className="flex flex-col gap-3 rounded-lg border border-warning/40 bg-warning-soft p-4">
@@ -46,7 +46,7 @@ export function PaisDetalle({ pais, nombresZonas, onEditar }: PaisDetalleProps) 
         onClick={onEditar}
         title="Editar país"
         aria-label="Editar país"
-        className="self-center rounded-full border border-line bg-panel p-2 text-muted hover:bg-hover hover:text-fg focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:outline-none"
+        className="self-center rounded-full border border-border bg-card p-2 text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

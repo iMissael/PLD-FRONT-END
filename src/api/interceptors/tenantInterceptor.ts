@@ -1,14 +1,17 @@
 import type { InternalAxiosRequestConfig } from "axios";
 
 import { getCurrentTenantId } from "@/shared/tenant/tenantStore";
+import { rutaTenant } from "@/shared/tenant/tenantPaths";
 
 /**
- * Agrega el tenant activo a cada request saliente, de las dos formas que
- * espera el backend:
+ * Arma la URL real de cada request saliente y manda el tenant activo de las
+ * dos formas que espera el backend:
  *
- *  1. Como prefijo de la URL: `/SICANETSC/PLD/{tenantId}` antes de la ruta
- *     relativa que pide cada función de `api/` (p. ej. `/personas-bloqueadas`
- *     queda en `/SICANETSC/PLD/{tenantId}/personas-bloqueadas`).
+ *  1. Como prefijo de la URL: `/SICANETSC/PLD/{tenantId}/api` antes de la
+ *     ruta relativa que pide cada función de `api/` (p. ej. `/personas-bloqueadas`
+ *     queda en `/SICANETSC/PLD/{tenantId}/personas-bloqueadas`). Los
+ *     controllers del backend cuelgan de `/api/...` y el prefijo del tenant
+ *     se les antepone, así que sin el `/api` la ruta no existe.
  *  2. Como header `X-Tenant-Id`, que el backend usa para validar contra el
  *     segmento de la URL (ver TenantInterceptor.java del backend).
  *
@@ -31,6 +34,6 @@ export function tenantInterceptor(
   }
 
   config.headers.set("X-Tenant-Id", tenantId);
-  config.url = `/SICANETSC/PLD/${tenantId}${config.url ?? ""}`;
+  config.url = `${rutaTenant(tenantId)}${config.url ?? ""}`;
   return config;
 }

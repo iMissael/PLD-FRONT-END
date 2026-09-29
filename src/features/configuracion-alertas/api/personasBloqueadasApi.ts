@@ -9,7 +9,7 @@ import type {
   RfcCurpParams,
 } from "../types/personaBloqueada";
 
-const BASE_PATH = "/api/personas-bloqueadas";
+const BASE_PATH = "/personas-bloqueadas";
 
 /**
  * El backend real (`PersonaBloqueadaController`) también expone

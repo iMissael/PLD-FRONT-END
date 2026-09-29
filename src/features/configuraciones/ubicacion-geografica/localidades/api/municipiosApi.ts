@@ -2,7 +2,7 @@ import { apiClient } from "@/api/client";
 
 import type { MunicipioResponse } from "../types/localidad";
 
-const BASE_PATH = "/api/catalogos/municipios";
+const BASE_PATH = "/catalogos/municipios";
 
 /**
  * `MunicipioController` tiene CRUD completo, pero en el front es solo un

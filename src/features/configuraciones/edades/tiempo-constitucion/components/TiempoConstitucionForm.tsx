@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Button } from "@/shared/components/ui/Button";
+import { Button } from "@/shared/components/ui/CatalogoButton";
 import { card, field, hint, label } from "@/shared/components/ui/styles";
 
 import { NivelRiesgoSelect } from "../../../ubicacion-geografica/niveles-riesgo/components/NivelRiesgoSelect";
@@ -102,7 +102,7 @@ export function TiempoConstitucionForm({
 
   return (
     <form onSubmit={handleSubmit} className={`flex flex-col gap-4 p-4 ${card}`}>
-      <h3 className="text-sm font-semibold text-fg">
+      <h3 className="text-sm font-semibold text-foreground">
         {esNuevo ? "Nuevo tiempo de constitución" : `Editar: ${tiempo.nombre}`}
       </h3>
 
@@ -153,7 +153,7 @@ export function TiempoConstitucionForm({
                   sinLimiteSuperior: event.target.checked,
                 }))
               }
-              className="rounded border-line accent-accent"
+              className="rounded border-border accent-accent"
             />
             Sin límite superior
           </label>
@@ -192,9 +192,9 @@ export function TiempoConstitucionForm({
         </div>
       </div>
 
-      <p className="rounded-md bg-hover px-3 py-2 text-sm text-muted">
+      <p className="rounded-md bg-muted px-3 py-2 text-sm text-muted-foreground">
         Nombre que se guardará:{" "}
-        <span className="font-medium text-fg">
+        <span className="font-medium text-foreground">
           {nombrePrevio ?? "— captura el rango —"}
         </span>
       </p>

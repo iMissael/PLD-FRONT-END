@@ -5,7 +5,7 @@
  * `infrastructure.adapters.in.rest.dto` de `denuncias-app`).
  *
  * Cuando el backend exponga su OpenAPI/Swagger, corre `pnpm gen:api` y
- * reemplaza esto por los tipos generados en `src/api/schema.d.ts`.
+ * reemplaza esto por los tipos generados en `src/schema.d.ts`.
  */
 
 /**
@@ -98,13 +98,13 @@ export interface RfcCurpParams {
 }
 
 /**
- * OJO: el shape de `FilaErrorCarga` (domain model del backend) no se ha
- * confirmado leyendo su código fuente todavía — esto es una suposición
- * razonable. Confirmar antes de construir la pantalla de carga masiva.
+ * Igual a `FilaErrorCarga` del backend (record en `domain.model.enums`):
+ * los nombres de campo son los del record de Java, no una interpretación
+ * libre ("fila"/"error" no existen en el JSON real).
  */
 export interface FilaErrorCarga {
-  fila: number;
-  error: string;
+  numeroFila: number;
+  motivo: string;
 }
 
 /** Igual a `CargaMasivaResponse` del backend. */

@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
-import { Button } from "@/shared/components/ui/Button";
+import { Button } from "@/shared/components/ui/CatalogoButton";
 
 import {
   BusquedaEntidadesForm,
@@ -26,10 +26,7 @@ const ENTIDADES_POR_PAGINA = 15;
  * acento. Igual que en Países.
  */
 function normalizar(texto: string): string {
-  return texto
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .toUpperCase();
+  return texto.normalize("NFD").replace(/[̀-ͯ]/g, "").toUpperCase();
 }
 
 export function EntidadesPage() {
@@ -120,8 +117,8 @@ export function EntidadesPage() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-fg">Entidades</h2>
-          <p className="text-sm text-muted">
+          <h2 className="text-xl font-semibold text-foreground">Entidades</h2>
+          <p className="text-sm text-muted-foreground">
             Administra las entidades federativas y su zona de riesgo asignada.
           </p>
         </div>
@@ -158,7 +155,7 @@ export function EntidadesPage() {
       />
 
       {!isLoading && (entidadesFiltradas?.length ?? 0) > 0 ? (
-        <div className="flex items-center justify-between text-sm text-muted">
+        <div className="flex items-center justify-between text-sm text-muted-foreground">
           <span>
             {entidadesFiltradas?.length} entidad
             {entidadesFiltradas?.length === 1 ? "" : "es"} — página {paginaActual} de{" "}

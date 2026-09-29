@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { Alert } from "@/shared/components/ui/Alert";
-import { Button } from "@/shared/components/ui/Button";
+import { Button } from "@/shared/components/ui/CatalogoButton";
 import { card, field, label } from "@/shared/components/ui/styles";
 
 import { useMexicoPaisId } from "../hooks/useMexicoPaisId";
@@ -76,7 +76,7 @@ export function EntidadForm({
 
   return (
     <form onSubmit={handleSubmit} className={`flex flex-col gap-4 p-4 ${card}`}>
-      <h3 className="text-sm font-semibold text-fg">
+      <h3 className="text-sm font-semibold text-foreground">
         {esNueva ? "Nueva entidad" : `Editar entidad: ${entidad.nombre}`}
       </h3>
 
@@ -123,7 +123,7 @@ export function EntidadForm({
 
         <div className="flex flex-col gap-1">
           <label htmlFor="preBuro" className={label}>
-            Pre-buró <span className="font-normal text-muted">(opcional)</span>
+            Pre-buró <span className="font-normal text-muted-foreground">(opcional)</span>
           </label>
           <input
             id="preBuro"

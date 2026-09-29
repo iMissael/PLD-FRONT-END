@@ -70,10 +70,10 @@ export const es = {
     addObservation: "Agregar Observación",
     changeStatus: "Cambiar Estatus",
     statusLabels: {
-      R: "Recepción (Pendiente)",
-      V: "Verificación / Revisión",
-      A: "Atendida (Alerta Generada)",
-      D: "Desechada",
+      R: "Recibido",
+      V: "En Revisión",
+      A: "Aceptada",
+      D: "Rechazada",
     },
     alertStatusLabels: {
       A: "Activa",

@@ -1,12 +1,16 @@
 import { apiClient } from "@/api/client";
-import type { LoginCredentials, LoginResponse } from "../types/auth";
+import type { LoginRequest, LoginResponse } from "../types/auth";
 
 export async function loginUser(
-  credentials: LoginCredentials,
+  credentials: LoginRequest,
   signal?: AbortSignal,
 ): Promise<LoginResponse> {
-  const { data } = await apiClient.post<LoginResponse>("/api/auth/login", credentials, {
+  const { data } = await apiClient.post<LoginResponse>("/auth/login", credentials, {
     signal,
   });
   return data;
+}
+
+export function login(credentials: LoginRequest): Promise<LoginResponse> {
+  return loginUser(credentials);
 }

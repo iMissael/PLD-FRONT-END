@@ -122,6 +122,17 @@ export function UserCircleIcon(props: IconProps) {
   );
 }
 
+export function UserPlusIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="9.5" cy="8" r="3.2" />
+      <path d="M3.5 19.5v-1a4.5 4.5 0 0 1 4.5-4.5h3a4.5 4.5 0 0 1 4.5 4.5v1" />
+      <path d="M19 8.5v5" />
+      <path d="M16.5 11h5" />
+    </svg>
+  );
+}
+
 export function DotsVerticalIcon(props: IconProps) {
   return (
     <svg {...base} {...props}>
@@ -316,6 +327,24 @@ export function ArrowLeftIcon(props: IconProps) {
     <svg {...base} {...props}>
       <line x1="19" y1="12" x2="5" y2="12" />
       <polyline points="12 19 5 12 12 5" />
+    </svg>
+  );
+}
+
+export function EditIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+    </svg>
+  );
+}
+
+export function UserCheckIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+      <circle cx="9" cy="7" r="4" />
+      <polyline points="16 11 18 13 22 9" />
     </svg>
   );
 }

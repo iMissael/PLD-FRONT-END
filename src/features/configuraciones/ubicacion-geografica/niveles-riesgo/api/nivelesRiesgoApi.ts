@@ -2,7 +2,7 @@ import { apiClient } from "@/api/client";
 
 import type { NivelRiesgoResponse } from "../types/nivelRiesgo";
 
-const BASE_PATH = "/api/catalogos/niveles-riesgo";
+const BASE_PATH = "/catalogos/niveles-riesgo";
 
 /**
  * Catálogo de solo lectura desde el front: se usa como fuente de un

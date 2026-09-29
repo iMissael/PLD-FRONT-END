@@ -1,5 +1,5 @@
-import { Badge } from "@/shared/components/ui/Badge";
-import { Button } from "@/shared/components/ui/Button";
+import { Badge } from "@/shared/components/ui/CatalogoBadge";
+import { Button } from "@/shared/components/ui/CatalogoButton";
 import { emptyState, table } from "@/shared/components/ui/styles";
 
 import type { ZonaGeograficaResponse } from "../types/zonaGeografica";
@@ -63,7 +63,7 @@ export function ZonasTable({
               <td className="px-3 py-2 text-right">
                 <Button
                   variante="secundario"
-                  className={`px-3 py-1 text-xs ${zona.id === verId ? "border-fg text-fg" : ""}`}
+                  className={`px-3 py-1 text-xs ${zona.id === verId ? "border-fg text-foreground" : ""}`}
                   onClick={(event) => {
                     event.stopPropagation();
                     onVer(zona);

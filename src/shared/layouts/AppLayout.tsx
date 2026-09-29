@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
-import { NavLink, Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 
-import { useAuth } from "@/features/auth/hooks/useAuth";
-import { ThemeToggle } from "@/shared/components/ThemeToggle";
+import { useAuthStore } from "@/shared/auth/authStore";
+import { useRutaTenant } from "@/shared/tenant/useRutaTenant";
 
 import {
   ActivityIcon,
@@ -17,9 +17,9 @@ import {
   SearchIcon,
   SettingsIcon,
   ShieldSearchIcon,
-  UserCircleIcon,
+  UserPlusIcon,
 } from "@/shared/components/icons";
-import { field } from "@/shared/components/ui/styles";
+import { ThemeToggle } from "@/shared/components/ThemeToggle";
 
 interface NavLeaf {
   label: string;
@@ -44,15 +44,18 @@ function isGroup(node: NavNode): node is NavGroup {
  * relativos a la ruta del tenant (`/SICANETSC/PLD/:tenantId`), porque este
  * layout cuelga directamente de ella (ver routes/router.tsx) — nunca
  * hardcodear el tenant aquí.
+ *
+ * IMPORTANTE: estos 4 nombres (Configuraciones, Configuración de alertas,
+ * Operación, Control) son los definidos por el negocio — no renombrar aquí.
  */
 const NAV_ITEMS: NavNode[] = [
   {
     label: "Buzón de denuncias",
     icon: ShieldSearchIcon,
     children: [
-      { label: "Gestión de Denuncias", to: "buzon/gestion" },
+      { label: "Gestión de denuncias", to: "buzon/gestion" },
       { label: "Alertas PLD", to: "buzon/alertas" },
-      { label: "Buzón Anónimo (Público)", to: "buzon/denuncias" },
+      { label: "Buzón anónimo (público)", to: "buzon/denuncias" },
     ],
   },
   {
@@ -63,6 +66,7 @@ const NAV_ITEMS: NavNode[] = [
         label: "Configuración del oficial de cumplimiento",
         to: "configuraciones/oficial-cumplimiento",
       },
+      { label: "Matriz de riesgo", to: "configuraciones/matriz-riesgo" },
       {
         label: "ubicación geográfica",
         children: [
@@ -116,12 +120,28 @@ const NAV_ITEMS: NavNode[] = [
   {
     label: "Operación",
     icon: ActivityIcon,
-    children: [{ label: "Resumen", to: "operacion" }],
+    children: [
+      { label: "Resumen", to: "operacion" },
+      { label: "Evaluación de riesgo", to: "operacion/evaluacion-riesgo" },
+    ],
   },
   {
     label: "Control",
     icon: ClipboardCheckIcon,
-    children: [{ label: "Resumen", to: "control" }],
+    children: [
+      { label: "Resumen", to: "control" },
+      { label: "Quien es quien", to: "control/quienesquien" },
+      { label: "Revisión de coincidencias", to: "control/coincidencias" },
+    ],
+  },
+  {
+    label: "Nuevos usuarios",
+    icon: UserPlusIcon,
+    children: [
+      { label: "Usuarios", to: "configuraciones/administracion/usuarios" },
+      { label: "Roles", to: "configuraciones/administracion/roles" },
+      { label: "Permisos", to: "configuraciones/administracion/permisos" },
+    ],
   },
   { label: "Acerca de", to: "acerca-de", icon: InfoIcon },
 ];
@@ -158,25 +178,32 @@ function collectLeaves(node: NavNode): NavLeaf[] {
  * comparten el mismo primer segmento (p.ej. "configuraciones/personas" y
  * "configuraciones/ubicacion-geografica/paises"). */
 function isNodeActive(node: NavNode, pathname: string): boolean {
-  return collectLeaves(node).some((hoja) => pathname.endsWith(`/${hoja.to}`));
+  return collectLeaves(node).some(
+    (hoja) => pathname.endsWith(`/${hoja.to}`) || pathname.includes(`/${hoja.to}/`),
+  );
 }
 
 /**
  * Layout base de la app: barra superior (menú hamburguesa, logo, y accesos
  * de usuario) + menú lateral colapsable + contenido de la página activa.
  *
- * Colores: todos vienen de los tokens del tema (`estilos/paleta_colores.md`).
- * Según esa guía el verde vive **solo en el menú lateral** (item activo en
- * `nav-active`, hover de inactivos en `nav-inactive-hover`); el acento indigo
- * se usa para foco y el logo combina indigo con el teal de marca.
+ * Colores: todos vienen de los tokens de `src/index.css` (paleta 60/30/10).
+ * El verde vive solo en el menú lateral (item activo en `nav`/`nav-hover`,
+ * hover de inactivos en `nav-soft`); el acento indigo (`primary`) se usa
+ * para foco y avatar, y el logo combina indigo con el teal de marca.
  */
 export function AppLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const [query, setQuery] = useState("");
-
-  const { tenantId } = useParams<{ tenantId: string }>();
   const navigate = useNavigate();
-  const { user, role, logout } = useAuth();
+  const rutaEnTenant = useRutaTenant();
+  const usuario = useAuthStore((estado) => estado.usuario);
+  const inicial = (usuario?.nombre ?? "U").trim().charAt(0).toUpperCase() || "U";
+
+  function cerrarSesion() {
+    useAuthStore.getState().logout();
+    navigate(rutaEnTenant("login"), { replace: true });
+  }
 
   const itemsFiltrados = useMemo(() => filterTree(NAV_ITEMS, query), [query]);
   const otrosFiltrados = useMemo(
@@ -187,71 +214,67 @@ export function AppLayout() {
     [query],
   );
 
-  const handleLogout = () => {
-    logout();
-    navigate(`/SICANETSC/PLD/${tenantId ?? "57b37f52-ecd6-483d-addb-1495e96e2492"}/login`, {
-      replace: true,
-    });
-  };
-
   return (
-    <div className="flex h-full flex-col bg-bg">
-      <header className="flex h-16 shrink-0 items-center justify-between border-b border-line bg-panel px-4">
+    <div className="bg-background flex h-full flex-col">
+      <header className="bg-muted/95 border-border flex h-16 shrink-0 items-center justify-between border-b px-4">
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={() => setCollapsed((value) => !value)}
             aria-label={collapsed ? "Mostrar menú" : "Ocultar menú"}
-            className="rounded-md p-2 text-nav-inactive hover:bg-hover focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:outline-none"
+            className="hover:bg-secondary text-foreground rounded-md p-2"
           >
             <MenuIcon className="h-5 w-5" />
           </button>
 
-          {/* Logo: gradiente indigo → teal de marca (guía › logo TopBar). */}
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-accent-hover to-brand-teal text-xs font-bold text-white">
+          <span className="from-primary-hover to-brand-teal flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br text-xs font-bold text-white">
             SC
           </span>
-          <span className="truncate text-sm font-semibold text-fg">SICANET SC</span>
+          <span className="text-foreground truncate text-sm font-semibold">
+            SICANET SC
+          </span>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <ThemeToggle />
-        
           <button
             type="button"
-            title={role?.nombre ? `Perfil (${role.nombre})` : "Perfil"}
-            className="flex items-center gap-2 rounded-md px-2 py-1.5 text-nav-inactive hover:bg-hover focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:outline-none"
+            title="Notificaciones"
+            className="hover:bg-secondary text-foreground rounded-full p-2"
           >
-            <UserCircleIcon className="h-7 w-7 text-muted" />
-            <div className="flex flex-col text-left">
-              <span className="text-sm font-medium leading-none text-fg">
-                {user?.username ?? "Oficial PLD"}
-              </span>
-              {role?.nombre && (
-                <span className="text-[10px] text-muted">{role.nombre}</span>
-              )}
-            </div>
+            <BellIcon className="h-5 w-5" />
           </button>
-          
+          <button
+            type="button"
+            title="Perfil"
+            className="hover:bg-secondary text-foreground flex items-center gap-2 rounded-md px-2 py-1.5"
+          >
+            <span className="from-primary-hover to-primary flex size-9 items-center justify-center rounded-full bg-gradient-to-br text-sm font-bold text-white">
+              {inicial}
+            </span>
+            <span className="flex flex-col items-start leading-tight">
+              <span className="text-sm font-medium">{usuario?.nombre ?? "Usuario"}</span>
+            </span>
+          </button>
         </div>
       </header>
 
       <div className="flex min-h-0 flex-1">
         <aside
-          className={`flex shrink-0 flex-col overflow-y-auto border-r border-line bg-panel transition-[width] duration-200 ${
+          className={`bg-card border-border flex shrink-0 flex-col overflow-y-auto border-r transition-[width] duration-200 ${
             collapsed ? "w-[4.5rem]" : "w-64"
           }`}
         >
           {!collapsed && (
-            <div className="border-b border-line p-3">
+            <div className="border-border border-b p-3">
               <label className="relative block">
-                <SearchIcon className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+                <SearchIcon className="text-muted-foreground pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2" />
                 <input
                   type="search"
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder="Buscar en el menú..."
-                  className={`w-full pl-8 ${field} placeholder:text-muted`}
+                  className="border-input bg-muted text-foreground placeholder:text-muted-foreground focus:border-ring focus:bg-card focus:ring-ring/30 w-full rounded-md border py-2 pl-8 pr-3 text-sm focus:outline-none focus:ring-2"
                 />
               </label>
             </div>
@@ -289,11 +312,9 @@ export function AppLayout() {
                   <button
                     type="button"
                     title="Cerrar sesión"
-                    onClick={handleLogout}
+                    onClick={cerrarSesion}
                     className={[
-                      // La guía pide rosa para "cerrar sesión", distinto del
-                      // rojo de error.
-                      "flex items-center gap-3 rounded-md text-sm font-medium text-logout transition-colors hover:bg-logout-soft",
+                      "text-logout hover:bg-logout-soft flex items-center gap-3 rounded-md text-sm font-medium transition-colors",
                       collapsed ? "mx-2 justify-center px-0 py-2.5" : "mx-2 px-3 py-2.5",
                     ].join(" ")}
                   >
@@ -316,7 +337,7 @@ export function AppLayout() {
 
 function SectionLabel({ children }: { children: string }) {
   return (
-    <p className="px-4 pb-2 text-xs font-semibold uppercase tracking-wide text-muted">
+    <p className="text-muted-foreground px-4 pb-2 text-xs font-semibold uppercase tracking-wide">
       {children}
     </p>
   );
@@ -332,8 +353,8 @@ function navLinkClassName(collapsed: boolean) {
       "flex items-center gap-3 rounded-md text-sm font-medium transition-colors",
       collapsed ? "mx-2 justify-center px-0 py-2.5" : "mx-2 px-3 py-2.5",
       isActive
-        ? "bg-nav-active text-white hover:bg-nav-active-hover"
-        : "text-nav-inactive hover:bg-nav-inactive-hover",
+        ? "bg-nav hover:bg-nav-hover text-white"
+        : "hover:bg-nav-soft text-foreground",
     ].join(" ");
 }
 
@@ -345,8 +366,8 @@ function nestedLinkClassName({ isActive }: { isActive: boolean }) {
   return [
     "rounded-md px-3 py-2 text-sm transition-colors",
     isActive
-      ? "font-medium text-nav-active hover:text-nav-active-hover"
-      : "text-nav-subitem hover:text-nav-subitem-hover",
+      ? "text-nav hover:text-nav-hover font-bold"
+      : "hover:text-nav-link-hover text-muted-foreground",
   ].join(" ");
 }
 
@@ -433,22 +454,22 @@ function NavGroupSection({ node, depth }: { node: NavGroup; depth: number }) {
             ? [
                 "mx-2 flex w-[calc(100%-1rem)] items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors",
                 destacado
-                  ? "bg-nav-active text-white hover:bg-nav-active-hover"
-                  : "text-nav-inactive hover:bg-nav-inactive-hover",
+                  ? "bg-nav hover:bg-nav-hover text-white shadow-sm"
+                  : "hover:bg-nav-soft text-foreground",
               ].join(" ")
-            : "flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-nav-subitem hover:text-nav-subitem-hover"
+            : "hover:text-nav-link-hover text-muted-foreground flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors"
         }
       >
         {Icon && <Icon className="h-5 w-5 shrink-0" />}
         <span className="flex-1 truncate text-left">{node.label}</span>
         <ChevronDownIcon
           className={`h-4 w-4 shrink-0 transition-transform ${
-            destacado ? "text-white" : "text-muted"
+            destacado ? "text-white" : "text-muted-foreground"
           } ${open ? "" : "-rotate-90"}`}
         />
       </button>
       {open && (
-        <div className="ml-4 mt-0.5 flex flex-col gap-0.5 border-l border-line pl-2">
+        <div className="border-border ml-4 mt-0.5 flex flex-col gap-0.5 border-l pl-2">
           {node.children.map((child) => (
             <NavNodeRenderer
               key={child.label}

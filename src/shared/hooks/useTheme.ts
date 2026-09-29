@@ -9,6 +9,7 @@ export function useTheme() {
     const saved = localStorage.getItem(THEME_STORAGE_KEY) as ThemeMode | null;
     return saved ?? "auto";
   });
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     localStorage.setItem(THEME_STORAGE_KEY, theme);
@@ -17,12 +18,9 @@ export function useTheme() {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     const applyTheme = () => {
-      const isDark = theme === "dark" || (theme === "auto" && mediaQuery.matches);
-      if (isDark) {
-        root.classList.add("dark");
-      } else {
-        root.classList.remove("dark");
-      }
+      const dark = theme === "dark" || (theme === "auto" && mediaQuery.matches);
+      root.classList.toggle("dark", dark);
+      setIsDark(dark);
     };
 
     applyTheme();
@@ -33,5 +31,9 @@ export function useTheme() {
     }
   }, [theme]);
 
-  return { theme, setTheme };
+  // El botón único (sin opción de "sistema" visible) solo alterna entre
+  // claro/oscuro a partir de lo que esté resuelto en pantalla en ese momento.
+  const toggleTheme = () => setTheme(isDark ? "light" : "dark");
+
+  return { theme, setTheme, isDark, toggleTheme };
 }

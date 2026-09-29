@@ -51,9 +51,16 @@ export function BuzonPublicoPage() {
   });
 
   const selectedTipoId = watch("catTipoAlertaId");
+  const selectedRazonId = watch("catRazonAlertaId");
   const { data: razonesAlerta, isLoading: loadingRazones } = useRazonesAlertaPorTipo(
     selectedTipoId > 0 ? selectedTipoId : null,
   );
+
+  const selectedRazon = razonesAlerta?.find((r) => r.id === selectedRazonId);
+  const selectedRazonDescripcion =
+    selectedRazon?.descripcionRazonAlerta ||
+    (selectedRazon as unknown as { descripcion?: string })?.descripcion ||
+    "";
 
   useEffect(() => {
     if (tiposAlerta && tiposAlerta.length > 0 && selectedTipoId === 0) {
@@ -214,7 +221,7 @@ export function BuzonPublicoPage() {
                       ) : razonesAlerta && razonesAlerta.length > 0 ? (
                         razonesAlerta.map((razon) => (
                           <option key={razon.id} value={razon.id}>
-                            {razon.nombre} - {razon.descripcionRazonAlerta}
+                            {razon.nombre}
                           </option>
                         ))
                       ) : (
@@ -223,6 +230,20 @@ export function BuzonPublicoPage() {
                     </select>
                     {errors.catRazonAlertaId && (
                       <p className="mt-1 text-xs text-red-600">{errors.catRazonAlertaId.message}</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Visualización de la descripción de la razón de alerta seleccionada */}
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-300">
+                    Descripción de la Razón de Alerta
+                  </label>
+                  <div className="mt-1 rounded-md border border-slate-200 bg-slate-50 p-2.5 text-xs text-slate-700 dark:border-slate-700/80 dark:bg-slate-800/60 dark:text-slate-300 min-h-[42px] flex items-center leading-relaxed">
+                    {selectedRazonDescripcion || (
+                      <span className="italic text-slate-400 dark:text-slate-500">
+                        Selecciona una razón de alerta para visualizar su descripción.
+                      </span>
                     )}
                   </div>
                 </div>
