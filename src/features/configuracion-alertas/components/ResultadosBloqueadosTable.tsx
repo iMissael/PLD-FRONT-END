@@ -14,10 +14,10 @@ interface ResultadosBloqueadosTableProps {
 function Campo({ label, value }: { label: string; value: string | null | undefined }) {
   return (
     <div className="flex flex-col">
-      <dt className="text-xs font-medium uppercase tracking-wide text-slate-400">
+      <dt className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
         {label}
       </dt>
-      <dd className="text-sm text-slate-800">{value ?? "—"}</dd>
+      <dd className="text-foreground text-sm">{value ?? "—"}</dd>
     </div>
   );
 }
@@ -26,19 +26,19 @@ function ResultadoCard({ resultado }: { resultado: ResultadoBusquedaResponse }) 
   const { personaPrincipal, alias, coincidenciaViaAlias, aliasCoincidentes } = resultado;
 
   return (
-    <li className="rounded-lg border border-slate-200 bg-white p-4">
+    <li className="border-border bg-card rounded-lg border p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h3 className="text-base font-semibold text-slate-900">
+        <h3 className="text-foreground text-base font-semibold">
           {personaPrincipal.nombreCompleto}
         </h3>
         <div className="flex gap-2">
-          <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">
+          <span className="bg-secondary text-secondary-foreground rounded-full px-2 py-0.5 text-xs font-medium">
             {personaPrincipal.estatus}
           </span>
           <span
             className={
               coincidenciaViaAlias
-                ? "rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800"
+                ? "bg-warning-soft text-warning-hover rounded-full px-2 py-0.5 text-xs font-medium"
                 : "rounded-full bg-success-soft text-success-hover px-2 py-0.5 text-xs font-medium"
             }
           >
@@ -58,19 +58,19 @@ function ResultadoCard({ resultado }: { resultado: ResultadoBusquedaResponse }) 
       </dl>
 
       {coincidenciaViaAlias && aliasCoincidentes.length > 0 ? (
-        <p className="mt-3 text-sm text-amber-800">
+        <p className="text-warning-hover mt-3 text-sm">
           Coincidió por el/los alias: {aliasCoincidentes.join(", ")}
         </p>
       ) : null}
 
       {alias.length > 0 ? (
-        <div className="mt-3 border-t border-slate-100 pt-3">
-          <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
+        <div className="border-border mt-3 border-t pt-3">
+          <p className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
             Alias registrados ({alias.length})
           </p>
           <ul className="mt-1 flex flex-col gap-1">
             {alias.map((unAlias) => (
-              <li key={unAlias.id} className="text-sm text-slate-600">
+              <li key={unAlias.id} className="text-muted-foreground text-sm">
                 {unAlias.nombreCompleto}
                 {unAlias.rfc ? ` · RFC ${unAlias.rfc}` : ""}
                 {unAlias.curp ? ` · CURP ${unAlias.curp}` : ""}
@@ -92,7 +92,7 @@ export function ResultadosBloqueadosTable({
 }: ResultadosBloqueadosTableProps) {
   if (sinBusqueda) {
     return (
-      <p className="rounded-lg border border-dashed border-slate-300 p-6 text-center text-sm text-slate-500">
+      <p className="border-border text-muted-foreground rounded-lg border border-dashed p-6 text-center text-sm">
         Ingresa al menos un criterio y presiona "Buscar" para consultar.
       </p>
     );
@@ -100,7 +100,7 @@ export function ResultadosBloqueadosTable({
 
   if (isLoading) {
     return (
-      <p className="rounded-lg border border-slate-200 bg-white p-6 text-center text-sm text-slate-500">
+      <p className="border-border bg-card text-muted-foreground rounded-lg border p-6 text-center text-sm">
         Buscando coincidencias...
       </p>
     );
@@ -109,7 +109,7 @@ export function ResultadosBloqueadosTable({
   if (isError) {
     const mensaje = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
     return (
-      <p className="rounded-lg border border-red-200 bg-red-50 p-6 text-center text-sm text-red-700">
+      <p className="border-destructive-soft bg-destructive-soft text-destructive rounded-lg border p-6 text-center text-sm">
         {mensaje}
       </p>
     );
@@ -117,7 +117,7 @@ export function ResultadosBloqueadosTable({
 
   if (!resultados || resultados.length === 0) {
     return (
-      <p className="rounded-lg border border-slate-200 bg-white p-6 text-center text-sm text-slate-500">
+      <p className="border-border bg-card text-muted-foreground rounded-lg border p-6 text-center text-sm">
         Sin coincidencias.
       </p>
     );

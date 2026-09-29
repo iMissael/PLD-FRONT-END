@@ -22,6 +22,7 @@ import {
   ShieldSearchIcon,
   UserPlusIcon,
 } from "@/shared/components/icons";
+import { ThemeToggle } from "@/shared/components/ThemeToggle";
 
 interface NavLeaf {
   label: string;
@@ -133,6 +134,7 @@ const NAV_ITEMS: NavNode[] = [
     children: [
       { label: "Resumen", to: "control" },
       { label: "Quien es quien", to: "control/quienesquien" },
+      { label: "Revisión de coincidencias", to: "control/coincidencias" },
     ],
   },
   {
@@ -218,13 +220,13 @@ export function AppLayout() {
 
   return (
     <div className="bg-background flex h-full flex-col">
-      <header className="bg-muted/95 flex h-16 shrink-0 items-center justify-between border-b border-gray-300 px-4">
+      <header className="bg-muted/95 border-border flex h-16 shrink-0 items-center justify-between border-b px-4">
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={() => setCollapsed((value) => !value)}
             aria-label={collapsed ? "Mostrar menú" : "Ocultar menú"}
-            className="hover:bg-secondary rounded-md p-2 text-gray-700"
+            className="hover:bg-secondary text-foreground rounded-md p-2"
           >
             <MenuIcon className="h-5 w-5" />
           </button>
@@ -238,17 +240,18 @@ export function AppLayout() {
         </div>
 
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           <button
             type="button"
             title="Notificaciones"
-            className="hover:bg-secondary rounded-full p-2 text-gray-700"
+            className="hover:bg-secondary text-foreground rounded-full p-2"
           >
             <BellIcon className="h-5 w-5" />
           </button>
           <button
             type="button"
             title="Perfil"
-            className="hover:bg-secondary flex items-center gap-2 rounded-md px-2 py-1.5 text-gray-700"
+            className="hover:bg-secondary text-foreground flex items-center gap-2 rounded-md px-2 py-1.5"
           >
             <span className="from-primary-hover to-primary flex size-9 items-center justify-center rounded-full bg-gradient-to-br text-sm font-bold text-white">
               {inicial}
@@ -265,7 +268,7 @@ export function AppLayout() {
           <button
             type="button"
             title="Más opciones"
-            className="hover:bg-secondary rounded-full p-2 text-gray-700"
+            className="hover:bg-secondary text-foreground rounded-full p-2"
           >
             <DotsVerticalIcon className="h-5 w-5" />
           </button>
@@ -281,13 +284,13 @@ export function AppLayout() {
           {!collapsed && (
             <div className="border-border border-b p-3">
               <label className="relative block">
-                <SearchIcon className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                <SearchIcon className="text-muted-foreground pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2" />
                 <input
                   type="search"
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder="Buscar en el menú..."
-                  className="border-input bg-muted focus:border-ring focus:bg-card focus:ring-ring/30 w-full rounded-md border py-2 pl-8 pr-3 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none focus:ring-2"
+                  className="border-input bg-muted text-foreground placeholder:text-muted-foreground focus:border-ring focus:bg-card focus:ring-ring/30 w-full rounded-md border py-2 pl-8 pr-3 text-sm focus:outline-none focus:ring-2"
                 />
               </label>
             </div>
@@ -350,7 +353,7 @@ export function AppLayout() {
 
 function SectionLabel({ children }: { children: string }) {
   return (
-    <p className="px-4 pb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">
+    <p className="text-muted-foreground px-4 pb-2 text-xs font-semibold uppercase tracking-wide">
       {children}
     </p>
   );
@@ -367,7 +370,7 @@ function navLinkClassName(collapsed: boolean) {
       collapsed ? "mx-2 justify-center px-0 py-2.5" : "mx-2 px-3 py-2.5",
       isActive
         ? "bg-nav hover:bg-nav-hover text-white"
-        : "hover:bg-nav-soft text-gray-700",
+        : "hover:bg-nav-soft text-foreground",
     ].join(" ");
 }
 
@@ -380,7 +383,7 @@ function nestedLinkClassName({ isActive }: { isActive: boolean }) {
     "rounded-md px-3 py-2 text-sm transition-colors",
     isActive
       ? "text-nav hover:text-nav-hover font-bold"
-      : "hover:text-nav-link-hover text-gray-600",
+      : "hover:text-nav-link-hover text-muted-foreground",
   ].join(" ");
 }
 
@@ -468,16 +471,16 @@ function NavGroupSection({ node, depth }: { node: NavGroup; depth: number }) {
                 "mx-2 flex w-[calc(100%-1rem)] items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors",
                 destacado
                   ? "bg-nav hover:bg-nav-hover text-white shadow-sm"
-                  : "hover:bg-nav-soft text-gray-700",
+                  : "hover:bg-nav-soft text-foreground",
               ].join(" ")
-            : "hover:text-nav-link-hover flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-gray-600 transition-colors"
+            : "hover:text-nav-link-hover text-muted-foreground flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors"
         }
       >
         {Icon && <Icon className="h-5 w-5 shrink-0" />}
         <span className="flex-1 truncate text-left">{node.label}</span>
         <ChevronDownIcon
           className={`h-4 w-4 shrink-0 transition-transform ${
-            destacado ? "text-white" : "text-gray-400"
+            destacado ? "text-white" : "text-muted-foreground"
           } ${open ? "" : "-rotate-90"}`}
         />
       </button>

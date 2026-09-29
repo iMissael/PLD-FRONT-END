@@ -7,12 +7,11 @@ describe("UsuariosTable", () => {
   it("lists usuarios returned by the API", async () => {
     renderWithProviders(<UsuariosTable />);
 
-    expect(screen.getByText(/cargando usuarios/i)).toBeInTheDocument();
-
     await waitFor(() => {
-      expect(screen.getByText("admin")).toBeInTheDocument();
+      expect(screen.getByText("Administrador")).toBeInTheDocument();
     });
 
-    expect(screen.getByText("Administrador")).toBeInTheDocument();
+    expect(screen.getByText("@admin")).toBeInTheDocument();
+    expect(screen.getByText("ROLE_ADMIN")).toBeInTheDocument();
   });
 });

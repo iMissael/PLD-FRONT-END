@@ -9,6 +9,7 @@ import {
   Copy,
   Download,
   Loader2,
+  Plus,
   RefreshCw,
   Search,
   ShieldCheck,
@@ -48,13 +49,6 @@ export interface EvaluacionMostrada {
   resultado: EvaluacionRiesgoResultado;
   detalles: DetallesSubfactor;
 }
-
-const PALETA_PUNTO = [
-  "bg-indigo-600",
-  "bg-rose-500",
-  "bg-amber-500",
-  "bg-violet-500",
-] as const;
 
 const COLUMNAS = "md:grid-cols-[minmax(0,1fr)_92px_92px_92px_100px]";
 
@@ -195,6 +189,9 @@ function TarjetaFactor({
   const esEnfoque = claveSubfactor(factor.descripcionFactor).includes("enfoque");
   const [abierto, setAbierto] = useState(!esEnfoque);
   const nivel = nivelDesdePromedio(factor.puntajeObtenido);
+  // El punto de color de la categoría es su propio nivel de riesgo (verde/ámbar/rojo),
+  // igual que en la matriz de referencia — no un color decorativo rotando por índice.
+  const colorPunto = nivel?.solido.split(" ")[0] ?? "bg-gray-300";
   const ChevronFactor = abierto ? ChevronUp : ChevronDown;
 
   return (
@@ -225,7 +222,7 @@ function TarjetaFactor({
           <span
             className={cn(
               "size-2 shrink-0 rounded-full",
-              esEnfoque ? "bg-indigo-400" : PALETA_PUNTO[indice % PALETA_PUNTO.length],
+              esEnfoque ? "bg-indigo-400" : colorPunto,
             )}
           />
           <span className="truncate text-sm font-bold">
@@ -506,7 +503,7 @@ export function MatrizRiesgoDashboard({
   const rfcEncabezado = cliente && cliente.rfc !== "—" ? cliente.rfc : "";
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
+    <div className="flex h-full flex-col rounded-lg border border-gray-200 bg-white shadow-sm">
       <header className="flex flex-wrap items-center justify-between gap-4 rounded-t-lg bg-slate-900 px-5 py-3 text-white">
         <div className="flex items-center gap-3">
           <div className="flex size-9 items-center justify-center rounded-lg border border-indigo-400/30 bg-indigo-500/20 text-indigo-300">
@@ -575,11 +572,19 @@ export function MatrizRiesgoDashboard({
             <Download className="size-3.5 text-slate-400" />
             Exportar
           </button>
+          <button
+            type="button"
+            onClick={onEvaluar}
+            className="inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-indigo-500"
+          >
+            <Plus className="size-3.5" />
+            Nueva evaluación
+          </button>
         </div>
       </header>
 
-      <div className="flex min-h-[640px] flex-col lg:flex-row">
-        <aside className="w-full shrink-0 border-b border-gray-200 bg-white lg:w-[300px] lg:rounded-bl-lg lg:border-r lg:border-b-0">
+      <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
+        <aside className="w-full shrink-0 overflow-y-auto border-b border-gray-200 bg-white lg:w-[300px] lg:rounded-bl-lg lg:border-r lg:border-b-0">
           <div className="flex items-center justify-between bg-gradient-to-r from-slate-900 to-slate-800 px-4 py-3 text-white">
             <span className="flex items-center gap-2 text-sm font-semibold tracking-wide">
               <span className="rounded bg-indigo-500/20 p-1 text-indigo-300">
@@ -630,7 +635,7 @@ export function MatrizRiesgoDashboard({
           </div>
         </aside>
 
-        <section className="flex min-w-0 flex-1 flex-col bg-slate-50 lg:rounded-br-lg">
+        <section className="flex min-h-0 min-w-0 flex-1 flex-col bg-slate-50 lg:rounded-br-lg">
           <div className="flex flex-wrap items-center justify-between gap-4 border-b border-gray-200 bg-white px-6 py-4">
             <div className="min-w-[260px] flex-1">
               <h3 className="flex flex-wrap items-baseline gap-2 text-base font-bold tracking-tight text-gray-900">
@@ -678,7 +683,7 @@ export function MatrizRiesgoDashboard({
             </div>
           </div>
 
-          <div className="flex-1 space-y-5 p-6">
+          <div className="min-h-0 flex-1 space-y-5 overflow-y-auto p-6">
             {evaluacion ? (
               <>
                 <div

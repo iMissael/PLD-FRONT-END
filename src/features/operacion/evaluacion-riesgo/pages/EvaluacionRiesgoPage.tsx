@@ -1,6 +1,4 @@
-import { Plus } from "lucide-react";
 import { useState } from "react";
-import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import {
   Sheet,
@@ -72,34 +70,22 @@ export function EvaluacionRiesgoPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold">Evaluación de riesgo</h1>
-          <p className="text-muted-foreground">
-            Elige un socio y su evaluación se calcula al instante con sus datos y su
-            crédito solicitado; o evalúa uno nuevo.
-          </p>
-        </div>
-        <Button onClick={() => setFormularioAbierto(true)}>
-          <Plus />
-          Nueva evaluación
-        </Button>
+    <div className="flex h-full flex-col gap-6">
+      <div className="min-h-0 flex-1">
+        <MatrizRiesgoDashboard
+          cliente={cliente}
+          cargandoSocio={Boolean(socio) && debeEvaluar && perfil.isPending}
+          errorSocio={Boolean(socio) && debeEvaluar && perfil.isError}
+          evaluacion={evaluacionGuardada ?? null}
+          estadoEvaluacion={estadoEvaluacion}
+          onSeleccionarSocio={seleccionarSocio}
+          onEvaluar={() => setFormularioAbierto(true)}
+          onReintentar={reintentar}
+          onReevaluar={reevaluarSocio}
+        />
       </div>
 
-      <MatrizRiesgoDashboard
-        cliente={cliente}
-        cargandoSocio={Boolean(socio) && debeEvaluar && perfil.isPending}
-        errorSocio={Boolean(socio) && debeEvaluar && perfil.isError}
-        evaluacion={evaluacionGuardada ?? null}
-        estadoEvaluacion={estadoEvaluacion}
-        onSeleccionarSocio={seleccionarSocio}
-        onEvaluar={() => setFormularioAbierto(true)}
-        onReintentar={reintentar}
-        onReevaluar={reevaluarSocio}
-      />
-
-      <Card>
+      <Card className="shrink-0">
         <CardHeader>
           <CardTitle>Consultar evaluación previa</CardTitle>
         </CardHeader>

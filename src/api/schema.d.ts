@@ -35,9 +35,21 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener usuario por ID
+         * @description Consulta un usuario por su identificador único
+         */
         get: operations["obtenerPorId"];
+        /**
+         * Actualizar usuario
+         * @description Modifica los datos de identidad de un usuario existente
+         */
         put: operations["actualizar"];
         post?: never;
+        /**
+         * Eliminar usuario
+         * @description Elimina un usuario por su ID
+         */
         delete: operations["eliminar"];
         options?: never;
         head?: never;
@@ -51,8 +63,20 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener datos de oficial de cumplimiento
+         * @description Consulta los datos de oficial de cumplimiento de un usuario
+         */
         get: operations["obtenerOficial"];
+        /**
+         * Actualizar datos de oficial de cumplimiento
+         * @description Modifica los datos de oficial de cumplimiento de un usuario
+         */
         put: operations["actualizarOficial"];
+        /**
+         * Registrar datos de oficial de cumplimiento
+         * @description Crea los datos de oficial de cumplimiento asociados a un usuario
+         */
         post: operations["crearOficial"];
         delete?: never;
         options?: never;
@@ -67,8 +91,20 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener domicilio
+         * @description Consulta el domicilio de un usuario
+         */
         get: operations["obtenerDomicilio"];
+        /**
+         * Actualizar domicilio
+         * @description Modifica el domicilio de un usuario
+         */
         put: operations["actualizarDomicilio"];
+        /**
+         * Registrar domicilio
+         * @description Crea el domicilio asociado a un usuario
+         */
         post: operations["crearDomicilio"];
         delete?: never;
         options?: never;
@@ -83,8 +119,20 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener estado de la credencial
+         * @description Consulta intentos fallidos, bloqueo y fechas de la credencial del usuario (no expone el hash)
+         */
         get: operations["obtenerCredencial"];
+        /**
+         * Cambiar contraseña
+         * @description Cambia la contraseña de un usuario que ya tiene credencial
+         */
         put: operations["cambiarPassword"];
+        /**
+         * Establecer credencial
+         * @description Crea la credencial (contraseña) inicial de un usuario que aún no tiene una válida
+         */
         post: operations["establecerCredencial"];
         delete?: never;
         options?: never;
@@ -99,9 +147,21 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener rol por ID
+         * @description Consulta un rol por su identificador único
+         */
         get: operations["obtenerPorId_1"];
+        /**
+         * Actualizar rol
+         * @description Modifica los datos de un rol existente
+         */
         put: operations["actualizar_1"];
         post?: never;
+        /**
+         * Eliminar rol
+         * @description Elimina un rol por su ID
+         */
         delete: operations["eliminar_1"];
         options?: never;
         head?: never;
@@ -136,8 +196,20 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
+        /**
+         * Actualizar persona bloqueada por RFC y CURP
+         * @description Localiza y actualiza una persona bloqueada por la combinación de RFC y CURP
+         */
         put: operations["actualizarPorRfcOCurp"];
+        /**
+         * Crear persona bloqueada
+         * @description Registra una nueva persona (o alias) en la lista local de bloqueados
+         */
         post: operations["crear_2"];
+        /**
+         * Eliminar persona bloqueada por RFC y CURP
+         * @description Localiza y elimina una persona bloqueada por la combinación de RFC y CURP
+         */
         delete: operations["eliminarPorRfcOCurp"];
         options?: never;
         head?: never;
@@ -151,9 +223,21 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener persona bloqueada por ID
+         * @description Consulta una persona bloqueada por su identificador único
+         */
         get: operations["obtener_1"];
+        /**
+         * Actualizar persona bloqueada por ID
+         * @description Modifica los datos de una persona bloqueada existente
+         */
         put: operations["actualizar_2"];
         post?: never;
+        /**
+         * Eliminar persona bloqueada por ID
+         * @description Elimina una persona bloqueada por su ID
+         */
         delete: operations["eliminar_2"];
         options?: never;
         head?: never;
@@ -167,9 +251,21 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener permiso por ID
+         * @description Consulta un permiso por su identificador único
+         */
         get: operations["obtenerPorId_2"];
+        /**
+         * Actualizar permiso
+         * @description Modifica los datos de un permiso existente
+         */
         put: operations["actualizar_3"];
         post?: never;
+        /**
+         * Eliminar permiso
+         * @description Elimina un permiso por su ID
+         */
         delete: operations["eliminar_3"];
         options?: never;
         head?: never;
@@ -299,9 +395,21 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener tipo de persona por ID
+         * @description Consulta un tipo de persona por su identificador único
+         */
         get: operations["obtenerPorId_6"];
+        /**
+         * Actualizar tipo de persona
+         * @description Modifica los datos de un tipo de persona existente
+         */
         put: operations["actualizar_4"];
         post?: never;
+        /**
+         * Eliminar tipo de persona
+         * @description Elimina un tipo de persona por su ID
+         */
         delete: operations["eliminar_4"];
         options?: never;
         head?: never;
@@ -315,9 +423,21 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener tipo de pago por ID
+         * @description Consulta un tipo de pago por su identificador único
+         */
         get: operations["obtenerPorId_7"];
+        /**
+         * Actualizar tipo de pago
+         * @description Modifica los datos de un tipo de pago existente
+         */
         put: operations["actualizar_5"];
         post?: never;
+        /**
+         * Eliminar tipo de pago
+         * @description Elimina un tipo de pago por su ID
+         */
         delete: operations["eliminar_5"];
         options?: never;
         head?: never;
@@ -331,9 +451,21 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener tipo de denuncia por ID
+         * @description Consulta un tipo de denuncia por su identificador único
+         */
         get: operations["obtenerPorId_8"];
+        /**
+         * Actualizar tipo de denuncia
+         * @description Modifica los datos de un tipo de denuncia existente
+         */
         put: operations["actualizar_6"];
         post?: never;
+        /**
+         * Eliminar tipo de denuncia
+         * @description Elimina un tipo de denuncia por su ID
+         */
         delete: operations["eliminar_6"];
         options?: never;
         head?: never;
@@ -347,9 +479,21 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener tipo de crédito por ID
+         * @description Consulta un tipo de crédito por su identificador único
+         */
         get: operations["obtenerPorId_9"];
+        /**
+         * Actualizar tipo de crédito
+         * @description Modifica los datos de un tipo de crédito existente
+         */
         put: operations["actualizar_7"];
         post?: never;
+        /**
+         * Eliminar tipo de crédito
+         * @description Elimina un tipo de crédito por su ID
+         */
         delete: operations["eliminar_7"];
         options?: never;
         head?: never;
@@ -363,9 +507,21 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener rango de tiempo de constitución por ID
+         * @description Consulta un rango de tiempo de constitución por su identificador único
+         */
         get: operations["obtenerPorId_10"];
+        /**
+         * Actualizar rango de tiempo de constitución
+         * @description Modifica los datos de un rango de tiempo de constitución existente
+         */
         put: operations["actualizar_8"];
         post?: never;
+        /**
+         * Eliminar rango de tiempo de constitución
+         * @description Elimina un rango de tiempo de constitución por su ID
+         */
         delete: operations["eliminar_8"];
         options?: never;
         head?: never;
@@ -379,9 +535,21 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener rango de monto de préstamo por ID
+         * @description Consulta un rango de monto de préstamo por su identificador único
+         */
         get: operations["obtenerPorId_11"];
+        /**
+         * Actualizar rango de monto de préstamo
+         * @description Modifica los datos de un rango de monto de préstamo existente
+         */
         put: operations["actualizar_9"];
         post?: never;
+        /**
+         * Eliminar rango de monto de préstamo
+         * @description Elimina un rango de monto de préstamo por su ID
+         */
         delete: operations["eliminar_9"];
         options?: never;
         head?: never;
@@ -395,9 +563,21 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener categoría PEP por ID
+         * @description Consulta una categoría PEP por su identificador único
+         */
         get: operations["obtenerPorId_12"];
+        /**
+         * Actualizar categoría PEP
+         * @description Modifica los datos de una categoría PEP existente
+         */
         put: operations["actualizar_10"];
         post?: never;
+        /**
+         * Eliminar categoría PEP
+         * @description Elimina una categoría PEP por su ID
+         */
         delete: operations["eliminar_10"];
         options?: never;
         head?: never;
@@ -455,9 +635,21 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener origen de recurso por ID
+         * @description Consulta un origen de recurso por su identificador único
+         */
         get: operations["obtenerPorId_13"];
+        /**
+         * Actualizar origen de recurso
+         * @description Modifica los datos de un origen de recurso existente
+         */
         put: operations["actualizar_11"];
         post?: never;
+        /**
+         * Eliminar origen de recurso
+         * @description Elimina un origen de recurso por su ID
+         */
         delete: operations["eliminar_11"];
         options?: never;
         head?: never;
@@ -471,9 +663,21 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener nivel de riesgo por ID
+         * @description Consulta un nivel de riesgo por su identificador único
+         */
         get: operations["obtenerPorId_14"];
+        /**
+         * Actualizar nivel de riesgo
+         * @description Modifica los datos de un nivel de riesgo existente
+         */
         put: operations["actualizar_12"];
         post?: never;
+        /**
+         * Eliminar nivel de riesgo
+         * @description Elimina un nivel de riesgo por su ID
+         */
         delete: operations["eliminar_12"];
         options?: never;
         head?: never;
@@ -563,9 +767,21 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener lista restrictiva por ID
+         * @description Consulta una lista restrictiva por su identificador único
+         */
         get: operations["obtenerPorId_15"];
+        /**
+         * Actualizar lista restrictiva
+         * @description Modifica los datos de una lista restrictiva existente
+         */
         put: operations["actualizar_13"];
         post?: never;
+        /**
+         * Eliminar lista restrictiva
+         * @description Elimina una lista restrictiva por su ID
+         */
         delete: operations["eliminar_13"];
         options?: never;
         head?: never;
@@ -579,9 +795,21 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener historial crediticio por ID
+         * @description Consulta un historial crediticio por su identificador único
+         */
         get: operations["obtenerPorId_16"];
+        /**
+         * Actualizar historial crediticio
+         * @description Modifica los datos de un historial crediticio existente
+         */
         put: operations["actualizar_14"];
         post?: never;
+        /**
+         * Eliminar historial crediticio
+         * @description Elimina un historial crediticio por su ID
+         */
         delete: operations["eliminar_14"];
         options?: never;
         head?: never;
@@ -595,9 +823,21 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener rango de experiencia por ID
+         * @description Consulta un rango de experiencia en la actividad por su identificador único
+         */
         get: operations["obtenerPorId_17"];
+        /**
+         * Actualizar rango de experiencia en la actividad
+         * @description Modifica los datos de un rango de experiencia existente
+         */
         put: operations["actualizar_15"];
         post?: never;
+        /**
+         * Eliminar rango de experiencia en la actividad
+         * @description Elimina un rango de experiencia por su ID
+         */
         delete: operations["eliminar_15"];
         options?: never;
         head?: never;
@@ -611,9 +851,21 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener estatus de denuncia por ID
+         * @description Consulta un estatus de denuncia por su identificador único
+         */
         get: operations["obtenerPorId_18"];
+        /**
+         * Actualizar estatus de denuncia
+         * @description Modifica los datos de un estatus de denuncia existente
+         */
         put: operations["actualizar_16"];
         post?: never;
+        /**
+         * Eliminar estatus de denuncia
+         * @description Elimina un estatus de denuncia por su ID
+         */
         delete: operations["eliminar_16"];
         options?: never;
         head?: never;
@@ -675,9 +927,21 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener rango de edad por ID
+         * @description Consulta un rango de edad por su identificador único
+         */
         get: operations["obtenerPorId_19"];
+        /**
+         * Actualizar rango de edad
+         * @description Modifica los datos de un rango de edad existente
+         */
         put: operations["actualizar_17"];
         post?: never;
+        /**
+         * Eliminar rango de edad
+         * @description Elimina un rango de edad por su ID
+         */
         delete: operations["eliminar_18"];
         options?: never;
         head?: never;
@@ -691,9 +955,21 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener destino de recurso por ID
+         * @description Consulta un destino de recurso por su identificador único
+         */
         get: operations["obtenerPorId_20"];
+        /**
+         * Actualizar destino de recurso
+         * @description Modifica los datos de un destino de recurso existente
+         */
         put: operations["actualizar_18"];
         post?: never;
+        /**
+         * Eliminar destino de recurso
+         * @description Elimina un destino de recurso por su ID
+         */
         delete: operations["eliminar_19"];
         options?: never;
         head?: never;
@@ -707,9 +983,21 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener canal de pago por ID
+         * @description Consulta un canal de pago por su identificador único
+         */
         get: operations["obtenerPorId_21"];
+        /**
+         * Actualizar canal de pago
+         * @description Modifica los datos de un canal de pago existente
+         */
         put: operations["actualizar_19"];
         post?: never;
+        /**
+         * Eliminar canal de pago
+         * @description Elimina un canal de pago por su ID
+         */
         delete: operations["eliminar_20"];
         options?: never;
         head?: never;
@@ -723,9 +1011,21 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener tipo de calle por ID
+         * @description Consulta un tipo de calle por su clave
+         */
         get: operations["obtenerTipoCallePorId"];
+        /**
+         * Actualizar tipo de calle
+         * @description Modifica los datos de un tipo de calle existente
+         */
         put: operations["actualizarTipoCalle"];
         post?: never;
+        /**
+         * Eliminar tipo de calle
+         * @description Elimina un tipo de calle por su clave
+         */
         delete: operations["eliminarTipoCalle"];
         options?: never;
         head?: never;
@@ -739,9 +1039,21 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener tipo de asentamiento por ID
+         * @description Consulta un tipo de asentamiento por su clave
+         */
         get: operations["obtenerTipoAsentamientoPorId"];
+        /**
+         * Actualizar tipo de asentamiento
+         * @description Modifica los datos de un tipo de asentamiento existente
+         */
         put: operations["actualizarTipoAsentamiento"];
         post?: never;
+        /**
+         * Eliminar tipo de asentamiento
+         * @description Elimina un tipo de asentamiento por su clave
+         */
         delete: operations["eliminarTipoAsentamiento"];
         options?: never;
         head?: never;
@@ -827,8 +1139,16 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar usuarios
+         * @description Consulta el catálogo completo de usuarios registrados
+         */
         get: operations["listar"];
         put?: never;
+        /**
+         * Crear usuario
+         * @description Registra un nuevo usuario con su contraseña inicial y rol
+         */
         post: operations["crear"];
         delete?: never;
         options?: never;
@@ -843,8 +1163,16 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar excepciones de permiso
+         * @description Consulta las excepciones de permiso registradas para un usuario
+         */
         get: operations["listarExcepcionesPermiso"];
         put?: never;
+        /**
+         * Crear excepción de permiso
+         * @description Otorga o niega un permiso puntual a un usuario, distinto de lo que le da su rol
+         */
         post: operations["crearExcepcionPermiso"];
         delete?: never;
         options?: never;
@@ -859,8 +1187,16 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar roles
+         * @description Consulta el catálogo completo de roles registrados
+         */
         get: operations["listar_1"];
         put?: never;
+        /**
+         * Crear rol
+         * @description Registra un nuevo rol en el catálogo
+         */
         post: operations["crear_1"];
         delete?: never;
         options?: never;
@@ -877,7 +1213,15 @@ export interface paths {
         };
         get?: never;
         put?: never;
+        /**
+         * Asignar permiso a un rol
+         * @description Otorga un permiso del catálogo a un rol
+         */
         post: operations["asignarPermiso"];
+        /**
+         * Revocar permiso de un rol
+         * @description Quita un permiso previamente asignado a un rol
+         */
         delete: operations["revocarPermiso"];
         options?: never;
         head?: never;
@@ -913,6 +1257,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
+        /**
+         * Carga masiva de personas bloqueadas
+         * @description Procesa un archivo .xlsx o .csv (encabezado en la fila 1, datos desde la fila 2) con instrucción Insertar/Actualizar/Eliminar por fila; las filas con error no detienen el resto
+         */
         post: operations["cargaMasiva"];
         delete?: never;
         options?: never;
@@ -927,8 +1275,16 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar permisos
+         * @description Consulta el catálogo completo de permisos registrados
+         */
         get: operations["listar_2"];
         put?: never;
+        /**
+         * Crear permiso
+         * @description Registra un nuevo permiso (recurso + acción) en el catálogo
+         */
         post: operations["crear_3"];
         delete?: never;
         options?: never;
@@ -969,6 +1325,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
+        /**
+         * Consultar listas restrictivas
+         * @description Busca a una persona en las listas activas del catálogo (locales y proveedor externo) y registra la consulta en bitácora
+         */
         post: operations["consultar"];
         delete?: never;
         options?: never;
@@ -1031,8 +1391,16 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar tipos de persona
+         * @description Consulta el catálogo completo de tipos de persona registrados
+         */
         get: operations["listarTodos"];
         put?: never;
+        /**
+         * Crear tipo de persona
+         * @description Registra un nuevo tipo de persona en el catálogo
+         */
         post: operations["crear_4"];
         delete?: never;
         options?: never;
@@ -1047,8 +1415,16 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar tipos de pago
+         * @description Consulta el catálogo completo de tipos de pago registrados
+         */
         get: operations["listarTodos_1"];
         put?: never;
+        /**
+         * Crear tipo de pago
+         * @description Registra un nuevo tipo de pago en el catálogo
+         */
         post: operations["crear_5"];
         delete?: never;
         options?: never;
@@ -1063,8 +1439,16 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar tipos de denuncia
+         * @description Consulta el catálogo completo de tipos de denuncia registrados
+         */
         get: operations["listarTodos_2"];
         put?: never;
+        /**
+         * Crear tipo de denuncia
+         * @description Registra un nuevo tipo de denuncia en el catálogo
+         */
         post: operations["crear_6"];
         delete?: never;
         options?: never;
@@ -1079,8 +1463,16 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar tipos de crédito
+         * @description Consulta el catálogo completo de tipos de crédito registrados
+         */
         get: operations["listarTodos_3"];
         put?: never;
+        /**
+         * Crear tipo de crédito
+         * @description Registra un nuevo tipo de crédito en el catálogo
+         */
         post: operations["crear_7"];
         delete?: never;
         options?: never;
@@ -1095,8 +1487,16 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar rangos de tiempo de constitución
+         * @description Consulta el catálogo completo de rangos de tiempo de constitución registrados
+         */
         get: operations["listarTodos_4"];
         put?: never;
+        /**
+         * Crear rango de tiempo de constitución
+         * @description Registra un nuevo rango de tiempo de constitución en el catálogo
+         */
         post: operations["crear_8"];
         delete?: never;
         options?: never;
@@ -1111,8 +1511,16 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar rangos de monto de préstamo
+         * @description Consulta el catálogo completo de rangos de monto de préstamo registrados
+         */
         get: operations["listarTodos_5"];
         put?: never;
+        /**
+         * Crear rango de monto de préstamo
+         * @description Registra un nuevo rango de monto de préstamo en el catálogo
+         */
         post: operations["crear_9"];
         delete?: never;
         options?: never;
@@ -1127,8 +1535,16 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar categorías PEP
+         * @description Consulta el catálogo completo de categorías PEP registradas
+         */
         get: operations["listarTodos_6"];
         put?: never;
+        /**
+         * Crear categoría PEP
+         * @description Registra una nueva categoría PEP en el catálogo
+         */
         post: operations["crear_10"];
         delete?: never;
         options?: never;
@@ -1207,8 +1623,16 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar orígenes de recurso
+         * @description Consulta el catálogo completo de orígenes de recurso registrados
+         */
         get: operations["listarTodos_7"];
         put?: never;
+        /**
+         * Crear origen de recurso
+         * @description Registra un nuevo origen de recurso en el catálogo
+         */
         post: operations["crear_11"];
         delete?: never;
         options?: never;
@@ -1223,8 +1647,16 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar niveles de riesgo
+         * @description Consulta el catálogo completo de niveles de riesgo registrados
+         */
         get: operations["listarTodos_8"];
         put?: never;
+        /**
+         * Crear nivel de riesgo
+         * @description Registra un nuevo nivel de riesgo en el catálogo
+         */
         post: operations["crear_12"];
         delete?: never;
         options?: never;
@@ -1327,8 +1759,16 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar listas restrictivas
+         * @description Consulta el catálogo completo de listas restrictivas registradas
+         */
         get: operations["listarTodos_9"];
         put?: never;
+        /**
+         * Crear lista restrictiva
+         * @description Registra una nueva lista restrictiva en el catálogo
+         */
         post: operations["crear_13"];
         delete?: never;
         options?: never;
@@ -1343,8 +1783,16 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar historiales crediticios
+         * @description Consulta el catálogo completo de historiales crediticios registrados
+         */
         get: operations["listarTodos_10"];
         put?: never;
+        /**
+         * Crear historial crediticio
+         * @description Registra un nuevo historial crediticio en el catálogo
+         */
         post: operations["crear_14"];
         delete?: never;
         options?: never;
@@ -1359,8 +1807,16 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar rangos de experiencia en la actividad
+         * @description Consulta el catálogo completo de rangos de experiencia registrados
+         */
         get: operations["listarTodos_11"];
         put?: never;
+        /**
+         * Crear rango de experiencia en la actividad
+         * @description Registra un nuevo rango de experiencia en el catálogo
+         */
         post: operations["crear_15"];
         delete?: never;
         options?: never;
@@ -1375,8 +1831,16 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar estatus de denuncia
+         * @description Consulta el catálogo completo de estatus de denuncia registrados
+         */
         get: operations["listarTodos_12"];
         put?: never;
+        /**
+         * Crear estatus de denuncia
+         * @description Registra un nuevo estatus de denuncia en el catálogo
+         */
         post: operations["crear_16"];
         delete?: never;
         options?: never;
@@ -1415,8 +1879,16 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar rangos de edad
+         * @description Consulta el catálogo completo de rangos de edad registrados
+         */
         get: operations["listarTodos_13"];
         put?: never;
+        /**
+         * Crear rango de edad
+         * @description Registra un nuevo rango de edad en el catálogo
+         */
         post: operations["crear_17"];
         delete?: never;
         options?: never;
@@ -1431,8 +1903,16 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar destinos de recurso
+         * @description Consulta el catálogo completo de destinos de recurso registrados
+         */
         get: operations["listarTodos_14"];
         put?: never;
+        /**
+         * Crear destino de recurso
+         * @description Registra un nuevo destino de recurso en el catálogo
+         */
         post: operations["crear_18"];
         delete?: never;
         options?: never;
@@ -1447,8 +1927,16 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar canales de pago
+         * @description Consulta el catálogo completo de canales de pago registrados
+         */
         get: operations["listarTodos_15"];
         put?: never;
+        /**
+         * Crear canal de pago
+         * @description Registra un nuevo canal de pago en el catálogo
+         */
         post: operations["crear_19"];
         delete?: never;
         options?: never;
@@ -1463,8 +1951,16 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar tipos de calle
+         * @description Consulta el catálogo de tipos de calle
+         */
         get: operations["listarTiposCalle"];
         put?: never;
+        /**
+         * Crear tipo de calle
+         * @description Registra un nuevo tipo de calle en el catálogo
+         */
         post: operations["crearTipoCalle"];
         delete?: never;
         options?: never;
@@ -1479,8 +1975,16 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar tipos de asentamiento
+         * @description Consulta el catálogo de tipos de asentamiento (colonia, fraccionamiento, etc.)
+         */
         get: operations["listarTiposAsentamiento_1"];
         put?: never;
+        /**
+         * Crear tipo de asentamiento
+         * @description Registra un nuevo tipo de asentamiento en el catálogo
+         */
         post: operations["crearTipoAsentamiento"];
         delete?: never;
         options?: never;
@@ -1521,6 +2025,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
+        /**
+         * Iniciar sesión
+         * @description Valida usuario/contraseña contra el esquema del tenant de la ruta y emite un JWT (Bearer) para el resto de los endpoints. Es la única ruta del tenant que no requiere token.
+         */
         post: operations["login"];
         delete?: never;
         options?: never;
@@ -1561,6 +2069,10 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
+        /**
+         * Asignar rol a un usuario
+         * @description Cambia el rol asignado a un usuario
+         */
         patch: operations["asignarRol"];
         trace?: never;
     };
@@ -1603,6 +2115,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener perfil de riesgo del socio
+         * @description Devuelve los datos de identidad, nacionalidad, tipo de persona y actividad económica del socio, para precargar el formulario de evaluación de riesgo
+         */
         get: operations["obtenerPerfilRiesgo"];
         put?: never;
         post?: never;
@@ -1619,6 +2135,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener socio por ID
+         * @description Consulta un socio por su referencia (PERS-{id} para personas locales, o la referencia del sistema externo)
+         */
         get: operations["buscarPorId_1"];
         put?: never;
         post?: never;
@@ -1635,6 +2155,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Buscar socios por nombre
+         * @description Sin el parámetro nombre lista todos los socios; con él, devuelve las coincidencias. Primero busca en las personas locales activas y luego en el sistema externo de socios.
+         */
         get: operations["buscarPorNombre"];
         put?: never;
         post?: never;
@@ -1651,6 +2175,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar permisos de un rol
+         * @description Consulta los permisos actualmente asignados a un rol
+         */
         get: operations["listarPermisos"];
         put?: never;
         post?: never;
@@ -1727,6 +2255,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Buscar coincidencias en la lista local
+         * @description Busca personas en la lista local de bloqueados por nombre, RFC, CURP y/o fecha de nacimiento; registra siempre la consulta en bitácora y, si hay coincidencias, también la coincidencia
+         */
         get: operations["consultaBloqueados"];
         put?: never;
         post?: never;
@@ -1743,6 +2275,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Obtener empleado por ID
+         * @description Consulta un empleado del sistema externo por su identificador
+         */
         get: operations["buscarPorId_2"];
         put?: never;
         post?: never;
@@ -1759,6 +2295,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Buscar empleados por nombre
+         * @description Sin el parámetro nombre lista todos los empleados; con él, devuelve las coincidencias
+         */
         get: operations["buscarPorNombre_1"];
         put?: never;
         post?: never;
@@ -1995,6 +2535,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar sucursales activas
+         * @description Consulta las sucursales activas, usadas para poblar el combo al dar de alta un usuario
+         */
         get: operations["listarActivas"];
         put?: never;
         post?: never;
@@ -2011,6 +2555,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar tipos de vialidad
+         * @description Catálogo de tipos de vialidad para el domicilio de usuarios
+         */
         get: operations["listarTiposVialidad"];
         put?: never;
         post?: never;
@@ -2027,6 +2575,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar tipos de identificación
+         * @description Catálogo de tipos de identificación oficial para el alta de usuarios
+         */
         get: operations["listarTiposIdentificacion"];
         put?: never;
         post?: never;
@@ -2043,6 +2595,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar tipos de comprobante
+         * @description Catálogo de tipos de comprobante de domicilio para el alta de usuarios
+         */
         get: operations["listarTiposComprobante"];
         put?: never;
         post?: never;
@@ -2059,6 +2615,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar tipos de asentamiento
+         * @description Catálogo de tipos de asentamiento para el domicilio de usuarios
+         */
         get: operations["listarTiposAsentamiento"];
         put?: never;
         post?: never;
@@ -2075,6 +2635,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar posesiones de vivienda
+         * @description Catálogo del tipo de posesión de la vivienda (propia, rentada, etc.) para el domicilio de usuarios
+         */
         get: operations["listarPosesionesVivienda"];
         put?: never;
         post?: never;
@@ -2091,6 +2655,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar niveles de estudios
+         * @description Catálogo de niveles de estudios para el alta de usuarios
+         */
         get: operations["listarNivelesEstudios"];
         put?: never;
         post?: never;
@@ -2107,6 +2675,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar nacionalidades
+         * @description Catálogo de nacionalidades para el alta de usuarios
+         */
         get: operations["listarNacionalidades"];
         put?: never;
         post?: never;
@@ -2123,6 +2695,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Listar estados civiles
+         * @description Catálogo de estados civiles para el alta de usuarios
+         */
         get: operations["listarEstadosCiviles"];
         put?: never;
         post?: never;
@@ -2142,6 +2718,10 @@ export interface paths {
         get?: never;
         put?: never;
         post?: never;
+        /**
+         * Eliminar excepción de permiso
+         * @description Elimina una excepción de permiso de un usuario
+         */
         delete: operations["eliminarExcepcionPermiso"];
         options?: never;
         head?: never;
@@ -2376,6 +2956,8 @@ export interface components {
             /** Format: date-time */
             fecha_modificacion?: string;
             revision?: components["schemas"]["RevisionDto"];
+            socio?: components["schemas"]["SocioRevisionDto"];
+            personas_en_lista?: components["schemas"]["PersonaEnListaDto"][];
         };
         ListaDto: {
             coincide?: boolean;
@@ -2384,12 +2966,35 @@ export interface components {
             alias?: string;
             origen?: string;
         };
+        PersonaEnListaDto: {
+            nombre?: string;
+            rfc?: string;
+            curp?: string;
+            /** Format: date */
+            fecha_nacimiento?: string;
+            pais?: string;
+            lista?: string;
+            oficio?: string;
+            motivo?: string;
+            /** Format: date */
+            fecha_publicacion?: string;
+            alias_coincidentes?: string[];
+        };
         RevisionDto: {
             /** Format: uuid */
             confirmado_por?: string;
             /** Format: date-time */
             fecha_confirmacion?: string;
             comentario?: string;
+        };
+        SocioRevisionDto: {
+            nombre?: string;
+            tipo_persona?: string;
+            rfc?: string;
+            curp?: string;
+            /** Format: date */
+            fecha_nacimiento?: string;
+            nacionalidad?: string;
         };
         PersonaBloqueadaRequest: {
             nombreCompleto: string;
@@ -4559,6 +5164,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID único del tipo de persona */
                 id: string;
             };
             cookie?: never;
@@ -4581,6 +5187,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del tipo de persona */
                 id: string;
             };
             cookie?: never;
@@ -4607,6 +5214,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del tipo de persona a eliminar */
                 id: string;
             };
             cookie?: never;
@@ -4627,6 +5235,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID único del tipo de pago */
                 id: string;
             };
             cookie?: never;
@@ -4649,6 +5258,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del tipo de pago */
                 id: string;
             };
             cookie?: never;
@@ -4675,6 +5285,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del tipo de pago a eliminar */
                 id: string;
             };
             cookie?: never;
@@ -4695,6 +5306,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID único del tipo de denuncia */
                 id: number;
             };
             cookie?: never;
@@ -4717,6 +5329,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del tipo de denuncia */
                 id: number;
             };
             cookie?: never;
@@ -4743,6 +5356,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del tipo de denuncia a eliminar */
                 id: number;
             };
             cookie?: never;
@@ -4763,6 +5377,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID único del tipo de crédito */
                 id: string;
             };
             cookie?: never;
@@ -4785,6 +5400,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del tipo de crédito */
                 id: string;
             };
             cookie?: never;
@@ -4811,6 +5427,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del tipo de crédito a eliminar */
                 id: string;
             };
             cookie?: never;
@@ -4831,6 +5448,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID único del rango de tiempo de constitución */
                 id: string;
             };
             cookie?: never;
@@ -4853,6 +5471,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del rango de tiempo de constitución */
                 id: string;
             };
             cookie?: never;
@@ -4879,6 +5498,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del rango de tiempo de constitución a eliminar */
                 id: string;
             };
             cookie?: never;
@@ -4899,6 +5519,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID único del rango de monto de préstamo */
                 id: string;
             };
             cookie?: never;
@@ -4921,6 +5542,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del rango de monto de préstamo */
                 id: string;
             };
             cookie?: never;
@@ -4947,6 +5569,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del rango de monto de préstamo a eliminar */
                 id: string;
             };
             cookie?: never;
@@ -4967,6 +5590,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID único de la categoría PEP */
                 id: string;
             };
             cookie?: never;
@@ -4989,6 +5613,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID de la categoría PEP */
                 id: string;
             };
             cookie?: never;
@@ -5015,6 +5640,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID de la categoría PEP a eliminar */
                 id: string;
             };
             cookie?: never;
@@ -5158,6 +5784,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID único del origen de recurso */
                 id: string;
             };
             cookie?: never;
@@ -5180,6 +5807,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del origen de recurso */
                 id: string;
             };
             cookie?: never;
@@ -5206,6 +5834,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del origen de recurso a eliminar */
                 id: string;
             };
             cookie?: never;
@@ -5226,6 +5855,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID único del nivel de riesgo */
                 id: number;
             };
             cookie?: never;
@@ -5248,6 +5878,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del nivel de riesgo */
                 id: number;
             };
             cookie?: never;
@@ -5274,6 +5905,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del nivel de riesgo a eliminar */
                 id: number;
             };
             cookie?: never;
@@ -5475,6 +6107,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID único de la lista restrictiva */
                 id: string;
             };
             cookie?: never;
@@ -5497,6 +6130,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID de la lista restrictiva */
                 id: string;
             };
             cookie?: never;
@@ -5523,6 +6157,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID de la lista restrictiva a eliminar */
                 id: string;
             };
             cookie?: never;
@@ -5543,6 +6178,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID único del historial crediticio */
                 id: string;
             };
             cookie?: never;
@@ -5565,6 +6201,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del historial crediticio */
                 id: string;
             };
             cookie?: never;
@@ -5591,6 +6228,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del historial crediticio a eliminar */
                 id: string;
             };
             cookie?: never;
@@ -5611,6 +6249,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID único del rango de experiencia */
                 id: string;
             };
             cookie?: never;
@@ -5633,6 +6272,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del rango de experiencia */
                 id: string;
             };
             cookie?: never;
@@ -5659,6 +6299,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del rango de experiencia a eliminar */
                 id: string;
             };
             cookie?: never;
@@ -5679,6 +6320,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID único del estatus de denuncia */
                 id: number;
             };
             cookie?: never;
@@ -5701,6 +6343,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del estatus de denuncia */
                 id: number;
             };
             cookie?: never;
@@ -5727,6 +6370,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del estatus de denuncia a eliminar */
                 id: number;
             };
             cookie?: never;
@@ -5851,6 +6495,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID único del rango de edad */
                 id: number;
             };
             cookie?: never;
@@ -5873,6 +6518,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del rango de edad */
                 id: number;
             };
             cookie?: never;
@@ -5899,6 +6545,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del rango de edad a eliminar */
                 id: number;
             };
             cookie?: never;
@@ -5919,6 +6566,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID único del destino de recurso */
                 id: string;
             };
             cookie?: never;
@@ -5941,6 +6589,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del destino de recurso */
                 id: string;
             };
             cookie?: never;
@@ -5967,6 +6616,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del destino de recurso a eliminar */
                 id: string;
             };
             cookie?: never;
@@ -5987,6 +6637,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID único del canal de pago */
                 id: string;
             };
             cookie?: never;
@@ -6009,6 +6660,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del canal de pago */
                 id: string;
             };
             cookie?: never;
@@ -6035,6 +6687,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description ID del canal de pago a eliminar */
                 id: string;
             };
             cookie?: never;
@@ -6567,10 +7220,7 @@ export interface operations {
         };
         requestBody?: {
             content: {
-                "application/json": {
-                    /** Format: binary */
-                    archivo: string;
-                };
+                "multipart/form-data": Record<string, never>;
             };
         };
         responses: {
@@ -8134,6 +8784,7 @@ export interface operations {
     buscarPorNombre: {
         parameters: {
             query?: {
+                /** @description Texto a buscar en el nombre del socio */
                 nombre?: string;
             };
             header?: never;
@@ -8305,6 +8956,7 @@ export interface operations {
     buscarPorNombre_1: {
         parameters: {
             query?: {
+                /** @description Texto a buscar en el nombre del empleado */
                 nombre?: string;
             };
             header?: never;

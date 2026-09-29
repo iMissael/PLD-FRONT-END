@@ -1,5 +1,20 @@
+import { Search, Trash2, Users } from "lucide-react";
+import { useMemo, useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/shared/components/ui/alert-dialog";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
+import { Input } from "@/shared/components/ui/input";
+import { Skeleton } from "@/shared/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -8,68 +23,202 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/components/ui/table";
+import { useRoles } from "@/features/configuraciones/administracion/roles/hooks/useRoles";
 import {
   useEliminarUsuario,
   useUsuarios,
 } from "@/features/configuraciones/administracion/usuarios/hooks/useUsuarios";
+import type { UsuarioResponse } from "@/features/configuraciones/administracion/usuarios/types/usuarios";
 
-export function UsuariosTable() {
-  const { data: usuarios, isLoading, isError } = useUsuarios();
+function inicialesDe(nombre: string | undefined, username: string | undefined) {
+  const base = nombre?.trim() || username || "?";
+  return base.charAt(0).toUpperCase();
+}
+
+function AvatarUsuario({ usuario }: { usuario: UsuarioResponse }) {
+  return (
+    <span className="from-primary-hover to-primary flex size-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-sm font-bold text-white">
+      {inicialesDe(usuario.nombre, usuario.username)}
+    </span>
+  );
+}
+
+function BadgeEstado({ estado }: { estado: UsuarioResponse["estado"] }) {
+  if (estado === "ACTIVO") return <Badge>Activo</Badge>;
+  if (estado === "ELIMINADO") return <Badge variant="outline">Eliminado</Badge>;
+  return <Badge variant="secondary">Inactivo</Badge>;
+}
+
+function FilaEsqueleto() {
+  return (
+    <TableRow>
+      <TableCell>
+        <div className="flex items-center gap-3">
+          <Skeleton className="size-9 shrink-0 rounded-full" />
+          <div className="space-y-1.5">
+            <Skeleton className="h-4 w-32" />
+            <Skeleton className="h-3 w-20" />
+          </div>
+        </div>
+      </TableCell>
+      <TableCell>
+        <Skeleton className="h-4 w-40" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="h-4 w-24" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="h-5 w-16 rounded-full" />
+      </TableCell>
+      <TableCell className="text-right">
+        <Skeleton className="ml-auto h-8 w-8 rounded-md" />
+      </TableCell>
+    </TableRow>
+  );
+}
+
+function BotonEliminar({ usuario }: { usuario: UsuarioResponse }) {
   const eliminarUsuario = useEliminarUsuario();
 
-  if (isLoading) {
-    return <p className="text-muted-foreground text-sm">Cargando usuarios…</p>;
-  }
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+          aria-label={`Eliminar a ${usuario.nombre ?? usuario.username}`}
+        >
+          <Trash2 />
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>¿Eliminar a {usuario.nombre ?? usuario.username}?</AlertDialogTitle>
+          <AlertDialogDescription>
+            Su acceso quedará bloqueado de inmediato y se limpiarán sus permisos y
+            domicilio asociados. Esta acción no se puede deshacer desde aquí.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+          <AlertDialogAction
+            className="bg-destructive text-white hover:bg-destructive-hover"
+            disabled={eliminarUsuario.isPending}
+            onClick={() => {
+              if (usuario.idUsuario) eliminarUsuario.mutate(usuario.idUsuario);
+            }}
+          >
+            {eliminarUsuario.isPending ? "Eliminando…" : "Eliminar"}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}
+
+export function UsuariosTable() {
+  const [busqueda, setBusqueda] = useState("");
+  const { data: usuarios, isLoading, isError } = useUsuarios();
+  const { data: roles } = useRoles();
+
+  const nombreDeRol = useMemo(() => {
+    const mapa = new Map(roles?.map((rol) => [rol.idRol, rol.nombre]) ?? []);
+    return (rolId: string | undefined) => (rolId ? (mapa.get(rolId) ?? "—") : "—");
+  }, [roles]);
+
+  const usuariosFiltrados = useMemo(() => {
+    if (!usuarios) return [];
+    const query = busqueda.trim().toLowerCase();
+    if (!query) return usuarios;
+    return usuarios.filter((usuario) =>
+      [usuario.nombre, usuario.username, usuario.correo]
+        .filter(Boolean)
+        .some((campo) => campo!.toLowerCase().includes(query)),
+    );
+  }, [usuarios, busqueda]);
 
   if (isError) {
     return (
-      <p className="text-destructive text-sm">No se pudieron cargar los usuarios.</p>
+      <p className="text-destructive rounded-lg border border-dashed p-6 text-center text-sm">
+        No se pudieron cargar los usuarios.
+      </p>
     );
   }
 
-  if (!usuarios || usuarios.length === 0) {
-    return <p className="text-muted-foreground text-sm">Aún no hay usuarios.</p>;
-  }
-
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Username</TableHead>
-          <TableHead>Nombre</TableHead>
-          <TableHead>Correo</TableHead>
-          <TableHead>Estado</TableHead>
-          <TableHead className="text-right">Acciones</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {usuarios.map((usuario) => (
-          <TableRow key={usuario.idUsuario}>
-            <TableCell className="font-medium">{usuario.username}</TableCell>
-            <TableCell>{usuario.nombre}</TableCell>
-            <TableCell>{usuario.correo ?? "—"}</TableCell>
-            <TableCell>
-              <Badge variant={usuario.estado === "ACTIVO" ? "default" : "secondary"}>
-                {usuario.estado}
-              </Badge>
-            </TableCell>
-            <TableCell className="text-right">
-              <Button
-                variant="ghost"
-                size="sm"
-                disabled={eliminarUsuario.isPending}
-                onClick={() => {
-                  if (usuario.idUsuario) {
-                    eliminarUsuario.mutate(usuario.idUsuario);
-                  }
-                }}
-              >
-                Eliminar
-              </Button>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <div className="space-y-3">
+      <div className="relative max-w-xs">
+        <Search className="text-muted-foreground pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2" />
+        <Input
+          value={busqueda}
+          onChange={(event) => setBusqueda(event.target.value)}
+          placeholder="Buscar por nombre, usuario o correo…"
+          className="pl-8"
+        />
+      </div>
+
+      <div className="overflow-hidden rounded-lg border">
+        <Table>
+          <TableHeader>
+            <TableRow className="hover:bg-transparent">
+              <TableHead>Usuario</TableHead>
+              <TableHead>Correo</TableHead>
+              <TableHead>Rol</TableHead>
+              <TableHead>Estado</TableHead>
+              <TableHead className="text-right">Acciones</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {isLoading &&
+              Array.from({ length: 4 }).map((_, i) => <FilaEsqueleto key={i} />)}
+
+            {!isLoading && usuariosFiltrados.length === 0 && (
+              <TableRow className="hover:bg-transparent">
+                <TableCell colSpan={5} className="h-32 text-center">
+                  <div className="text-muted-foreground flex flex-col items-center gap-2">
+                    <Users className="size-8 opacity-40" />
+                    <span className="text-sm">
+                      {busqueda
+                        ? "Ningún usuario coincide con esa búsqueda."
+                        : "Aún no hay usuarios registrados."}
+                    </span>
+                  </div>
+                </TableCell>
+              </TableRow>
+            )}
+
+            {!isLoading &&
+              usuariosFiltrados.map((usuario) => (
+                <TableRow key={usuario.idUsuario}>
+                  <TableCell>
+                    <div className="flex items-center gap-3">
+                      <AvatarUsuario usuario={usuario} />
+                      <div className="min-w-0">
+                        <p className="truncate font-medium">
+                          {usuario.nombre ?? usuario.username}
+                        </p>
+                        <p className="text-muted-foreground truncate text-xs">
+                          @{usuario.username}
+                        </p>
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {usuario.correo ?? "—"}
+                  </TableCell>
+                  <TableCell>{nombreDeRol(usuario.rolId)}</TableCell>
+                  <TableCell>
+                    <BadgeEstado estado={usuario.estado} />
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <BotonEliminar usuario={usuario} />
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
   );
 }

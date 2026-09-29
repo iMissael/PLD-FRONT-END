@@ -77,6 +77,60 @@
   --brand-teal: #059e9e;
 }
 
+/*
+ * Modo oscuro: mismos tokens, mismo reparto 60/30/10, valores oscuros de la
+ * paleta oficial (bg/panel/fg/border/accent). El verde de navegación y el
+ * gradiente de identidad se mantienen (son de marca, no de superficie); el
+ * índigo se aclara un paso porque el tono base del modo claro pierde
+ * contraste sobre fondos oscuros.
+ */
+:root.dark {
+  /* 60 % */
+  --background: #0b1220;
+  --foreground: #e6eef8;
+  --card: #0f1724;
+  --card-foreground: #e6eef8;
+  --popover: #0f1724;
+  --popover-foreground: #e6eef8;
+
+  /* 30 % */
+  --secondary: #1f2937;
+  --secondary-hover: #2d3644;
+  --secondary-foreground: #e6eef8;
+  --muted: #16202e;
+  --muted-foreground: #9ca3af;
+  --accent: #2d3644;
+  --accent-foreground: #e6eef8;
+  --border: #374151;
+  --input: #475569;
+  --nav: #15803d;
+  --nav-hover: #16a34a;
+  --nav-soft: #14532d;
+  --nav-link-hover: #4ade80;
+
+  /* 10 % */
+  --primary: #6366f1;
+  --primary-hover: #818cf8;
+  --primary-strong: #4f46e5;
+  --primary-soft: #312e81;
+  --primary-foreground: #ffffff;
+  --ring: #818cf8;
+
+  /* Estado */
+  --success: #22c55e;
+  --success-hover: #16a34a;
+  --success-soft: #14532d;
+  --warning: #f59e0b;
+  --warning-hover: #d97706;
+  --warning-soft: #78350f;
+  --destructive: #ef4444;
+  --destructive-hover: #dc2626;
+  --destructive-soft: #7f1d1d;
+  --destructive-foreground: #ffffff;
+  --logout: #fb7185;
+  --logout-soft: #4c0519;
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

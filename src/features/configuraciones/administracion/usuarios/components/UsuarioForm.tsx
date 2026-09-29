@@ -101,7 +101,7 @@ function aOficialPayload(values: CrearUsuarioFormValues): OficialRequest {
   };
 }
 
-export function UsuarioForm() {
+export function UsuarioForm({ onCreado }: { onCreado?: () => void }) {
   const [paso, setPaso] = useState<1 | 2 | 3>(1);
   const crearUsuarioCompleto = useCrearUsuarioCompleto();
   const { data: roles } = useRoles();
@@ -206,6 +206,7 @@ export function UsuarioForm() {
           toast.success("Usuario creado correctamente");
           form.reset();
           setPaso(1);
+          onCreado?.();
         },
         onError: () => {
           toast.error("No se pudo crear el usuario");

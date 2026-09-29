@@ -23,6 +23,7 @@ import { PaisesPage } from "@/features/configuraciones/ubicacion-geografica/pais
 import { ZonasGeograficasPage } from "@/features/configuraciones/ubicacion-geografica/zonas-geograficas/pages/ZonasGeograficasPage";
 import { ControlPage } from "@/features/control/pages/ControlPage";
 import { ConsultaListasPage } from "@/features/operacion/consulta-listas/pages/Quienesquien";
+import { RevisionCoincidenciasPage } from "@/features/control/revision-coincidencias/pages/RevisionCoincidenciasPage";
 import { EvaluacionRiesgoPage } from "@/features/operacion/evaluacion-riesgo/pages/EvaluacionRiesgoPage";
 import { OperacionPage } from "@/features/operacion/pages/OperacionPage";
 import { SeleccionarSucursalPage } from "@/features/sucursales/pages/SeleccionarSucursalPage";
@@ -102,6 +103,18 @@ export const router = createBrowserRouter([
                     path: "control",
                     element: <ControlPage />,
                   },
+                  // Sin ancho acotado: la matriz de riesgo necesita todo el ancho
+                  // disponible (expediente del cliente + tabla de factores lado a lado).
+                  {
+                    path: "operacion/evaluacion-riesgo",
+                    element: <EvaluacionRiesgoPage />,
+                  },
+                  // Sin ancho acotado: la tabla de usuarios y el formulario de alta
+                  // (con muchos campos en varias columnas) aprovechan todo el ancho.
+                  {
+                    path: "configuraciones/administracion/usuarios",
+                    element: <UsuariosPage />,
+                  },
                   {
                     path: "acerca-de",
                     element: (
@@ -149,10 +162,6 @@ export const router = createBrowserRouter([
                         element: <MatrizRiesgoPage />,
                       },
                       {
-                        path: "configuraciones/administracion/usuarios",
-                        element: <UsuariosPage />,
-                      },
-                      {
                         path: "configuraciones/administracion/roles",
                         element: <RolesPage />,
                       },
@@ -165,12 +174,12 @@ export const router = createBrowserRouter([
                         element: <PermisosPage />,
                       },
                       {
-                        path: "operacion/evaluacion-riesgo",
-                        element: <EvaluacionRiesgoPage />,
-                      },
-                      {
                         path: "control/quienesquien",
                         element: <ConsultaListasPage />,
+                      },
+                      {
+                        path: "control/coincidencias",
+                        element: <RevisionCoincidenciasPage />,
                       },
                       {
                         path: "configuraciones/personas",
