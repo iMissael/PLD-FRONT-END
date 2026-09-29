@@ -33,7 +33,7 @@ export const FALLBACK_RAZONES_ALERTA: Record<number, RazonAlerta[]> = {
 export async function getTiposAlertaBuzon(signal?: AbortSignal): Promise<TipoAlertaBuzon[]> {
   try {
     const { data } = await apiClient.get<TipoAlertaBuzon[]>(
-      "/api/catalogos/tipos-alerta/buzon",
+      "/catalogos/tipos-alerta/buzon",
       { headers: NO_CACHE_HEADERS, signal },
     );
     return data && data.length > 0 ? data : FALLBACK_TIPOS_ALERTA;
@@ -49,7 +49,7 @@ export async function getRazonesAlertaPorTipo(
 ): Promise<RazonAlerta[]> {
   try {
     const { data } = await apiClient.get<RazonAlerta[]>(
-      `/api/catalogos/razones-alerta/tipo-alerta/${tipoAlertaId}`,
+      `/catalogos/razones-alerta/tipo-alerta/${tipoAlertaId}`,
       { headers: NO_CACHE_HEADERS, signal },
     );
     return data && data.length > 0 ? data : (FALLBACK_RAZONES_ALERTA[tipoAlertaId] ?? FALLBACK_RAZONES_ALERTA[1]!);

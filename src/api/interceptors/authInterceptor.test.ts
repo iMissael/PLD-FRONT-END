@@ -91,4 +91,14 @@ describe("unauthorizedInterceptor", () => {
     expect(useAuthStore.getState().token).toBe("jwt-de-prueba");
     expect(asignar).not.toHaveBeenCalled();
   });
+
+  it("sin sesión activa, un 401 no redirige (p. ej. un catálogo protegido desde una pantalla pública)", async () => {
+    useAuthStore.getState().logout();
+
+    await expect(
+      unauthorizedInterceptor(error(401, "/SICANETSC/PLD/tenant-a/api/catalogos/tipos-alerta/buzon")),
+    ).rejects.toBeDefined();
+
+    expect(asignar).not.toHaveBeenCalled();
+  });
 });
