@@ -11,6 +11,7 @@ import {
   ChevronDownIcon,
   ClipboardCheckIcon,
   DotsVerticalIcon,
+  FileTextIcon,
   HelpCircleIcon,
   HomeIcon,
   InfoIcon,
@@ -50,6 +51,15 @@ function isGroup(node: NavNode): node is NavGroup {
  * Operación, Control) son los definidos por el negocio — no renombrar aquí.
  */
 const NAV_ITEMS: NavNode[] = [
+  {
+    label: "Buzón de denuncias",
+    icon: FileTextIcon,
+    children: [
+      { label: "Gestión de denuncias", to: "buzon/gestion" },
+      { label: "Alertas PLD", to: "buzon/alertas" },
+      { label: "Buzón anónimo (público)", to: "buzon/denuncias" },
+    ],
+  },
   {
     label: "Configuraciones",
     icon: SettingsIcon,

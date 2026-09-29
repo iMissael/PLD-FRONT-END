@@ -1,6 +1,9 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import { LoginPage } from "@/features/auth/pages/LoginPage";
+import { BuzonPublicoPage } from "@/features/buzon/pages/BuzonPublicoPage";
+import { GestionAlertasPage } from "@/features/buzon/pages/GestionAlertasPage";
+import { GestionDenunciasPage } from "@/features/buzon/pages/GestionDenunciasPage";
 import { CargaMasivaPage } from "@/features/configuracion-alertas/pages/CargaMasivaPage";
 import { ConsultaBloqueadosPage } from "@/features/configuracion-alertas/pages/ConsultaBloqueadosPage";
 import { ActividadesEconomicasPage } from "@/features/configuraciones/actividad-economica/pages/ActividadesEconomicasPage";
@@ -24,6 +27,7 @@ import { EvaluacionRiesgoPage } from "@/features/operacion/evaluacion-riesgo/pag
 import { OperacionPage } from "@/features/operacion/pages/OperacionPage";
 import { SeleccionarSucursalPage } from "@/features/sucursales/pages/SeleccionarSucursalPage";
 import { RequireAuth } from "@/shared/auth/RequireAuth";
+import { RequierePermiso } from "@/shared/auth/RequierePermiso";
 import { RequireSucursal } from "@/shared/auth/RequireSucursal";
 import { PlaceholderPage } from "@/shared/components/PlaceholderPage";
 import { AppLayout } from "@/shared/layouts/AppLayout";
@@ -37,9 +41,10 @@ import { TenantRouteLayout } from "@/shared/layouts/TenantRouteLayout";
  * `:tenantId` y lo deja disponible para el cliente de Axios antes de que
  * cualquier página hija dispare un request.
  *
- * Dentro del tenant: `login` es público; lo demás exige sesión
- * (`RequireAuth`), y las pantallas de trabajo además exigen haber elegido
- * sucursal (`RequireSucursal`).
+ * Dentro del tenant: `login` y el buzón anónimo (`buzon/denuncias` y sus
+ * alias) son públicos; lo demás exige sesión (`RequireAuth`), y las
+ * pantallas de trabajo además exigen haber elegido sucursal
+ * (`RequireSucursal`).
  */
 export const router = createBrowserRouter([
   {
@@ -47,6 +52,10 @@ export const router = createBrowserRouter([
     element: <TenantRouteLayout />,
     children: [
       { path: "login", element: <LoginPage /> },
+      // Buzón anónimo: cualquiera puede levantar una denuncia sin sesión.
+      { path: "buzon/denuncias", element: <BuzonPublicoPage /> },
+      { path: "buzon-denuncias", element: <BuzonPublicoPage /> },
+      { path: "buzon-anonimo", element: <BuzonPublicoPage /> },
       {
         element: <RequireAuth />,
         children: [
@@ -115,6 +124,22 @@ export const router = createBrowserRouter([
                   {
                     element: <ContenidoAcotado />,
                     children: [
+                      {
+                        path: "buzon/gestion",
+                        element: (
+                          <RequierePermiso recurso="denuncias" accion="ver">
+                            <GestionDenunciasPage />
+                          </RequierePermiso>
+                        ),
+                      },
+                      {
+                        path: "buzon/alertas",
+                        element: (
+                          <RequierePermiso recurso="alertas" accion="ver">
+                            <GestionAlertasPage />
+                          </RequierePermiso>
+                        ),
+                      },
                       {
                         path: "configuraciones/oficial-cumplimiento",
                         element: <OficialCumplimientoPage />,
