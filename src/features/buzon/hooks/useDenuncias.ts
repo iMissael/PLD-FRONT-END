@@ -73,6 +73,8 @@ export function useEditarDenuncia(id: number) {
     mutationFn: (input: EditarDenunciaInput) => editarDenuncia(id, input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: DENUNCIAS_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: [...DENUNCIAS_QUERY_KEY, id] });
+      queryClient.invalidateQueries({ queryKey: [...OBSERVACIONES_QUERY_KEY, id] });
     },
   });
 }
@@ -83,6 +85,8 @@ export function useCambiarEstatusDenuncia(id: number) {
     mutationFn: (input: CambiarEstatusInput) => cambiarEstatusDenuncia(id, input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: DENUNCIAS_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: [...DENUNCIAS_QUERY_KEY, id] });
+      queryClient.invalidateQueries({ queryKey: [...OBSERVACIONES_QUERY_KEY, id] });
     },
   });
 }
