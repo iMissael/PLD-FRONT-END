@@ -2,6 +2,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogFooter,
+} from "@/shared/components/ui/alert-dialog";
 import { Button } from "@/shared/components/ui/button";
 import {
   Form,
@@ -12,6 +21,7 @@ import {
   FormMessage,
 } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
+import { InputFormateado } from "@/shared/components/InputFormateado";
 import {
   Select,
   SelectContent,
@@ -19,6 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
+import { alfanumerico, nombrePropio, rfc } from "@/shared/utils/entradas";
 import { useConsultarListas } from "@/features/operacion/consulta-listas/hooks/useConsultaListas";
 import {
   consultaListasSchema,
@@ -50,9 +61,10 @@ function calcularEdad(fechaNacimiento: string | undefined): string {
 export function ConsultaListasForm({
   onResultados,
 }: {
-  onResultados: (resultados: ConsultaLista[]) => void;
+  onResultados: (resultados: ConsultaLista[], proveedorExternoNoDisponible: boolean) => void;
 }) {
   const [enviando, setEnviando] = useState(false);
+  const [errorServicio, setErrorServicio] = useState(false);
   const consultarListas = useConsultarListas();
 
   const form = useForm<ConsultaListasFormValues>({
@@ -98,12 +110,18 @@ export function ConsultaListasForm({
         sucursalId,
       },
       {
-        onSuccess: (resultados) => {
-          onResultados(resultados);
-          toast.success("Consulta realizada correctamente");
+        onSuccess: (respuesta) => {
+          onResultados(respuesta.resultados, respuesta.proveedorExternoNoDisponible);
+          if (respuesta.proveedorExternoNoDisponible) {
+            toast.warning(
+              "El proveedor externo de listas no respondió: la verificación quedó incompleta.",
+            );
+          } else {
+            toast.success("Consulta realizada correctamente");
+          }
         },
         onError: () => {
-          toast.error("No se pudo completar la consulta de listas");
+          setErrorServicio(true);
         },
         onSettled: () => setEnviando(false),
       },
@@ -121,7 +139,7 @@ export function ConsultaListasForm({
               <FormItem>
                 <FormLabel>Nombre(s)</FormLabel>
                 <FormControl>
-                  <Input placeholder="Juan" {...field} />
+                  <InputFormateado placeholder="Juan" {...field} formato={nombrePropio} maxLength={150} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -134,7 +152,7 @@ export function ConsultaListasForm({
               <FormItem>
                 <FormLabel>Primer apellido</FormLabel>
                 <FormControl>
-                  <Input placeholder="Pérez" {...field} />
+                  <InputFormateado placeholder="Pérez" {...field} formato={nombrePropio} maxLength={100} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -147,7 +165,7 @@ export function ConsultaListasForm({
               <FormItem>
                 <FormLabel>Segundo apellido</FormLabel>
                 <FormControl>
-                  <Input placeholder="Gómez" {...field} />
+                  <InputFormateado placeholder="Gómez" {...field} formato={nombrePropio} maxLength={100} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -200,7 +218,7 @@ export function ConsultaListasForm({
               <FormItem>
                 <FormLabel>RFC</FormLabel>
                 <FormControl>
-                  <Input placeholder="PEGJ800101ABC" {...field} />
+                  <InputFormateado placeholder="PEGJ800101ABC" {...field} formato={rfc} maxLength={13} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -213,7 +231,12 @@ export function ConsultaListasForm({
               <FormItem>
                 <FormLabel>CURP</FormLabel>
                 <FormControl>
-                  <Input placeholder="PEGJ800101HDFRZN01" {...field} />
+                  <InputFormateado
+                    placeholder="PEGJ800101HDFRZN01"
+                    {...field}
+                    formato={alfanumerico}
+                    maxLength={18}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -225,6 +248,18 @@ export function ConsultaListasForm({
           {enviando ? "Consultando…" : "Consultar"}
         </Button>
       </form>
+
+      <AlertDialog open={errorServicio} onOpenChange={setErrorServicio}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>No se pudo completar la consulta</AlertDialogTitle>
+            <AlertDialogDescription>El servicio de API no funciona</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction>Aceptar</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Form>
   );
 }

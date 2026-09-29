@@ -1,12 +1,12 @@
 import { apiClient } from "@/api/client";
 import type {
-  ConsultaLista,
   ConsultaListasRequest,
   ListaRestrictiva,
+  ResultadoConsultaListas,
 } from "@/features/operacion/consulta-listas/types/Quienesquien";
 
 export async function consultarListas(payload: ConsultaListasRequest) {
-  const { data } = await apiClient.post<ConsultaLista[]>("/consulta-listas", payload);
+  const { data } = await apiClient.post<ResultadoConsultaListas>("/consulta-listas", payload);
   return data;
 }
 

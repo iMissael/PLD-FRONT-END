@@ -1,7 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
+import { InputFormateado } from "@/shared/components/InputFormateado";
+import { alfanumerico, nombrePropio, rfc } from "@/shared/utils/entradas";
 import {
   busquedaBloqueadosSchema,
   tieneAlMenosUnCriterio,
@@ -27,7 +29,13 @@ export function BusquedaBloqueadosForm({
 }: BusquedaBloqueadosFormProps) {
   const [formError, setFormError] = useState<string | null>(null);
 
-  const { register, handleSubmit, reset } = useForm<BusquedaBloqueadosFormValues>({
+  const {
+    register,
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<BusquedaBloqueadosFormValues>({
     resolver: zodResolver(busquedaBloqueadosSchema),
     defaultValues: DEFAULT_VALUES,
   });
@@ -58,11 +66,18 @@ export function BusquedaBloqueadosForm({
         <label htmlFor="nombre" className="text-foreground text-sm font-medium">
           Nombre
         </label>
-        <input
-          id="nombre"
-          type="text"
-          className="border-input focus:border-ring text-foreground rounded-md border px-3 py-2 text-sm focus:outline-none"
-          {...register("nombre")}
+        <Controller
+          control={control}
+          name="nombre"
+          render={({ field }) => (
+            <InputFormateado
+              id="nombre"
+              formato={nombrePropio}
+              maxLength={200}
+              className="border-input focus:border-ring text-foreground rounded-md border px-3 py-2 text-sm focus:outline-none"
+              {...field}
+            />
+          )}
         />
       </div>
 
@@ -70,26 +85,40 @@ export function BusquedaBloqueadosForm({
         <label htmlFor="rfc" className="text-foreground text-sm font-medium">
           RFC
         </label>
-        <input
-          id="rfc"
-          type="text"
-          maxLength={13}
-          className="border-input focus:border-ring text-foreground rounded-md border px-3 py-2 text-sm uppercase focus:outline-none"
-          {...register("rfc")}
+        <Controller
+          control={control}
+          name="rfc"
+          render={({ field }) => (
+            <InputFormateado
+              id="rfc"
+              formato={rfc}
+              maxLength={13}
+              className="border-input focus:border-ring text-foreground rounded-md border px-3 py-2 text-sm focus:outline-none"
+              {...field}
+            />
+          )}
         />
+        {errors.rfc && <p className="text-destructive text-xs">{errors.rfc.message}</p>}
       </div>
 
       <div className="flex flex-col gap-1">
         <label htmlFor="curp" className="text-foreground text-sm font-medium">
           CURP
         </label>
-        <input
-          id="curp"
-          type="text"
-          maxLength={18}
-          className="border-input focus:border-ring text-foreground rounded-md border px-3 py-2 text-sm uppercase focus:outline-none"
-          {...register("curp")}
+        <Controller
+          control={control}
+          name="curp"
+          render={({ field }) => (
+            <InputFormateado
+              id="curp"
+              formato={alfanumerico}
+              maxLength={18}
+              className="border-input focus:border-ring text-foreground rounded-md border px-3 py-2 text-sm focus:outline-none"
+              {...field}
+            />
+          )}
         />
+        {errors.curp && <p className="text-destructive text-xs">{errors.curp.message}</p>}
       </div>
 
       <div className="flex flex-col gap-1">
