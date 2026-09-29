@@ -1,6 +1,7 @@
 const TOKEN_KEY = "pld_auth_token";
 
-let memoryToken: string | null = null;
+let memoryToken: string | null =
+  typeof window !== "undefined" ? sessionStorage.getItem(TOKEN_KEY) : null;
 
 function sanitizeToken(token: string | null): string | null {
   if (!token) return null;
@@ -17,30 +18,19 @@ export function setAuthToken(token: string | null): void {
   if (typeof window !== "undefined") {
     if (clean) {
       sessionStorage.setItem(TOKEN_KEY, clean);
-      localStorage.setItem(TOKEN_KEY, clean);
     } else {
       sessionStorage.removeItem(TOKEN_KEY);
-      localStorage.removeItem(TOKEN_KEY);
     }
   }
 }
 
 export function getAuthToken(): string | null {
-  if (memoryToken) {
-    return memoryToken;
-  }
   if (typeof window !== "undefined") {
-    const sessionTok = sanitizeToken(sessionStorage.getItem(TOKEN_KEY));
-    if (sessionTok) {
-      memoryToken = sessionTok;
-      return sessionTok;
-    }
-    const localTok = sanitizeToken(localStorage.getItem(TOKEN_KEY));
-    if (localTok) {
-      memoryToken = localTok;
-      sessionStorage.setItem(TOKEN_KEY, localTok);
-      return localTok;
+    const tokenFromStorage = sanitizeToken(sessionStorage.getItem(TOKEN_KEY));
+    if (tokenFromStorage) {
+      memoryToken = tokenFromStorage;
+      return tokenFromStorage;
     }
   }
-  return null;
+  return sanitizeToken(memoryToken);
 }
