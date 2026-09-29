@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
-import { Button } from "@/shared/components/ui/Button";
+import { Button } from "@/shared/components/ui/CatalogoButton";
 
 import { TiempoConstitucionForm } from "../components/TiempoConstitucionForm";
 import { TiemposConstitucionTable } from "../components/TiemposConstitucionTable";
@@ -69,8 +69,10 @@ export function TiemposConstitucionPage() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-fg">Tiempo de constitución</h2>
-          <p className="text-sm text-muted">
+          <h2 className="text-xl font-semibold text-foreground">
+            Tiempo de constitución
+          </h2>
+          <p className="text-sm text-muted-foreground">
             Rangos de antigüedad de la empresa y el nivel de riesgo PLD asociado. El
             nombre se genera a partir del rango.
           </p>

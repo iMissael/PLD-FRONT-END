@@ -5,23 +5,32 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import { globalIgnores } from "eslint/config";
 import tseslint from "typescript-eslint";
 
-export default tseslint.config(globalIgnores(["dist", "coverage", "node_modules"]), {
-  files: ["**/*.{ts,tsx}"],
-  extends: [
-    js.configs.recommended,
-    ...tseslint.configs.recommended,
-    reactHooks.configs["recommended-latest"],
-    reactRefresh.configs.vite,
-    eslintConfigPrettier,
-  ],
-  languageOptions: {
-    ecmaVersion: 2022,
-    sourceType: "module",
-  },
-  rules: {
-    "@typescript-eslint/no-unused-vars": [
-      "warn",
-      { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+export default tseslint.config(
+  globalIgnores(["dist", "coverage", "node_modules"]),
+  {
+    files: ["**/*.{ts,tsx}"],
+    extends: [
+      js.configs.recommended,
+      ...tseslint.configs.recommended,
+      reactHooks.configs["recommended-latest"],
+      reactRefresh.configs.vite,
+      eslintConfigPrettier,
     ],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: "module",
+    },
+    rules: {
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+      ],
+    },
   },
-});
+  {
+    // Los componentes de shadcn exportan también sus variantes (buttonVariants…)
+    // y test-utils reexporta Testing Library: la regla de fast refresh no aplica.
+    files: ["src/shared/components/ui/**/*.{ts,tsx}", "src/test/**/*.{ts,tsx}"],
+    rules: { "react-refresh/only-export-components": "off" },
+  },
+);

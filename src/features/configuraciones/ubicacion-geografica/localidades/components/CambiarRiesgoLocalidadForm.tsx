@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Button } from "@/shared/components/ui/Button";
+import { Button } from "@/shared/components/ui/CatalogoButton";
 import { card, label } from "@/shared/components/ui/styles";
 
 import { NivelRiesgoSelect } from "../../niveles-riesgo/components/NivelRiesgoSelect";
@@ -32,7 +32,7 @@ export function CambiarRiesgoLocalidadForm({
 
   return (
     <div className={`flex flex-col gap-4 p-4 ${card}`}>
-      <h3 className="text-sm font-semibold text-fg">
+      <h3 className="text-sm font-semibold text-foreground">
         Cambiar nivel de riesgo: {localidad.nombre}
       </h3>
 

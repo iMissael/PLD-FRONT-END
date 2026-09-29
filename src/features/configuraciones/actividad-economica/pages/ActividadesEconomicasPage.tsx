@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
-import { Button } from "@/shared/components/ui/Button";
+import { Button } from "@/shared/components/ui/CatalogoButton";
 
 import { ActividadEconomicaForm } from "../components/ActividadEconomicaForm";
 import { ActividadesEconomicasTable } from "../components/ActividadesEconomicasTable";
@@ -106,8 +106,8 @@ export function ActividadesEconomicasPage() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-fg">Actividad económica</h2>
-          <p className="text-sm text-muted">
+          <h2 className="text-xl font-semibold text-foreground">Actividad económica</h2>
+          <p className="text-sm text-muted-foreground">
             Catálogo de actividades económicas (claves SAT) y su nivel de riesgo PLD.
           </p>
         </div>
@@ -148,7 +148,7 @@ export function ActividadesEconomicasPage() {
 
       {filtradas.length > FILAS_POR_PAGINA ? (
         <div className="flex items-center justify-between text-sm">
-          <p className="text-muted">
+          <p className="text-muted-foreground">
             Mostrando {offset + 1}–{Math.min(offset + FILAS_POR_PAGINA, filtradas.length)}{" "}
             de {filtradas.length}
           </p>
@@ -161,7 +161,7 @@ export function ActividadesEconomicasPage() {
             >
               Anterior
             </Button>
-            <span className="text-muted">
+            <span className="text-muted-foreground">
               Página {paginaActual + 1} de {totalPaginas}
             </span>
             <Button

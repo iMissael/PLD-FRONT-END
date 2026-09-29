@@ -8,7 +8,7 @@ interface AlertProps {
 }
 
 const POR_TONO: Record<Tono, string> = {
-  error: "border-danger/30 bg-danger-soft text-danger",
+  error: "border-destructive/30 bg-destructive-soft text-destructive",
   advertencia: "border-warning/30 bg-warning-soft text-warning",
   exito: "border-success/30 bg-success-soft text-success-hover",
 };

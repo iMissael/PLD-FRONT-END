@@ -39,13 +39,13 @@ export function ZonaAsignaciones({ zona, onCerrar }: ZonaAsignacionesProps) {
   return (
     <div className={`flex flex-col gap-4 p-4 ${card}`}>
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-fg">
+        <h3 className="text-sm font-semibold text-foreground">
           {esZonaDeEntidades ? "Entidades" : "Países"} de la zona: {zona.nombre}
         </h3>
         <button
           type="button"
           onClick={onCerrar}
-          className="text-sm font-medium text-muted hover:text-fg"
+          className="text-sm font-medium text-muted-foreground hover:text-foreground"
         >
           Cerrar
         </button>
@@ -53,15 +53,15 @@ export function ZonaAsignaciones({ zona, onCerrar }: ZonaAsignacionesProps) {
 
       {esZonaDeEntidades ? (
         <div className="flex flex-col gap-2">
-          <p className="text-sm font-medium text-fg">
+          <p className="text-sm font-medium text-foreground">
             Entidades asignadas ({entidadesDeZona?.length ?? 0})
           </p>
           {cargandoEntidadesZona ? (
-            <p className="text-sm text-muted">Cargando...</p>
+            <p className="text-sm text-muted-foreground">Cargando...</p>
           ) : entidadesDeZona && entidadesDeZona.length > 0 ? (
-            <ul className="max-h-96 divide-y divide-line overflow-y-auto rounded-md border border-line">
+            <ul className="max-h-96 divide-y divide-border overflow-y-auto rounded-md border border-border">
               {entidadesDeZona.map((entidad) => (
-                <li key={entidad.id} className="px-3 py-2 text-sm text-fg">
+                <li key={entidad.id} className="px-3 py-2 text-sm text-foreground">
                   {entidad.nombre}
                 </li>
               ))}
@@ -72,15 +72,15 @@ export function ZonaAsignaciones({ zona, onCerrar }: ZonaAsignacionesProps) {
         </div>
       ) : (
         <div className="flex flex-col gap-2">
-          <p className="text-sm font-medium text-fg">
+          <p className="text-sm font-medium text-foreground">
             Países asignados ({paisesDeZona?.length ?? 0})
           </p>
           {cargandoPaisesZona ? (
-            <p className="text-sm text-muted">Cargando...</p>
+            <p className="text-sm text-muted-foreground">Cargando...</p>
           ) : paisesDeZona && paisesDeZona.length > 0 ? (
-            <ul className="max-h-96 divide-y divide-line overflow-y-auto rounded-md border border-line">
+            <ul className="max-h-96 divide-y divide-border overflow-y-auto rounded-md border border-border">
               {paisesDeZona.map((pais) => (
-                <li key={pais.id} className="px-3 py-2 text-sm text-fg">
+                <li key={pais.id} className="px-3 py-2 text-sm text-foreground">
                   {pais.nombre}
                 </li>
               ))}

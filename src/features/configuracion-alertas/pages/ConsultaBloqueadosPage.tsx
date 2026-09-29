@@ -17,8 +17,8 @@ export function ConsultaBloqueadosPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="text-xl font-semibold text-slate-900">Consulta de bloqueados</h2>
-        <p className="text-sm text-slate-500">
+        <h2 className="text-foreground text-xl font-semibold">Consulta de bloqueados</h2>
+        <p className="text-muted-foreground text-sm">
           Busca coincidencias exactas o difusas por nombre, RFC, CURP o fecha de
           nacimiento.
         </p>

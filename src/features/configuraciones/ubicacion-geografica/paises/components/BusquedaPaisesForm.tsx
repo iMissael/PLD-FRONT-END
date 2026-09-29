@@ -45,7 +45,7 @@ export function BusquedaPaisesForm({ onBuscar }: BusquedaPaisesFormProps) {
 
       <div className="flex items-center gap-3">
         <span className={label}>Filtrar por</span>
-        <label className="flex items-center gap-1.5 text-sm text-fg">
+        <label className="flex items-center gap-1.5 text-sm text-foreground">
           <input
             type="radio"
             name="filtrarPor"
@@ -55,7 +55,7 @@ export function BusquedaPaisesForm({ onBuscar }: BusquedaPaisesFormProps) {
           />
           País
         </label>
-        <label className="flex items-center gap-1.5 text-sm text-fg">
+        <label className="flex items-center gap-1.5 text-sm text-foreground">
           <input
             type="radio"
             name="filtrarPor"

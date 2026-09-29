@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Button } from "@/shared/components/ui/Button";
+import { Button } from "@/shared/components/ui/CatalogoButton";
 import { card, field, hint, label } from "@/shared/components/ui/styles";
 
 import { NivelRiesgoSelect } from "../../ubicacion-geografica/niveles-riesgo/components/NivelRiesgoSelect";
@@ -79,7 +79,7 @@ export function ActividadEconomicaForm({
 
   return (
     <form onSubmit={handleSubmit} className={`flex flex-col gap-4 p-4 ${card}`}>
-      <h3 className="text-sm font-semibold text-fg">
+      <h3 className="text-sm font-semibold text-foreground">
         {esNueva
           ? "Nueva actividad económica"
           : `Editar actividad: ${actividad.descripcion}`}

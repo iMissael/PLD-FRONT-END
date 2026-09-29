@@ -1,37 +1,28 @@
-export interface LoginCredentials {
+// Escritos a mano en vez de re-exportar components["schemas"] del OpenAPI
+// generado: los DTOs de auth son records de Java sin anotaciones de
+// validación, así que springdoc marca todos sus campos como opcionales,
+// lo que obligaría a relajar el tipado del authStore sin necesidad real.
+export interface LoginRequest {
   username: string;
   password: string;
-}
-
-export interface Permiso {
-  recurso: string;
-  accion: string;
-}
-
-export interface Usuario {
-  id: number;
-  empleadoId: number;
-  username: string;
-}
-
-export interface Rol {
-  id: number;
-  nombre: string;
 }
 
 export interface LoginResponse {
   token: string;
   tokenType: string;
   expiresInSeconds: number;
-  usuario: Usuario;
-  rol: Rol;
-  permisos: Permiso[];
-}
-
-export interface AuthState {
-  isAuthenticated: boolean;
-  token: string | null;
-  user: Usuario | null;
-  role: Rol | null;
-  permissions: Permiso[];
+  usuario: {
+    id: string;
+    username: string;
+    nombre: string;
+    correo: string | null;
+  };
+  rol: {
+    id: string;
+    nombre: string;
+  };
+  permisos: {
+    recurso: string;
+    accion: string;
+  }[];
 }

@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
-import { Button } from "@/shared/components/ui/Button";
+import { Button } from "@/shared/components/ui/CatalogoButton";
 
 import { useZonasGeograficasSelect } from "../../zonas-geograficas/hooks/useZonasGeograficas";
 import { BusquedaPaisesForm, type FiltroPaises } from "../components/BusquedaPaisesForm";
@@ -21,10 +21,7 @@ const PAISES_POR_PAGINA = 15;
  * acento.
  */
 function normalizar(texto: string): string {
-  return texto
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .toUpperCase();
+  return texto.normalize("NFD").replace(/[̀-ͯ]/g, "").toUpperCase();
 }
 
 /**
@@ -104,7 +101,9 @@ export function PaisesPage() {
           setEditando(false);
         },
         onError: (error) => {
-          setMensajeError(isAppError(error) ? error.message : "Ocurrió un error inesperado.");
+          setMensajeError(
+            isAppError(error) ? error.message : "Ocurrió un error inesperado.",
+          );
         },
       },
     );
@@ -135,8 +134,8 @@ export function PaisesPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="text-xl font-semibold text-fg">Configuración de países</h2>
-        <p className="text-sm text-muted">
+        <h2 className="text-xl font-semibold text-foreground">Configuración de países</h2>
+        <p className="text-sm text-muted-foreground">
           Consulta el catálogo de países y edita la nacionalidad, el código ISO y las
           zonas de riesgo asignadas.
         </p>
@@ -165,7 +164,7 @@ export function PaisesPage() {
       />
 
       {!isLoading && (paisesFiltrados?.length ?? 0) > 0 ? (
-        <div className="flex items-center justify-between text-sm text-muted">
+        <div className="flex items-center justify-between text-sm text-muted-foreground">
           <span>
             {paisesFiltrados?.length} país{paisesFiltrados?.length === 1 ? "" : "es"} —
             página {paginaActual} de {totalPaginas}

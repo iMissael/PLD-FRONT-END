@@ -12,9 +12,7 @@ const BASE_PATH = "/catalogos/tiempos-constitucion";
  * El backend hace soft-delete (`estatus = 'E'`) y ya filtra los eliminados
  * en el listado, así que no hace falta ningún parámetro de estatus.
  */
-export async function listarTiemposConstitucion(): Promise<
-  TiempoConstitucionResponse[]
-> {
+export async function listarTiemposConstitucion(): Promise<TiempoConstitucionResponse[]> {
   const { data } = await apiClient.get<TiempoConstitucionResponse[]>(BASE_PATH);
   return data;
 }

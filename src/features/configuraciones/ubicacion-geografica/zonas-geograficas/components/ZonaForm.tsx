@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Button } from "@/shared/components/ui/Button";
+import { Button } from "@/shared/components/ui/CatalogoButton";
 import { card, field, label } from "@/shared/components/ui/styles";
 
 import { NivelRiesgoSelect } from "../../niveles-riesgo/components/NivelRiesgoSelect";
@@ -69,7 +69,7 @@ export function ZonaForm({ zona, onGuardar, onCancelar, isPending }: ZonaFormPro
 
   return (
     <form onSubmit={handleSubmit} className={`flex flex-col gap-4 p-4 ${card}`}>
-      <h3 className="text-sm font-semibold text-fg">
+      <h3 className="text-sm font-semibold text-foreground">
         {esNueva ? "Nueva zona geográfica" : `Editar zona: ${zona.nombre}`}
       </h3>
 

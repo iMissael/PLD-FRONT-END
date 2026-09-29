@@ -18,7 +18,7 @@ function StatCard({
 }) {
   const toneClasses =
     tone === "brand"
-      ? "border-[#88EC9B]/40 bg-gradient-to-br from-[#88EC9B]/15 to-[#5BD191]/10 text-[#1f6b4d]"
+      ? "border-success/30 bg-success-soft text-success-hover"
       : tone === "warn"
         ? "border-amber-200 bg-amber-50 text-amber-800"
         : "border-slate-200 bg-slate-50 text-slate-700";
@@ -62,15 +62,9 @@ export function CargaMasivaPage() {
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
-          className="flex w-full flex-col items-center gap-2 rounded-lg border-2 border-dashed border-slate-200 px-4 py-10 text-center transition-colors hover:border-[#5BD191] hover:bg-[#88EC9B]/5"
+          className="flex w-full flex-col items-center gap-2 rounded-lg border-2 border-dashed border-slate-200 px-4 py-10 text-center transition-colors hover:border-primary hover:bg-primary-soft/40"
         >
-          <span
-            className="flex h-11 w-11 items-center justify-center rounded-full text-white"
-            style={{
-              background:
-                "linear-gradient(160deg, #88EC9B 0%, #5BD191 55%, #4BB58B 100%)",
-            }}
-          >
+          <span className="bg-primary text-primary-foreground flex h-11 w-11 items-center justify-center rounded-full">
             <UploadIcon className="h-5 w-5" />
           </span>
           <span className="text-sm font-medium text-slate-700">
@@ -104,10 +98,7 @@ export function CargaMasivaPage() {
             type="button"
             disabled={!archivo || mutation.isPending}
             onClick={handleSubir}
-            className="rounded-md px-4 py-2 text-sm font-medium text-white shadow-sm disabled:cursor-not-allowed disabled:opacity-50"
-            style={{
-              background: "linear-gradient(135deg, #5BD191 0%, #4BB58B 100%)",
-            }}
+            className="bg-primary hover:bg-primary-hover rounded-md px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50"
           >
             {mutation.isPending ? "Procesando..." : "Subir archivo"}
           </button>
@@ -142,9 +133,9 @@ export function CargaMasivaPage() {
                 <tbody className="divide-y divide-slate-100">
                   {resultado.detalleErrores.map((detalle, index) => (
                     // No hay id único en el DTO; fila+índice es estable para esta lista de solo lectura.
-                    <tr key={`${detalle.fila}-${index}`}>
-                      <td className="px-4 py-2 text-slate-800">{detalle.fila}</td>
-                      <td className="px-4 py-2 text-slate-800">{detalle.error}</td>
+                    <tr key={`${detalle.numeroFila}-${index}`}>
+                      <td className="px-4 py-2 text-slate-800">{detalle.numeroFila}</td>
+                      <td className="px-4 py-2 text-slate-800">{detalle.motivo}</td>
                     </tr>
                   ))}
                 </tbody>

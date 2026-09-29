@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
-import { Button } from "@/shared/components/ui/Button";
+import { Button } from "@/shared/components/ui/CatalogoButton";
 import { field, label } from "@/shared/components/ui/styles";
 import { useDebounce } from "@/shared/hooks/useDebounce";
 
@@ -76,8 +76,8 @@ export function LocalidadesPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="text-xl font-semibold text-fg">Localidades</h2>
-        <p className="text-sm text-muted">
+        <h2 className="text-xl font-semibold text-foreground">Localidades</h2>
+        <p className="text-sm text-muted-foreground">
           Consulta las localidades del catálogo y ajusta su nivel de riesgo PLD. El alta y
           la edición completa de localidades no están disponibles en esta vista.
         </p>
@@ -118,7 +118,7 @@ export function LocalidadesPage() {
       />
 
       {!isLoading && totalElementos > 0 ? (
-        <div className="flex items-center justify-between text-sm text-muted">
+        <div className="flex items-center justify-between text-sm text-muted-foreground">
           <span>
             {totalElementos.toLocaleString("es-MX")} localidad
             {totalElementos === 1 ? "" : "es"} — página {pagina + 1} de {totalPaginas}
