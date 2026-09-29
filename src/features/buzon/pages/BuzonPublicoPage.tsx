@@ -221,7 +221,7 @@ export function BuzonPublicoPage() {
                       ) : razonesAlerta && razonesAlerta.length > 0 ? (
                         razonesAlerta.map((razon) => (
                           <option key={razon.id} value={razon.id}>
-                            {razon.nombre} - {razon.nombre}
+                            {razon.nombre}
                           </option>
                         ))
                       ) : (
