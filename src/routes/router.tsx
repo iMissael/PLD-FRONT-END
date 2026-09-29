@@ -23,7 +23,7 @@ import { PaisesPage } from "@/features/configuraciones/ubicacion-geografica/pais
 import { ZonasGeograficasPage } from "@/features/configuraciones/ubicacion-geografica/zonas-geograficas/pages/ZonasGeograficasPage";
 import { ControlPage } from "@/features/control/pages/ControlPage";
 import { ConsultaListasPage } from "@/features/operacion/consulta-listas/pages/Quienesquien";
-import { RevisionCoincidenciasPage } from "@/features/control/revision-coincidencias/pages/RevisionCoincidenciasPage";
+import { RevisionCoincidenciasPage } from "@/features/operacion/revision-coincidencias/pages/RevisionCoincidenciasPage";
 import { EvaluacionRiesgoPage } from "@/features/operacion/evaluacion-riesgo/pages/EvaluacionRiesgoPage";
 import { OperacionPage } from "@/features/operacion/pages/OperacionPage";
 import { SeleccionarSucursalPage } from "@/features/sucursales/pages/SeleccionarSucursalPage";
@@ -178,7 +178,7 @@ export const router = createBrowserRouter([
                         element: <ConsultaListasPage />,
                       },
                       {
-                        path: "control/coincidencias",
+                        path: "operacion/coincidencias",
                         element: <RevisionCoincidenciasPage />,
                       },
                       {

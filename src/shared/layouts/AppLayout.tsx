@@ -126,6 +126,7 @@ const NAV_ITEMS: NavNode[] = [
     children: [
       { label: "Resumen", to: "operacion" },
       { label: "Evaluación de riesgo", to: "operacion/evaluacion-riesgo" },
+      { label: "Revisión de coincidencias", to: "operacion/coincidencias" },
     ],
   },
   {
@@ -134,7 +135,6 @@ const NAV_ITEMS: NavNode[] = [
     children: [
       { label: "Resumen", to: "control" },
       { label: "Quien es quien", to: "control/quienesquien" },
-      { label: "Revisión de coincidencias", to: "control/coincidencias" },
     ],
   },
   {
