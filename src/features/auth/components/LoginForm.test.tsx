@@ -20,8 +20,8 @@ function montar() {
         <Routes>
           <Route path="/SICANETSC/PLD/:tenantId/login" element={<LoginForm />} />
           <Route
-            path="/SICANETSC/PLD/:tenantId/seleccionar-sucursal"
-            element={<p>elige sucursal</p>}
+            path="/SICANETSC/PLD/:tenantId/configuracion-alertas"
+            element={<p>menu principal</p>}
           />
         </Routes>
       </MemoryRouter>
@@ -34,7 +34,7 @@ describe("LoginForm", () => {
   beforeEach(() => setCurrentTenantId(TEST_TENANT_ID));
   afterEach(() => useAuthStore.getState().logout());
 
-  it("con credenciales correctas guarda la sesión del tenant y pasa a elegir sucursal", async () => {
+  it("con credenciales correctas guarda la sesión del tenant y pasa al menú principal", async () => {
     const user = userEvent.setup();
     montar();
 
@@ -42,7 +42,7 @@ describe("LoginForm", () => {
     await user.type(screen.getByLabelText("Contraseña"), "Admin123!");
     await user.click(screen.getByRole("button", { name: /acceder/i }));
 
-    expect(await screen.findByText("elige sucursal")).toBeInTheDocument();
+    expect(await screen.findByText("menu principal")).toBeInTheDocument();
     expect(useAuthStore.getState().isAuthenticated(TEST_TENANT_ID)).toBe(true);
   });
 

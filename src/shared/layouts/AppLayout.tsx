@@ -2,7 +2,6 @@ import { useMemo, useState } from "react";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import { useAuthStore } from "@/shared/auth/authStore";
-import { useSucursalActivaStore } from "@/shared/auth/sucursalActivaStore";
 import { useRutaTenant } from "@/shared/tenant/useRutaTenant";
 
 import {
@@ -199,7 +198,6 @@ export function AppLayout() {
   const navigate = useNavigate();
   const rutaEnTenant = useRutaTenant();
   const usuario = useAuthStore((estado) => estado.usuario);
-  const sucursalActiva = useSucursalActivaStore((estado) => estado.sucursalActiva);
   const inicial = (usuario?.nombre ?? "U").trim().charAt(0).toUpperCase() || "U";
 
   function cerrarSesion() {
@@ -256,11 +254,6 @@ export function AppLayout() {
             </span>
             <span className="flex flex-col items-start leading-tight">
               <span className="text-sm font-medium">{usuario?.nombre ?? "Usuario"}</span>
-              {sucursalActiva && (
-                <span className="text-muted-foreground text-xs">
-                  {sucursalActiva.nombre}
-                </span>
-              )}
             </span>
           </button>
         </div>

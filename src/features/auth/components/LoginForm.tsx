@@ -41,7 +41,7 @@ export function LoginForm() {
       {
         onSuccess: (data: LoginResponse) => {
           useAuthStore.getState().setSession(tenantId, data, values.recordarme);
-          navigate(rutaTenant(tenantId, "seleccionar-sucursal"), { replace: true });
+          navigate(rutaTenant(tenantId, "configuracion-alertas"), { replace: true });
         },
         onError: (error: unknown) => {
           // Credenciales malas llegan como 401/403: se muestra el mensaje fijo.

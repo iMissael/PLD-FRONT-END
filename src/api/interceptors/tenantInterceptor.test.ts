@@ -13,12 +13,12 @@ function config(url: string): InternalAxiosRequestConfig {
 describe("tenantInterceptor", () => {
   afterEach(() => resetCurrentTenantId());
 
-  it("antepone el tenant y /api a la ruta y manda el header X-Tenant-Id", () => {
+  it("antepone el tenant a la ruta y manda el header X-Tenant-Id", () => {
     setCurrentTenantId("abc-123");
 
     const resultado = tenantInterceptor(config("/personas-bloqueadas"));
 
-    expect(resultado.url).toBe("/SICANETSC/PLD/abc-123/api/personas-bloqueadas");
+    expect(resultado.url).toBe("/SICANETSC/PLD/abc-123/personas-bloqueadas");
     expect(resultado.headers.get("X-Tenant-Id")).toBe("abc-123");
   });
 

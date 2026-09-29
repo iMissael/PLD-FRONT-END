@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/api/catalogos/tenants/{id}": {
+    "/catalogos/tenants/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -28,7 +28,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/usuarios/{id}": {
+    "/SICANETSC/PLD/{tenantId}/usuarios/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -56,7 +56,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/usuarios/{id}/oficial": {
+    "/SICANETSC/PLD/{tenantId}/usuarios/{id}/oficial": {
         parameters: {
             query?: never;
             header?: never;
@@ -84,7 +84,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/usuarios/{id}/domicilio": {
+    "/SICANETSC/PLD/{tenantId}/usuarios/{id}/domicilio": {
         parameters: {
             query?: never;
             header?: never;
@@ -112,7 +112,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/usuarios/{id}/credencial": {
+    "/SICANETSC/PLD/{tenantId}/usuarios/{id}/credencial": {
         parameters: {
             query?: never;
             header?: never;
@@ -140,7 +140,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/roles/{id}": {
+    "/SICANETSC/PLD/{tenantId}/roles/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -168,7 +168,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/pld/coincidencias/{socioRef}/confirmacion": {
+    "/SICANETSC/PLD/{tenantId}/pld/coincidencias/{socioRef}/confirmacion": {
         parameters: {
             query?: never;
             header?: never;
@@ -188,7 +188,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/personas-bloqueadas": {
+    "/SICANETSC/PLD/{tenantId}/personas-bloqueadas": {
         parameters: {
             query?: never;
             header?: never;
@@ -216,7 +216,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/personas-bloqueadas/{id}": {
+    "/SICANETSC/PLD/{tenantId}/personas-bloqueadas/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -244,7 +244,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/permisos/{id}": {
+    "/SICANETSC/PLD/{tenantId}/permisos/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -272,7 +272,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/denuncias/{id}/relacionar-manual": {
+    "/SICANETSC/PLD/{tenantId}/denuncias/{id}/relacionar-manual": {
         parameters: {
             query?: never;
             header?: never;
@@ -292,7 +292,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/denuncias/{id}/reasignar": {
+    "/SICANETSC/PLD/{tenantId}/denuncias/{id}/reasignar": {
         parameters: {
             query?: never;
             header?: never;
@@ -312,7 +312,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/denuncias/{id}/estatus": {
+    "/SICANETSC/PLD/{tenantId}/denuncias/{id}/estatus": {
         parameters: {
             query?: never;
             header?: never;
@@ -332,7 +332,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/zonas-geograficas/{id}": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/zonas-geograficas/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -356,7 +356,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/zonas-geograficas/{id}/paises": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/zonas-geograficas/{id}/paises": {
         parameters: {
             query?: never;
             header?: never;
@@ -372,7 +372,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/zonas-geograficas/{id}/entidades": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/zonas-geograficas/{id}/entidades": {
         parameters: {
             query?: never;
             header?: never;
@@ -388,7 +388,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/tipos-persona/{id}": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/tipos-persona/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -416,7 +416,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/tipos-pago/{id}": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/tipos-pago/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -444,7 +444,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/tipos-denuncia/{id}": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/tipos-denuncia/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -472,7 +472,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/tipos-credito/{id}": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/tipos-credito/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -500,7 +500,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/tiempos-constitucion/{id}": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/tiempos-constitucion/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -528,7 +528,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/prestamos-monto/{id}": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/prestamos-monto/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -556,7 +556,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/peps/{id}": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/peps/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -584,7 +584,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/paises/{id}": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/paises/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -608,7 +608,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/paises/{id}/zonas": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/paises/{id}/zonas": {
         parameters: {
             query?: never;
             header?: never;
@@ -628,7 +628,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/origenes-recurso/{id}": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/origenes-recurso/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -656,7 +656,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/niveles-riesgo/{id}": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/niveles-riesgo/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -684,7 +684,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/municipios/{id}": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/municipios/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -712,7 +712,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/localidades/{id}": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/localidades/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -740,7 +740,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/localidades/{id}/nivel-riesgo": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/localidades/{id}/nivel-riesgo": {
         parameters: {
             query?: never;
             header?: never;
@@ -760,7 +760,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/listas-restrictivas/{id}": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/listas-restrictivas/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -788,7 +788,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/historias-crediticias/{id}": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/historias-crediticias/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -816,7 +816,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/experiencias-actividad/{id}": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/experiencias-actividad/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -844,7 +844,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/estatus-denuncia/{id}": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/estatus-denuncia/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -872,7 +872,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/entidades/{id}": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/entidades/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -900,7 +900,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/entidades/{id}/zona": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/entidades/{id}/zona": {
         parameters: {
             query?: never;
             header?: never;
@@ -920,7 +920,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/edades/{id}": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/edades/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -948,7 +948,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/destinos-recurso/{id}": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/destinos-recurso/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -976,7 +976,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/canales-pago/{id}": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/canales-pago/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -1004,7 +1004,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/auxiliares-geograficos/tipos-calle/{id}": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/auxiliares-geograficos/tipos-calle/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -1032,7 +1032,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/auxiliares-geograficos/tipos-asentamiento/{id}": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/auxiliares-geograficos/tipos-asentamiento/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -1060,7 +1060,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/actividades-economicas/{id}": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/actividades-economicas/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -1088,7 +1088,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/catalogos/tenants": {
+    "/catalogos/tenants": {
         parameters: {
             query?: never;
             header?: never;
@@ -1112,7 +1112,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/catalogos/tenants/{id}/aprovisionar": {
+    "/catalogos/tenants/{id}/aprovisionar": {
         parameters: {
             query?: never;
             header?: never;
@@ -1132,7 +1132,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/usuarios": {
+    "/SICANETSC/PLD/{tenantId}/usuarios": {
         parameters: {
             query?: never;
             header?: never;
@@ -1156,7 +1156,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/usuarios/{id}/excepciones-permiso": {
+    "/SICANETSC/PLD/{tenantId}/usuarios/{id}/excepciones-permiso": {
         parameters: {
             query?: never;
             header?: never;
@@ -1180,7 +1180,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/roles": {
+    "/SICANETSC/PLD/{tenantId}/roles": {
         parameters: {
             query?: never;
             header?: never;
@@ -1204,7 +1204,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/roles/{rolId}/permisos/{permisoId}": {
+    "/SICANETSC/PLD/{tenantId}/roles/{rolId}/permisos/{permisoId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -1228,7 +1228,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/pld/evaluaciones": {
+    "/SICANETSC/PLD/{tenantId}/pld/evaluaciones": {
         parameters: {
             query?: never;
             header?: never;
@@ -1248,7 +1248,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/personas-bloqueadas/carga-masiva": {
+    "/SICANETSC/PLD/{tenantId}/personas-bloqueadas/carga-masiva": {
         parameters: {
             query?: never;
             header?: never;
@@ -1268,7 +1268,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/permisos": {
+    "/SICANETSC/PLD/{tenantId}/permisos": {
         parameters: {
             query?: never;
             header?: never;
@@ -1292,7 +1292,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/denuncias": {
+    "/SICANETSC/PLD/{tenantId}/denuncias": {
         parameters: {
             query?: never;
             header?: never;
@@ -1316,7 +1316,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/consulta-listas": {
+    "/SICANETSC/PLD/{tenantId}/consulta-listas": {
         parameters: {
             query?: never;
             header?: never;
@@ -1336,7 +1336,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/configuracion-matriz": {
+    "/SICANETSC/PLD/{tenantId}/configuracion-matriz": {
         parameters: {
             query?: never;
             header?: never;
@@ -1360,7 +1360,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/zonas-geograficas": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/zonas-geograficas": {
         parameters: {
             query?: never;
             header?: never;
@@ -1384,7 +1384,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/tipos-persona": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/tipos-persona": {
         parameters: {
             query?: never;
             header?: never;
@@ -1408,7 +1408,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/tipos-pago": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/tipos-pago": {
         parameters: {
             query?: never;
             header?: never;
@@ -1432,7 +1432,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/tipos-denuncia": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/tipos-denuncia": {
         parameters: {
             query?: never;
             header?: never;
@@ -1456,7 +1456,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/tipos-credito": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/tipos-credito": {
         parameters: {
             query?: never;
             header?: never;
@@ -1480,7 +1480,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/tiempos-constitucion": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/tiempos-constitucion": {
         parameters: {
             query?: never;
             header?: never;
@@ -1504,7 +1504,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/prestamos-monto": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/prestamos-monto": {
         parameters: {
             query?: never;
             header?: never;
@@ -1528,7 +1528,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/peps": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/peps": {
         parameters: {
             query?: never;
             header?: never;
@@ -1552,7 +1552,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/paises": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/paises": {
         parameters: {
             query?: never;
             header?: never;
@@ -1576,7 +1576,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/paises/batch": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/paises/batch": {
         parameters: {
             query?: never;
             header?: never;
@@ -1596,7 +1596,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/paises/masivo": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/paises/masivo": {
         parameters: {
             query?: never;
             header?: never;
@@ -1616,7 +1616,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/origenes-recurso": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/origenes-recurso": {
         parameters: {
             query?: never;
             header?: never;
@@ -1640,7 +1640,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/niveles-riesgo": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/niveles-riesgo": {
         parameters: {
             query?: never;
             header?: never;
@@ -1664,7 +1664,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/municipios": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/municipios": {
         parameters: {
             query?: never;
             header?: never;
@@ -1688,7 +1688,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/localidades": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/localidades": {
         parameters: {
             query?: never;
             header?: never;
@@ -1712,7 +1712,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/localidades/masivo": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/localidades/masivo": {
         parameters: {
             query?: never;
             header?: never;
@@ -1732,7 +1732,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/localidades/batch": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/localidades/batch": {
         parameters: {
             query?: never;
             header?: never;
@@ -1752,7 +1752,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/listas-restrictivas": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/listas-restrictivas": {
         parameters: {
             query?: never;
             header?: never;
@@ -1776,7 +1776,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/historias-crediticias": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/historias-crediticias": {
         parameters: {
             query?: never;
             header?: never;
@@ -1800,7 +1800,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/experiencias-actividad": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/experiencias-actividad": {
         parameters: {
             query?: never;
             header?: never;
@@ -1824,7 +1824,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/estatus-denuncia": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/estatus-denuncia": {
         parameters: {
             query?: never;
             header?: never;
@@ -1848,7 +1848,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/entidades": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/entidades": {
         parameters: {
             query?: never;
             header?: never;
@@ -1872,7 +1872,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/edades": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/edades": {
         parameters: {
             query?: never;
             header?: never;
@@ -1896,7 +1896,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/destinos-recurso": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/destinos-recurso": {
         parameters: {
             query?: never;
             header?: never;
@@ -1920,7 +1920,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/canales-pago": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/canales-pago": {
         parameters: {
             query?: never;
             header?: never;
@@ -1944,7 +1944,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/auxiliares-geograficos/tipos-calle": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/auxiliares-geograficos/tipos-calle": {
         parameters: {
             query?: never;
             header?: never;
@@ -1968,7 +1968,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/auxiliares-geograficos/tipos-asentamiento": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/auxiliares-geograficos/tipos-asentamiento": {
         parameters: {
             query?: never;
             header?: never;
@@ -1992,7 +1992,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/actividades-economicas": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/actividades-economicas": {
         parameters: {
             query?: never;
             header?: never;
@@ -2016,7 +2016,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/auth/login": {
+    "/SICANETSC/PLD/{tenantId}/auth/login": {
         parameters: {
             query?: never;
             header?: never;
@@ -2036,7 +2036,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/catalogos/tenants/{id}/estatus": {
+    "/catalogos/tenants/{id}/estatus": {
         parameters: {
             query?: never;
             header?: never;
@@ -2056,7 +2056,7 @@ export interface paths {
         patch: operations["cambiarEstatus"];
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/usuarios/{id}/rol": {
+    "/SICANETSC/PLD/{tenantId}/usuarios/{id}/rol": {
         parameters: {
             query?: never;
             header?: never;
@@ -2076,7 +2076,7 @@ export interface paths {
         patch: operations["asignarRol"];
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/zonas-geograficas/{id}/estatus": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/zonas-geograficas/{id}/estatus": {
         parameters: {
             query?: never;
             header?: never;
@@ -2092,7 +2092,7 @@ export interface paths {
         patch: operations["cambiarEstatus_1"];
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/paises/{id}/nivel-riesgo": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/paises/{id}/nivel-riesgo": {
         parameters: {
             query?: never;
             header?: never;
@@ -2108,7 +2108,7 @@ export interface paths {
         patch: operations["cambiarNivelRiesgo_1"];
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/socios/{referencia}/perfil-riesgo": {
+    "/SICANETSC/PLD/{tenantId}/socios/{referencia}/perfil-riesgo": {
         parameters: {
             query?: never;
             header?: never;
@@ -2128,7 +2128,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/socios/{id}": {
+    "/SICANETSC/PLD/{tenantId}/socios/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -2148,7 +2148,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/socios/buscar": {
+    "/SICANETSC/PLD/{tenantId}/socios/buscar": {
         parameters: {
             query?: never;
             header?: never;
@@ -2168,7 +2168,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/roles/{rolId}/permisos": {
+    "/SICANETSC/PLD/{tenantId}/roles/{rolId}/permisos": {
         parameters: {
             query?: never;
             header?: never;
@@ -2188,7 +2188,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/pld/evaluaciones/seguimiento/{llaveSeguimiento}": {
+    "/SICANETSC/PLD/{tenantId}/pld/evaluaciones/seguimiento/{llaveSeguimiento}": {
         parameters: {
             query?: never;
             header?: never;
@@ -2208,7 +2208,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/pld/coincidencias/{socioRef}": {
+    "/SICANETSC/PLD/{tenantId}/pld/coincidencias/{socioRef}": {
         parameters: {
             query?: never;
             header?: never;
@@ -2228,7 +2228,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/pld/coincidencias/pendientes": {
+    "/SICANETSC/PLD/{tenantId}/pld/coincidencias/pendientes": {
         parameters: {
             query?: never;
             header?: never;
@@ -2248,7 +2248,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/personas-bloqueadas/consulta-bloqueados": {
+    "/SICANETSC/PLD/{tenantId}/personas-bloqueadas/consulta-bloqueados": {
         parameters: {
             query?: never;
             header?: never;
@@ -2268,7 +2268,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/empleados/{id}": {
+    "/SICANETSC/PLD/{tenantId}/empleados/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -2288,7 +2288,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/empleados/buscar": {
+    "/SICANETSC/PLD/{tenantId}/empleados/buscar": {
         parameters: {
             query?: never;
             header?: never;
@@ -2308,7 +2308,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/denuncias/{id}": {
+    "/SICANETSC/PLD/{tenantId}/denuncias/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -2328,7 +2328,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/denuncias/{id}/historial-relaciones": {
+    "/SICANETSC/PLD/{tenantId}/denuncias/{id}/historial-relaciones": {
         parameters: {
             query?: never;
             header?: never;
@@ -2348,7 +2348,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/denuncias/sugerencias": {
+    "/SICANETSC/PLD/{tenantId}/denuncias/sugerencias": {
         parameters: {
             query?: never;
             header?: never;
@@ -2368,7 +2368,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/denuncias/relacionables": {
+    "/SICANETSC/PLD/{tenantId}/denuncias/relacionables": {
         parameters: {
             query?: never;
             header?: never;
@@ -2388,7 +2388,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/denuncias/buscar-por-referencia": {
+    "/SICANETSC/PLD/{tenantId}/denuncias/buscar-por-referencia": {
         parameters: {
             query?: never;
             header?: never;
@@ -2408,7 +2408,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/configuracion-matriz/{id}": {
+    "/SICANETSC/PLD/{tenantId}/configuracion-matriz/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -2428,7 +2428,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/configuracion-matriz/activa": {
+    "/SICANETSC/PLD/{tenantId}/configuracion-matriz/activa": {
         parameters: {
             query?: never;
             header?: never;
@@ -2448,7 +2448,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/zonas-geograficas/paises/{idPais}/zonas": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/zonas-geograficas/paises/{idPais}/zonas": {
         parameters: {
             query?: never;
             header?: never;
@@ -2464,7 +2464,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/zonas-geograficas/catalogos/paises": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/zonas-geograficas/catalogos/paises": {
         parameters: {
             query?: never;
             header?: never;
@@ -2480,7 +2480,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/zonas-geograficas/paises": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/zonas-geograficas/paises": {
         parameters: {
             query?: never;
             header?: never;
@@ -2496,7 +2496,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/zonas-geograficas/catalogos/entidades": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/zonas-geograficas/catalogos/entidades": {
         parameters: {
             query?: never;
             header?: never;
@@ -2512,7 +2512,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/zonas-geograficas/entidades": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/zonas-geograficas/entidades": {
         parameters: {
             query?: never;
             header?: never;
@@ -2528,7 +2528,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/sucursales": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/sucursales": {
         parameters: {
             query?: never;
             header?: never;
@@ -2548,7 +2548,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/identidad/tipos-vialidad": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/identidad/tipos-vialidad": {
         parameters: {
             query?: never;
             header?: never;
@@ -2568,7 +2568,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/identidad/tipos-identificacion": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/identidad/tipos-identificacion": {
         parameters: {
             query?: never;
             header?: never;
@@ -2588,7 +2588,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/identidad/tipos-comprobante": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/identidad/tipos-comprobante": {
         parameters: {
             query?: never;
             header?: never;
@@ -2608,7 +2608,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/identidad/tipos-asentamiento": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/identidad/tipos-asentamiento": {
         parameters: {
             query?: never;
             header?: never;
@@ -2628,7 +2628,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/identidad/posesiones-vivienda": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/identidad/posesiones-vivienda": {
         parameters: {
             query?: never;
             header?: never;
@@ -2648,7 +2648,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/identidad/niveles-estudios": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/identidad/niveles-estudios": {
         parameters: {
             query?: never;
             header?: never;
@@ -2668,7 +2668,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/identidad/nacionalidades": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/identidad/nacionalidades": {
         parameters: {
             query?: never;
             header?: never;
@@ -2688,7 +2688,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/catalogos/identidad/estados-civiles": {
+    "/SICANETSC/PLD/{tenantId}/catalogos/identidad/estados-civiles": {
         parameters: {
             query?: never;
             header?: never;
@@ -2708,7 +2708,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/api/usuarios/{id}/excepciones-permiso/{idExcepcion}": {
+    "/SICANETSC/PLD/{tenantId}/usuarios/{id}/excepciones-permiso/{idExcepcion}": {
         parameters: {
             query?: never;
             header?: never;

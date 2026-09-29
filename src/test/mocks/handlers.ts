@@ -10,8 +10,7 @@ import type { ResultadoBusquedaResponse } from "@/features/configuracion-alertas
  * `tenantInterceptor.ts` arma la URL real con ese valor.
  */
 export const TEST_TENANT_ID = "test-tenant-id";
-// Los controllers del backend cuelgan de /api y el tenant se antepone (ver tenantInterceptor.ts).
-const API_BASE_URL = `http://localhost:8080/SICANETSC/PLD/${TEST_TENANT_ID}/api`;
+const API_BASE_URL = `http://localhost:8080/SICANETSC/PLD/${TEST_TENANT_ID}`;
 
 type UsuarioResponse = components["schemas"]["UsuarioResponse"];
 type RolResponse = components["schemas"]["RolResponse"];
