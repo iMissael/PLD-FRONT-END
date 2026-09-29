@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "@/features/auth/hooks/useAuth";
-import { CheckCircleIcon, PaperclipIcon, XIcon } from "@/shared/components/icons";
+import { CheckCircleIcon, EyeIcon, PaperclipIcon, XIcon } from "@/shared/components/icons";
 import { es } from "@/shared/i18n/es";
 import {
   useAgregarObservacion,
@@ -8,6 +8,7 @@ import {
   useDenunciaDetalle,
   useEvidencias,
   useObservaciones,
+  verEvidenciaPorId
 } from "../hooks/useDenuncias";
 import type { EstadoDenuncia } from "../types/buzon";
 
@@ -29,11 +30,31 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
   const { data: obsList = [], isLoading: loadingObs } = useObservaciones(denunciaId);
   const { data: evidList = [], isLoading: loadingEvid } = useEvidencias(denunciaId);
 
+
+
   const cambiarEstatus = useCambiarEstatusDenuncia(denunciaId ?? 0);
   const agregarObs = useAgregarObservacion(denunciaId ?? 0);
 
   const [nuevaObservacion, setNuevaObservacion] = useState("");
+  const [openingEvidenciaId, setOpeningEvidenciaId] = useState<number | null>(null);
   const [feedback, setFeedback] = useState<{ msg: string; type: "success" | "error" | "warning" } | null>(null);
+
+  const handleVerEvidencia = async (evidenciaId: number, nombre?: string) => {
+    setOpeningEvidenciaId(evidenciaId);
+    try {
+      const blob = await verEvidenciaPorId(evidenciaId);
+      const blobUrl = URL.createObjectURL(blob);
+      window.open(blobUrl, "_blank", "noopener,noreferrer");
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
+    } catch {
+      setFeedback({
+        msg: `No se pudo abrir la evidencia ${nombre || `#${evidenciaId}`}. Verifica que el archivo exista en el servidor.`,
+        type: "error",
+      });
+    } finally {
+      setOpeningEvidenciaId(null);
+    }
+  };
 
   if (!denunciaId) return null;
 
@@ -122,13 +143,12 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
 
         {feedback && (
           <div
-            className={`mt-4 rounded-lg px-3.5 py-2 text-xs font-medium ${
-              feedback.type === "success"
+            className={`mt-4 rounded-lg px-3.5 py-2 text-xs font-medium ${feedback.type === "success"
                 ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
                 : feedback.type === "warning"
-                ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20"
-                : "bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20"
-            }`}
+                  ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20"
+                  : "bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20"
+              }`}
           >
             {feedback.msg}
           </div>
@@ -202,10 +222,10 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                 <p className="text-fg font-medium">
                   {denuncia.fechaIncidente
                     ? new Date(denuncia.fechaIncidente).toLocaleDateString("es-MX", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })
                     : "No especificada"}
                 </p>
               </div>
@@ -233,17 +253,31 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                   {evidenciasCombined.map((ev) => (
                     <li
                       key={ev.id}
-                      className="flex items-center justify-between rounded-lg border border-line bg-bg p-2.5"
+                      className="flex items-center justify-between rounded-lg border border-line bg-bg p-2.5 transition-colors hover:border-accent-line hover:bg-hover/40"
                     >
-                      <div className="flex items-center gap-2 truncate">
+                      <div className="flex items-center gap-2 truncate mr-2">
                         <PaperclipIcon className="h-4 w-4 shrink-0 text-muted" />
-                        <span className="font-medium truncate text-fg">
+                        <span className="font-medium truncate text-fg" title={ev.nombre}>
                           {ev.nombre || `Evidencia #${ev.id}`}
                         </span>
+                        <span className="text-[11px] text-muted shrink-0">
+                          ({ev.tipoArchivo || "Archivo"})
+                        </span>
                       </div>
-                      <span className="text-[11px] text-muted shrink-0 ml-2">
-                        {ev.tipoArchivo || "Archivo"}
-                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleVerEvidencia(ev.id, ev.nombre)}
+                        disabled={openingEvidenciaId === ev.id}
+                        className="inline-flex items-center gap-1.5 rounded-md bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 disabled:opacity-50 shrink-0 focus-visible:outline-none"
+                        title="Ver evidencia en nueva pestaña"
+                      >
+                        {openingEvidenciaId === ev.id ? (
+                          <div className="h-3 w-3 animate-spin rounded-full border-2 border-slate-500 border-t-transparent" />
+                        ) : (
+                          <EyeIcon className="h-3.5 w-3.5" />
+                        )}
+                        <span>{openingEvidenciaId === ev.id ? "Cargando..." : "Ver archivo"}</span>
+                      </button>
                     </li>
                   ))}
                 </ul>
