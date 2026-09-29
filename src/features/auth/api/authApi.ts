@@ -5,7 +5,7 @@ export async function loginUser(
   credentials: LoginCredentials,
   signal?: AbortSignal,
 ): Promise<LoginResponse> {
-  const { data } = await apiClient.post<LoginResponse>("/api/auth/login", credentials, {
+  const { data } = await apiClient.post<LoginResponse>("/auth/login", credentials, {
     signal,
   });
   return data;

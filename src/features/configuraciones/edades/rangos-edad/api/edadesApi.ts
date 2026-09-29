@@ -2,7 +2,7 @@ import { apiClient } from "@/api/client";
 
 import type { ActualizarEdadInput, CrearEdadInput, EdadResponse } from "../types/edad";
 
-const BASE_PATH = "/api/catalogos/edades";
+const BASE_PATH = "/catalogos/edades";
 
 /**
  * El backend hace soft-delete (`estatus = 'E'`) y ya filtra los eliminados

@@ -5,7 +5,7 @@
  * `infrastructure.adapters.in.rest.dto` de `denuncias-app`).
  *
  * Cuando el backend exponga su OpenAPI/Swagger, corre `pnpm gen:api` y
- * reemplaza esto por los tipos generados en `src/api/schema.d.ts`.
+ * reemplaza esto por los tipos generados en `src/schema.d.ts`.
  */
 
 /**

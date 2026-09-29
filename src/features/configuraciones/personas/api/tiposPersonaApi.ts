@@ -6,7 +6,7 @@ import type {
   TipoPersonaResponse,
 } from "../types/tipoPersona";
 
-const BASE_PATH = "/api/catalogos/tipos-persona";
+const BASE_PATH = "/catalogos/tipos-persona";
 
 /**
  * El backend hace soft-delete (`estatus = 'E'`) y ya filtra los eliminados

@@ -10,7 +10,7 @@ const NO_CACHE_HEADERS = {
 export async function getTiposAlertaBuzon(signal?: AbortSignal): Promise<TipoAlertaBuzon[]> {
   try {
     const { data } = await apiClient.get<TipoAlertaBuzon[]>(
-      "/api/catalogos/tipos-alerta/buzon",
+      "/catalogos/tipos-alerta/buzon",
       { headers: NO_CACHE_HEADERS, signal },
     );
     return data
@@ -25,7 +25,7 @@ export async function getRazonesAlertaPorTipo(
 ): Promise<RazonAlerta[]> {
   try {
     const { data } = await apiClient.get<RazonAlerta[]>(
-      `/api/catalogos/razones-alerta/tipo-alerta/${tipoAlertaId}`,
+      `/catalogos/razones-alerta/tipo-alerta/${tipoAlertaId}`,
       { headers: NO_CACHE_HEADERS, signal },
     );
     return data

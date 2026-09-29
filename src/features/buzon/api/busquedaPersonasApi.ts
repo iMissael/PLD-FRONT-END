@@ -77,14 +77,14 @@ export const MOCK_PERSONAS: PersonaItem[] = [
 ];
 
 /**
- * Busca empleados activos en el sistema mediante /api/empleados con fallback a datos simulados
+ * Busca empleados activos en el sistema mediante /empleados con fallback a datos simulados
  */
 export async function buscarEmpleados(q: string, signal?: AbortSignal): Promise<PersonaItem[]> {
   if (!q || !q.trim()) return [];
   const term = q.trim().toLowerCase();
 
   try {
-    const { data } = await apiClient.get<unknown>("/api/empleados", {
+    const { data } = await apiClient.get<unknown>("/empleados", {
       params: { q: q.trim(), busqueda: q.trim(), nombre: q.trim() },
       signal,
     });
@@ -132,14 +132,14 @@ export async function buscarEmpleados(q: string, signal?: AbortSignal): Promise<
 }
 
 /**
- * Busca socios registrados en el sistema mediante /api/socios con fallback a datos simulados
+ * Busca socios registrados en el sistema mediante /socios con fallback a datos simulados
  */
 export async function buscarSocios(q: string, signal?: AbortSignal): Promise<PersonaItem[]> {
   if (!q || !q.trim()) return [];
   const term = q.trim().toLowerCase();
 
   try {
-    const { data } = await apiClient.get<unknown>("/api/socios", {
+    const { data } = await apiClient.get<unknown>("/socios", {
       params: { q: q.trim(), busqueda: q.trim(), nombre: q.trim() },
       signal,
     });

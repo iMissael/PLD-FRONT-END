@@ -6,7 +6,7 @@ import type {
   CrearActividadEconomicaInput,
 } from "../types/actividadEconomica";
 
-const BASE_PATH = "/api/catalogos/actividades-economicas";
+const BASE_PATH = "/catalogos/actividades-economicas";
 
 /**
  * Devuelve el catálogo completo (~1,261 registros): el backend no acepta
