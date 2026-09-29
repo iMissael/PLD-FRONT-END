@@ -17,6 +17,7 @@ import {
 import { Input } from "@/shared/components/ui/input";
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { useLogin } from "@/features/auth/hooks/useLogin";
+import type { LoginResponse } from "@/features/auth/types/auth";
 import { loginSchema, type LoginFormValues } from "@/features/auth/types/loginSchema";
 import { useAuthStore } from "@/shared/auth/authStore";
 import { rutaTenant } from "@/shared/tenant/tenantPaths";
@@ -38,11 +39,11 @@ export function LoginForm() {
     login.mutate(
       { username: values.username, password: values.password },
       {
-        onSuccess: (data) => {
+        onSuccess: (data: LoginResponse) => {
           useAuthStore.getState().setSession(tenantId, data, values.recordarme);
           navigate(rutaTenant(tenantId, "seleccionar-sucursal"), { replace: true });
         },
-        onError: (error) => {
+        onError: (error: unknown) => {
           // Credenciales malas llegan como 401/403: se muestra el mensaje fijo.
           const usarMensajeFijo =
             !isAppError(error) || error.status === 401 || error.status === 403;

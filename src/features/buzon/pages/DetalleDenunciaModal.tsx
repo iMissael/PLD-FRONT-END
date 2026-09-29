@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "@/features/auth/hooks/useAuth";
+import { useAuthStore } from "@/shared/auth/authStore";
 import {
   CheckCircleIcon,
   EditIcon,
@@ -37,7 +37,7 @@ const BADGE_STYLES: Record<EstadoDenuncia, string> = {
 };
 
 export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaModalProps) {
-  const { user } = useAuth();
+  const user = useAuthStore((state) => state.usuario);
   const { data: denuncia, isLoading: loadingDetalle } = useDenunciaDetalle(denunciaId);
   const { data: obsList = [], isLoading: loadingObs } = useObservaciones(denunciaId);
   const { data: evidList = [], isLoading: loadingEvid } = useEvidencias(denunciaId);
