@@ -9,7 +9,10 @@ import {
   listarEvidencias,
   listarObservaciones,
   verDenunciaPorId,
+  verEvidenciaPorId,
 } from "../api/buzonApi";
+
+export { verEvidenciaPorId };
 import type {
   AgregarObservacionInput,
   CambiarEstatusInput,
