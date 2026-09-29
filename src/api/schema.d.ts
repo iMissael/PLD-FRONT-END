@@ -3236,6 +3236,8 @@ export interface components {
             primerApellido?: string;
             segundoApellido?: string;
             tipoPersona?: string;
+            /** Format: date */
+            fechaNacimiento?: string;
             /** Format: uuid */
             verificadoPor: string;
             sucursalId: string;

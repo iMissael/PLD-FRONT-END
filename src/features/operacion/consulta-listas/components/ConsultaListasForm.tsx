@@ -32,6 +32,21 @@ function aTextoOIndefinido(valor: string | undefined) {
   return valor ? valor : undefined;
 }
 
+function calcularEdad(fechaNacimiento: string | undefined): string {
+  if (!fechaNacimiento) return "";
+  const nacimiento = new Date(fechaNacimiento);
+  if (Number.isNaN(nacimiento.getTime())) return "";
+
+  const hoy = new Date();
+  let edad = hoy.getFullYear() - nacimiento.getFullYear();
+  const aunNoCumple =
+    hoy.getMonth() < nacimiento.getMonth() ||
+    (hoy.getMonth() === nacimiento.getMonth() && hoy.getDate() < nacimiento.getDate());
+  if (aunNoCumple) edad -= 1;
+
+  return edad >= 0 ? String(edad) : "";
+}
+
 export function ConsultaListasForm({
   onResultados,
 }: {
@@ -43,15 +58,17 @@ export function ConsultaListasForm({
   const form = useForm<ConsultaListasFormValues>({
     resolver: zodResolver(consultaListasSchema),
     defaultValues: {
-      nombreCompleto: "",
       nombre: "",
       primerApellido: "",
       segundoApellido: "",
+      fechaNacimiento: "",
       rfc: "",
       curp: "",
       tipoPersona: "",
     },
   });
+
+  const edad = calcularEdad(form.watch("fechaNacimiento"));
 
   function onSubmit(values: ConsultaListasFormValues) {
     const verificadoPor = useAuthStore.getState().usuario?.id;
@@ -62,13 +79,18 @@ export function ConsultaListasForm({
       return;
     }
 
+    const nombreCompleto = [values.nombre, values.primerApellido, values.segundoApellido]
+      .filter((parte) => parte && parte.trim().length > 0)
+      .join(" ");
+
     setEnviando(true);
     consultarListas.mutate(
       {
-        nombreCompleto: aTextoOIndefinido(values.nombreCompleto),
+        nombreCompleto,
         nombre: aTextoOIndefinido(values.nombre),
         primerApellido: aTextoOIndefinido(values.primerApellido),
         segundoApellido: aTextoOIndefinido(values.segundoApellido),
+        fechaNacimiento: aTextoOIndefinido(values.fechaNacimiento),
         rfc: aTextoOIndefinido(values.rfc),
         curp: aTextoOIndefinido(values.curp),
         tipoPersona: aTextoOIndefinido(values.tipoPersona),
@@ -92,40 +114,6 @@ export function ConsultaListasForm({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid gap-4 sm:grid-cols-3">
-          <FormField
-            control={form.control}
-            name="nombreCompleto"
-            render={({ field }) => (
-              <FormItem className="sm:col-span-2">
-                <FormLabel>Nombre completo</FormLabel>
-                <FormControl>
-                  <Input placeholder="Juan Pérez Gómez" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="tipoPersona"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Tipo de persona</FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Selecciona un tipo" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="FISICA">Persona física</SelectItem>
-                    <SelectItem value="MORAL">Persona moral</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <FormField
             control={form.control}
             name="nombre"
@@ -165,6 +153,46 @@ export function ConsultaListasForm({
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="tipoPersona"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Tipo de persona</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Selecciona un tipo" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="FISICA">Persona física</SelectItem>
+                    <SelectItem value="MORAL">Persona moral</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="fechaNacimiento"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Fecha de nacimiento</FormLabel>
+                <FormControl>
+                  <Input type="date" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormItem>
+            <FormLabel>Edad</FormLabel>
+            <FormControl>
+              <Input value={edad} placeholder="—" disabled />
+            </FormControl>
+          </FormItem>
           <FormField
             control={form.control}
             name="rfc"
