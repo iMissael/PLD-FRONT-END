@@ -6,6 +6,7 @@ import { GestionAlertasPage } from "@/features/buzon/pages/GestionAlertasPage";
 import { GestionDenunciasPage } from "@/features/buzon/pages/GestionDenunciasPage";
 import { CargaMasivaPage } from "@/features/configuracion-alertas/pages/CargaMasivaPage";
 import { ConsultaBloqueadosPage } from "@/features/configuracion-alertas/pages/ConsultaBloqueadosPage";
+import { ReglasAlertaPage } from "@/features/configuracion-alertas/reglas/pages/ReglasAlertaPage";
 import { ActividadesEconomicasPage } from "@/features/configuraciones/actividad-economica/pages/ActividadesEconomicasPage";
 import { PermisosPage } from "@/features/configuraciones/administracion/permisos/pages/PermisosPage";
 import { RolesPage } from "@/features/configuraciones/administracion/roles/pages/RolesPage";
@@ -21,11 +22,14 @@ import { EntidadesPage } from "@/features/configuraciones/ubicacion-geografica/e
 import { LocalidadesPage } from "@/features/configuraciones/ubicacion-geografica/localidades/pages/LocalidadesPage";
 import { PaisesPage } from "@/features/configuraciones/ubicacion-geografica/paises/pages/PaisesPage";
 import { ZonasGeograficasPage } from "@/features/configuraciones/ubicacion-geografica/zonas-geograficas/pages/ZonasGeograficasPage";
+import { ControlDolarPage } from "@/features/control-dolar/pages/ControlDolarPage";
 import { ControlPage } from "@/features/control/pages/ControlPage";
+import { CapturaAlertasPage } from "@/features/operacion/captura-alertas/pages/CapturaAlertasPage";
 import { ConsultaListasPage } from "@/features/operacion/consulta-listas/pages/Quienesquien";
 import { RevisionCoincidenciasPage } from "@/features/control/revision-coincidencias/pages/RevisionCoincidenciasPage";
 import { EvaluacionRiesgoPage } from "@/features/operacion/evaluacion-riesgo/pages/EvaluacionRiesgoPage";
 import { OperacionPage } from "@/features/operacion/pages/OperacionPage";
+import { RevisionAlertasPage } from "@/features/operacion/revision-alertas/pages/RevisionAlertasPage";
 import { SeleccionarSucursalPage } from "@/features/sucursales/pages/SeleccionarSucursalPage";
 import { RequireAuth } from "@/shared/auth/RequireAuth";
 import { RequierePermiso } from "@/shared/auth/RequierePermiso";
@@ -94,6 +98,16 @@ export const router = createBrowserRouter([
                   {
                     path: "configuracion-alertas/carga-masiva",
                     element: <CargaMasivaPage />,
+                  },
+                  // Sin ancho acotado: la tabla de reglas tiene muchas columnas.
+                  {
+                    path: "configuracion-alertas/reglas",
+                    element: <ReglasAlertaPage />,
+                  },
+                  // Sin ancho acotado: la lista y el detalle de la alerta van lado a lado.
+                  {
+                    path: "operacion/revision-alertas",
+                    element: <RevisionAlertasPage />,
                   },
                   {
                     path: "operacion",
@@ -172,6 +186,16 @@ export const router = createBrowserRouter([
                       {
                         path: "configuraciones/administracion/permisos",
                         element: <PermisosPage />,
+                      },
+                      {
+                        path: "operacion/captura-alertas",
+                        element: <CapturaAlertasPage />,
+                      },
+                      // Ruta propia (no "control/..."): su lugar en el menú todavía no
+                      // está decidido y así moverlo no cambia la URL.
+                      {
+                        path: "control-dolar",
+                        element: <ControlDolarPage />,
                       },
                       {
                         path: "control/quienesquien",

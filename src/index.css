@@ -194,6 +194,45 @@ body {
 }
 
 /*
+ * Scroll discreto en todo el sistema: barra delgada del color del borde sobre fondo
+ * transparente, que se marca un poco más al pasar el mouse por el panel. Toma los
+ * tokens del tema, así que funciona igual en claro y oscuro.
+ * `scrollbar-*` es el estándar (Firefox, Chrome 121+); `::-webkit-scrollbar` cubre
+ * Safari y Chrome anteriores.
+ */
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  :where(*:not(html, body)):hover {
+    scrollbar-color: var(--muted-foreground) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--border);
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--muted-foreground);
+  }
+}
+
+/*
  * Animación del escudo en la pantalla de "entrando a <sucursal>": un único
  * gesto de confirmación (aparece + un anillo que se expande una vez), no un
  * spinner en loop. Respeta prefers-reduced-motion mostrando el estado final
