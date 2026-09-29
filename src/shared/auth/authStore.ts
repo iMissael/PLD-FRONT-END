@@ -31,6 +31,8 @@ interface AuthState {
   permisos: LoginResponse["permisos"];
   /** ¿Hay una sesión válida para este tenant? */
   isAuthenticated: (tenantId: string) => boolean;
+  /** ROLE_ADMIN pasa siempre; el resto necesita el permiso exacto. */
+  hasPermission: (recurso: string, accion: string) => boolean;
   setSession: (tenantId: string, data: LoginResponse, remember: boolean) => void;
   logout: () => void;
 }
@@ -44,6 +46,10 @@ export const useAuthStore = create<AuthState>()(
       rol: null,
       permisos: [],
       isAuthenticated: (tenantId) => get().token !== null && get().tenantId === tenantId,
+      hasPermission: (recurso, accion) => {
+        if (get().rol?.nombre === "ROLE_ADMIN") return true;
+        return get().permisos.some((p) => p.recurso === recurso && p.accion === accion);
+      },
       setSession: (tenantId, data, remember) => {
         localStorage.setItem(REMEMBER_FLAG_KEY, String(remember));
         // Una sesión nueva siempre vuelve a pedir la sucursal.
