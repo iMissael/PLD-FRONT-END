@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -12,10 +13,20 @@ import {
   useEliminarPermiso,
   usePermisos,
 } from "@/features/configuraciones/administracion/permisos/hooks/usePermisos";
+import type { PermisoResponse } from "@/features/configuraciones/administracion/permisos/types/permisos";
 
 export function PermisosTable() {
   const { data: permisos, isLoading, isError } = usePermisos();
   const eliminarPermiso = useEliminarPermiso();
+
+  const listaPermisos: PermisoResponse[] = useMemo(() => {
+    if (!permisos) return [];
+    if (Array.isArray(permisos)) return permisos;
+    if (Array.isArray((permisos as unknown as { contenido?: PermisoResponse[] })?.contenido)) {
+      return (permisos as unknown as { contenido: PermisoResponse[] }).contenido ?? [];
+    }
+    return [];
+  }, [permisos]);
 
   if (isLoading) {
     return <p className="text-muted-foreground text-sm">Cargando permisos…</p>;
@@ -27,7 +38,7 @@ export function PermisosTable() {
     );
   }
 
-  if (!permisos || permisos.length === 0) {
+  if (listaPermisos.length === 0) {
     return <p className="text-muted-foreground text-sm">Aún no hay permisos.</p>;
   }
 
@@ -43,7 +54,7 @@ export function PermisosTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {permisos.map((permiso) => (
+        {listaPermisos.map((permiso) => (
           <TableRow key={permiso.idPermiso}>
             <TableCell className="font-medium">{permiso.recurso}</TableCell>
             <TableCell>{permiso.accion}</TableCell>

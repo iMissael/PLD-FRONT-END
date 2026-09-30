@@ -99,6 +99,11 @@ export function ExperienciasActividadPage() {
           setCreandoNueva(false);
           setMensajeError(null);
         }}
+        onDoubleClick={(experiencia) => {
+          setSeleccionada(experiencia);
+          setCreandoNueva(false);
+          setMensajeError(null);
+        }}
       />
 
       {mostrarFormulario ? (

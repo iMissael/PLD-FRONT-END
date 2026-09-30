@@ -25,6 +25,12 @@ export function EdadesTable({
 }: EdadesTableProps) {
   const { data: niveles } = useNivelesRiesgo();
 
+  const listaNiveles = Array.isArray(niveles)
+    ? niveles
+    : Array.isArray((niveles as unknown as { contenido?: typeof niveles })?.contenido)
+    ? ((niveles as unknown as { contenido: typeof niveles }).contenido ?? [])
+    : [];
+
   const columns: ColumnDef<EdadResponse>[] = useMemo(
     () => [
       {
@@ -41,12 +47,12 @@ export function EdadesTable({
       {
         header: "Nivel de riesgo",
         cell: (item) => {
-          const nivel = niveles?.find((n) => n.id === item.catNivelRiesgoId);
+          const nivel = listaNiveles.find((n) => n.id === item.catNivelRiesgoId);
           return nivel ? `${nivel.nivelRiesgoDescripcion} (${nivel.nivelRiesgoValor})` : String(item.catNivelRiesgoId);
         },
       },
     ],
-    [niveles],
+    [listaNiveles],
   );
 
   return (
@@ -60,6 +66,19 @@ export function EdadesTable({
       onRowClick={onSeleccionar}
       onRowDoubleClick={onDoubleClick}
       doubleClickTitle="Doble clic para modificar este registro"
+      search={{
+        placeholder: "Buscar rango de edad...",
+        filterFn: (item, term) => {
+          const t = term.toLowerCase().trim();
+          const desc = formatearRango(item.edadInicial, item.edadFinal).toLowerCase();
+          return desc.includes(t) || String(item.edadInicial).includes(t) || String(item.edadFinal ?? "").includes(t);
+        },
+      }}
+      pagination={{
+        mode: "client",
+        defaultRowsPerPage: 10,
+        rowsPerPageOptions: [5, 10, 25, 50],
+      }}
     />
   );
 }

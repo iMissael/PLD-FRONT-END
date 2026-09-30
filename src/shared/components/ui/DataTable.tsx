@@ -37,7 +37,7 @@ export interface SearchConfig<T> {
 }
 
 export interface DataTableProps<T> {
-  data: T[] | undefined;
+  data: T[] | { contenido?: T[] } | undefined | null;
   columns: ColumnDef<T>[];
   isLoading?: boolean;
   loadingMessage?: string;
@@ -78,6 +78,17 @@ export function DataTable<T>({
   containerClassName = "",
 }: DataTableProps<T>) {
   const activeSelectedId = selectedRowId !== undefined ? selectedRowId : seleccionadoId;
+
+  // Extracción segura del arreglo (soporta arrays planos y respuestas paginadas { contenido: [...] })
+  const safeData: T[] = useMemo(() => {
+    if (!data) return [];
+    if (Array.isArray(data)) return data;
+    if (Array.isArray((data as unknown as { contenido?: T[] })?.contenido)) {
+      return (data as unknown as { contenido: T[] }).contenido ?? [];
+    }
+    return [];
+  }, [data]);
+
   // Configuración de búsqueda
   const isSearchEnabled = Boolean(search);
   const searchConfig: SearchConfig<T> | undefined =
@@ -112,22 +123,22 @@ export function DataTable<T>({
 
   // 1. Filtrado de búsqueda
   const dataFiltrada = useMemo(() => {
-    if (!data) return [];
-    if (!currentSearch.trim() || isServerPagination) return data;
+    if (!safeData || safeData.length === 0) return [];
+    if (!currentSearch.trim() || isServerPagination) return safeData;
 
     const query = currentSearch.toLowerCase().trim();
 
     if (searchConfig?.filterFn) {
-      return data.filter((item) => searchConfig.filterFn!(item, query));
+      return safeData.filter((item) => searchConfig.filterFn!(item, query));
     }
 
     // Filtro por defecto: busca en todas las propiedades del objeto
-    return data.filter((item) =>
+    return safeData.filter((item) =>
       Object.values(item as Record<string, unknown>).some((val) =>
         String(val ?? "").toLowerCase().includes(query),
       ),
     );
-  }, [data, currentSearch, isServerPagination, searchConfig]);
+  }, [safeData, currentSearch, isServerPagination, searchConfig]);
 
   // 2. Paginación de datos
   const totalElements = isServerPagination
@@ -220,7 +231,7 @@ export function DataTable<T>({
               <div key={n} className="h-10 w-full animate-pulse rounded-md bg-muted" />
             ))}
           </div>
-        ) : !data || data.length === 0 ? (
+        ) : safeData.length === 0 ? (
           <div className="py-12 text-center text-xs text-muted-foreground">
             {emptyMessage}
           </div>
@@ -292,7 +303,7 @@ export function DataTable<T>({
         )}
 
         {/* Paginación integrada */}
-        {Boolean(pagination) && !isLoading && data && data.length > 0 && (
+        {Boolean(pagination) && !isLoading && safeData.length > 0 && (
           <TablePagination
             component="div"
             count={totalElements}

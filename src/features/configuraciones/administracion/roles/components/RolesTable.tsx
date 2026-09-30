@@ -25,12 +25,20 @@ export function RolesTable() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const totalElements = roles?.length ?? 0;
-  const paginatedRoles = useMemo(() => {
+  const listaRoles = useMemo(() => {
     if (!roles) return [];
+    if (Array.isArray(roles)) return roles;
+    if (Array.isArray((roles as unknown as { contenido?: typeof roles })?.contenido)) {
+      return (roles as unknown as { contenido: typeof roles }).contenido ?? [];
+    }
+    return [];
+  }, [roles]);
+
+  const totalElements = listaRoles.length;
+  const paginatedRoles = useMemo(() => {
     const start = page * rowsPerPage;
-    return roles.slice(start, start + rowsPerPage);
-  }, [roles, page, rowsPerPage]);
+    return listaRoles.slice(start, start + rowsPerPage);
+  }, [listaRoles, page, rowsPerPage]);
 
   const handleChangePage = (_: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);

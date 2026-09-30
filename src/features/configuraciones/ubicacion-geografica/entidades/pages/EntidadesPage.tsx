@@ -117,6 +117,14 @@ export function EntidadesPage() {
     [],
   );
 
+  const listaEntidades = useMemo(() => {
+    if (Array.isArray(entidades)) return entidades;
+    if (Array.isArray((entidades as unknown as { contenido?: EntidadResponse[] })?.contenido)) {
+      return (entidades as unknown as { contenido: EntidadResponse[] }).contenido;
+    }
+    return [];
+  }, [entidades]);
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
@@ -143,7 +151,7 @@ export function EntidadesPage() {
       {mensajeError ? <Alert>{mensajeError}</Alert> : null}
 
       <DataTable
-        data={entidades}
+        data={listaEntidades}
         columns={columns}
         isLoading={isLoading}
         loadingMessage="Cargando entidades..."

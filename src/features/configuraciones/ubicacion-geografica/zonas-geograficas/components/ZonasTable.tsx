@@ -27,11 +27,16 @@ export function ZonasTable({
   onDoubleClick,
 }: ZonasTableProps) {
   const zonasSegunTipo = useMemo(() => {
-    if (!zonas) return [];
-    if (!tipoFiltro) return zonas;
+    const listaZonas = Array.isArray(zonas)
+      ? zonas
+      : Array.isArray((zonas as unknown as { contenido?: typeof zonas })?.contenido)
+      ? ((zonas as unknown as { contenido: typeof zonas }).contenido ?? [])
+      : [];
+    if (!listaZonas || listaZonas.length === 0) return [];
+    if (!tipoFiltro) return listaZonas;
 
     if (tipoFiltro === "P") {
-      return zonas.filter(
+      return listaZonas.filter(
         (z) =>
           z.entidadPais === "P" ||
           (z.entidadPais === null && z.totalPaisesAsignados > 0) ||
@@ -40,14 +45,14 @@ export function ZonasTable({
     }
 
     if (tipoFiltro === "E") {
-      return zonas.filter(
+      return listaZonas.filter(
         (z) =>
           z.entidadPais === "E" ||
           (z.entidadPais === null && z.totalEntidadesAsignadas > 0),
       );
     }
 
-    return zonas;
+    return listaZonas;
   }, [zonas, tipoFiltro]);
 
   const columns = useMemo<ColumnDef<ZonaGeograficaResponse>[]>(() => {

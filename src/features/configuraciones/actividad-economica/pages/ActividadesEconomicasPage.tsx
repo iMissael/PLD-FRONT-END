@@ -41,16 +41,25 @@ export function ActividadesEconomicasPage() {
   const eliminar = useEliminarActividadEconomica();
 
   // El backend devuelve el catálogo completo; el filtro corre en memoria.
-  const filtradas = useMemo(() => {
-    const lista = actividades ?? [];
-    const termino = normalizar(busqueda.trim());
-    if (!termino) return lista;
-    return lista.filter((actividad) =>
-      normalizar(actividad.descripcion).includes(termino),
-    );
-  }, [actividades, busqueda]);
+  const listaActividades = useMemo(() => {
+    if (!actividades) return [];
+    if (Array.isArray(actividades)) return actividades;
+    if (Array.isArray((actividades as unknown as { contenido?: typeof actividades })?.contenido)) {
+      return (actividades as unknown as { contenido: typeof actividades }).contenido ?? [];
+    }
+    return [];
+  }, [actividades]);
 
-  const totalGeneral = actividades?.length ?? 0;
+  const filtradas = useMemo(() => {
+    const termino = normalizar(busqueda.trim());
+    if (!termino) return listaActividades;
+    return listaActividades.filter((actividad) =>
+      normalizar(actividad.descripcion).includes(termino) ||
+      normalizar(actividad.claveSat).includes(termino),
+    );
+  }, [listaActividades, busqueda]);
+
+  const totalGeneral = listaActividades.length;
 
   const handleGuardar = (input: Parameters<typeof crear.mutate>[0]) => {
     setMensajeError(null);

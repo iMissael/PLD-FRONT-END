@@ -20,6 +20,12 @@ export function ExperienciasActividadTable({
 }: ExperienciasActividadTableProps) {
   const { data: niveles } = useNivelesRiesgo();
 
+  const listaNiveles = Array.isArray(niveles)
+    ? niveles
+    : Array.isArray((niveles as unknown as { contenido?: typeof niveles })?.contenido)
+    ? ((niveles as unknown as { contenido: typeof niveles }).contenido ?? [])
+    : [];
+
   const columns: ColumnDef<ExperienciaActividadResponse>[] = useMemo(
     () => [
       {
@@ -36,12 +42,12 @@ export function ExperienciasActividadTable({
       {
         header: "Nivel de riesgo",
         cell: (item) => {
-          const nivel = niveles?.find((n) => n.id === item.catNivelRiesgoId);
+          const nivel = listaNiveles.find((n) => n.id === item.catNivelRiesgoId);
           return nivel ? `${nivel.nivelRiesgoDescripcion} (${nivel.nivelRiesgoValor})` : String(item.catNivelRiesgoId);
         },
       },
     ],
-    [niveles],
+    [listaNiveles],
   );
 
   return (
@@ -55,6 +61,14 @@ export function ExperienciasActividadTable({
       onRowClick={onSeleccionar}
       onRowDoubleClick={onDoubleClick}
       doubleClickTitle="Doble clic para modificar este registro"
+      search={{
+        placeholder: "Buscar experiencia...",
+      }}
+      pagination={{
+        mode: "client",
+        defaultRowsPerPage: 10,
+        rowsPerPageOptions: [5, 10, 25, 50],
+      }}
     />
   );
 }

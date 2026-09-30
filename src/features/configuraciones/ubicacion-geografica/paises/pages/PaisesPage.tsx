@@ -18,7 +18,12 @@ export function PaisesPage() {
 
   const nombresDeZona = useMemo(() => {
     const mapa: Record<string, string> = {};
-    zonas?.forEach((zona) => {
+    const listaZonas = Array.isArray(zonas)
+      ? zonas
+      : Array.isArray((zonas as unknown as { contenido?: typeof zonas })?.contenido)
+      ? ((zonas as unknown as { contenido: typeof zonas }).contenido ?? [])
+      : [];
+    listaZonas.forEach((zona) => {
       mapa[zona.id] = zona.nombre;
     });
     return mapa;

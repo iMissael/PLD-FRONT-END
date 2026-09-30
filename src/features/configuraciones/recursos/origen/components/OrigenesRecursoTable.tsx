@@ -20,6 +20,12 @@ export function OrigenesRecursoTable({
 }: OrigenesRecursoTableProps) {
   const { data: niveles } = useNivelesRiesgo();
 
+  const listaNiveles = Array.isArray(niveles)
+    ? niveles
+    : Array.isArray((niveles as unknown as { contenido?: typeof niveles })?.contenido)
+    ? ((niveles as unknown as { contenido: typeof niveles }).contenido ?? [])
+    : [];
+
   const columns: ColumnDef<OrigenRecursoResponse>[] = useMemo(
     () => [
       {
@@ -36,13 +42,13 @@ export function OrigenesRecursoTable({
       {
         header: "Nivel de riesgo",
         cell: (item) => {
-          const nivel = niveles?.find((n) => n.id === item.catNivelRiesgoId);
+          const nivel = listaNiveles.find((n) => n.id === item.catNivelRiesgoId);
           if (!nivel) return String(item.catNivelRiesgoId);
           return `${nivel.nivelRiesgoDescripcion} (${nivel.nivelRiesgoValor})`;
         },
       },
     ],
-    [niveles],
+    [listaNiveles],
   );
 
   return (
@@ -56,6 +62,14 @@ export function OrigenesRecursoTable({
       onRowClick={onSeleccionar}
       onRowDoubleClick={onDoubleClick}
       doubleClickTitle="Doble clic para modificar este registro"
+      search={{
+        placeholder: "Buscar origen de recurso...",
+      }}
+      pagination={{
+        mode: "client",
+        defaultRowsPerPage: 10,
+        rowsPerPageOptions: [5, 10, 25, 50],
+      }}
     />
   );
 }

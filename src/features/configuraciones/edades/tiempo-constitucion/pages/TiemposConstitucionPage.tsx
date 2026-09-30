@@ -99,6 +99,11 @@ export function TiemposConstitucionPage() {
           setCreandoNuevo(false);
           setMensajeError(null);
         }}
+        onDoubleClick={(tiempo) => {
+          setSeleccionado(tiempo);
+          setCreandoNuevo(false);
+          setMensajeError(null);
+        }}
       />
 
       {mostrarFormulario ? (

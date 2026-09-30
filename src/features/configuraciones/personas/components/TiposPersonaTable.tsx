@@ -20,6 +20,12 @@ export function TiposPersonaTable({
 }: TiposPersonaTableProps) {
   const { data: niveles } = useNivelesRiesgo();
 
+  const listaNiveles = Array.isArray(niveles)
+    ? niveles
+    : Array.isArray((niveles as unknown as { contenido?: typeof niveles })?.contenido)
+    ? ((niveles as unknown as { contenido: typeof niveles }).contenido ?? [])
+    : [];
+
   const columns: ColumnDef<TipoPersonaResponse>[] = useMemo(
     () => [
       {
@@ -36,12 +42,12 @@ export function TiposPersonaTable({
       {
         header: "Nivel de riesgo",
         cell: (item) => {
-          const nivel = niveles?.find((n) => n.id === item.catNivelRiesgoId);
+          const nivel = listaNiveles.find((n) => n.id === item.catNivelRiesgoId);
           return nivel ? `${nivel.nivelRiesgoDescripcion} (${nivel.nivelRiesgoValor})` : String(item.catNivelRiesgoId);
         },
       },
     ],
-    [niveles],
+    [listaNiveles],
   );
 
   return (
@@ -55,6 +61,14 @@ export function TiposPersonaTable({
       onRowClick={onSeleccionar}
       onRowDoubleClick={onDoubleClick}
       doubleClickTitle="Doble clic para modificar este registro"
+      search={{
+        placeholder: "Buscar tipo de persona...",
+      }}
+      pagination={{
+        mode: "client",
+        defaultRowsPerPage: 10,
+        rowsPerPageOptions: [5, 10, 25, 50],
+      }}
     />
   );
 }
