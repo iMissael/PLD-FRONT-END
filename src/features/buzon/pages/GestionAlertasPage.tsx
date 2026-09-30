@@ -28,16 +28,16 @@ export function GestionAlertasPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+          <h1 className="text-xl font-bold tracking-tight text-foreground">
             {es.buzon.alertsTitle}
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
+          <p className="text-xs text-muted-foreground">
             {es.buzon.alertsSubtitle}
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <FilterIcon className="h-4 w-4 text-slate-400" />
+          <FilterIcon className="h-4 w-4 text-muted-foreground" />
           <select
             value={estatusFilter ?? ""}
             onChange={(e) => {
@@ -45,7 +45,7 @@ export function GestionAlertasPage() {
               setEstatusFilter(val ? val : undefined);
               setPage(0);
             }}
-            className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+            className="rounded-md border border-border bg-card px-3 py-1.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
           >
             <option value="">Todos los estatus</option>
             <option value="A">Activas (A)</option>
@@ -56,21 +56,21 @@ export function GestionAlertasPage() {
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xs dark:border-slate-800 dark:bg-slate-900">
+      <div className="overflow-hidden rounded-xl border border-border bg-card shadow-xs">
         {isLoading ? (
           <div className="space-y-3 p-6">
             {[1, 2, 3].map((n) => (
-              <div key={n} className="h-10 w-full animate-pulse rounded-md bg-slate-100 dark:bg-slate-800" />
+              <div key={n} className="h-10 w-full animate-pulse rounded-md bg-muted" />
             ))}
           </div>
         ) : !data || data.content.length === 0 ? (
-          <div className="py-12 text-center text-xs text-slate-500 dark:text-slate-400">
+          <div className="py-12 text-center text-xs text-muted-foreground">
             {es.common.empty}
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="border-b border-slate-200 bg-slate-50 text-slate-600 dark:border-slate-800 dark:bg-slate-800/60 dark:text-slate-300">
+              <thead className="border-b border-border bg-muted/50 text-muted-foreground">
                 <tr>
                   <th className="px-4 py-3 font-semibold">ID</th>
                   <th className="px-4 py-3 font-semibold">Descripción</th>
@@ -80,16 +80,16 @@ export function GestionAlertasPage() {
                   <th className="px-4 py-3 font-semibold text-right">Acción</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              <tbody className="divide-y divide-border">
                 {data.content.map((alerta) => (
-                  <tr key={alerta.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40">
-                    <td className="px-4 py-3 font-mono font-bold text-slate-900 dark:text-white">
+                  <tr key={alerta.id} className="hover:bg-muted/40 transition-colors">
+                    <td className="px-4 py-3 font-mono font-bold text-foreground">
                       #{alerta.id}
                     </td>
-                    <td className="max-w-xs truncate px-4 py-3 text-slate-800 dark:text-slate-200 font-medium">
+                    <td className="max-w-xs truncate px-4 py-3 text-foreground font-medium">
                       {alerta.descripcion}
                     </td>
-                    <td className="px-4 py-3 font-mono text-slate-700 dark:text-slate-300">
+                    <td className="px-4 py-3 font-mono text-foreground">
                       ${alerta.importe?.toLocaleString("es-MX") ?? 0}
                     </td>
                     <td className="px-4 py-3">
@@ -97,14 +97,14 @@ export function GestionAlertasPage() {
                         {es.buzon.alertStatusLabels[alerta.estatus]}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-slate-500">
+                    <td className="px-4 py-3 text-muted-foreground">
                       {new Date(alerta.createdAt).toLocaleDateString("es-MX")}
                     </td>
                     <td className="px-4 py-3 text-right">
                       <button
                         type="button"
                         onClick={() => setSelectedAlertaId(alerta.id)}
-                        className="rounded-md bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
+                        className="rounded-md bg-muted px-2.5 py-1 text-xs font-semibold text-foreground hover:bg-muted/80 transition-colors"
                       >
                         Ver Alerta
                       </button>
@@ -119,19 +119,19 @@ export function GestionAlertasPage() {
 
       {/* Alerta Detail Modal */}
       {selectedAlertaId && alertaDetalle && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-xs p-4">
-          <div className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100">
-            <div className="flex items-center justify-between border-b border-slate-200 pb-3 dark:border-slate-800">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
+          <div className="w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-2xl text-foreground">
+            <div className="flex items-center justify-between border-b border-border pb-3">
               <div className="flex items-center gap-2">
                 <ShieldSearchIcon className="h-5 w-5 text-amber-500" />
-                <h2 className="text-base font-bold text-slate-900 dark:text-white">
+                <h2 className="text-base font-bold text-foreground">
                   Alerta PLD #{alertaDetalle.id}
                 </h2>
               </div>
               <button
                 type="button"
                 onClick={() => setSelectedAlertaId(null)}
-                className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+                className="rounded-lg p-1 text-muted-foreground hover:bg-muted"
               >
                 <XIcon className="h-5 w-5" />
               </button>
@@ -139,27 +139,27 @@ export function GestionAlertasPage() {
 
             <div className="mt-4 space-y-3 text-xs">
               <div>
-                <span className="font-semibold text-slate-500">Descripción:</span>
-                <p className="mt-1 text-slate-800 dark:text-slate-200 font-medium">{alertaDetalle.descripcion}</p>
+                <span className="font-semibold text-muted-foreground">Descripción:</span>
+                <p className="mt-1 text-foreground font-medium">{alertaDetalle.descripcion}</p>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <span className="font-semibold text-slate-500">Importe:</span>
-                  <p className="font-mono text-slate-800 dark:text-slate-200">${alertaDetalle.importe?.toLocaleString("es-MX")}</p>
+                  <span className="font-semibold text-muted-foreground">Importe:</span>
+                  <p className="font-mono text-foreground">${alertaDetalle.importe?.toLocaleString("es-MX")}</p>
                 </div>
                 <div>
-                  <span className="font-semibold text-slate-500">Moneda:</span>
-                  <p className="text-slate-800 dark:text-slate-200">{alertaDetalle.importeMonedaAcronimo || "MXN"}</p>
+                  <span className="font-semibold text-muted-foreground">Moneda:</span>
+                  <p className="text-foreground">{alertaDetalle.importeMonedaAcronimo || "MXN"}</p>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <span className="font-semibold text-slate-500">Forma de Pago:</span>
-                  <p className="text-slate-800 dark:text-slate-200">{alertaDetalle.formaPago || "N/A"}</p>
+                  <span className="font-semibold text-muted-foreground">Forma de Pago:</span>
+                  <p className="text-foreground">{alertaDetalle.formaPago || "N/A"}</p>
                 </div>
                 <div>
-                  <span className="font-semibold text-slate-500">Estatus:</span>
-                  <p className="font-bold text-emerald-600">{es.buzon.alertStatusLabels[alertaDetalle.estatus]}</p>
+                  <span className="font-semibold text-muted-foreground">Estatus:</span>
+                  <p className="font-bold text-emerald-600 dark:text-emerald-400">{es.buzon.alertStatusLabels[alertaDetalle.estatus]}</p>
                 </div>
               </div>
             </div>

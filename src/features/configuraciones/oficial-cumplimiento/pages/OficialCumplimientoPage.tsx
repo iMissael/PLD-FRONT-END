@@ -28,7 +28,7 @@ function nombreCompleto(usuario: UsuarioResponse) {
 
 function Aviso({ children }: { children: ReactNode }) {
   return (
-    <div className="space-y-3 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div className="space-y-3 rounded-xl border border-border bg-card p-6 shadow-sm text-foreground">
       {children}
     </div>
   );
@@ -66,14 +66,14 @@ export function OficialCumplimientoPage() {
       <div className="max-w-sm space-y-2">
         <Label
           htmlFor="selector-oficial"
-          className="text-xs font-bold tracking-wider text-slate-700 uppercase"
+          className="text-xs font-bold tracking-wider text-muted-foreground uppercase"
         >
           Oficial de cumplimiento
         </Label>
         <Select value={usuarioId} onValueChange={setSeleccion}>
           <SelectTrigger
             id="selector-oficial"
-            className="h-10 w-full border-slate-300 bg-white font-semibold data-[size=default]:h-10"
+            className="h-10 w-full border-border bg-card text-foreground font-semibold data-[size=default]:h-10"
           >
             <SelectValue placeholder="Selecciona un oficial" />
           </SelectTrigger>

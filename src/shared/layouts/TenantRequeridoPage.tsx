@@ -6,12 +6,12 @@
  */
 export function TenantRequeridoPage() {
   return (
-    <div className="mx-auto mt-16 max-w-md rounded-lg border border-slate-200 bg-white p-6 text-center">
-      <h1 className="text-lg font-semibold text-slate-900">Falta el tenant en la URL</h1>
-      <p className="mt-2 text-sm text-slate-500">
+    <div className="mx-auto mt-16 max-w-md rounded-xl border border-border bg-card p-6 text-center shadow-sm">
+      <h1 className="text-lg font-semibold text-foreground">Falta el tenant en la URL</h1>
+      <p className="mt-2 text-sm text-muted-foreground">
         Esta aplicación es multi-tenant: accede con el link completo que incluye tu
         tenant, con el formato{" "}
-        <code className="rounded bg-slate-100 px-1 py-0.5 text-xs">
+        <code className="rounded bg-muted px-1.5 py-0.5 text-xs text-foreground font-mono">
           /SICANETSC/PLD/&#123;tenantId&#125;/configuracion-alertas
         </code>
         .
