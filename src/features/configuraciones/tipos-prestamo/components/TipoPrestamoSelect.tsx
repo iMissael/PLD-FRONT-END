@@ -27,6 +27,12 @@ export function TipoPrestamoSelect({
 }: TipoPrestamoSelectProps) {
   const { data: tipos, isLoading } = useTiposPrestamo();
 
+  const listaTipos = Array.isArray(tipos)
+    ? tipos
+    : Array.isArray((tipos as unknown as { contenido?: typeof tipos })?.contenido)
+    ? ((tipos as unknown as { contenido: typeof tipos }).contenido ?? [])
+    : [];
+
   return (
     <select
       id={id}
@@ -37,7 +43,7 @@ export function TipoPrestamoSelect({
       className={field}
     >
       <option value="">{isLoading ? "Cargando..." : "Sin asignar"}</option>
-      {tipos?.map((tipo) => (
+      {listaTipos.map((tipo) => (
         <option key={tipo.id} value={tipo.id}>
           {tipo.nombre}
         </option>

@@ -41,19 +41,19 @@ export function ActividadesEconomicasPage() {
   const eliminar = useEliminarActividadEconomica();
 
   // El backend devuelve el catálogo completo; el filtro corre en memoria.
-  const listaActividades = useMemo(() => {
+  const listaActividades: ActividadEconomicaResponse[] = useMemo(() => {
     if (!actividades) return [];
     if (Array.isArray(actividades)) return actividades;
-    if (Array.isArray((actividades as unknown as { contenido?: typeof actividades })?.contenido)) {
-      return (actividades as unknown as { contenido: typeof actividades }).contenido ?? [];
+    if (Array.isArray((actividades as unknown as { contenido?: ActividadEconomicaResponse[] })?.contenido)) {
+      return (actividades as unknown as { contenido: ActividadEconomicaResponse[] }).contenido ?? [];
     }
     return [];
   }, [actividades]);
 
-  const filtradas = useMemo(() => {
+  const filtradas: ActividadEconomicaResponse[] = useMemo(() => {
     const termino = normalizar(busqueda.trim());
     if (!termino) return listaActividades;
-    return listaActividades.filter((actividad) =>
+    return listaActividades.filter((actividad: ActividadEconomicaResponse) =>
       normalizar(actividad.descripcion).includes(termino) ||
       normalizar(actividad.claveSat).includes(termino),
     );
@@ -76,7 +76,7 @@ export function ActividadesEconomicasPage() {
       actualizar.mutate(
         { id: seleccionada.id, input },
         {
-          onSuccess: (actividadActualizada) => setSeleccionada(actividadActualizada),
+          onSuccess: (actividadActualizada: ActividadEconomicaResponse) => setSeleccionada(actividadActualizada),
           onError,
         },
       );

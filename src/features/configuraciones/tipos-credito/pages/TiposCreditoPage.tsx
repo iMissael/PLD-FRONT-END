@@ -95,6 +95,11 @@ export function TiposCreditoPage() {
           setCreandoNuevo(false);
           setMensajeError(null);
         }}
+        onDoubleClick={(tipo) => {
+          setSeleccionado(tipo);
+          setCreandoNuevo(false);
+          setMensajeError(null);
+        }}
       />
 
       {mostrarFormulario ? (
