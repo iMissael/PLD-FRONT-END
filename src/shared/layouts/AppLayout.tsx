@@ -9,8 +9,6 @@ import {
   BellIcon,
   ChevronDownIcon,
   ClipboardCheckIcon,
-  DotsVerticalIcon,
-  FileTextIcon,
   HelpCircleIcon,
   HomeIcon,
   InfoIcon,
@@ -53,7 +51,7 @@ function isGroup(node: NavNode): node is NavGroup {
 const NAV_ITEMS: NavNode[] = [
   {
     label: "Buzón de denuncias",
-    icon: FileTextIcon,
+    icon: ShieldSearchIcon,
     children: [
       { label: "Gestión de denuncias", to: "buzon/gestion" },
       { label: "Alertas PLD", to: "buzon/alertas" },
@@ -109,6 +107,30 @@ const NAV_ITEMS: NavNode[] = [
         label: "Configuración de actividad económica",
         to: "configuraciones/actividad-economica",
       },
+      {
+        label: "Configuración de tipos de crédito",
+        to: "configuraciones/tipos-credito",
+      },
+      {
+        label: "Configuración de historial crediticio",
+        to: "configuraciones/historial-crediticio",
+      },
+      {
+        label: "Configuración de monto de crédito",
+        to: "configuraciones/monto-credito",
+      },
+      {
+        label: "Configuración de recursos",
+        children: [
+          { label: "Origen", to: "configuraciones/recursos/origen" },
+          { label: "Destino", to: "configuraciones/recursos/destino" },
+        ],
+      },
+      {
+        label: "Configuración de canales de pago",
+        to: "configuraciones/canales-pago",
+      },
+      
     ],
   },
   {
@@ -200,9 +222,7 @@ export function AppLayout() {
   const navigate = useNavigate();
   const rutaEnTenant = useRutaTenant();
   const usuario = useAuthStore((estado) => estado.usuario);
-  // El login ya no manda nombre/correo del usuario, solo id/empleadoId/username
-  // (ver LoginResponse.UsuarioResumen en el backend): se muestra el username.
-  const inicial = (usuario?.username ?? "U").trim().charAt(0).toUpperCase() || "U";
+  const inicial = (usuario?.nombre ?? "U").trim().charAt(0).toUpperCase() || "U";
 
   function cerrarSesion() {
     useAuthStore.getState().logout();
@@ -257,15 +277,8 @@ export function AppLayout() {
               {inicial}
             </span>
             <span className="flex flex-col items-start leading-tight">
-              <span className="text-sm font-medium">{usuario?.username ?? "Usuario"}</span>
+              <span className="text-sm font-medium">{usuario?.nombre ?? "Usuario"}</span>
             </span>
-          </button>
-          <button
-            type="button"
-            title="Más opciones"
-            className="hover:bg-secondary text-foreground rounded-full p-2"
-          >
-            <DotsVerticalIcon className="h-5 w-5" />
           </button>
         </div>
       </header>

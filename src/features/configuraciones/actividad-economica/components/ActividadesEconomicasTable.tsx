@@ -8,6 +8,7 @@ interface ActividadesEconomicasTableProps {
   isLoading: boolean;
   seleccionadaId: string | null;
   onSeleccionar: (actividad: ActividadEconomicaResponse) => void;
+  onDoubleClick?: (actividad: ActividadEconomicaResponse) => void;
   /** Índice de la primera fila de la página, para que el consecutivo continúe. */
   offset: number;
 }
@@ -17,6 +18,7 @@ export function ActividadesEconomicasTable({
   isLoading,
   seleccionadaId,
   onSeleccionar,
+  onDoubleClick,
   offset,
 }: ActividadesEconomicasTableProps) {
   const { data: niveles } = useNivelesRiesgo();
@@ -51,7 +53,12 @@ export function ActividadesEconomicasTable({
             <tr
               key={actividad.id}
               onClick={() => onSeleccionar(actividad)}
-              className={table.row(actividad.id === seleccionadaId)}
+              onDoubleClick={() => {
+                if (onDoubleClick) onDoubleClick(actividad);
+                else onSeleccionar(actividad);
+              }}
+              title="Doble clic para modificar este registro"
+              className={`${table.row(actividad.id === seleccionadaId)} select-none`}
             >
               {/* Consecutivo de fila dentro del listado filtrado, no el id
                   del registro. `offset` lo continúa entre páginas. */}

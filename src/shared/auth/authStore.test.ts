@@ -6,7 +6,7 @@ const sesion = {
   token: "jwt",
   tokenType: "Bearer",
   expiresInSeconds: 3600,
-  usuario: { id: 1, empleadoId: 1, username: "admin" },
+  usuario: { id: 1, username: "admin", nombre: "Admin", correo: null },
   rol: { id: 1, nombre: "ROLE_ADMIN" },
   permisos: [{ recurso: "usuarios", accion: "crear" }],
 };

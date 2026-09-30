@@ -5,9 +5,9 @@ import type {
   CatalogoIdentidadResponse,
   DestinoRecursoResponse,
   EntidadGeograficaResponse,
-  LocalidadResponse,
   MunicipioResponse,
   OrigenRecursoResponse,
+  PaginaLocalidadesResponse,
   PaisResponse,
   PepResponse,
   SucursalResponse,
@@ -95,11 +95,16 @@ export async function listarMunicipios(entidadId?: number) {
   return data;
 }
 
+// El endpoint pagina (cat_localidad tiene cientos de miles de filas): el contenido
+// real viene en `contenido`, no en el cuerpo de la respuesta directamente. Se pide
+// el tope de fila (200) porque este selector necesita "todas" las del municipio,
+// no una página chica para tabla.
 export async function listarLocalidades(idMunicipio?: number) {
-  const { data } = await apiClient.get<LocalidadResponse[]>("/catalogos/localidades", {
-    params: idMunicipio ? { idMunicipio } : undefined,
-  });
-  return data;
+  const { data } = await apiClient.get<PaginaLocalidadesResponse>(
+    "/catalogos/localidades",
+    { params: idMunicipio ? { idMunicipio, tamanio: 200 } : { tamanio: 200 } },
+  );
+  return data.contenido ?? [];
 }
 
 export async function listarActividadesEconomicas() {

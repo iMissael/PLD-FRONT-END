@@ -129,9 +129,9 @@ export function CaptchaChallenge({ onVerify }: CaptchaChallengeProps) {
   };
 
   return (
-    <div className="flex flex-col gap-2 rounded-lg border border-slate-200 bg-slate-50 p-3.5 dark:border-slate-800 dark:bg-slate-900/50">
+    <div className="flex flex-col gap-2 rounded-lg border border-border bg-muted/40 p-3.5">
       <div className="flex items-center justify-between gap-2">
-        <label className="text-xs font-semibold  tracking-wider text-slate-600 dark:text-slate-400">
+        <label className="text-xs font-semibold tracking-wider text-muted-foreground">
           {es.captcha.label}
         </label>
         <span className="text-[10px] text-amber-600 dark:text-amber-400 font-medium">
@@ -140,7 +140,7 @@ export function CaptchaChallenge({ onVerify }: CaptchaChallengeProps) {
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <div className="relative overflow-hidden rounded-md border border-slate-300 shadow-xs dark:border-slate-700">
+        <div className="relative overflow-hidden rounded-md border border-border shadow-xs bg-card">
           <canvas ref={canvasRef} width={180} height={44} className="block cursor-default select-none" />
         </div>
 
@@ -150,7 +150,7 @@ export function CaptchaChallenge({ onVerify }: CaptchaChallengeProps) {
             onClick={refreshCaptcha}
             disabled={cooldown > 0}
             title={es.captcha.refreshTooltip}
-            className="rounded-md border border-slate-200 bg-white p-2 text-slate-600 hover:bg-slate-100 hover:text-slate-900 disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
+            className="rounded-md border border-border bg-card p-2 text-foreground hover:bg-muted disabled:opacity-50 transition-colors"
           >
             <RefreshCwIcon className={`h-4 w-4 ${cooldown > 0 ? "animate-spin" : ""}`} />
           </button>
@@ -159,7 +159,7 @@ export function CaptchaChallenge({ onVerify }: CaptchaChallengeProps) {
             type="button"
             onClick={playAudio}
             title={es.captcha.audioTooltip}
-            className="rounded-md border border-slate-200 bg-white p-2 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
+            className="rounded-md border border-border bg-card p-2 text-foreground hover:bg-muted transition-colors"
           >
             <Volume2Icon className="h-4 w-4" />
           </button>
@@ -174,13 +174,13 @@ export function CaptchaChallenge({ onVerify }: CaptchaChallengeProps) {
           onChange={handleInputChange}
           placeholder={es.captcha.placeholder}
           aria-label={es.captcha.label}
-          className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-mono tracking-wider text-slate-900 placeholder:text-slate-400 focus:border-[#5BD191] focus:outline-none focus:ring-2 focus:ring-[#88EC9B]/40 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+          className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm font-mono tracking-wider text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring"
         />
       </div>
 
       {showAccessibleCode && (
-        <p className="text-xs text-slate-500 dark:text-slate-400">
-          Código accesible: <span className="font-mono font-bold tracking-widest text-slate-800 dark:text-slate-200">{code}</span>
+        <p className="text-xs text-muted-foreground">
+          Código accesible: <span className="font-mono font-bold tracking-widest text-foreground">{code}</span>
         </p>
       )}
     </div>

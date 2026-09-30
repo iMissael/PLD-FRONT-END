@@ -7,14 +7,17 @@ export interface LoginRequest {
   password: string;
 }
 
+export type LoginCredentials = LoginRequest;
+
 export interface LoginResponse {
   token: string;
   tokenType: string;
   expiresInSeconds: number;
   usuario: {
     id: number;
-    empleadoId: number;
     username: string;
+    nombre: string;
+    correo: string | null;
   };
   rol: {
     id: number;

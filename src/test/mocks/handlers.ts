@@ -20,8 +20,9 @@ type PermisoResponse = components["schemas"]["PermisoResponse"];
 const usuarios: UsuarioResponse[] = [
   {
     idUsuario: 1,
-    empleadoId: 1,
     username: "admin",
+    nombre: "Administrador",
+    correo: "admin@example.com",
     estado: "ACTIVO",
     rolId: 1,
   },
@@ -53,8 +54,9 @@ const loginResponse: LoginResponse = {
   expiresInSeconds: 28800,
   usuario: {
     id: 1,
-    empleadoId: 1,
     username: "admin",
+    nombre: "Administrador",
+    correo: "admin@example.com",
   },
   rol: { id: 1, nombre: "ROLE_ADMIN" },
   permisos: [{ recurso: "usuarios", accion: "crear" }],

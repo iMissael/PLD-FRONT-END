@@ -1,28 +1,26 @@
 import { z } from "zod";
 import {
+  conFormato,
   coordenadaEnRango,
   coordenadasEnPar,
-  conFormato,
+  fechaNacimiento,
   fechaNoFutura,
+  MENSAJE_NOMBRE,
+  PATRON_CLAVE,
+  PATRON_CURP,
+  PATRON_NOMBRE,
   PATRON_NUMERO_DOMICILIO,
+  PATRON_RFC,
   texto,
 } from "@/shared/utils/validacion";
 
-// Los máximos del domicilio son los de las columnas de la tabla domicilio_usuario; el backend
+const EDAD_MINIMA = 18;
+
+// Los máximos son los de las columnas de las tablas usuario y domicilio_usuario; el backend
 // no los valida y un texto más largo terminaría en un error 500 al guardar.
-//
-// El usuario ya no captura identidad (nombre, RFC, CURP, domicilio de nacimiento, etc.): esos
-// datos viven en `empleado_interno`, una tabla que esta app todavía no puede crear/editar. Por
-// eso el alta de usuario solo pide el id del empleado ya existente + sus credenciales de acceso.
 export const crearUsuarioSchema = z
   .object({
-    // Paso 1 — Empleado y acceso
-    empleadoId: z
-      .string()
-      .trim()
-      .min(1, "El id de empleado es obligatorio")
-      .max(10, "Máximo 10 dígitos")
-      .regex(/^\d+$/, "El id de empleado debe ser numérico"),
+    // Paso 1 — Datos de acceso
     username: z
       .string()
       .trim()
@@ -35,11 +33,56 @@ export const crearUsuarioSchema = z
       .min(8, "La contraseña debe tener al menos 8 caracteres")
       .max(72, "Máximo 72 caracteres"),
     confirmarPassword: z.string().min(1, "Confirma la contraseña"),
-    rolId: z.string().min(1, "El rol es obligatorio"),
+    correo: z
+      .string()
+      .trim()
+      .max(150, "Máximo 150 caracteres")
+      .refine(
+        (valor) => valor === "" || z.string().email().safeParse(valor).success,
+        "Correo inválido",
+      )
+      .optional(),
+    telefono: conFormato(10, /^\d{10}$/, "El teléfono debe tener exactamente 10 dígitos"),
+
+    // Paso 1 — Datos personales
+    nombre: z
+      .string()
+      .trim()
+      .min(1, "El nombre es obligatorio")
+      .max(150, "Máximo 150 caracteres")
+      .regex(PATRON_NOMBRE, MENSAJE_NOMBRE),
+    primerApellido: conFormato(100, PATRON_NOMBRE, MENSAJE_NOMBRE),
+    segundoApellido: conFormato(100, PATRON_NOMBRE, MENSAJE_NOMBRE),
+    nacionalidad: z.string().optional(),
+    paisNacimientoId: z.string().optional(),
+    entidadNacimientoId: z.string().optional(),
+    lugarDeNacimiento: texto(100),
+    fechaNacimiento: fechaNacimiento(
+      EDAD_MINIMA,
+      `El usuario debe ser mayor de ${EDAD_MINIMA} años`,
+    ),
+    genero: z.string().max(20, "Máximo 20 caracteres").optional(),
+    rfc: conFormato(
+      13,
+      PATRON_RFC,
+      "RFC inválido: 3 o 4 letras, 6 dígitos de fecha y 3 de homoclave (12 o 13 caracteres)",
+    ),
+    curp: conFormato(
+      18,
+      PATRON_CURP,
+      "CURP inválida: debe tener 18 caracteres con el formato oficial",
+    ),
+    estadoCivil: z.string().optional(),
+    numDependientes: conFormato(2, /^\d{1,2}$/, "Solo números enteros, de 0 a 99"),
+    nivelEstudios: z.string().optional(),
+
+    // Paso 1 — Identificación
+    tipoIdentificacion: z.string().optional(),
+    folioIdentificacion: conFormato(50, /^[A-Z0-9]+$/, "Solo letras y números"),
 
     // Paso 2 — Domicilio
-    tipoComprobanteId: z.string().optional(),
-    tipoVialidadId: z.string().optional(),
+    tipoComprobante: z.string().optional(),
+    tipoVialidad: z.string().optional(),
     calle: texto(100),
     numExterior: conFormato(
       10,
@@ -54,7 +97,7 @@ export const crearUsuarioSchema = z
     nombreCalleIzquierda: texto(50),
     nombreCalleDerecha: texto(50),
     referencia: texto(100),
-    laCasaEsId: z.string().optional(),
+    posesionVivienda: z.string().optional(),
     antiguedadDomicilio: fechaNoFutura("La fecha no puede ser futura"),
     codigoPostal: conFormato(5, /^\d{5}$/, "El código postal debe tener 5 dígitos"),
     tipoAsentamiento: texto(50),
@@ -65,6 +108,19 @@ export const crearUsuarioSchema = z
     domicilioEntidadId: z.string().min(1, "La entidad del domicilio es obligatoria"),
     municipioId: z.string().min(1, "El municipio es obligatorio"),
     localidadId: z.string().min(1, "La localidad es obligatoria"),
+
+    // Paso 3 — Tipo
+    rolId: z.string().min(1, "El rol es obligatorio"),
+
+    // Paso 3 — Parámetros PLD del oficial de cumplimiento (solo si el rol elegido es
+    // "Oficial de Cumplimiento"; la obligatoriedad se valida en el submit del formulario,
+    // ya que depende del rol seleccionado y no puede fijarse de forma estática aquí).
+    tipoPersona: z.string().optional(),
+    claveDelOficialDeCumplimiento: conFormato(12, PATRON_CLAVE, "Solo letras, números y guion"),
+    claveDelSujetoObligado: conFormato(50, PATRON_CLAVE, "Solo letras, números y guion"),
+    claveOrganoSuperior: conFormato(50, PATRON_CLAVE, "Solo letras, números y guion"),
+    monedaDeOperacionPrincipal: conFormato(3, /^[A-Z]{3}$/, "Usa el código de 3 letras, por ejemplo MXN"),
+    actividadEconomicaId: z.string().optional(),
   })
   .superRefine((datos, contexto) => {
     if (datos.password !== datos.confirmarPassword) {
@@ -80,23 +136,39 @@ export const crearUsuarioSchema = z
 export type CrearUsuarioFormValues = z.infer<typeof crearUsuarioSchema>;
 
 export const PASO1_CAMPOS = [
-  "empleadoId",
   "username",
   "password",
   "confirmarPassword",
-  "rolId",
+  "correo",
+  "telefono",
+  "nombre",
+  "primerApellido",
+  "segundoApellido",
+  "nacionalidad",
+  "paisNacimientoId",
+  "entidadNacimientoId",
+  "lugarDeNacimiento",
+  "fechaNacimiento",
+  "genero",
+  "rfc",
+  "curp",
+  "estadoCivil",
+  "numDependientes",
+  "nivelEstudios",
+  "tipoIdentificacion",
+  "folioIdentificacion",
 ] as const;
 
 export const PASO2_CAMPOS = [
-  "tipoComprobanteId",
-  "tipoVialidadId",
+  "tipoComprobante",
+  "tipoVialidad",
   "calle",
   "numExterior",
   "numInterior",
   "nombreCalleIzquierda",
   "nombreCalleDerecha",
   "referencia",
-  "laCasaEsId",
+  "posesionVivienda",
   "antiguedadDomicilio",
   "codigoPostal",
   "tipoAsentamiento",

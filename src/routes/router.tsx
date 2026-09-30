@@ -11,12 +11,18 @@ import { PermisosPage } from "@/features/configuraciones/administracion/permisos
 import { RolesPage } from "@/features/configuraciones/administracion/roles/pages/RolesPage";
 import { RolPermisosPage } from "@/features/configuraciones/administracion/roles/pages/RolPermisosPage";
 import { UsuariosPage } from "@/features/configuraciones/administracion/usuarios/pages/UsuariosPage";
+import { CanalesPagoPage } from "@/features/configuraciones/canales-pago/pages/CanalesPagoPage";
 import { EdadesPage } from "@/features/configuraciones/edades/rangos-edad/pages/EdadesPage";
 import { TiemposConstitucionPage } from "@/features/configuraciones/edades/tiempo-constitucion/pages/TiemposConstitucionPage";
 import { ExperienciasActividadPage } from "@/features/configuraciones/experiencia-actividad/pages/ExperienciasActividadPage";
+import { HistorialesCrediticiosPage } from "@/features/configuraciones/historial-crediticio/pages/HistorialesCrediticiosPage";
 import { MatrizRiesgoPage } from "@/features/configuraciones/matriz-riesgo/pages/MatrizRiesgoPage";
+import { PrestamosMontoPage } from "@/features/configuraciones/monto-credito/pages/PrestamosMontoPage";
 import { OficialCumplimientoPage } from "@/features/configuraciones/oficial-cumplimiento/pages/OficialCumplimientoPage";
 import { TiposPersonaPage } from "@/features/configuraciones/personas/pages/TiposPersonaPage";
+import { DestinosRecursoPage } from "@/features/configuraciones/recursos/destino/pages/DestinosRecursoPage";
+import { OrigenesRecursoPage } from "@/features/configuraciones/recursos/origen/pages/OrigenesRecursoPage";
+import { TiposCreditoPage } from "@/features/configuraciones/tipos-credito/pages/TiposCreditoPage";
 import { EntidadesPage } from "@/features/configuraciones/ubicacion-geografica/entidades/pages/EntidadesPage";
 import { LocalidadesPage } from "@/features/configuraciones/ubicacion-geografica/localidades/pages/LocalidadesPage";
 import { PaisesPage } from "@/features/configuraciones/ubicacion-geografica/paises/pages/PaisesPage";
@@ -190,6 +196,30 @@ export const router = createBrowserRouter([
                   {
                     path: "configuraciones/actividad-economica",
                     element: <ActividadesEconomicasPage />,
+                  },
+                  {
+                    path: "configuraciones/tipos-credito",
+                    element: <TiposCreditoPage />,
+                  },
+                  {
+                    path: "configuraciones/historial-crediticio",
+                    element: <HistorialesCrediticiosPage />,
+                  },
+                  {
+                    path: "configuraciones/monto-credito",
+                    element: <PrestamosMontoPage />,
+                  },
+                  {
+                    path: "configuraciones/recursos/origen",
+                    element: <OrigenesRecursoPage />,
+                  },
+                  {
+                    path: "configuraciones/recursos/destino",
+                    element: <DestinosRecursoPage />,
+                  },
+                  {
+                    path: "configuraciones/canales-pago",
+                    element: <CanalesPagoPage />,
                   },
                 ],
               },

@@ -18,15 +18,15 @@ function StatCard({
 }) {
   const toneClasses =
     tone === "brand"
-      ? "border-success/30 bg-success-soft text-success-hover"
+      ? "border-success/30 bg-success-soft text-success dark:text-success"
       : tone === "warn"
-        ? "border-amber-200 bg-amber-50 text-amber-800"
-        : "border-slate-200 bg-slate-50 text-slate-700";
+        ? "border-warning/30 bg-warning-soft text-warning dark:text-warning"
+        : "border-border bg-muted/50 text-foreground";
 
   return (
-    <div className={`flex-1 rounded-lg border p-4 ${toneClasses}`}>
-      <p className="text-xs font-medium uppercase tracking-wide opacity-70">{label}</p>
-      <p className="mt-1 text-2xl font-semibold">{value}</p>
+    <div className={`flex-1 rounded-xl border p-4 shadow-xs ${toneClasses}`}>
+      <p className="text-xs font-medium uppercase tracking-wide opacity-80">{label}</p>
+      <p className="mt-1 text-2xl font-bold">{value}</p>
     </div>
   );
 }
@@ -52,26 +52,26 @@ export function CargaMasivaPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="text-xl font-semibold text-slate-900">Carga masiva</h2>
-        <p className="text-sm text-slate-500">
+        <h2 className="text-xl font-bold text-foreground">Carga masiva</h2>
+        <p className="text-sm text-muted-foreground">
           Sube un archivo CSV o XLSX con personas bloqueadas para procesarlas en lote.
         </p>
       </div>
 
-      <div className="rounded-lg border border-slate-200 bg-white p-4">
+      <div className="rounded-xl border border-border bg-card p-5 shadow-xs">
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
-          className="flex w-full flex-col items-center gap-2 rounded-lg border-2 border-dashed border-slate-200 px-4 py-10 text-center transition-colors hover:border-primary hover:bg-primary-soft/40"
+          className="flex w-full flex-col items-center gap-2 rounded-xl border-2 border-dashed border-border px-4 py-10 text-center transition-colors hover:border-primary hover:bg-primary/5 cursor-pointer"
         >
-          <span className="bg-primary text-primary-foreground flex h-11 w-11 items-center justify-center rounded-full">
+          <span className="bg-primary text-primary-foreground flex h-11 w-11 items-center justify-center rounded-full shadow-xs">
             <UploadIcon className="h-5 w-5" />
           </span>
-          <span className="text-sm font-medium text-slate-700">
+          <span className="text-sm font-medium text-foreground">
             {archivo ? archivo.name : "Haz clic para elegir un archivo (.csv, .xlsx)"}
           </span>
           {archivo && (
-            <span className="text-xs text-slate-400">
+            <span className="text-xs text-muted-foreground">
               {(archivo.size / 1024).toFixed(1)} KB
             </span>
           )}
@@ -86,7 +86,7 @@ export function CargaMasivaPage() {
 
         <div className="mt-4 flex items-center justify-between gap-4">
           {mutation.isError ? (
-            <p className="text-sm text-red-600">
+            <p className="text-sm text-destructive">
               {isAppError(mutation.error)
                 ? mutation.error.message
                 : "Ocurrió un error inesperado al subir el archivo."}
@@ -98,7 +98,7 @@ export function CargaMasivaPage() {
             type="button"
             disabled={!archivo || mutation.isPending}
             onClick={handleSubir}
-            className="bg-primary hover:bg-primary-hover rounded-md px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+            className="bg-primary hover:bg-primary-hover rounded-lg px-4 py-2 text-sm font-medium text-white shadow-xs transition-colors disabled:cursor-not-allowed disabled:opacity-50"
           >
             {mutation.isPending ? "Procesando..." : "Subir archivo"}
           </button>
@@ -118,24 +118,24 @@ export function CargaMasivaPage() {
           </div>
 
           {resultado.detalleErrores.length > 0 && (
-            <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white">
-              <table className="min-w-full divide-y divide-slate-200 text-sm">
-                <thead className="bg-slate-50">
+            <div className="overflow-x-auto rounded-xl border border-border bg-card shadow-xs">
+              <table className="min-w-full divide-y divide-border text-sm">
+                <thead className="bg-muted/50">
                   <tr>
-                    <th className="px-4 py-2 text-left font-medium text-slate-600">
+                    <th className="px-4 py-2 text-left font-semibold text-muted-foreground">
                       Fila
                     </th>
-                    <th className="px-4 py-2 text-left font-medium text-slate-600">
+                    <th className="px-4 py-2 text-left font-semibold text-muted-foreground">
                       Error
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-border">
                   {resultado.detalleErrores.map((detalle, index) => (
                     // No hay id único en el DTO; fila+índice es estable para esta lista de solo lectura.
-                    <tr key={`${detalle.numeroFila}-${index}`}>
-                      <td className="px-4 py-2 text-slate-800">{detalle.numeroFila}</td>
-                      <td className="px-4 py-2 text-slate-800">{detalle.motivo}</td>
+                    <tr key={`${detalle.numeroFila}-${index}`} className="hover:bg-muted/30">
+                      <td className="px-4 py-2 text-foreground font-mono">{detalle.numeroFila}</td>
+                      <td className="px-4 py-2 text-foreground">{detalle.motivo}</td>
                     </tr>
                   ))}
                 </tbody>

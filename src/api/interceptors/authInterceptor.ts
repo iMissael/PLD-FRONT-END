@@ -1,6 +1,6 @@
 import type { AxiosError, InternalAxiosRequestConfig } from "axios";
 
-import { useAuthStore } from "@/shared/auth/authStore";
+import { getAuthToken, useAuthStore } from "@/shared/auth/authStore";
 import { getCurrentTenantId } from "@/shared/tenant/tenantStore";
 import { rutaTenant } from "@/shared/tenant/tenantPaths";
 
@@ -12,10 +12,12 @@ export function authInterceptor(
   config: InternalAxiosRequestConfig,
 ): InternalAxiosRequestConfig {
   const tenantId = getCurrentTenantId();
-  const { token, tenantId: tenantDeLaSesion } = useAuthStore.getState();
+  const { token: storeToken, tenantId: tenantDeLaSesion } = useAuthStore.getState();
+  const activeToken = storeToken || getAuthToken();
 
-  if (token && tenantId && tenantDeLaSesion === tenantId) {
-    config.headers.set("Authorization", `Bearer ${token}`);
+  if (activeToken && tenantId && (!tenantDeLaSesion || tenantDeLaSesion === tenantId)) {
+    config.headers.set("Authorization", `Bearer ${activeToken}`);
+    config.headers["Authorization"] = `Bearer ${activeToken}`;
   }
   return config;
 }
@@ -23,7 +25,7 @@ export function authInterceptor(
 export function unauthorizedInterceptor(error: AxiosError): Promise<never> {
   const esLogin = error.config?.url?.endsWith("/auth/login") ?? false;
   const tenantId = getCurrentTenantId();
-  const haySesion = useAuthStore.getState().token !== null;
+  const haySesion = useAuthStore.getState().token !== null || getAuthToken() !== null;
 
   if (error.response?.status === 401 && !esLogin && tenantId && haySesion) {
     useAuthStore.getState().logout();

@@ -117,13 +117,13 @@ export function OficialCumplimientoForm({
           <SeccionDomicilio form={form} />
           <SeccionParametrosPld form={form} />
 
-          <div className="sticky bottom-0 z-10 -mx-6 flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 bg-white/95 px-6 py-3 shadow-[0_-4px_16px_rgba(0,0,0,0.06)] backdrop-blur">
-            <p className="flex items-center gap-2 text-xs text-slate-500">
-              <Clock className="size-4 text-slate-400" />
+          <div className="sticky bottom-0 z-10 -mx-6 flex flex-wrap items-center justify-between gap-3 border-t border-border bg-card/95 px-6 py-3 shadow-[0_-4px_16px_rgba(0,0,0,0.06)] backdrop-blur">
+            <p className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Clock className="size-4 text-muted-foreground/70" />
               {actualizado ? (
                 <span>
                   Última actualización:{" "}
-                  <strong className="text-slate-700">
+                  <strong className="text-foreground">
                     {new Date(actualizado).toLocaleString("es-MX")}
                   </strong>
                 </span>
@@ -135,7 +135,7 @@ export function OficialCumplimientoForm({
               <Button
                 type="button"
                 variant="outline"
-                className="border-slate-300 text-xs font-semibold text-slate-700"
+                className="border-border text-xs font-semibold text-foreground"
                 disabled={!isDirty || guardar.isPending}
                 onClick={() => form.reset()}
               >

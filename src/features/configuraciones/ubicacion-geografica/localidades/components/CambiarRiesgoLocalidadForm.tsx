@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/shared/components/ui/CatalogoButton";
 import { card, label } from "@/shared/components/ui/styles";
@@ -29,6 +29,13 @@ export function CambiarRiesgoLocalidadForm({
   const [nivelRiesgoId, setNivelRiesgoId] = useState<number | "">(
     localidad.idNivelRiesgo,
   );
+
+  // El panel no se desmonta al cambiar de fila: si se selecciona otra
+  // localidad, `useState` conservaría el nivel de la anterior y se guardaría
+  // un valor que no corresponde al registro mostrado.
+  useEffect(() => {
+    setNivelRiesgoId(localidad.idNivelRiesgo);
+  }, [localidad]);
 
   return (
     <div className={`flex flex-col gap-4 p-4 ${card}`}>

@@ -49,9 +49,6 @@ export async function crearDomicilioUsuario(
   return data;
 }
 
-// El backend ya no tiene /usuarios/{id}/oficial (ver types/usuarios.ts): estas tres
-// funciones quedan apuntando a un endpoint que ya no existe, solo para no romper en
-// runtime el import de la feature "oficial-cumplimiento" mientras se decide su rediseño.
 export async function crearOficial(usuarioId: number, payload: OficialRequest) {
   const { data } = await apiClient.post<OficialResponse>(
     `/usuarios/${usuarioId}/oficial`,

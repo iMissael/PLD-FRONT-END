@@ -6,8 +6,13 @@ import {
   crearDenunciaAnonima,
   editarDenuncia,
   listarDenuncias,
+  listarEvidencias,
+  listarObservaciones,
   verDenunciaPorId,
+  verEvidenciaPorId,
 } from "../api/buzonApi";
+
+export { verEvidenciaPorId };
 import type {
   AgregarObservacionInput,
   CambiarEstatusInput,
@@ -17,6 +22,8 @@ import type {
 } from "../types/buzon";
 
 export const DENUNCIAS_QUERY_KEY = ["denuncias"];
+export const OBSERVACIONES_QUERY_KEY = ["observaciones"];
+export const EVIDENCIAS_QUERY_KEY = ["evidencias"];
 
 export function useListarDenuncias(params?: ListarDenunciasParams) {
   return useQuery({
@@ -35,6 +42,24 @@ export function useDenunciaDetalle(id: number | null) {
   });
 }
 
+export function useObservaciones(denunciaId: number | null) {
+  return useQuery({
+    queryKey: [...OBSERVACIONES_QUERY_KEY, denunciaId],
+    queryFn: ({ signal }) => (denunciaId ? listarObservaciones(denunciaId, signal) : []),
+    enabled: Boolean(denunciaId),
+    staleTime: 0,
+  });
+}
+
+export function useEvidencias(denunciaId: number | null) {
+  return useQuery({
+    queryKey: [...EVIDENCIAS_QUERY_KEY, denunciaId],
+    queryFn: ({ signal }) => (denunciaId ? listarEvidencias(denunciaId, signal) : []),
+    enabled: Boolean(denunciaId),
+    staleTime: 0,
+  });
+}
+
 export function useCrearDenuncia() {
   return useMutation({
     mutationFn: ({ input, evidencias }: { input: CrearDenunciaInput; evidencias?: File[] }) =>
@@ -48,6 +73,8 @@ export function useEditarDenuncia(id: number) {
     mutationFn: (input: EditarDenunciaInput) => editarDenuncia(id, input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: DENUNCIAS_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: [...DENUNCIAS_QUERY_KEY, id] });
+      queryClient.invalidateQueries({ queryKey: [...OBSERVACIONES_QUERY_KEY, id] });
     },
   });
 }
@@ -58,6 +85,8 @@ export function useCambiarEstatusDenuncia(id: number) {
     mutationFn: (input: CambiarEstatusInput) => cambiarEstatusDenuncia(id, input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: DENUNCIAS_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: [...DENUNCIAS_QUERY_KEY, id] });
+      queryClient.invalidateQueries({ queryKey: [...OBSERVACIONES_QUERY_KEY, id] });
     },
   });
 }
@@ -68,6 +97,7 @@ export function useAgregarObservacion(denunciaId: number) {
     mutationFn: (input: AgregarObservacionInput) => agregarObservacion(denunciaId, input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [...DENUNCIAS_QUERY_KEY, denunciaId] });
+      queryClient.invalidateQueries({ queryKey: [...OBSERVACIONES_QUERY_KEY, denunciaId] });
     },
   });
 }
@@ -78,6 +108,7 @@ export function useAdjuntarEvidencia(denunciaId: number) {
     mutationFn: (archivo: File) => adjuntarEvidencia(denunciaId, archivo),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [...DENUNCIAS_QUERY_KEY, denunciaId] });
+      queryClient.invalidateQueries({ queryKey: [...EVIDENCIAS_QUERY_KEY, denunciaId] });
     },
   });
 }

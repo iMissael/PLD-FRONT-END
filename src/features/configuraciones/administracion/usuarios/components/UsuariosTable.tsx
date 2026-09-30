@@ -23,6 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/components/ui/table";
+import { TablePagination } from "@/shared/components/TablePagination";
 import { useRoles } from "@/features/configuraciones/administracion/roles/hooks/useRoles";
 import {
   useEliminarUsuario,
@@ -30,15 +31,15 @@ import {
 } from "@/features/configuraciones/administracion/usuarios/hooks/useUsuarios";
 import type { UsuarioResponse } from "@/features/configuraciones/administracion/usuarios/types/usuarios";
 
-function inicialesDe(username: string | undefined) {
-  const base = username?.trim() || "?";
+function inicialesDe(nombre: string | undefined, username: string | undefined) {
+  const base = nombre?.trim() || username || "?";
   return base.charAt(0).toUpperCase();
 }
 
 function AvatarUsuario({ usuario }: { usuario: UsuarioResponse }) {
   return (
     <span className="from-primary-hover to-primary flex size-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-sm font-bold text-white">
-      {inicialesDe(usuario.username)}
+      {inicialesDe(usuario.nombre, usuario.username)}
     </span>
   );
 }
@@ -87,14 +88,14 @@ function BotonEliminar({ usuario }: { usuario: UsuarioResponse }) {
           variant="ghost"
           size="icon-sm"
           className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-          aria-label={`Eliminar a ${usuario.username}`}
+          aria-label={`Eliminar a ${usuario.nombre ?? usuario.username}`}
         >
           <Trash2 />
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>¿Eliminar a {usuario.username}?</AlertDialogTitle>
+          <AlertDialogTitle>¿Eliminar a {usuario.nombre ?? usuario.username}?</AlertDialogTitle>
           <AlertDialogDescription>
             Su acceso quedará bloqueado de inmediato y se limpiarán sus permisos y
             domicilio asociados. Esta acción no se puede deshacer desde aquí.
@@ -119,6 +120,9 @@ function BotonEliminar({ usuario }: { usuario: UsuarioResponse }) {
 
 export function UsuariosTable() {
   const [busqueda, setBusqueda] = useState("");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
   const { data: usuarios, isLoading, isError } = useUsuarios();
   const { data: roles } = useRoles();
 
@@ -132,11 +136,26 @@ export function UsuariosTable() {
     const query = busqueda.trim().toLowerCase();
     if (!query) return usuarios;
     return usuarios.filter((usuario) =>
-      [usuario.username, usuario.empleadoId?.toString()]
+      [usuario.nombre, usuario.username, usuario.correo]
         .filter(Boolean)
         .some((campo) => campo!.toLowerCase().includes(query)),
     );
   }, [usuarios, busqueda]);
+
+  const totalElements = usuariosFiltrados.length;
+  const paginatedUsuarios = useMemo(() => {
+    const start = page * rowsPerPage;
+    return usuariosFiltrados.slice(start, start + rowsPerPage);
+  }, [usuariosFiltrados, page, rowsPerPage]);
+
+  const handleChangePage = (_: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setRowsPerPage(parseInt(e.target.value, 10));
+    setPage(0);
+  };
 
   if (isError) {
     return (
@@ -152,18 +171,21 @@ export function UsuariosTable() {
         <Search className="text-muted-foreground pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2" />
         <Input
           value={busqueda}
-          onChange={(event) => setBusqueda(event.target.value)}
-          placeholder="Buscar por usuario o empleado…"
+          onChange={(event) => {
+            setBusqueda(event.target.value);
+            setPage(0);
+          }}
+          placeholder="Buscar por nombre, usuario o correo…"
           className="pl-8"
         />
       </div>
 
-      <div className="overflow-hidden rounded-lg border">
+      <div className="overflow-hidden rounded-lg border border-border bg-card">
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent">
               <TableHead>Usuario</TableHead>
-              <TableHead>Empleado</TableHead>
+              <TableHead>Correo</TableHead>
               <TableHead>Rol</TableHead>
               <TableHead>Estado</TableHead>
               <TableHead className="text-right">Acciones</TableHead>
@@ -173,7 +195,7 @@ export function UsuariosTable() {
             {isLoading &&
               Array.from({ length: 4 }).map((_, i) => <FilaEsqueleto key={i} />)}
 
-            {!isLoading && usuariosFiltrados.length === 0 && (
+            {!isLoading && paginatedUsuarios.length === 0 && (
               <TableRow className="hover:bg-transparent">
                 <TableCell colSpan={5} className="h-32 text-center">
                   <div className="text-muted-foreground flex flex-col items-center gap-2">
@@ -189,18 +211,23 @@ export function UsuariosTable() {
             )}
 
             {!isLoading &&
-              usuariosFiltrados.map((usuario) => (
+              paginatedUsuarios.map((usuario) => (
                 <TableRow key={usuario.idUsuario}>
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <AvatarUsuario usuario={usuario} />
                       <div className="min-w-0">
-                        <p className="truncate font-medium">@{usuario.username}</p>
+                        <p className="truncate font-medium">
+                          {usuario.nombre ?? usuario.username}
+                        </p>
+                        <p className="text-muted-foreground truncate text-xs">
+                          @{usuario.username}
+                        </p>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell className="text-muted-foreground">
-                    {usuario.empleadoId ?? "—"}
+                    {usuario.correo ?? "—"}
                   </TableCell>
                   <TableCell>{nombreDeRol(usuario.rolId)}</TableCell>
                   <TableCell>
@@ -213,6 +240,16 @@ export function UsuariosTable() {
               ))}
           </TableBody>
         </Table>
+
+        <TablePagination
+          component="div"
+          count={totalElements}
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          rowsPerPageOptions={[5, 10, 25, 50]}
+        />
       </div>
     </div>
   );

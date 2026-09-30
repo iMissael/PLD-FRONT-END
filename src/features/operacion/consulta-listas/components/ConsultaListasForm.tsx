@@ -79,6 +79,15 @@ export function ConsultaListasForm({
     },
   });
 
+  const form = useForm<ConsultaListasFormValues>({
+    resolver: zodResolver(consultaListasSchema),
+    defaultValues: {
+      nombre: "",
+      fechaConstitucion: "",
+      rfc: "",
+      tipoPersona: "",
+    },
+  });
   const edad = calcularEdad(form.watch("fechaNacimiento"));
 
   function onSubmit(values: ConsultaListasFormValues) {
@@ -106,6 +115,12 @@ export function ConsultaListasForm({
         verificadoPor,
       },
       {
+        nombreCompleto,
+        nombre: aTextoOIndefinido(values.nombre),
+        fechaConstitucion: aTextoOIndefinido(values.fechaNacimiento),
+        rfc: aTextoOIndefinido(values.rfc),
+      }
+      {
         onSuccess: (respuesta) => {
           onResultados(respuesta.resultados, respuesta.proveedorExternoNoDisponible);
           if (respuesta.proveedorExternoNoDisponible) {
@@ -125,9 +140,32 @@ export function ConsultaListasForm({
   }
 
   return (
+    
+    
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid gap-4 sm:grid-cols-3">
+          <FormField
+            control={form.control}
+            name="tipoPersona"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Tipo de persona</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Selecciona un tipo" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="FISICA">Persona física</SelectItem>
+                    <SelectItem value="MORAL">Persona moral</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="nombre"
@@ -167,27 +205,7 @@ export function ConsultaListasForm({
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="tipoPersona"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Tipo de persona</FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Selecciona un tipo" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="FISICA">Persona física</SelectItem>
-                    <SelectItem value="MORAL">Persona moral</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+  
           <FormField
             control={form.control}
             name="fechaNacimiento"

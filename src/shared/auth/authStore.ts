@@ -69,3 +69,14 @@ export const useAuthStore = create<AuthState>()(
     { name: STORAGE_KEY, storage: createJSONStorage(() => rememberAwareStorage) },
   ),
 );
+
+export function getAuthToken(): string | null {
+  const stateToken = useAuthStore.getState().token;
+  if (stateToken) return stateToken;
+  const rawToken =
+    sessionStorage.getItem("token") ||
+    sessionStorage.getItem("auth_token") ||
+    localStorage.getItem("token");
+  if (!rawToken) return null;
+  return rawToken.replace(/^"(.*)"$/, "$1");
+}

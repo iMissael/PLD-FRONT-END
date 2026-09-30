@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   crearDomicilioUsuario,
+  crearOficial,
   crearUsuario,
   eliminarUsuario,
   listarUsuarios,
@@ -8,6 +9,7 @@ import {
 import type {
   CrearUsuarioRequest,
   DomicilioUsuarioRequest,
+  OficialRequest,
 } from "@/features/configuraciones/administracion/usuarios/types/usuarios";
 
 const usuariosKeys = {
@@ -34,17 +36,21 @@ export function useCrearUsuario() {
 export interface CrearUsuarioCompletoInput {
   usuario: CrearUsuarioRequest;
   domicilio: DomicilioUsuarioRequest;
+  oficial?: OficialRequest;
 }
 
 export function useCrearUsuarioCompleto() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ usuario, domicilio }: CrearUsuarioCompletoInput) => {
+    mutationFn: async ({ usuario, domicilio, oficial }: CrearUsuarioCompletoInput) => {
       const usuarioCreado = await crearUsuario(usuario);
       if (!usuarioCreado.idUsuario) {
         throw new Error("El usuario se creó sin id");
       }
       await crearDomicilioUsuario(usuarioCreado.idUsuario, domicilio);
+      if (oficial) {
+        await crearOficial(usuarioCreado.idUsuario, oficial);
+      }
       return usuarioCreado;
     },
     onSuccess: () => {

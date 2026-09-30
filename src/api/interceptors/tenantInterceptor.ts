@@ -3,6 +3,13 @@ import type { InternalAxiosRequestConfig } from "axios";
 import { getCurrentTenantId } from "@/shared/tenant/tenantStore";
 import { rutaTenant } from "@/shared/tenant/tenantPaths";
 
+declare module "axios" {
+  export interface AxiosRequestConfig {
+    /** Rutas públicas (p. ej. el nombre del tenant en login) sin prefijo ni header de tenant. */
+    skipTenantInterceptor?: boolean;
+  }
+}
+
 export function tenantInterceptor(
   config: InternalAxiosRequestConfig,
 ): InternalAxiosRequestConfig {
