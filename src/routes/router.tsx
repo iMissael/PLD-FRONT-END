@@ -22,6 +22,7 @@ import { OficialCumplimientoPage } from "@/features/configuraciones/oficial-cump
 import { TiposPersonaPage } from "@/features/configuraciones/personas/pages/TiposPersonaPage";
 import { DestinosRecursoPage } from "@/features/configuraciones/recursos/destino/pages/DestinosRecursoPage";
 import { OrigenesRecursoPage } from "@/features/configuraciones/recursos/origen/pages/OrigenesRecursoPage";
+import { TiposCreditoPage } from "@/features/configuraciones/tipos-credito/pages/TiposCreditoPage";
 import { EntidadesPage } from "@/features/configuraciones/ubicacion-geografica/entidades/pages/EntidadesPage";
 import { LocalidadesPage } from "@/features/configuraciones/ubicacion-geografica/localidades/pages/LocalidadesPage";
 import { PaisesPage } from "@/features/configuraciones/ubicacion-geografica/paises/pages/PaisesPage";
@@ -225,6 +226,10 @@ export const router = createBrowserRouter([
                       {
                         path: "configuraciones/canales-pago",
                         element: <CanalesPagoPage />,
+                      },
+                      {
+                        path: "configuraciones/tipos-credito",
+                        element: <TiposCreditoPage />,
                       },
                     ],
                   },
