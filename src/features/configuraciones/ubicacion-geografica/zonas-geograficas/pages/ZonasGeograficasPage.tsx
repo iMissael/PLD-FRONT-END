@@ -74,6 +74,17 @@ export function ZonasGeograficasPage() {
     });
   };
 
+  const formRef = useRef<HTMLDivElement | null>(null);
+
+  const handleEditarZona = (zona: ZonaGeograficaResponse) => {
+    setSeleccionada(zona);
+    setCreandoNueva(false);
+    setMensajeError(null);
+    setTimeout(() => {
+      formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 50);
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
@@ -90,6 +101,9 @@ export function ZonasGeograficasPage() {
             setSeleccionada(null);
             setVerZona(null);
             setMensajeError(null);
+            setTimeout(() => {
+              formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+            }, 50);
           }}
         >
           Nueva zona
@@ -108,6 +122,7 @@ export function ZonasGeograficasPage() {
           setCreandoNueva(false);
           setMensajeError(null);
         }}
+        onDoubleClick={handleEditarZona}
         onVer={(zona) => setVerZona((prev) => (prev?.id === zona.id ? null : zona))}
       />
 
@@ -118,7 +133,7 @@ export function ZonasGeograficasPage() {
       ) : null}
 
       {mostrarFormulario ? (
-        <div className="flex flex-col gap-3">
+        <div ref={formRef} className="flex flex-col gap-3">
           <ZonaForm
             zona={zonaEnEdicion}
             onGuardar={handleGuardar}

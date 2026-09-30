@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { FilterIcon } from "@/shared/components/icons";
+import { Calendar, Filter, X } from "lucide-react";
 import { es } from "@/shared/i18n/es";
+import { TablePagination } from "@/shared/components/TablePagination";
 import { useListarDenuncias } from "../hooks/useDenuncias";
 import type { EstadoDenuncia } from "../types/buzon";
 import { DetalleDenunciaModal } from "./DetalleDenunciaModal";
@@ -14,14 +15,37 @@ const BADGE_STYLES: Record<EstadoDenuncia, string> = {
 
 export function GestionDenunciasPage() {
   const [estadoFilter, setEstadoFilter] = useState<EstadoDenuncia | undefined>();
+  const [fechaDesde, setFechaDesde] = useState<string>("");
+  const [fechaHasta, setFechaHasta] = useState<string>("");
   const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
   const { data, isLoading } = useListarDenuncias({
     estado: estadoFilter,
+    fechaDesde: fechaDesde ? new Date(fechaDesde).toISOString() : undefined,
+    fechaHasta: fechaHasta ? new Date(fechaHasta).toISOString() : undefined,
     page,
-    size: 10,
+    size: rowsPerPage,
   });
+
+  const hayFiltros = Boolean(estadoFilter || fechaDesde || fechaHasta);
+
+  const limpiarFiltros = () => {
+    setEstadoFilter(undefined);
+    setFechaDesde("");
+    setFechaHasta("");
+    setPage(0);
+  };
+
+  const handleChangePage = (_: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setRowsPerPage(parseInt(e.target.value, 10));
+    setPage(0);
+  };
 
   return (
     <div className="space-y-6">
@@ -35,24 +59,68 @@ export function GestionDenunciasPage() {
           </p>
         </div>
 
-        {/* Filter Toolbar */}
-        <div className="flex items-center gap-2">
-          <FilterIcon className="h-4 w-4 text-muted-foreground" />
-          <select
-            value={estadoFilter ?? ""}
-            onChange={(e) => {
-              const val = e.target.value as EstadoDenuncia | "";
-              setEstadoFilter(val ? val : undefined);
-              setPage(0);
-            }}
-            className="rounded-md border border-border bg-card px-3 py-1.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-          >
-            <option value="">Todos los estatus</option>
-            <option value="R">Recepción (R)</option>
-            <option value="V">Verificación (V)</option>
-            <option value="A">Atendida (A)</option>
-            <option value="D">Desechada (D)</option>
-          </select>
+        {/* Filter Toolbar: Fecha y Estatus */}
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Filtro por Estatus */}
+          <div className="flex items-center gap-1.5">
+            <Filter className="size-3.5 text-muted-foreground" />
+            <select
+              value={estadoFilter ?? ""}
+              onChange={(e) => {
+                const val = e.target.value as EstadoDenuncia | "";
+                setEstadoFilter(val ? val : undefined);
+                setPage(0);
+              }}
+              className="rounded-md border border-border bg-card px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            >
+              <option value="">Todos los estatus</option>
+              <option value="R">Recepción (R)</option>
+              <option value="V">Verificación (V)</option>
+              <option value="A">Atendida (A)</option>
+              <option value="D">Desechada (D)</option>
+            </select>
+          </div>
+
+          {/* Filtro por Fecha Desde */}
+          <div className="flex items-center gap-1.5">
+            <Calendar className="size-3.5 text-muted-foreground" />
+            <label className="text-[11px] text-muted-foreground">Desde:</label>
+            <input
+              type="date"
+              value={fechaDesde}
+              onChange={(e) => {
+                setFechaDesde(e.target.value);
+                setPage(0);
+              }}
+              className="rounded-md border border-border bg-card px-2 py-1 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            />
+          </div>
+
+          {/* Filtro por Fecha Hasta */}
+          <div className="flex items-center gap-1.5">
+            <label className="text-[11px] text-muted-foreground">Hasta:</label>
+            <input
+              type="date"
+              value={fechaHasta}
+              onChange={(e) => {
+                setFechaHasta(e.target.value);
+                setPage(0);
+              }}
+              className="rounded-md border border-border bg-card px-2 py-1 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            />
+          </div>
+
+          {/* Botón para limpiar filtros */}
+          {hayFiltros && (
+            <button
+              type="button"
+              onClick={limpiarFiltros}
+              className="inline-flex items-center gap-1 rounded-md border border-border bg-muted/60 px-2.5 py-1 text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+            >
+              <X className="size-3" />
+              Limpiar
+            </button>
+          )}
         </div>
       </div>
 
@@ -78,12 +146,21 @@ export function GestionDenunciasPage() {
                   <th className="px-4 py-3 font-semibold">Denunciado</th>
                   <th className="px-4 py-3 font-semibold">Descripción</th>
                   <th className="px-4 py-3 font-semibold">Estatus</th>
-                  <th className="px-4 py-3 font-semibold text-right">Acción</th>
+                  <th className="px-4 py-3 font-semibold text-right">
+                    <span className="text-[10px] font-normal text-muted-foreground">
+                      (Doble clic para editar)
+                    </span>
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
                 {data.content.map((item) => (
-                  <tr key={item.id} className="hover:bg-muted/40 transition-colors">
+                  <tr
+                    key={item.id}
+                    onDoubleClick={() => setSelectedId(item.id)}
+                    title="Doble clic para ver o modificar este registro"
+                    className="hover:bg-muted/40 transition-colors cursor-pointer select-none"
+                  >
                     <td className="px-4 py-3 font-mono font-bold text-foreground">
                       #{item.id}
                     </td>
@@ -107,7 +184,7 @@ export function GestionDenunciasPage() {
                         onClick={() => setSelectedId(item.id)}
                         className="rounded-md bg-muted px-2.5 py-1 text-xs font-semibold text-foreground hover:bg-muted/80 transition-colors"
                       >
-                        Ver Detalle
+                        Ver Detalle / Editar
                       </button>
                     </td>
                   </tr>
@@ -117,32 +194,16 @@ export function GestionDenunciasPage() {
           </div>
         )}
 
-        {/* Pagination Footer */}
-        {data && data.totalPages > 1 && (
-          <div className="flex items-center justify-between border-t border-border px-4 py-3">
-            <span className="text-xs text-muted-foreground">
-              Página {data.number + 1} de {data.totalPages} ({data.totalElements} registros)
-            </span>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                disabled={data.first}
-                onClick={() => setPage((p) => Math.max(0, p - 1))}
-                className="rounded-md border border-border bg-card px-3 py-1 text-xs text-foreground disabled:opacity-40 hover:bg-muted"
-              >
-                Anterior
-              </button>
-              <button
-                type="button"
-                disabled={data.last}
-                onClick={() => setPage((p) => p + 1)}
-                className="rounded-md border border-border bg-card px-3 py-1 text-xs text-foreground disabled:opacity-40 hover:bg-muted"
-              >
-                Siguiente
-              </button>
-            </div>
-          </div>
-        )}
+        {/* TablePagination Component */}
+        <TablePagination
+          component="div"
+          count={data?.totalElements ?? 0}
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          rowsPerPageOptions={[5, 10, 25, 50]}
+        />
       </div>
 
       <DetalleDenunciaModal

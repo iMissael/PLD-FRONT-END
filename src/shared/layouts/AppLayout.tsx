@@ -192,13 +192,37 @@ function isNodeActive(node: NavNode, pathname: string): boolean {
  * hover de inactivos en `nav-soft`); el acento indigo (`primary`) se usa
  * para foco y avatar, y el logo combina indigo con el teal de marca.
  */
+function extractUsernameFromToken(token: string | null): string | null {
+  if (!token) return null;
+  try {
+    const parts = token.split(".");
+    if (parts.length < 2 || !parts[1]) return null;
+    const base64Url = parts[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join(""),
+    );
+    const payload = JSON.parse(jsonPayload);
+    return payload.sub || payload.username || payload.preferred_username || payload.name || null;
+  } catch {
+    return null;
+  }
+}
+
 export function AppLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
   const rutaEnTenant = useRutaTenant();
   const usuario = useAuthStore((estado) => estado.usuario);
-  const inicial = (usuario?.nombre ?? "U").trim().charAt(0).toUpperCase() || "U";
+  const token = useAuthStore((estado) => estado.token);
+
+  const tokenUsername = useMemo(() => extractUsernameFromToken(token), [token]);
+  const displayUsername = usuario?.username || tokenUsername || usuario?.nombre || "Usuario";
+  const inicial = displayUsername.trim().charAt(0).toUpperCase() || "U";
 
   function cerrarSesion() {
     useAuthStore.getState().logout();
@@ -253,7 +277,7 @@ export function AppLayout() {
               {inicial}
             </span>
             <span className="flex flex-col items-start leading-tight">
-              <span className="text-sm font-medium">{usuario?.nombre ?? "Usuario"}</span>
+              <span className="text-sm font-medium">{displayUsername}</span>
             </span>
           </button>
         </div>

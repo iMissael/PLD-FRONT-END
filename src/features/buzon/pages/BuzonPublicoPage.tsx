@@ -62,6 +62,35 @@ export function BuzonPublicoPage() {
     (selectedRazon as unknown as { descripcion?: string })?.descripcion ||
     "";
 
+  const selectedTipo = tiposAlerta?.find((t) => t.id === selectedTipoId);
+  const tipoCodigo = (selectedTipo?.nombre || "").trim().toUpperCase();
+  const tipoDesc = (selectedTipo?.descripcion || "").trim().toUpperCase();
+
+  const isInternaPreocupante =
+    tipoCodigo === "IP" ||
+    tipoCodigo.startsWith("IP") ||
+    tipoDesc.includes("PREOCUPANTE") ||
+    tipoDesc.includes("INTERNA");
+
+  const isInusual =
+    !isInternaPreocupante &&
+    (tipoCodigo === "I" ||
+      tipoCodigo.startsWith("I ") ||
+      tipoCodigo.startsWith("I-") ||
+      tipoDesc.includes("INUSUAL"));
+
+  const denunciadoLabel = isInusual
+    ? es.buzon.denouncedSocio
+    : isInternaPreocupante
+    ? es.buzon.denouncedEmpleado
+    : es.buzon.denouncedName;
+
+  const denunciadoPlaceholder = isInusual
+    ? es.buzon.denouncedSocioPlaceholder
+    : isInternaPreocupante
+    ? es.buzon.denouncedEmpleadoPlaceholder
+    : es.buzon.denouncedNamePlaceholder;
+
   useEffect(() => {
     if (tiposAlerta && tiposAlerta.length > 0 && selectedTipoId === 0) {
       const firstId = tiposAlerta[0]?.id ?? 0;
@@ -250,12 +279,12 @@ export function BuzonPublicoPage() {
 
                 <div>
                   <label className="block text-xs font-medium text-foreground">
-                    {es.buzon.denouncedName}
+                    {denunciadoLabel}
                   </label>
                   <input
                     type="text"
                     {...register("nombreDenunciado")}
-                    placeholder={es.buzon.denouncedNamePlaceholder}
+                    placeholder={denunciadoPlaceholder}
                     className="mt-1 w-full rounded-md border border-border bg-background p-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                   />
                 </div>

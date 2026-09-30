@@ -115,7 +115,7 @@ export const router = createBrowserRouter([
                     path: "configuraciones/administracion/usuarios",
                     element: <UsuariosPage />,
                   },
-                  {
+                  {    
                     path: "acerca-de",
                     element: (
                       <PlaceholderPage

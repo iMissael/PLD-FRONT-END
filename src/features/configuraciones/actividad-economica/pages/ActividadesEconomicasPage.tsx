@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
 import { Button } from "@/shared/components/ui/CatalogoButton";
+import { TablePagination } from "@/shared/components/TablePagination";
 
 import { ActividadEconomicaForm } from "../components/ActividadEconomicaForm";
 import { ActividadesEconomicasTable } from "../components/ActividadesEconomicasTable";
@@ -143,38 +144,23 @@ export function ActividadesEconomicasPage() {
           setCreandoNueva(false);
           setMensajeError(null);
         }}
+        onDoubleClick={(actividad) => {
+          setSeleccionada(actividad);
+          setCreandoNueva(false);
+          setMensajeError(null);
+        }}
         offset={offset}
       />
 
-      {filtradas.length > FILAS_POR_PAGINA ? (
-        <div className="flex items-center justify-between text-sm">
-          <p className="text-muted-foreground">
-            Mostrando {offset + 1}–{Math.min(offset + FILAS_POR_PAGINA, filtradas.length)}{" "}
-            de {filtradas.length}
-          </p>
-          <div className="flex items-center gap-2">
-            <Button
-              variante="secundario"
-              className="px-3 py-1"
-              onClick={() => setPagina((prev) => Math.max(0, prev - 1))}
-              disabled={paginaActual === 0}
-            >
-              Anterior
-            </Button>
-            <span className="text-muted-foreground">
-              Página {paginaActual + 1} de {totalPaginas}
-            </span>
-            <Button
-              variante="secundario"
-              className="px-3 py-1"
-              onClick={() => setPagina((prev) => Math.min(totalPaginas - 1, prev + 1))}
-              disabled={paginaActual >= totalPaginas - 1}
-            >
-              Siguiente
-            </Button>
-          </div>
-        </div>
-      ) : null}
+      <TablePagination
+        component="div"
+        count={filtradas.length}
+        page={paginaActual}
+        onPageChange={(_e: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => setPagina(newPage)}
+        rowsPerPage={FILAS_POR_PAGINA}
+        showFirstButton
+        showLastButton
+      />
 
       {mostrarFormulario ? (
         <div className="flex flex-col gap-3">

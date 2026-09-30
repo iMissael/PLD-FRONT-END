@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { FilterIcon, ShieldSearchIcon, XIcon } from "@/shared/components/icons";
+import { Calendar, Filter, X } from "lucide-react";
+import { ShieldSearchIcon } from "@/shared/components/icons";
 import { es } from "@/shared/i18n/es";
+import { TablePagination } from "@/shared/components/TablePagination";
 import { useAlertaDetalle, useListarAlertas } from "../hooks/useAlertas";
 import type { EstatusAlerta } from "../types/buzon";
 
@@ -13,16 +15,39 @@ const ALERTA_BADGES: Record<EstatusAlerta, string> = {
 
 export function GestionAlertasPage() {
   const [estatusFilter, setEstatusFilter] = useState<EstatusAlerta | undefined>();
+  const [fechaDesde, setFechaDesde] = useState<string>("");
+  const [fechaHasta, setFechaHasta] = useState<string>("");
   const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [selectedAlertaId, setSelectedAlertaId] = useState<number | null>(null);
 
   const { data, isLoading } = useListarAlertas({
     estatus: estatusFilter,
+    fechaDesde: fechaDesde ? new Date(fechaDesde).toISOString() : undefined,
+    fechaHasta: fechaHasta ? new Date(fechaHasta).toISOString() : undefined,
     page,
-    size: 10,
+    size: rowsPerPage,
   });
 
   const { data: alertaDetalle } = useAlertaDetalle(selectedAlertaId);
+
+  const hayFiltros = Boolean(estatusFilter || fechaDesde || fechaHasta);
+
+  const limpiarFiltros = () => {
+    setEstatusFilter(undefined);
+    setFechaDesde("");
+    setFechaHasta("");
+    setPage(0);
+  };
+
+  const handleChangePage = (_: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setRowsPerPage(parseInt(e.target.value, 10));
+    setPage(0);
+  };
 
   return (
     <div className="space-y-6">
@@ -36,23 +61,64 @@ export function GestionAlertasPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          <FilterIcon className="h-4 w-4 text-muted-foreground" />
-          <select
-            value={estatusFilter ?? ""}
-            onChange={(e) => {
-              const val = e.target.value as EstatusAlerta | "";
-              setEstatusFilter(val ? val : undefined);
-              setPage(0);
-            }}
-            className="rounded-md border border-border bg-card px-3 py-1.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-          >
-            <option value="">Todos los estatus</option>
-            <option value="A">Activas (A)</option>
-            <option value="B">Bloqueadas (B)</option>
-            <option value="S">Suspendidas (S)</option>
-            <option value="E">Evaluadas (E)</option>
-          </select>
+        {/* Filter Toolbar */}
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-1.5">
+            <Filter className="size-3.5 text-muted-foreground" />
+            <select
+              value={estatusFilter ?? ""}
+              onChange={(e) => {
+                const val = e.target.value as EstatusAlerta | "";
+                setEstatusFilter(val ? val : undefined);
+                setPage(0);
+              }}
+              className="rounded-md border border-border bg-card px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            >
+              <option value="">Todos los estatus</option>
+              <option value="A">Activas (A)</option>
+              <option value="B">Bloqueadas (B)</option>
+              <option value="S">Suspendidas (S)</option>
+              <option value="E">Evaluadas (E)</option>
+            </select>
+          </div>
+
+          <div className="flex items-center gap-1.5">
+            <Calendar className="size-3.5 text-muted-foreground" />
+            <label className="text-[11px] text-muted-foreground">Desde:</label>
+            <input
+              type="date"
+              value={fechaDesde}
+              onChange={(e) => {
+                setFechaDesde(e.target.value);
+                setPage(0);
+              }}
+              className="rounded-md border border-border bg-card px-2 py-1 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            />
+          </div>
+
+          <div className="flex items-center gap-1.5">
+            <label className="text-[11px] text-muted-foreground">Hasta:</label>
+            <input
+              type="date"
+              value={fechaHasta}
+              onChange={(e) => {
+                setFechaHasta(e.target.value);
+                setPage(0);
+              }}
+              className="rounded-md border border-border bg-card px-2 py-1 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            />
+          </div>
+
+          {hayFiltros && (
+            <button
+              type="button"
+              onClick={limpiarFiltros}
+              className="inline-flex items-center gap-1 rounded-md border border-border bg-muted/60 px-2.5 py-1 text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+            >
+              <X className="size-3" />
+              Limpiar
+            </button>
+          )}
         </div>
       </div>
 
@@ -77,12 +143,21 @@ export function GestionAlertasPage() {
                   <th className="px-4 py-3 font-semibold">Importe</th>
                   <th className="px-4 py-3 font-semibold">Estatus</th>
                   <th className="px-4 py-3 font-semibold">Fecha</th>
-                  <th className="px-4 py-3 font-semibold text-right">Acción</th>
+                  <th className="px-4 py-3 font-semibold text-right">
+                    <span className="text-[10px] font-normal text-muted-foreground">
+                      (Doble clic para ver)
+                    </span>
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
                 {data.content.map((alerta) => (
-                  <tr key={alerta.id} className="hover:bg-muted/40 transition-colors">
+                  <tr
+                    key={alerta.id}
+                    onDoubleClick={() => setSelectedAlertaId(alerta.id)}
+                    title="Doble clic para ver detalle de la alerta"
+                    className="hover:bg-muted/40 transition-colors cursor-pointer select-none"
+                  >
                     <td className="px-4 py-3 font-mono font-bold text-foreground">
                       #{alerta.id}
                     </td>
@@ -115,6 +190,17 @@ export function GestionAlertasPage() {
             </table>
           </div>
         )}
+
+        {/* TablePagination Component */}
+        <TablePagination
+          component="div"
+          count={data?.totalElements ?? 0}
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          rowsPerPageOptions={[5, 10, 25, 50]}
+        />
       </div>
 
       {/* Alerta Detail Modal */}
@@ -133,7 +219,7 @@ export function GestionAlertasPage() {
                 onClick={() => setSelectedAlertaId(null)}
                 className="rounded-lg p-1 text-muted-foreground hover:bg-muted"
               >
-                <XIcon className="h-5 w-5" />
+                <X className="h-5 w-5" />
               </button>
             </div>
 
