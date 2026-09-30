@@ -112,6 +112,10 @@ const NAV_ITEMS: NavNode[] = [
         to: "configuraciones/actividad-economica",
       },
       {
+        label: "Configuración de tipos de crédito",
+        to: "configuraciones/tipos-credito",
+      },
+      {
         label: "Configuración de historial crediticio",
         to: "configuraciones/historial-crediticio",
       },
@@ -130,6 +134,7 @@ const NAV_ITEMS: NavNode[] = [
         label: "Configuración de canales de pago",
         to: "configuraciones/canales-pago",
       },
+      
     ],
   },
   {
