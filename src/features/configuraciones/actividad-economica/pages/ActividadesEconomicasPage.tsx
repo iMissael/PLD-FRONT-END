@@ -15,8 +15,6 @@ import {
 } from "../hooks/useActividadesEconomicasMutations";
 import type { ActividadEconomicaResponse } from "../types/actividadEconomica";
 
-const FILAS_POR_PAGINA = 50;
-
 /** Quita acentos para que "nomina" encuentre "Consumo Nómina". */
 function normalizar(texto: string): string {
   return (
@@ -32,7 +30,6 @@ export function ActividadesEconomicasPage() {
   const { data: actividades, isLoading } = useActividadesEconomicas();
 
   const [busqueda, setBusqueda] = useState("");
-  const [pagina, setPagina] = useState(0);
   const [seleccionada, setSeleccionada] = useState<ActividadEconomicaResponse | null>(
     null,
   );
@@ -44,25 +41,25 @@ export function ActividadesEconomicasPage() {
   const eliminar = useEliminarActividadEconomica();
 
   // El backend devuelve el catálogo completo; el filtro corre en memoria.
-  // Se depende de `actividades` (la referencia estable de TanStack Query) en
-  // vez de un `?? []` intermedio, que cambiaría en cada render.
+  const listaActividades = useMemo(() => {
+    if (!actividades) return [];
+    if (Array.isArray(actividades)) return actividades;
+    if (Array.isArray((actividades as unknown as { contenido?: typeof actividades })?.contenido)) {
+      return (actividades as unknown as { contenido: typeof actividades }).contenido ?? [];
+    }
+    return [];
+  }, [actividades]);
+
   const filtradas = useMemo(() => {
-    const lista = actividades ?? [];
     const termino = normalizar(busqueda.trim());
-    if (!termino) return lista;
-    return lista.filter((actividad) =>
-      normalizar(actividad.descripcion).includes(termino),
+    if (!termino) return listaActividades;
+    return listaActividades.filter((actividad) =>
+      normalizar(actividad.descripcion).includes(termino) ||
+      normalizar(actividad.claveSat).includes(termino),
     );
-  }, [actividades, busqueda]);
+  }, [listaActividades, busqueda]);
 
-  const totalGeneral = actividades?.length ?? 0;
-
-  const totalPaginas = Math.max(1, Math.ceil(filtradas.length / FILAS_POR_PAGINA));
-  // Si el filtro reduce los resultados, la página actual puede quedar fuera de
-  // rango; se acota al vuelo en vez de resetearla en un efecto.
-  const paginaActual = Math.min(pagina, totalPaginas - 1);
-  const offset = paginaActual * FILAS_POR_PAGINA;
-  const pagina_actual_filas = filtradas.slice(offset, offset + FILAS_POR_PAGINA);
+  const totalGeneral = listaActividades.length;
 
   const handleGuardar = (input: Parameters<typeof crear.mutate>[0]) => {
     setMensajeError(null);
@@ -128,14 +125,13 @@ export function ActividadesEconomicasPage() {
         valor={busqueda}
         onCambiar={(valor) => {
           setBusqueda(valor);
-          setPagina(0);
         }}
         totalFiltrado={filtradas.length}
         totalGeneral={totalGeneral}
       />
 
       <ActividadesEconomicasTable
-        actividades={pagina_actual_filas}
+        actividades={filtradas}
         isLoading={isLoading}
         seleccionadaId={seleccionada?.id ?? null}
         onSeleccionar={(actividad) => {
@@ -143,38 +139,12 @@ export function ActividadesEconomicasPage() {
           setCreandoNueva(false);
           setMensajeError(null);
         }}
-        offset={offset}
+        onDoubleClick={(actividad) => {
+          setSeleccionada(actividad);
+          setCreandoNueva(false);
+          setMensajeError(null);
+        }}
       />
-
-      {filtradas.length > FILAS_POR_PAGINA ? (
-        <div className="flex items-center justify-between text-sm">
-          <p className="text-muted-foreground">
-            Mostrando {offset + 1}–{Math.min(offset + FILAS_POR_PAGINA, filtradas.length)}{" "}
-            de {filtradas.length}
-          </p>
-          <div className="flex items-center gap-2">
-            <Button
-              variante="secundario"
-              className="px-3 py-1"
-              onClick={() => setPagina((prev) => Math.max(0, prev - 1))}
-              disabled={paginaActual === 0}
-            >
-              Anterior
-            </Button>
-            <span className="text-muted-foreground">
-              Página {paginaActual + 1} de {totalPaginas}
-            </span>
-            <Button
-              variante="secundario"
-              className="px-3 py-1"
-              onClick={() => setPagina((prev) => Math.min(totalPaginas - 1, prev + 1))}
-              disabled={paginaActual >= totalPaginas - 1}
-            >
-              Siguiente
-            </Button>
-          </div>
-        </div>
-      ) : null}
 
       {mostrarFormulario ? (
         <div className="flex flex-col gap-3">

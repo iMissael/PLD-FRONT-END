@@ -1,5 +1,5 @@
-import { emptyState, table } from "@/shared/components/ui/styles";
-
+import { useMemo, type ReactNode } from "react";
+import { DataTable, type ColumnDef, type PaginationConfig, type SearchConfig } from "@/shared/components/DataTable";
 import type { LocalidadResponse } from "../types/localidad";
 
 interface LocalidadesTableProps {
@@ -7,6 +7,10 @@ interface LocalidadesTableProps {
   isLoading: boolean;
   seleccionadaId: string | null;
   onSeleccionar: (localidad: LocalidadResponse) => void;
+  onDoubleClick?: (localidad: LocalidadResponse) => void;
+  pagination?: boolean | PaginationConfig;
+  search?: boolean | SearchConfig<LocalidadResponse>;
+  filterBar?: ReactNode;
 }
 
 export function LocalidadesTable({
@@ -14,45 +18,54 @@ export function LocalidadesTable({
   isLoading,
   seleccionadaId,
   onSeleccionar,
+  onDoubleClick,
+  pagination,
+  search,
+  filterBar,
 }: LocalidadesTableProps) {
-  if (isLoading) {
-    return <p className={emptyState}>Cargando localidades...</p>;
-  }
-
-  if (!localidades || localidades.length === 0) {
-    return (
-      <p className={emptyState}>No hay localidades que coincidan con los filtros.</p>
-    );
-  }
+  const columns: ColumnDef<LocalidadResponse>[] = useMemo(
+    () => [
+      {
+        header: "Nombre",
+        accessorKey: "nombre",
+        className: "font-semibold text-foreground",
+      },
+      {
+        header: "Municipio",
+        accessorKey: "nombreMunicipio",
+        className: "text-muted-foreground",
+      },
+      {
+        header: "Tipo de asentamiento",
+        accessorKey: "tipoAsentamiento",
+        className: "text-muted-foreground",
+      },
+      {
+        header: "Nivel de riesgo",
+        cell: (item) =>
+          item.nivelRiesgoDescripcion
+            ? `${item.nivelRiesgoDescripcion} (${item.nivelRiesgoValor})`
+            : "—",
+      },
+    ],
+    [],
+  );
 
   return (
-    <div className={table.wrapper}>
-      <table className={table.root}>
-        <thead className={table.head}>
-          <tr>
-            <th className={table.headCell}>Nombre</th>
-            <th className={table.headCell}>Municipio</th>
-            <th className={table.headCell}>Tipo de asentamiento</th>
-            <th className={table.headCell}>Nivel de riesgo</th>
-          </tr>
-        </thead>
-        <tbody className={table.body}>
-          {localidades.map((localidad) => (
-            <tr
-              key={localidad.idLocalidad}
-              onClick={() => onSeleccionar(localidad)}
-              className={table.row(localidad.idLocalidad === seleccionadaId)}
-            >
-              <td className={table.cellStrong}>{localidad.nombre}</td>
-              <td className={table.cell}>{localidad.nombreMunicipio}</td>
-              <td className={table.cell}>{localidad.tipoAsentamiento}</td>
-              <td className={table.cell}>
-                {localidad.nivelRiesgoDescripcion} ({localidad.nivelRiesgoValor})
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <DataTable
+      data={localidades}
+      columns={columns}
+      isLoading={isLoading}
+      loadingMessage="Cargando localidades..."
+      emptyMessage="No hay localidades que coincidan con los filtros."
+      seleccionadoId={seleccionadaId}
+      getRowId={(localidad) => localidad.idLocalidad}
+      onRowClick={onSeleccionar}
+      onRowDoubleClick={onDoubleClick}
+      doubleClickTitle="Doble clic para modificar este registro"
+      pagination={pagination}
+      search={search}
+      filterBar={filterBar}
+    />
   );
 }

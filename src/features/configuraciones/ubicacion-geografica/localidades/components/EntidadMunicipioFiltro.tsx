@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-import { field, hint, label } from "@/shared/components/ui/styles";
-
+import type { EntidadResponse } from "../../entidades/types/entidad";
 import { useEntidades } from "../../entidades/hooks/useEntidades";
 import { useMunicipiosDeEntidad } from "../hooks/useLocalidades";
+import type { MunicipioResponse } from "../types/localidad";
 
 interface EntidadMunicipioFiltroProps {
   /** Ambos filtros se aplican a la tabla, no solo el de municipio. */
@@ -33,13 +33,25 @@ export function EntidadMunicipioFiltro({ onCambiar }: EntidadMunicipioFiltroProp
     busquedaMunicipio,
   );
 
+  const listaEntidades: EntidadResponse[] = Array.isArray(entidades)
+    ? entidades
+    : Array.isArray((entidades as unknown as { contenido?: EntidadResponse[] })?.contenido)
+    ? ((entidades as unknown as { contenido: EntidadResponse[] }).contenido ?? [])
+    : [];
+
+  const listaMunicipios: MunicipioResponse[] = Array.isArray(municipios)
+    ? municipios
+    : Array.isArray((municipios as unknown as { contenido?: MunicipioResponse[] })?.contenido)
+    ? ((municipios as unknown as { contenido: MunicipioResponse[] }).contenido ?? [])
+    : [];
+
   const sinEntidad = entidadId === "";
 
   return (
-    <div className="flex flex-wrap items-start gap-3">
-      <div className="flex flex-col gap-1">
-        <label htmlFor="entidadFiltro" className={label}>
-          Entidad
+    <div className="flex flex-wrap items-center gap-3">
+      <div className="flex items-center gap-2">
+        <label htmlFor="entidadFiltro" className="text-xs font-medium text-foreground whitespace-nowrap">
+          Entidad:
         </label>
         <select
           id="entidadFiltro"
@@ -47,8 +59,6 @@ export function EntidadMunicipioFiltro({ onCambiar }: EntidadMunicipioFiltroProp
           onChange={(event) => {
             const nuevaEntidad = event.target.value;
             setEntidadId(nuevaEntidad);
-            // Cambiar de entidad invalida el municipio elegido: pertenecía a
-            // la anterior.
             setMunicipioId("");
             setBusquedaMunicipio("");
             onCambiar({
@@ -56,10 +66,10 @@ export function EntidadMunicipioFiltro({ onCambiar }: EntidadMunicipioFiltroProp
               idMunicipio: null,
             });
           }}
-          className={field}
+          className="rounded-lg border border-border bg-card py-1.5 px-3 text-xs text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring"
         >
-          <option value="">Todas</option>
-          {entidades?.map((entidad) => (
+          <option value="">Todas las entidades</option>
+          {listaEntidades.map((entidad) => (
             <option key={entidad.idEntidad} value={entidad.idEntidad}>
               {entidad.nombre}
             </option>
@@ -67,9 +77,9 @@ export function EntidadMunicipioFiltro({ onCambiar }: EntidadMunicipioFiltroProp
         </select>
       </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="busquedaMunicipio" className={label}>
-          Buscar municipio
+      <div className="flex items-center gap-2">
+        <label htmlFor="busquedaMunicipio" className="text-xs font-medium text-foreground whitespace-nowrap">
+          Municipio:
         </label>
         <input
           id="busquedaMunicipio"
@@ -77,18 +87,12 @@ export function EntidadMunicipioFiltro({ onCambiar }: EntidadMunicipioFiltroProp
           disabled={sinEntidad}
           value={busquedaMunicipio}
           onChange={(event) => setBusquedaMunicipio(event.target.value)}
-          placeholder="Nombre del municipio..."
-          className={field}
+          placeholder={sinEntidad ? "Selecciona entidad primero" : "Filtrar municipios..."}
+          className="rounded-lg border border-border bg-card py-1.5 px-3 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50"
         />
-        {sinEntidad ? (
-          <span className={hint}>Selecciona una entidad primero.</span>
-        ) : null}
       </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="municipioFiltro" className={label}>
-          Municipio
-        </label>
+      <div className="flex items-center gap-2">
         <select
           id="municipioFiltro"
           value={municipioId}
@@ -101,18 +105,15 @@ export function EntidadMunicipioFiltro({ onCambiar }: EntidadMunicipioFiltroProp
               idMunicipio: nuevoMunicipio === "" ? null : nuevoMunicipio,
             });
           }}
-          className={field}
+          className="rounded-lg border border-border bg-card py-1.5 px-3 text-xs text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50"
         >
-          <option value="">Todos</option>
-          {municipios?.map((municipio) => (
+          <option value="">Todos los municipios</option>
+          {listaMunicipios.map((municipio) => (
             <option key={municipio.id} value={municipio.id}>
               {municipio.nombre}
             </option>
           ))}
         </select>
-        {!sinEntidad && municipios ? (
-          <span className={hint}>{municipios.length} municipio(s)</span>
-        ) : null}
       </div>
     </div>
   );

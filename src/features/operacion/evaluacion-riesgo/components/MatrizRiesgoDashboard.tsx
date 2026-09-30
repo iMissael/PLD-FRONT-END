@@ -108,10 +108,10 @@ function CampoCopiable({
       >
         {etiqueta}
       </p>
-      <div className="flex items-center justify-between gap-2 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2">
+      <div className="flex items-center justify-between gap-2 rounded-lg border border-border bg-muted/40 px-3 py-2">
         <span
           className={cn(
-            "truncate text-gray-900",
+            "truncate text-foreground",
             mono ? "font-mono font-bold tracking-wider" : "font-bold",
           )}
         >
@@ -120,7 +120,7 @@ function CampoCopiable({
         <button
           type="button"
           onClick={() => copiar(valor)}
-          className="shrink-0 text-gray-400 transition hover:text-indigo-600"
+          className="shrink-0 text-muted-foreground transition hover:text-primary"
           aria-label={`Copiar ${etiqueta}`}
         >
           <Icono className="size-3.5" />
@@ -146,31 +146,31 @@ function FilaSubfactor({
   return (
     <div
       className={cn(
-        "grid grid-cols-1 gap-1 px-4 py-2.5 hover:bg-slate-50/80 md:items-center",
+        "grid grid-cols-1 gap-1 px-4 py-2.5 hover:bg-slate-50/80 dark:hover:bg-slate-800/60 md:items-center",
         COLUMNAS,
       )}
     >
       <div className="min-w-0">
-        <span className="block truncate text-sm font-medium text-gray-900">
+        <span className="block truncate text-sm font-medium text-gray-900 dark:text-foreground">
           {etiquetaSubfactor(descripcion)}
         </span>
         <span
           className={cn(
             "block truncate text-[11px]",
-            detalle ? "text-slate-500" : "font-medium text-amber-600",
+            detalle ? "text-slate-500 dark:text-muted-foreground" : "font-medium text-amber-600 dark:text-amber-400",
           )}
         >
           {detalle ?? "Dato no capturado / encontrado"}
         </span>
       </div>
-      <div className="font-semibold text-gray-700 md:text-center">{numero(valor, 1)}</div>
-      <div className="font-mono text-gray-600 md:text-center">
+      <div className="font-semibold text-gray-700 dark:text-foreground md:text-center">{numero(valor, 1)}</div>
+      <div className="font-mono text-gray-600 dark:text-muted-foreground md:text-center">
         {numero(ponderacion, 2)}%
       </div>
       <div className="md:text-center">
         <NivelBadge nivel={nivelPorValorEntero(valor)} />
       </div>
-      <div className="font-mono font-bold text-gray-900 md:text-right">
+      <div className="font-mono font-bold text-gray-900 dark:text-foreground md:text-right">
         {numero(puntaje, 2)}
       </div>
     </div>
@@ -200,7 +200,7 @@ function TarjetaFactor({
         "overflow-hidden rounded-xl border shadow-sm",
         esEnfoque
           ? "border-indigo-800 bg-indigo-900 text-white"
-          : "border-gray-200 bg-white",
+          : "border-gray-200 bg-white dark:border-border dark:bg-card dark:text-card-foreground",
       )}
     >
       <button
@@ -209,7 +209,7 @@ function TarjetaFactor({
         aria-expanded={abierto}
         className={cn(
           "flex w-full flex-wrap items-center justify-between gap-3 px-4 py-3 text-left",
-          !esEnfoque && "border-b border-gray-200 bg-slate-50/80 hover:bg-slate-50",
+          !esEnfoque && "border-b border-gray-200 bg-slate-50/80 hover:bg-slate-50 dark:border-border dark:bg-slate-800/60 dark:hover:bg-slate-800",
         )}
       >
         <span className="flex min-w-0 items-center gap-2.5">
@@ -242,7 +242,7 @@ function TarjetaFactor({
           <span
             className={cn(
               "rounded px-2 py-1 font-mono font-bold",
-              esEnfoque ? "bg-indigo-950/60 text-white" : "bg-slate-100 text-gray-800",
+              esEnfoque ? "bg-indigo-950/60 text-white" : "bg-muted text-foreground",
             )}
           >
             {numero(factor.scorePonderado ?? factor.puntajeObtenido, 2)}
@@ -254,7 +254,7 @@ function TarjetaFactor({
         <div
           className={cn(
             "divide-y text-xs",
-            esEnfoque ? "bg-white text-gray-900" : "divide-gray-100",
+            esEnfoque ? "bg-card text-foreground" : "divide-border",
           )}
         >
           {factor.subfactores?.map((sub, i) => (
@@ -277,10 +277,10 @@ function ExpedienteDelCliente({ cliente }: { cliente: ClienteMatrizRiesgo }) {
   return (
     <div className="space-y-4">
       <div className="space-y-1">
-        <p className="text-[11px] font-semibold tracking-wider text-gray-500 uppercase">
+        <p className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
           Nombre del titular
         </p>
-        <div className="rounded-lg border border-gray-200 bg-gray-50 p-2.5 font-bold tracking-wide text-gray-900 uppercase">
+        <div className="rounded-lg border border-border bg-muted/40 p-2.5 font-bold tracking-wide text-foreground uppercase">
           {cliente.nombre}
         </div>
       </div>
@@ -294,10 +294,10 @@ function ExpedienteDelCliente({ cliente }: { cliente: ClienteMatrizRiesgo }) {
       <CampoCopiable etiqueta="C.U.R.P." valor={cliente.curp} mono icono={Clipboard} />
 
       <div className="space-y-1.5">
-        <p className="text-[11px] font-semibold tracking-wider text-gray-500 uppercase">
+        <p className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
           Tipo de persona
         </p>
-        <div className="grid grid-cols-2 gap-1.5 rounded-lg border border-gray-200 bg-gray-100 p-1">
+        <div className="grid grid-cols-2 gap-1.5 rounded-lg border border-border bg-muted/40 p-1">
           {(["FISICA", "MORAL"] as const).map((tipo) => {
             const activo = cliente.persona === tipo;
             return (
@@ -306,14 +306,14 @@ function ExpedienteDelCliente({ cliente }: { cliente: ClienteMatrizRiesgo }) {
                 className={cn(
                   "flex items-center justify-center gap-1.5 rounded-md py-1.5 text-xs",
                   activo
-                    ? "border border-gray-200 bg-white font-semibold text-indigo-700 shadow-sm"
-                    : "font-medium text-gray-500",
+                    ? "border border-border bg-card font-semibold text-primary shadow-xs"
+                    : "font-medium text-muted-foreground",
                 )}
               >
                 <span
                   className={cn(
                     "size-2 rounded-full",
-                    activo ? "bg-indigo-600" : "bg-gray-300",
+                    activo ? "bg-primary" : "bg-muted-foreground/40",
                   )}
                 />
                 {tipo === "FISICA" ? "Física" : "Moral"}
@@ -324,34 +324,34 @@ function ExpedienteDelCliente({ cliente }: { cliente: ClienteMatrizRiesgo }) {
       </div>
 
       <div className="space-y-1">
-        <p className="text-[11px] font-semibold tracking-wider text-gray-500 uppercase">
+        <p className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
           Tipo de cliente
         </p>
-        <div className="flex items-center justify-between rounded-lg border border-gray-300 px-3 py-2 font-medium text-gray-800 uppercase">
+        <div className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 font-medium text-foreground uppercase">
           <span className="truncate">{cliente.tipoCliente}</span>
-          <ChevronDown className="size-4 shrink-0 text-gray-400" />
+          <ChevronDown className="size-4 shrink-0 text-muted-foreground" />
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 border-t border-gray-200 pt-3 text-[11px]">
+      <div className="grid grid-cols-2 gap-3 border-t border-border pt-3 text-[11px]">
         <div>
-          <p className="font-medium text-gray-400">Fecha de Alta</p>
-          <p className="mt-0.5 flex items-center gap-1 font-semibold text-gray-700">
-            <Calendar className="size-3.5 text-gray-400" />
+          <p className="font-medium text-muted-foreground">Fecha de Alta</p>
+          <p className="mt-0.5 flex items-center gap-1 font-semibold text-foreground">
+            <Calendar className="size-3.5 text-muted-foreground" />
             {cliente.fechaAlta}
           </p>
         </div>
         <div>
-          <p className="font-medium text-gray-400">Sucursal</p>
-          <p className="mt-0.5 font-bold tracking-wide text-gray-800 uppercase">
+          <p className="font-medium text-muted-foreground">Sucursal</p>
+          <p className="mt-0.5 font-bold tracking-wide text-foreground uppercase">
             {cliente.sucursal}
           </p>
         </div>
       </div>
 
-      <div className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 p-2.5 text-[10px] text-gray-500">
+      <div className="flex items-center justify-between rounded-lg border border-border bg-muted/40 p-2.5 text-[10px] text-muted-foreground">
         <span>Última modificación:</span>
-        <span className="font-mono font-semibold text-gray-700">
+        <span className="font-mono font-semibold text-foreground">
           {cliente.fechaModificacion}
         </span>
       </div>
@@ -375,12 +375,12 @@ function TarjetaEstado({
   return (
     <div
       role={tono === "error" ? "alert" : "status"}
-      className="flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-gray-300 bg-white px-6 py-20 text-center"
+      className="flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-border bg-card px-6 py-20 text-center"
     >
       <span
         className={cn(
           "flex size-12 items-center justify-center rounded-full",
-          tono === "error" ? "bg-red-50 text-red-700" : "bg-indigo-50 text-indigo-700",
+          tono === "error" ? "bg-red-50 text-red-700 dark:bg-red-950/40 dark:text-red-400" : "bg-indigo-50 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-400",
         )}
       >
         <Icono
@@ -389,7 +389,7 @@ function TarjetaEstado({
         />
       </span>
       <div className="max-w-md space-y-1">
-        <p className="font-semibold text-gray-900">{titulo}</p>
+        <p className="font-semibold text-foreground">{titulo}</p>
         <p className="text-muted-foreground text-sm">{descripcion}</p>
       </div>
       {children}
@@ -503,7 +503,7 @@ export function MatrizRiesgoDashboard({
   const rfcEncabezado = cliente && cliente.rfc !== "—" ? cliente.rfc : "";
 
   return (
-    <div className="flex h-full flex-col rounded-lg border border-gray-200 bg-white shadow-sm">
+    <div className="flex h-full flex-col rounded-lg border border-border bg-card shadow-sm">
       <header className="flex flex-wrap items-center justify-between gap-4 rounded-t-lg bg-slate-900 px-5 py-3 text-white">
         <div className="flex items-center gap-3">
           <div className="flex size-9 items-center justify-center rounded-lg border border-indigo-400/30 bg-indigo-500/20 text-indigo-300">
@@ -584,7 +584,7 @@ export function MatrizRiesgoDashboard({
       </header>
 
       <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
-        <aside className="w-full shrink-0 overflow-y-auto border-b border-gray-200 bg-white lg:w-[300px] lg:rounded-bl-lg lg:border-r lg:border-b-0">
+        <aside className="w-full shrink-0 overflow-y-auto border-b border-border bg-card lg:w-[300px] lg:rounded-bl-lg lg:border-r lg:border-b-0">
           <div className="flex items-center justify-between bg-gradient-to-r from-slate-900 to-slate-800 px-4 py-3 text-white">
             <span className="flex items-center gap-2 text-sm font-semibold tracking-wide">
               <span className="rounded bg-indigo-500/20 p-1 text-indigo-300">
@@ -600,8 +600,8 @@ export function MatrizRiesgoDashboard({
           </div>
 
           <div className="space-y-4 p-4 text-xs">
-            <div className="space-y-2 rounded-xl border border-gray-200 bg-slate-50 p-3">
-              <p className="text-[11px] font-semibold tracking-wider text-gray-500 uppercase">
+            <div className="space-y-2 rounded-xl border border-gray-200 bg-slate-50 p-3 dark:border-border dark:bg-slate-900/60">
+              <p className="text-[11px] font-semibold tracking-wider text-gray-500 dark:text-muted-foreground uppercase">
                 Referencia / No. Cliente / Nombre
               </p>
               <BuscadorSocios
@@ -635,30 +635,30 @@ export function MatrizRiesgoDashboard({
           </div>
         </aside>
 
-        <section className="flex min-h-0 min-w-0 flex-1 flex-col bg-slate-50 lg:rounded-br-lg">
-          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-gray-200 bg-white px-6 py-4">
+        <section className="flex min-h-0 min-w-0 flex-1 flex-col bg-slate-50 dark:bg-background lg:rounded-br-lg">
+          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-gray-200 bg-white px-6 py-4 dark:border-border dark:bg-card">
             <div className="min-w-[260px] flex-1">
-              <h3 className="flex flex-wrap items-baseline gap-2 text-base font-bold tracking-tight text-gray-900">
+              <h3 className="flex flex-wrap items-baseline gap-2 text-base font-bold tracking-tight text-gray-900 dark:text-foreground">
                 Matriz de Factores y Ponderación de Riesgo
-                <span className="text-xs font-normal text-gray-500">
+                <span className="text-xs font-normal text-gray-500 dark:text-muted-foreground">
                   (Metodología EBR / CNBV)
                 </span>
               </h3>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-gray-500 dark:text-muted-foreground">
                 Evaluación cuantitativa y cualitativa de mitigantes y riesgos inherentes.
               </p>
             </div>
-            <div className="flex shrink-0 items-center gap-6 divide-x divide-gray-200 text-xs">
+            <div className="flex shrink-0 items-center gap-6 divide-x divide-gray-200 dark:divide-border text-xs">
               <div className="text-right">
-                <span className="block text-[11px] font-semibold text-gray-500 uppercase">
-                  Valor total calculado
+                <span className="block text-[11px] font-semibold text-gray-500 dark:text-muted-foreground uppercase">
+                  Valor total calculated
                 </span>
-                <span className="text-xl font-extrabold text-gray-900">
+                <span className="text-xl font-extrabold text-gray-900 dark:text-foreground">
                   {numero(resultado?.puntuacion_total)}
                 </span>
               </div>
               <div className="pl-6 text-right">
-                <span className="block text-[11px] font-semibold text-gray-500 uppercase">
+                <span className="block text-[11px] font-semibold text-gray-500 dark:text-muted-foreground uppercase">
                   Riesgo determinado
                 </span>
                 {nivelGeneral ? (
@@ -677,7 +677,7 @@ export function MatrizRiesgoDashboard({
                     {etiquetaGeneral}
                   </span>
                 ) : (
-                  <span className="text-xl font-extrabold text-gray-300">—</span>
+                  <span className="text-xl font-extrabold text-gray-300 dark:text-gray-600">—</span>
                 )}
               </div>
             </div>
@@ -688,7 +688,7 @@ export function MatrizRiesgoDashboard({
               <>
                 <div
                   className={cn(
-                    "hidden gap-2 rounded-lg bg-slate-200/60 px-4 py-2 text-[11px] font-bold tracking-wider text-gray-500 uppercase md:grid",
+                    "hidden gap-2 rounded-lg bg-slate-200/60 dark:bg-slate-800/80 px-4 py-2 text-[11px] font-bold tracking-wider text-gray-500 dark:text-muted-foreground uppercase md:grid",
                     COLUMNAS,
                   )}
                 >

@@ -10,6 +10,14 @@ import {
   UserCheckIcon,
   XIcon,
 } from "@/shared/components/icons";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/shared/components/ui/table";
 import { es } from "@/shared/i18n/es";
 import { buscarPersonasDenunciadas, obtenerPersonaPorRef, type PersonaItem } from "../api/busquedaPersonasApi";
 import { useRazonesAlertaPorTipo, useTiposAlertaBuzon } from "../hooks/useCatalogosBuzon";
@@ -240,15 +248,15 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
   const isLoading = loadingDetalle || loadingObs || loadingEvid;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-xs p-4">
-      <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-line bg-panel p-6 shadow-2xl text-fg">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-xs p-4">
+      <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-border bg-card p-6 shadow-2xl text-foreground">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-line pb-4">
+        <div className="flex items-center justify-between border-b border-border pb-4">
           <div>
-            <h2 className="text-base font-bold text-fg">
+            <h2 className="text-base font-bold text-foreground">
               Denuncia #{denunciaId}
             </h2>
-            <p className="text-xs text-muted mt-0.5">
+            <p className="text-xs text-muted-foreground mt-0.5">
               Registrada el: {denuncia?.createdAt ? new Date(denuncia.createdAt).toLocaleString("es-MX") : "-"}
             </p>
           </div>
@@ -256,7 +264,7 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
             type="button"
             onClick={onClose}
             aria-label="Cerrar modal"
-            className="rounded-lg p-1.5 text-muted hover:bg-hover hover:text-fg focus-visible:outline-none"
+            className="rounded-lg p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-none"
           >
             <XIcon className="h-5 w-5" />
           </button>
@@ -277,13 +285,13 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
         )}
 
         {isLoading && !denuncia ? (
-          <div className="py-12 text-center text-xs text-muted">{es.common.loading}</div>
+          <div className="py-12 text-center text-xs text-muted-foreground">{es.common.loading}</div>
         ) : denuncia ? (
           <div className="mt-5 space-y-6 text-xs">
             {/* Status Header & Action Buttons */}
-            <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-bg p-3.5">
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-muted/40 p-3.5">
               <div className="flex items-center gap-2">
-                <span className="text-muted font-medium">Estatus actual:</span>
+                <span className="text-muted-foreground font-medium">Estatus actual:</span>
                 <span className={`inline-block rounded-full px-3 py-0.5 text-xs font-semibold ${BADGE_STYLES[denuncia.estado]}`}>
                   {es.buzon.statusLabels[denuncia.estado]}
                 </span>
@@ -298,8 +306,8 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                     onClick={() => setIsEditing((prev) => !prev)}
                     className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-medium transition-colors ${
                       isEditing
-                        ? "bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-white"
-                        : "bg-indigo-600/10 text-indigo-600 hover:bg-indigo-600/20 dark:text-indigo-400 border border-indigo-500/20"
+                        ? "bg-secondary text-secondary-foreground"
+                        : "bg-primary/10 text-primary hover:bg-primary/20 border border-primary/20"
                     }`}
                   >
                     <EditIcon className="h-3.5 w-3.5" />
@@ -346,7 +354,7 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                 )}
 
                 {(denuncia.estado === "A" || denuncia.estado === "D") && (
-                  <span className="text-xs text-muted font-medium italic">
+                  <span className="text-xs text-muted-foreground font-medium italic">
                     Expediente finalizado ({es.buzon.statusLabels[denuncia.estado]})
                   </span>
                 )}
@@ -355,19 +363,19 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
 
             {/* FORMULARIO DE EDICIÓN EN REVISIÓN (PUT /buzon/denuncias/{id}) */}
             {isEditing && denuncia.estado === "V" ? (
-              <form onSubmit={handleGuardarEdicion} className="space-y-4 rounded-xl border border-indigo-500/30 bg-indigo-500/5 p-4">
-                <div className="flex items-center justify-between border-b border-indigo-500/20 pb-2">
-                  <h3 className="text-xs font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5">
+              <form onSubmit={handleGuardarEdicion} className="space-y-4 rounded-xl border border-primary/40 bg-card p-4 shadow-md ring-1 ring-primary/20">
+                <div className="flex items-center justify-between border-b border-border pb-2">
+                  <h3 className="text-xs font-bold text-primary flex items-center gap-1.5">
                     <EditIcon className="h-4 w-4" />
                     Editar Denuncia en Revisión
                   </h3>
-                  <span className="text-[11px] text-muted">PUT /buzon/denuncias/{denunciaId}</span>
+                  <span className="text-[11px] text-muted-foreground font-mono">PUT /buzon/denuncias/{denunciaId}</span>
                 </div>
 
                 {/* Selectores de Tipo y Razón de Alerta */}
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   <div>
-                    <label htmlFor="editTipoAlertaSelect" className="block text-xs font-medium text-fg mb-1">
+                    <label htmlFor="editTipoAlertaSelect" className="block text-xs font-medium text-foreground mb-1">
                       Tipo de Alerta
                     </label>
                     <select
@@ -379,7 +387,7 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                         setEditRazonAlertaId(0);
                       }}
                       disabled={loadingTipos}
-                      className="w-full rounded-lg border border-line bg-bg p-2 text-xs text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring"
+                      className="w-full rounded-lg border border-border bg-background p-2 text-xs text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
                       {loadingTipos ? (
                         <option value={0}>Cargando catálogo...</option>
@@ -394,7 +402,7 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                   </div>
 
                   <div>
-                    <label htmlFor="editRazonAlertaSelect" className="block text-xs font-medium text-fg mb-1">
+                    <label htmlFor="editRazonAlertaSelect" className="block text-xs font-medium text-foreground mb-1">
                       Razón de Alerta
                     </label>
                     <select
@@ -402,7 +410,7 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                       value={editRazonAlertaId}
                       onChange={(e) => setEditRazonAlertaId(Number(e.target.value))}
                       disabled={loadingRazones || editTipoAlertaId <= 0}
-                      className="w-full rounded-lg border border-line bg-bg p-2 text-xs text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring"
+                      className="w-full rounded-lg border border-border bg-background p-2 text-xs text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
                       {loadingRazones ? (
                         <option value={0}>Cargando razones...</option>
@@ -421,25 +429,25 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
 
                 {/* Previsualización de la descripción de la razón */}
                 {selectedRazonDescripcion && (
-                  <div className="rounded-lg border border-line/60 bg-bg/80 p-2.5 text-[11px] text-muted leading-relaxed">
-                    <span className="font-semibold text-fg block mb-0.5">Descripción de la Razón:</span>
+                  <div className="rounded-lg border border-border bg-muted/60 p-2.5 text-[11px] text-muted-foreground leading-relaxed">
+                    <span className="font-semibold text-foreground block mb-0.5">Descripción de la Razón:</span>
                     {selectedRazonDescripcion}
                   </div>
                 )}
 
                 {/* Contexto: Persona Denunciada Original */}
-                <div className="rounded-lg border border-line/70 bg-bg p-2.5 text-xs flex items-center justify-between">
+                <div className="rounded-lg border border-border bg-muted/40 p-2.5 text-xs flex items-center justify-between">
                   <div>
-                    <span className="text-[11px] text-muted block font-medium">Persona Denunciada (Original):</span>
-                    <span className="font-semibold text-fg">{denuncia.nombreDenunciado || "Anónimo / No especificado"}</span>
+                    <span className="text-[11px] text-muted-foreground block font-medium">Persona Denunciada (Original):</span>
+                    <span className="font-semibold text-foreground">{denuncia.nombreDenunciado || "Anónimo / No especificado"}</span>
                   </div>
-                  <span className="text-[10px] text-muted italic bg-panel px-2 py-0.5 rounded border border-line">Dato original de la denuncia</span>
+                  <span className="text-[10px] text-muted-foreground italic bg-card px-2 py-0.5 rounded border border-border">Dato original de la denuncia</span>
                 </div>
 
                 {/* BLOQUE FUSIONADO: BUSCADOR Y TABLA DE PERSONA VERIFICADA (SOCIOS Y EMPLEADOS) */}
                 <div className="space-y-2 relative">
                   <div className="flex items-center justify-between">
-                    <label className="block text-xs font-semibold text-fg">
+                    <label className="block text-xs font-semibold text-foreground">
                       Corregir / Verificar Persona Denunciada (`denunciadoVerificadoRef`)
                     </label>
                     {editDenunciadoVerificadoRef && (
@@ -451,25 +459,25 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
 
                   {/* Si ya hay persona asignada: Muestra tabla de sólo lectura */}
                   {editDenunciadoVerificadoRef ? (
-                    <div className="overflow-hidden rounded-xl border border-line bg-bg shadow-xs">
-                      <table className="w-full text-left text-xs">
-                        <thead className="border-b border-line bg-panel text-muted font-semibold text-[11px]">
-                          <tr>
-                            <th className="px-3 py-2">Ref</th>
-                            <th className="px-3 py-2">Nombre</th>
-                            <th className="px-3 py-2">Empleado / Socio</th>
-                            <th className="px-3 py-2 text-right">Acción</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-line/60">
-                          <tr className="hover:bg-hover/40 transition-colors">
-                            <td className="px-3 py-2.5 font-mono font-bold text-fg">
+                    <div className="overflow-hidden rounded-xl border border-border bg-card shadow-xs">
+                      <Table className="w-full text-left text-xs">
+                        <TableHeader>
+                          <TableRow className="border-b border-border bg-muted/50 text-muted-foreground font-semibold text-[11px]">
+                            <TableHead className="px-3 py-2">Ref</TableHead>
+                            <TableHead className="px-3 py-2">Nombre</TableHead>
+                            <TableHead className="px-3 py-2">Empleado / Socio</TableHead>
+                            <TableHead className="px-3 py-2 text-right">Acción</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          <TableRow className="hover:bg-muted/30 transition-colors">
+                            <TableCell className="px-3 py-2.5 font-mono font-bold text-foreground">
                               {editDenunciadoVerificadoRef}
-                            </td>
-                            <td className="px-3 py-2.5 font-medium text-fg">
+                            </TableCell>
+                            <TableCell className="px-3 py-2.5 font-medium text-foreground">
                               {selectedPersona?.nombreCompleto || "Registro en Catálogo"}
-                            </td>
-                            <td className="px-3 py-2.5">
+                            </TableCell>
+                            <TableCell className="px-3 py-2.5">
                               <span
                                 className={`inline-block rounded px-2 py-0.5 text-[10px] font-bold ${
                                   selectedPersona?.tipo === "EMPLEADO"
@@ -481,13 +489,13 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                               >
                                 {selectedPersona?.tipo || "VERIFICADO"}
                               </span>
-                            </td>
-                            <td className="px-3 py-2.5 text-right space-x-1.5 whitespace-nowrap">
+                            </TableCell>
+                            <TableCell className="px-3 py-2.5 text-right space-x-1.5 whitespace-nowrap">
                               {selectedPersona && (
                                 <button
                                   type="button"
                                   onClick={() => setPersonaModalData(selectedPersona)}
-                                  className="inline-flex items-center gap-1 rounded-md bg-indigo-600 px-2.5 py-1 text-[11px] font-medium text-white hover:bg-indigo-700 focus-visible:outline-none"
+                                  className="inline-flex items-center gap-1 rounded-md bg-primary px-2.5 py-1 text-[11px] font-medium text-white hover:bg-primary-hover focus-visible:outline-none"
                                   title="Ver más datos de la persona"
                                 >
                                   <InfoIcon className="h-3 w-3" />
@@ -501,22 +509,22 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                                   setSelectedPersona(null);
                                   setSearchPersonQuery("");
                                 }}
-                                className="inline-flex items-center gap-1 rounded-md border border-line bg-panel px-2 py-1 text-[11px] font-medium text-muted hover:text-red-600 hover:border-red-500/30 focus-visible:outline-none"
+                                className="inline-flex items-center gap-1 rounded-md border border-border bg-card px-2 py-1 text-[11px] font-medium text-muted-foreground hover:text-destructive hover:border-destructive/30 focus-visible:outline-none"
                                 title="Cambiar persona"
                               >
                                 <XIcon className="h-3 w-3" />
                                 Cambiar
                               </button>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+                            </TableCell>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
                     </div>
                   ) : (
                     /* Si no hay persona asignada: Muestra el buscador */
                     <div className="space-y-1">
                       <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-muted">
+                        <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-muted-foreground">
                           <SearchIcon className="h-4 w-4" />
                         </div>
                         <input
@@ -531,18 +539,18 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                             if (searchResults.length > 0) setShowDropdown(true);
                           }}
                           placeholder="Buscar empleado o socio por nombre, RFC o número..."
-                          className="w-full rounded-lg border border-line bg-bg pl-8 pr-8 py-2 text-xs text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring"
+                          className="w-full rounded-lg border border-border bg-background pl-8 pr-8 py-2 text-xs text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                         />
                         {isSearchingPersons && (
                           <div className="absolute inset-y-0 right-0 pr-2.5 flex items-center">
-                            <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
+                            <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
                           </div>
                         )}
                       </div>
 
                       {/* Dropdown de resultados */}
                       {showDropdown && searchResults.length > 0 && (
-                        <div className="absolute z-20 mt-1 w-full max-h-52 overflow-y-auto rounded-xl border border-line bg-panel shadow-xl divide-y divide-line">
+                        <div className="absolute z-20 mt-1 w-full max-h-52 overflow-y-auto rounded-xl border border-border bg-card shadow-xl divide-y divide-border">
                           {searchResults.map((item) => (
                             <button
                               key={`${item.tipo}-${item.id}`}
@@ -553,7 +561,7 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                                 setShowDropdown(false);
                                 setSearchPersonQuery("");
                               }}
-                              className="w-full text-left p-2.5 hover:bg-hover flex items-center justify-between transition-colors text-xs"
+                              className="w-full text-left p-2.5 hover:bg-muted/50 flex items-center justify-between transition-colors text-xs"
                             >
                               <div>
                                 <div className="flex items-center gap-2">
@@ -566,15 +574,15 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                                   >
                                     {item.tipo}
                                   </span>
-                                  <span className="font-semibold text-fg">{item.nombreCompleto}</span>
+                                  <span className="font-semibold text-foreground">{item.nombreCompleto}</span>
                                 </div>
-                                <p className="text-[11px] text-muted mt-0.5">
-                                  Ref: <span className="font-mono text-fg">{item.referencia}</span>
+                                <p className="text-[11px] text-muted-foreground mt-0.5">
+                                  Ref: <span className="font-mono text-foreground">{item.referencia}</span>
                                   {item.puesto ? ` • ${item.puesto}` : ""}
                                   {item.identificador ? ` • ${item.identificador}` : ""}
                                 </p>
                               </div>
-                              <UserCheckIcon className="h-4 w-4 text-muted shrink-0" />
+                              <UserCheckIcon className="h-4 w-4 text-muted-foreground shrink-0" />
                             </button>
                           ))}
                         </div>
@@ -585,7 +593,7 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
 
                 {/* Observaciones de la edición */}
                 <div>
-                  <label htmlFor="editObservacionesInput" className="block text-xs font-medium text-fg mb-1">
+                  <label htmlFor="editObservacionesInput" className="block text-xs font-medium text-foreground mb-1">
                     Observaciones de la Modificación
                   </label>
                   <textarea
@@ -594,23 +602,23 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                     value={editObservaciones}
                     onChange={(e) => setEditObservaciones(e.target.value)}
                     placeholder="Escribe el motivo del cambio o notas de dictaminación..."
-                    className="w-full rounded-lg border border-line bg-bg p-2 text-xs text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring"
+                    className="w-full rounded-lg border border-border bg-background p-2 text-xs text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   />
                 </div>
 
                 {/* Botones de acción de edición */}
-                <div className="flex justify-end gap-2 pt-2 border-t border-indigo-500/20">
+                <div className="flex justify-end gap-2 pt-2 border-t border-border">
                   <button
                     type="button"
                     onClick={() => setIsEditing(false)}
-                    className="rounded-lg border border-line px-3.5 py-1.5 text-xs font-medium text-fg hover:bg-hover"
+                    className="rounded-lg border border-border px-3.5 py-1.5 text-xs font-medium text-foreground hover:bg-muted"
                   >
                     Cancelar
                   </button>
                   <button
                     type="submit"
                     disabled={editarDenuncia.isPending}
-                    className="rounded-lg bg-indigo-600 px-4 py-1.5 text-xs font-medium text-white hover:bg-indigo-700 disabled:opacity-50"
+                    className="rounded-lg bg-primary px-4 py-1.5 text-xs font-medium text-white hover:bg-primary-hover disabled:opacity-50"
                   >
                     {editarDenuncia.isPending ? "Guardando..." : "Guardar Cambios"}
                   </button>
@@ -620,9 +628,9 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
 
             {/* General Info Grid (Modo Consulta) */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div className="rounded-xl border border-line bg-bg p-3">
-                <span className="text-muted font-semibold block mb-0.5">Fecha del Incidente</span>
-                <p className="text-fg font-medium">
+              <div className="rounded-xl border border-border bg-muted/30 p-3">
+                <span className="text-muted-foreground font-semibold block mb-0.5">Fecha del Incidente</span>
+                <p className="text-foreground font-medium">
                   {denuncia.fechaIncidente
                     ? new Date(denuncia.fechaIncidente).toLocaleDateString("es-MX", {
                         year: "numeric",
@@ -633,17 +641,17 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                 </p>
               </div>
 
-              <div className="rounded-xl border border-line bg-bg p-3">
-                <span className="text-muted font-semibold block mb-0.5">Persona Denunciada (Original)</span>
-                <p className="text-fg font-medium">
+              <div className="rounded-xl border border-border bg-muted/30 p-3">
+                <span className="text-muted-foreground font-semibold block mb-0.5">Persona Denunciada (Original)</span>
+                <p className="text-foreground font-medium">
                   {denuncia.nombreDenunciado || "Anónimo / No especificado"}
                 </p>
               </div>
 
               {/* Campo separado: Persona Denunciada Verificada */}
-              <div className="rounded-xl border border-line bg-bg p-3 sm:col-span-2">
+              <div className="rounded-xl border border-border bg-muted/30 p-3 sm:col-span-2">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-muted font-semibold block">Persona Denunciada Verificada</span>
+                  <span className="text-muted-foreground font-semibold block">Persona Denunciada Verificada</span>
                   {denuncia.denunciadoVerificadoRef ? (
                     <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full flex items-center gap-1">
                       <UserCheckIcon className="h-3 w-3" /> Verificado
@@ -656,25 +664,25 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                 </div>
 
                 {denuncia.denunciadoVerificadoRef ? (
-                  <div className="overflow-hidden rounded-lg border border-line bg-panel">
-                    <table className="w-full text-left text-xs">
-                      <thead className="border-b border-line bg-bg text-[10px] text-muted font-semibold">
-                        <tr>
-                          <th className="px-3 py-1.5">Ref</th>
-                          <th className="px-3 py-1.5">Nombre</th>
-                          <th className="px-3 py-1.5">Empleado / Socio</th>
-                          <th className="px-3 py-1.5 text-right">Acción</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-line/60">
-                        <tr>
-                          <td className="px-3 py-2 font-mono font-bold text-fg">
+                  <div className="overflow-hidden rounded-lg border border-border bg-card">
+                    <Table className="w-full text-left text-xs">
+                      <TableHeader>
+                        <TableRow className="border-b border-border bg-muted/50 text-[10px] text-muted-foreground font-semibold">
+                          <TableHead className="px-3 py-1.5">Ref</TableHead>
+                          <TableHead className="px-3 py-1.5">Nombre</TableHead>
+                          <TableHead className="px-3 py-1.5">Empleado / Socio</TableHead>
+                          <TableHead className="px-3 py-1.5 text-right">Acción</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell className="px-3 py-2 font-mono font-bold text-foreground">
                             {denuncia.denunciadoVerificadoRef}
-                          </td>
-                          <td className="px-3 py-2 font-medium text-fg">
+                          </TableCell>
+                          <TableCell className="px-3 py-2 font-medium text-foreground">
                             {selectedPersona?.nombreCompleto || "Registro en Catálogo"}
-                          </td>
-                          <td className="px-3 py-2">
+                          </TableCell>
+                          <TableCell className="px-3 py-2">
                             <span
                               className={`inline-block rounded px-2 py-0.5 text-[10px] font-bold ${
                                 selectedPersona?.tipo === "EMPLEADO"
@@ -686,28 +694,28 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                             >
                               {selectedPersona?.tipo || "VERIFICADO"}
                             </span>
-                          </td>
-                          <td className="px-3 py-2 text-right">
+                          </TableCell>
+                          <TableCell className="px-3 py-2 text-right">
                             {selectedPersona ? (
                               <button
                                 type="button"
                                 onClick={() => setPersonaModalData(selectedPersona)}
-                                className="inline-flex items-center gap-1 rounded bg-indigo-600 px-2.5 py-1 text-[11px] font-medium text-white hover:bg-indigo-700 focus-visible:outline-none"
+                                className="inline-flex items-center gap-1 rounded bg-primary px-2.5 py-1 text-[11px] font-medium text-white hover:bg-primary-hover focus-visible:outline-none"
                                 title="Ver más datos de la persona"
                               >
                                 <InfoIcon className="h-3 w-3" />
                                 Ver más datos
                               </button>
                             ) : (
-                              <span className="text-[11px] text-muted">Sin ficha</span>
+                              <span className="text-[11px] text-muted-foreground">Sin ficha</span>
                             )}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                          </TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
                   </div>
                 ) : (
-                  <p className="text-xs text-muted italic">
+                  <p className="text-xs text-muted-foreground italic">
                     No se ha asignado una persona verificada. Puedes asignarla editando la denuncia mientras esté en estado de Revisión.
                   </p>
                 )}
@@ -716,28 +724,28 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
 
             {/* Description */}
             <div>
-              <span className="text-muted font-semibold block mb-1.5">Descripción de los Hechos</span>
-              <div className="rounded-xl border border-line bg-bg p-3.5 text-fg leading-relaxed whitespace-pre-wrap">
+              <span className="text-muted-foreground font-semibold block mb-1.5">Descripción de los Hechos</span>
+              <div className="rounded-xl border border-border bg-muted/30 p-3.5 text-foreground leading-relaxed whitespace-pre-wrap">
                 {denuncia.descripcion}
               </div>
             </div>
 
             {/* Evidences con apertura en nueva pestaña */}
             <div>
-              <span className="text-muted font-semibold block mb-1.5">Evidencias Adjuntas</span>
+              <span className="text-muted-foreground font-semibold block mb-1.5">Evidencias Adjuntas</span>
               {evidenciasCombined && evidenciasCombined.length > 0 ? (
                 <ul className="space-y-1.5">
                   {evidenciasCombined.map((ev) => (
                     <li
                       key={ev.id}
-                      className="flex items-center justify-between rounded-lg border border-line bg-bg p-2.5 transition-colors hover:border-accent-line hover:bg-hover/40"
+                      className="flex items-center justify-between rounded-lg border border-border bg-card p-2.5 transition-colors hover:border-primary/50 hover:bg-muted/40"
                     >
                       <div className="flex items-center gap-2 truncate mr-2">
-                        <PaperclipIcon className="h-4 w-4 shrink-0 text-muted" />
-                        <span className="font-medium truncate text-fg" title={ev.nombre}>
+                        <PaperclipIcon className="h-4 w-4 shrink-0 text-muted-foreground" />
+                        <span className="font-medium truncate text-foreground" title={ev.nombre}>
                           {ev.nombre || `Evidencia #${ev.id}`}
                         </span>
-                        <span className="text-[11px] text-muted shrink-0">
+                        <span className="text-[11px] text-muted-foreground shrink-0">
                           ({ev.tipoArchivo || "Archivo"})
                         </span>
                       </div>
@@ -745,11 +753,11 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                         type="button"
                         onClick={() => handleVerEvidencia(ev.id, ev.nombre)}
                         disabled={openingEvidenciaId === ev.id}
-                        className="inline-flex items-center gap-1.5 rounded-md bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 disabled:opacity-50 shrink-0 focus-visible:outline-none"
+                        className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2.5 py-1 text-xs font-semibold text-secondary-foreground hover:bg-secondary-hover disabled:opacity-50 shrink-0 focus-visible:outline-none"
                         title="Ver evidencia en nueva pestaña"
                       >
                         {openingEvidenciaId === ev.id ? (
-                          <div className="h-3 w-3 animate-spin rounded-full border-2 border-slate-500 border-t-transparent" />
+                          <div className="h-3 w-3 animate-spin rounded-full border-2 border-primary border-t-transparent" />
                         ) : (
                           <EyeIcon className="h-3.5 w-3.5" />
                         )}
@@ -759,14 +767,14 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                   ))}
                 </ul>
               ) : (
-                <p className="text-muted italic">Sin evidencias adjuntas en el expediente.</p>
+                <p className="text-muted-foreground italic">Sin evidencias adjuntas en el expediente.</p>
               )}
             </div>
 
             {/* Observations History & Input Form */}
-            <div className="border-t border-line pt-5">
+            <div className="border-t border-border pt-5">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-bold text-fg">
+                <h3 className="text-sm font-bold text-foreground">
                   Historial de Observaciones ({observacionesCombined.length})
                 </h3>
                 {denuncia.estado === "V" && !tieneObservaciones && (
@@ -776,18 +784,18 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                 )}
               </div>
 
-              {/* Observation Timeline List displaying User ID & Date */}
+              {/* Observation Timeline List */}
               {observacionesCombined && observacionesCombined.length > 0 ? (
                 <ul className="space-y-2.5 mb-4 max-h-60 overflow-y-auto pr-1">
                   {observacionesCombined.map((obs) => (
                     <li
                       key={obs.id}
-                      className="rounded-xl border border-line bg-bg p-3 space-y-1"
+                      className="rounded-xl border border-border bg-muted/30 p-3 space-y-1"
                     >
-                      <p className="text-fg leading-normal">{obs.observacion}</p>
-                      <div className="flex items-center justify-between text-[11px] text-muted pt-1 border-t border-line/40">
+                      <p className="text-foreground leading-normal">{obs.observacion}</p>
+                      <div className="flex items-center justify-between text-[11px] text-muted-foreground pt-1 border-t border-border/60">
                         <span className="font-medium">
-                          Usuario: <span className="text-fg">{obs.verificoRef || user?.username || "Oficial PLD"}</span>
+                          Usuario: <span className="text-foreground">{obs.verificoRef || user?.nombre || "Oficial PLD"}</span>
                         </span>
                         <span>{new Date(obs.createdAt).toLocaleString("es-MX")}</span>
                       </div>
@@ -795,13 +803,13 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                   ))}
                 </ul>
               ) : (
-                <p className="text-muted italic mb-4">No hay observaciones registradas aún.</p>
+                <p className="text-muted-foreground italic mb-4">No hay observaciones registradas aún.</p>
               )}
 
-              {/* Form to add more observations without requiring to close/change status */}
+              {/* Form to add more observations */}
               {(denuncia.estado === "R" || denuncia.estado === "V") && (
-                <form onSubmit={handleAddObservation} className="space-y-2 pt-2 border-t border-line">
-                  <label htmlFor="nuevaObsInput" className="block text-xs font-semibold text-fg">
+                <form onSubmit={handleAddObservation} className="space-y-2 pt-2 border-t border-border">
+                  <label htmlFor="nuevaObsInput" className="block text-xs font-semibold text-foreground">
                     Agregar Observación de Seguimiento
                   </label>
                   <div className="flex gap-2">
@@ -811,12 +819,12 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                       value={nuevaObservacion}
                       onChange={(e) => setNuevaObservacion(e.target.value)}
                       placeholder="Escribe una observación de revisión (puedes agregar múltiples)..."
-                      className="flex-1 rounded-lg border border-line bg-bg px-3 py-2 text-xs text-fg focus-visible:ring-2 focus-visible:ring-accent-ring"
+                      className="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-xs text-foreground focus-visible:ring-2 focus-visible:ring-ring"
                     />
                     <button
                       type="submit"
                       disabled={!nuevaObservacion.trim() || agregarObs.isPending}
-                      className="rounded-lg bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700 disabled:opacity-50"
+                      className="rounded-lg bg-primary px-4 py-2 text-xs font-medium text-white hover:bg-primary-hover disabled:opacity-50"
                     >
                       {agregarObs.isPending ? "Guardando..." : "Agregar Observación"}
                     </button>
@@ -830,9 +838,9 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
 
       {/* PANEL MODAL PARA VISUALIZAR MÁS DATOS DE LA PERSONA (SOCIOS / EMPLEADOS) */}
       {personaModalData && (
-        <div className="fixed inset-0 z-60 flex items-center justify-center bg-slate-950/70 p-4">
-          <div className="w-full max-w-md rounded-2xl border border-line bg-panel p-5 shadow-2xl text-fg space-y-4">
-            <div className="flex items-center justify-between border-b border-line pb-3">
+        <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/70 backdrop-blur-xs p-4">
+          <div className="w-full max-w-md rounded-2xl border border-border bg-card p-5 shadow-2xl text-foreground space-y-4">
+            <div className="flex items-center justify-between border-b border-border pb-3">
               <div className="flex items-center gap-2">
                 <span
                   className={`rounded px-2 py-0.5 text-xs font-bold ${
@@ -843,71 +851,71 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                 >
                   {personaModalData.tipo}
                 </span>
-                <h3 className="text-sm font-bold text-fg">Ficha de la Persona</h3>
+                <h3 className="text-sm font-bold text-foreground">Ficha de la Persona</h3>
               </div>
               <button
                 type="button"
                 onClick={() => setPersonaModalData(null)}
-                className="rounded-lg p-1 text-muted hover:bg-hover hover:text-fg"
+                className="rounded-lg p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
               >
                 <XIcon className="h-4 w-4" />
               </button>
             </div>
 
             <div className="space-y-3 text-xs">
-              <div className="rounded-xl border border-line bg-bg p-3 space-y-1">
-                <span className="text-[11px] text-muted font-semibold block">Nombre Completo</span>
-                <p className="text-sm font-bold text-fg">{personaModalData.nombreCompleto}</p>
+              <div className="rounded-xl border border-border bg-muted/40 p-3 space-y-1">
+                <span className="text-[11px] text-muted-foreground font-semibold block">Nombre Completo</span>
+                <p className="text-sm font-bold text-foreground">{personaModalData.nombreCompleto}</p>
               </div>
 
               <div className="grid grid-cols-2 gap-2">
-                <div className="rounded-lg border border-line bg-bg p-2.5">
-                  <span className="text-[10px] text-muted block font-medium">Referencia / No.</span>
-                  <p className="font-mono font-bold text-fg">{personaModalData.referencia}</p>
+                <div className="rounded-lg border border-border bg-muted/30 p-2.5">
+                  <span className="text-[10px] text-muted-foreground block font-medium">Referencia / No.</span>
+                  <p className="font-mono font-bold text-foreground">{personaModalData.referencia}</p>
                 </div>
-                <div className="rounded-lg border border-line bg-bg p-2.5">
-                  <span className="text-[10px] text-muted block font-medium">RFC / CURP</span>
-                  <p className="font-mono text-fg">{personaModalData.identificador || "No registrado"}</p>
+                <div className="rounded-lg border border-border bg-muted/30 p-2.5">
+                  <span className="text-[10px] text-muted-foreground block font-medium">RFC / CURP</span>
+                  <p className="font-mono text-foreground">{personaModalData.identificador || "No registrado"}</p>
                 </div>
               </div>
 
               {personaModalData.puesto && (
-                <div className="rounded-lg border border-line bg-bg p-2.5">
-                  <span className="text-[10px] text-muted block font-medium">Puesto / Cargo / Régimen</span>
-                  <p className="text-fg font-medium">{personaModalData.puesto}</p>
+                <div className="rounded-lg border border-border bg-muted/30 p-2.5">
+                  <span className="text-[10px] text-muted-foreground block font-medium">Puesto / Cargo / Régimen</span>
+                  <p className="text-foreground font-medium">{personaModalData.puesto}</p>
                 </div>
               )}
 
               {personaModalData.departamento && (
-                <div className="rounded-lg border border-line bg-bg p-2.5">
-                  <span className="text-[10px] text-muted block font-medium">Departamento / Área</span>
-                  <p className="text-fg font-medium">{personaModalData.departamento}</p>
+                <div className="rounded-lg border border-border bg-muted/30 p-2.5">
+                  <span className="text-[10px] text-muted-foreground block font-medium">Departamento / Área</span>
+                  <p className="text-foreground font-medium">{personaModalData.departamento}</p>
                 </div>
               )}
 
               {(personaModalData.email || personaModalData.telefono) && (
                 <div className="grid grid-cols-2 gap-2">
-                  <div className="rounded-lg border border-line bg-bg p-2.5">
-                    <span className="text-[10px] text-muted block font-medium">Correo Electrónico</span>
-                    <p className="text-fg truncate">{personaModalData.email || "No registrado"}</p>
+                  <div className="rounded-lg border border-border bg-muted/30 p-2.5">
+                    <span className="text-[10px] text-muted-foreground block font-medium">Correo Electrónico</span>
+                    <p className="text-foreground truncate">{personaModalData.email || "No registrado"}</p>
                   </div>
-                  <div className="rounded-lg border border-line bg-bg p-2.5">
-                    <span className="text-[10px] text-muted block font-medium">Teléfono</span>
-                    <p className="text-fg">{personaModalData.telefono || "No registrado"}</p>
+                  <div className="rounded-lg border border-border bg-muted/30 p-2.5">
+                    <span className="text-[10px] text-muted-foreground block font-medium">Teléfono</span>
+                    <p className="text-foreground">{personaModalData.telefono || "No registrado"}</p>
                   </div>
                 </div>
               )}
 
               {personaModalData.sucursal && (
-                <div className="rounded-lg border border-line bg-bg p-2.5">
-                  <span className="text-[10px] text-muted block font-medium">Sucursal / Oficina</span>
-                  <p className="text-fg">{personaModalData.sucursal}</p>
+                <div className="rounded-lg border border-border bg-muted/30 p-2.5">
+                  <span className="text-[10px] text-muted-foreground block font-medium">Sucursal / Oficina</span>
+                  <p className="text-foreground">{personaModalData.sucursal}</p>
                 </div>
               )}
 
               {personaModalData.estatus && (
                 <div className="flex items-center justify-between px-1">
-                  <span className="text-muted">Estado del Registro:</span>
+                  <span className="text-muted-foreground">Estado del Registro:</span>
                   <span className="font-semibold text-emerald-600 dark:text-emerald-400">
                     {personaModalData.estatus}
                   </span>
@@ -915,11 +923,11 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
               )}
             </div>
 
-            <div className="flex justify-end pt-2 border-t border-line">
+            <div className="flex justify-end pt-2 border-t border-border">
               <button
                 type="button"
                 onClick={() => setPersonaModalData(null)}
-                className="rounded-lg bg-slate-200 dark:bg-slate-800 px-4 py-1.5 text-xs font-medium text-fg hover:bg-hover"
+                className="rounded-lg bg-secondary px-4 py-1.5 text-xs font-medium text-secondary-foreground hover:bg-secondary-hover"
               >
                 Cerrar Ficha
               </button>

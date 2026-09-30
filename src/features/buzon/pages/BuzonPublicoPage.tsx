@@ -62,6 +62,35 @@ export function BuzonPublicoPage() {
     (selectedRazon as unknown as { descripcion?: string })?.descripcion ||
     "";
 
+  const selectedTipo = tiposAlerta?.find((t) => t.id === selectedTipoId);
+  const tipoCodigo = (selectedTipo?.nombre || "").trim().toUpperCase();
+  const tipoDesc = (selectedTipo?.descripcion || "").trim().toUpperCase();
+
+  const isInternaPreocupante =
+    tipoCodigo === "IP" ||
+    tipoCodigo.startsWith("IP") ||
+    tipoDesc.includes("PREOCUPANTE") ||
+    tipoDesc.includes("INTERNA");
+
+  const isInusual =
+    !isInternaPreocupante &&
+    (tipoCodigo === "I" ||
+      tipoCodigo.startsWith("I ") ||
+      tipoCodigo.startsWith("I-") ||
+      tipoDesc.includes("INUSUAL"));
+
+  const denunciadoLabel = isInusual
+    ? es.buzon.denouncedSocio
+    : isInternaPreocupante
+    ? es.buzon.denouncedEmpleado
+    : es.buzon.denouncedName;
+
+  const denunciadoPlaceholder = isInusual
+    ? es.buzon.denouncedSocioPlaceholder
+    : isInternaPreocupante
+    ? es.buzon.denouncedEmpleadoPlaceholder
+    : es.buzon.denouncedNamePlaceholder;
+
   useEffect(() => {
     if (tiposAlerta && tiposAlerta.length > 0 && selectedTipoId === 0) {
       const firstId = tiposAlerta[0]?.id ?? 0;
@@ -117,8 +146,8 @@ export function BuzonPublicoPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 transition-colors dark:bg-slate-950 dark:text-slate-100">
-      <header className="border-b border-slate-200 bg-white px-6 py-4 dark:border-slate-800 dark:bg-slate-900">
+    <div className="min-h-screen bg-background text-foreground transition-colors">
+      <header className="border-b border-border bg-card px-6 py-4 shadow-xs">
         <div className="mx-auto flex max-w-4xl items-center justify-between">
           <div className="flex items-center gap-3">
             <span
@@ -128,10 +157,10 @@ export function BuzonPublicoPage() {
               SC
             </span>
             <div>
-              <h1 className="text-base font-bold tracking-tight text-slate-900 dark:text-white">
+              <h1 className="text-base font-bold tracking-tight text-foreground">
                 {es.buzon.publicTitle}
               </h1>
-              <p className="text-xs text-slate-500 dark:text-slate-400">{es.buzon.publicSubtitle}</p>
+              <p className="text-xs text-muted-foreground">{es.buzon.publicSubtitle}</p>
             </div>
           </div>
           <ThemeToggle />
@@ -139,16 +168,16 @@ export function BuzonPublicoPage() {
       </header>
 
       <main className="mx-auto max-w-3xl px-4 py-8">
-        <div className="mb-6 rounded-lg border border-emerald-200 bg-emerald-50/80 p-3.5 text-xs font-medium text-emerald-800 dark:border-emerald-900/50 dark:bg-emerald-950/40 dark:text-emerald-300">
+        <div className="mb-6 rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-3.5 text-xs font-medium text-emerald-800 dark:text-emerald-300">
           {es.buzon.anonymousBanner}
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
           {submitted ? (
             <div className="py-6 text-center space-y-4">
               <CheckCircleIcon className="mx-auto h-14 w-14 text-emerald-500" />
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white">{es.buzon.successTitle}</h2>
-              <p className="mx-auto max-w-md text-xs text-slate-600 dark:text-slate-400">
+              <h2 className="text-xl font-bold text-foreground">{es.buzon.successTitle}</h2>
+              <p className="mx-auto max-w-md text-xs text-muted-foreground">
                 {es.buzon.successDescription}
               </p>
               <div className="pt-4">
@@ -163,34 +192,34 @@ export function BuzonPublicoPage() {
             </div>
           ) : (
             <form onSubmit={handleSubmit(onSubmitFinal)} className="space-y-6">
-              <div className="space-y-4 border-b border-slate-100 pb-6 dark:border-slate-800">
-                <h2 className="text-sm font-bold text-slate-900 dark:text-white">
+              <div className="space-y-4 border-b border-border pb-6">
+                <h2 className="text-sm font-bold text-foreground">
                   Datos del Incidente
                 </h2>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-300">
+                  <label className="block text-xs font-medium text-foreground">
                     {es.buzon.incidentDate}
                   </label>
                   <input
                     type="date"
                     {...register("fechaIncidente")}
-                    className="mt-1 w-full rounded-md border border-slate-300 bg-white p-2 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="mt-1 w-full rounded-md border border-border bg-background p-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                   />
                   {errors.fechaIncidente && (
-                    <p className="mt-1 text-xs text-red-600">{errors.fechaIncidente.message}</p>
+                    <p className="mt-1 text-xs text-destructive">{errors.fechaIncidente.message}</p>
                   )}
                 </div>
 
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="block text-xs font-medium text-slate-700 dark:text-slate-300">
+                    <label className="block text-xs font-medium text-foreground">
                       {es.buzon.alertType}
                     </label>
                     <select
                       {...register("catTipoAlertaId", { valueAsNumber: true })}
                       disabled={loadingTipos}
-                      className="mt-1 w-full rounded-md border border-slate-300 bg-white p-2 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                      className="mt-1 w-full rounded-md border border-border bg-background p-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50"
                     >
                       {loadingTipos ? (
                         <option value={0}>Cargando catálogo...</option>
@@ -203,18 +232,18 @@ export function BuzonPublicoPage() {
                       )}
                     </select>
                     {errors.catTipoAlertaId && (
-                      <p className="mt-1 text-xs text-red-600">{errors.catTipoAlertaId.message}</p>
+                      <p className="mt-1 text-xs text-destructive">{errors.catTipoAlertaId.message}</p>
                     )}
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-slate-700 dark:text-slate-300">
+                    <label className="block text-xs font-medium text-foreground">
                       {es.buzon.alertReason}
                     </label>
                     <select
                       {...register("catRazonAlertaId", { valueAsNumber: true })}
                       disabled={loadingRazones || !selectedTipoId}
-                      className="mt-1 w-full rounded-md border border-slate-300 bg-white p-2 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                      className="mt-1 w-full rounded-md border border-border bg-background p-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50"
                     >
                       {loadingRazones ? (
                         <option value={0}>Cargando razones...</option>
@@ -229,19 +258,19 @@ export function BuzonPublicoPage() {
                       )}
                     </select>
                     {errors.catRazonAlertaId && (
-                      <p className="mt-1 text-xs text-red-600">{errors.catRazonAlertaId.message}</p>
+                      <p className="mt-1 text-xs text-destructive">{errors.catRazonAlertaId.message}</p>
                     )}
                   </div>
                 </div>
 
                 {/* Visualización de la descripción de la razón de alerta seleccionada */}
                 <div>
-                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-300">
+                  <label className="block text-xs font-medium text-foreground">
                     Descripción de la Razón de Alerta
                   </label>
-                  <div className="mt-1 rounded-md border border-slate-200 bg-slate-50 p-2.5 text-xs text-slate-700 dark:border-slate-700/80 dark:bg-slate-800/60 dark:text-slate-300 min-h-[42px] flex items-center leading-relaxed">
+                  <div className="mt-1 rounded-md border border-border bg-muted/40 p-2.5 text-xs text-foreground min-h-[42px] flex items-center leading-relaxed">
                     {selectedRazonDescripcion || (
-                      <span className="italic text-slate-400 dark:text-slate-500">
+                      <span className="italic text-muted-foreground">
                         Selecciona una razón de alerta para visualizar su descripción.
                       </span>
                     )}
@@ -249,42 +278,42 @@ export function BuzonPublicoPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-300">
-                    {es.buzon.denouncedName}
+                  <label className="block text-xs font-medium text-foreground">
+                    {denunciadoLabel}
                   </label>
                   <input
                     type="text"
                     {...register("nombreDenunciado")}
-                    placeholder={es.buzon.denouncedNamePlaceholder}
-                    className="mt-1 w-full rounded-md border border-slate-300 bg-white p-2 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    placeholder={denunciadoPlaceholder}
+                    className="mt-1 w-full rounded-md border border-border bg-background p-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-300">
+                  <label className="block text-xs font-medium text-foreground">
                     {es.buzon.descriptionLabel}
                   </label>
                   <textarea
                     rows={4}
                     {...register("descripcion")}
                     placeholder={es.buzon.descriptionPlaceholder}
-                    className="mt-1 w-full rounded-md border border-slate-300 bg-white p-2.5 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="mt-1 w-full rounded-md border border-border bg-background p-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                   />
                   {errors.descripcion && (
-                    <p className="mt-1 text-xs text-red-600">{errors.descripcion.message}</p>
+                    <p className="mt-1 text-xs text-destructive">{errors.descripcion.message}</p>
                   )}
                 </div>
               </div>
 
-              <div className="space-y-3 border-b border-slate-100 pb-6 dark:border-slate-800">
-                <h2 className="text-sm font-bold text-slate-900 dark:text-white">
+              <div className="space-y-3 border-b border-border pb-6">
+                <h2 className="text-sm font-bold text-foreground">
                   {es.buzon.evidenceTitle}
                 </h2>
-                <p className="text-xs text-slate-500 dark:text-slate-400">{es.buzon.evidenceHint}</p>
+                <p className="text-xs text-muted-foreground">{es.buzon.evidenceHint}</p>
 
-                <div className="relative flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 p-5 text-center hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800/50">
-                  <UploadIcon className="h-6 w-6 text-slate-400" />
-                  <p className="mt-1 text-xs font-medium text-slate-700 dark:text-slate-300">
+                <div className="relative flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-border bg-muted/30 p-5 text-center hover:bg-muted/60 transition-colors">
+                  <UploadIcon className="h-6 w-6 text-muted-foreground" />
+                  <p className="mt-1 text-xs font-medium text-foreground">
                     {es.buzon.dropzoneText}
                   </p>
                   <input
@@ -296,18 +325,18 @@ export function BuzonPublicoPage() {
                 </div>
 
                 {files.length > 0 && (
-                  <ul className="divide-y divide-slate-200 dark:divide-slate-800">
+                  <ul className="divide-y divide-border">
                     {files.map((f, i) => (
                       <li key={i} className="flex items-center justify-between py-2 text-xs">
-                        <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
-                          <PaperclipIcon className="h-4 w-4 text-slate-400" />
+                        <div className="flex items-center gap-2 text-foreground">
+                          <PaperclipIcon className="h-4 w-4 text-muted-foreground" />
                           <span>{f.name}</span>
-                          <span className="text-slate-400">({(f.size / 1024).toFixed(1)} KB)</span>
+                          <span className="text-muted-foreground">({(f.size / 1024).toFixed(1)} KB)</span>
                         </div>
                         <button
                           type="button"
                           onClick={() => removeFile(i)}
-                          className="text-red-500 hover:underline"
+                          className="text-destructive hover:underline"
                         >
                           Eliminar
                         </button>

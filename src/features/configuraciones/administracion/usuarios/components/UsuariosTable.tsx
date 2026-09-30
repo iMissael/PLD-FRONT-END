@@ -23,6 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/components/ui/table";
+import { TablePagination } from "@/shared/components/TablePagination";
 import { useRoles } from "@/features/configuraciones/administracion/roles/hooks/useRoles";
 import {
   useEliminarUsuario,
@@ -119,24 +120,63 @@ function BotonEliminar({ usuario }: { usuario: UsuarioResponse }) {
 
 export function UsuariosTable() {
   const [busqueda, setBusqueda] = useState("");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
   const { data: usuarios, isLoading, isError } = useUsuarios();
   const { data: roles } = useRoles();
 
-  const nombreDeRol = useMemo(() => {
-    const mapa = new Map(roles?.map((rol) => [rol.idRol, rol.nombre]) ?? []);
-    return (rolId: string | undefined) => (rolId ? (mapa.get(rolId) ?? "—") : "—");
+  const listaRoles = useMemo(() => {
+    if (!roles) return [];
+    if (Array.isArray(roles)) return roles;
+    if (Array.isArray((roles as unknown as { contenido?: typeof roles })?.contenido)) {
+      return (roles as unknown as { contenido: typeof roles }).contenido ?? [];
+    }
+    return [];
   }, [roles]);
 
-  const usuariosFiltrados = useMemo(() => {
+  const listaUsuarios = useMemo(() => {
     if (!usuarios) return [];
+    if (Array.isArray(usuarios)) return usuarios;
+    if (Array.isArray((usuarios as unknown as { contenido?: typeof usuarios })?.contenido)) {
+      return (usuarios as unknown as { contenido: typeof usuarios }).contenido ?? [];
+    }
+    return [];
+  }, [usuarios]);
+
+  const nombreDeRol = useMemo(() => {
+    const mapa = new Map<string, string>(
+      listaRoles
+        .filter((rol) => Boolean(rol.idRol))
+        .map((rol) => [String(rol.idRol), String(rol.nombre ?? "—")]),
+    );
+    return (rolId: string | undefined): string => (rolId ? (mapa.get(rolId) ?? "—") : "—");
+  }, [listaRoles]);
+
+  const usuariosFiltrados = useMemo(() => {
     const query = busqueda.trim().toLowerCase();
-    if (!query) return usuarios;
-    return usuarios.filter((usuario) =>
+    if (!query) return listaUsuarios;
+    return listaUsuarios.filter((usuario) =>
       [usuario.nombre, usuario.username, usuario.correo]
         .filter(Boolean)
         .some((campo) => campo!.toLowerCase().includes(query)),
     );
-  }, [usuarios, busqueda]);
+  }, [listaUsuarios, busqueda]);
+
+  const totalElements = usuariosFiltrados.length;
+  const paginatedUsuarios = useMemo(() => {
+    const start = page * rowsPerPage;
+    return usuariosFiltrados.slice(start, start + rowsPerPage);
+  }, [usuariosFiltrados, page, rowsPerPage]);
+
+  const handleChangePage = (_: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setRowsPerPage(parseInt(e.target.value, 10));
+    setPage(0);
+  };
 
   if (isError) {
     return (
@@ -152,13 +192,16 @@ export function UsuariosTable() {
         <Search className="text-muted-foreground pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2" />
         <Input
           value={busqueda}
-          onChange={(event) => setBusqueda(event.target.value)}
+          onChange={(event) => {
+            setBusqueda(event.target.value);
+            setPage(0);
+          }}
           placeholder="Buscar por nombre, usuario o correo…"
           className="pl-8"
         />
       </div>
 
-      <div className="overflow-hidden rounded-lg border">
+      <div className="overflow-hidden rounded-lg border border-border bg-card">
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent">
@@ -173,7 +216,7 @@ export function UsuariosTable() {
             {isLoading &&
               Array.from({ length: 4 }).map((_, i) => <FilaEsqueleto key={i} />)}
 
-            {!isLoading && usuariosFiltrados.length === 0 && (
+            {!isLoading && paginatedUsuarios.length === 0 && (
               <TableRow className="hover:bg-transparent">
                 <TableCell colSpan={5} className="h-32 text-center">
                   <div className="text-muted-foreground flex flex-col items-center gap-2">
@@ -189,7 +232,7 @@ export function UsuariosTable() {
             )}
 
             {!isLoading &&
-              usuariosFiltrados.map((usuario) => (
+              paginatedUsuarios.map((usuario) => (
                 <TableRow key={usuario.idUsuario}>
                   <TableCell>
                     <div className="flex items-center gap-3">
@@ -218,6 +261,16 @@ export function UsuariosTable() {
               ))}
           </TableBody>
         </Table>
+
+        <TablePagination
+          component="div"
+          count={totalElements}
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          rowsPerPageOptions={[5, 10, 25, 50]}
+        />
       </div>
     </div>
   );

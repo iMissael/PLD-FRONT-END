@@ -99,7 +99,7 @@ export function BuscadorSocios({
             "w-full rounded-lg border text-sm transition focus:ring-2 focus:outline-none",
             enEncabezado
               ? "border-slate-700 bg-slate-900/60 py-2 pr-4 pl-9 text-white placeholder-slate-400 focus:border-transparent focus:ring-indigo-500"
-              : "border-gray-300 bg-white py-2 pr-10 pl-3 font-medium text-gray-900 focus:border-indigo-500 focus:ring-indigo-500/40",
+              : "border-gray-300 bg-white dark:border-border dark:bg-card py-2 pr-10 pl-3 font-medium text-gray-900 dark:text-foreground focus:border-indigo-500 focus:ring-indigo-500/40",
           )}
         />
         {!enEncabezado && (
@@ -119,9 +119,9 @@ export function BuscadorSocios({
           id={idLista}
           role="listbox"
           aria-label="Socios del sistema"
-          className="absolute top-full right-0 left-0 z-40 mt-1 max-h-80 overflow-y-auto rounded-lg border border-gray-200 bg-white text-gray-900 shadow-xl"
+          className="absolute top-full right-0 left-0 z-40 mt-1 max-h-80 overflow-y-auto rounded-lg border border-gray-200 bg-white text-gray-900 dark:border-border dark:bg-popover dark:text-popover-foreground shadow-xl"
         >
-          <p className="sticky top-0 border-b border-gray-100 bg-white px-3 py-2 text-[11px] font-semibold tracking-wide text-gray-500 uppercase">
+          <p className="sticky top-0 border-b border-gray-100 bg-white dark:border-border dark:bg-popover px-3 py-2 text-[11px] font-semibold tracking-wide text-gray-500 dark:text-muted-foreground uppercase">
             {isFetching
               ? "Cargando socios…"
               : `${coincidencias.length} ${coincidencias.length === 1 ? "socio" : "socios"} en el sistema`}
@@ -141,10 +141,10 @@ export function BuscadorSocios({
               role="option"
               aria-selected={false}
               onClick={() => elegir(socio)}
-              className="flex w-full flex-col items-start px-3 py-2 text-left text-sm hover:bg-indigo-50 focus:bg-indigo-50 focus:outline-none"
+              className="flex w-full flex-col items-start px-3 py-2 text-left text-sm hover:bg-indigo-50 dark:hover:bg-slate-800 focus:bg-indigo-50 dark:focus:bg-slate-800 focus:outline-none"
             >
               <span className="font-medium">{socio.nombre}</span>
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-gray-500 dark:text-muted-foreground">
                 {socio.id}
                 {socio.rfc ? ` · ${socio.rfc}` : ""}
               </span>

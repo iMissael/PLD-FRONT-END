@@ -16,6 +16,12 @@ interface ZonasMultiSelectProps {
 export function ZonasMultiSelect({ value, onChange, disabled }: ZonasMultiSelectProps) {
   const { data: zonas, isLoading } = useZonasGeograficasSelect();
 
+  const listaZonas = Array.isArray(zonas)
+    ? zonas
+    : Array.isArray((zonas as unknown as { contenido?: typeof zonas })?.contenido)
+    ? ((zonas as unknown as { contenido: typeof zonas }).contenido ?? [])
+    : [];
+
   const toggle = (id: string) => {
     onChange(value.includes(id) ? value.filter((x) => x !== id) : [...value, id]);
   };
@@ -26,7 +32,7 @@ export function ZonasMultiSelect({ value, onChange, disabled }: ZonasMultiSelect
 
   return (
     <div className="max-h-40 overflow-y-auto rounded-md border border-border p-2">
-      {zonas?.map((zona) => (
+      {listaZonas.map((zona) => (
         <label
           key={zona.id}
           className="flex items-center gap-2 rounded px-2 py-1 text-sm text-foreground hover:bg-muted"
@@ -41,7 +47,7 @@ export function ZonasMultiSelect({ value, onChange, disabled }: ZonasMultiSelect
           {zona.nombre}
         </label>
       ))}
-      {zonas?.length === 0 ? (
+      {listaZonas.length === 0 ? (
         <p className="px-2 py-1 text-sm text-muted-foreground">
           No hay zonas registradas.
         </p>

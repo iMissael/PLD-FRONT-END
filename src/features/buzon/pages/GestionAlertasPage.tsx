@@ -1,8 +1,10 @@
-import { useState } from "react";
-import { FilterIcon, ShieldSearchIcon, XIcon } from "@/shared/components/icons";
+import { useState, useMemo } from "react";
+import { Calendar, Filter, X } from "lucide-react";
+import { ShieldSearchIcon } from "@/shared/components/icons";
 import { es } from "@/shared/i18n/es";
+import { DataTable, type ColumnDef } from "@/shared/components/DataTable";
 import { useAlertaDetalle, useListarAlertas } from "../hooks/useAlertas";
-import type { EstatusAlerta } from "../types/buzon";
+import type { AlertaPLD, EstatusAlerta } from "../types/buzon";
 
 const ALERTA_BADGES: Record<EstatusAlerta, string> = {
   A: "bg-red-100 text-red-800 dark:bg-red-950/60 dark:text-red-300",
@@ -13,153 +15,224 @@ const ALERTA_BADGES: Record<EstatusAlerta, string> = {
 
 export function GestionAlertasPage() {
   const [estatusFilter, setEstatusFilter] = useState<EstatusAlerta | undefined>();
+  const [fechaDesde, setFechaDesde] = useState<string>("");
+  const [fechaHasta, setFechaHasta] = useState<string>("");
   const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [selectedAlertaId, setSelectedAlertaId] = useState<number | null>(null);
 
   const { data, isLoading } = useListarAlertas({
     estatus: estatusFilter,
+    fechaDesde: fechaDesde ? new Date(fechaDesde).toISOString() : undefined,
+    fechaHasta: fechaHasta ? new Date(fechaHasta).toISOString() : undefined,
     page,
-    size: 10,
+    size: rowsPerPage,
   });
 
   const { data: alertaDetalle } = useAlertaDetalle(selectedAlertaId);
 
+  const hayFiltros = Boolean(estatusFilter || fechaDesde || fechaHasta);
+
+  const limpiarFiltros = () => {
+    setEstatusFilter(undefined);
+    setFechaDesde("");
+    setFechaHasta("");
+    setPage(0);
+  };
+
+  const columns: ColumnDef<AlertaPLD>[] = useMemo(
+    () => [
+      {
+        header: "ID",
+        width: "80px",
+        className: "font-mono font-bold text-foreground",
+        cell: (item) => `#${item.id}`,
+      },
+      {
+        header: "Descripción",
+        className: "max-w-xs truncate font-medium text-foreground",
+        accessorKey: "descripcion",
+      },
+      {
+        header: "Importe",
+        width: "130px",
+        className: "font-mono text-foreground",
+        cell: (item) => `$${item.importe?.toLocaleString("es-MX") ?? 0}`,
+      },
+      {
+        header: "Estatus",
+        width: "120px",
+        cell: (item) => (
+          <span
+            className={`inline-block rounded-full px-2.5 py-0.5 text-[10px] font-bold ${ALERTA_BADGES[item.estatus]}`}
+          >
+            {es.buzon.alertStatusLabels[item.estatus]}
+          </span>
+        ),
+      },
+      {
+        header: "Fecha",
+        width: "140px",
+        className: "text-muted-foreground",
+        cell: (item) => new Date(item.createdAt).toLocaleDateString("es-MX"),
+      },
+      {
+        header: "Doble clic para ver",
+        headerClassName: "text-right",
+        align: "right",
+        width: "140px",
+        cell: (item) => (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedAlertaId(item.id);
+            }}
+            className="rounded-md bg-muted px-2.5 py-1 text-xs font-semibold text-foreground hover:bg-muted/80 transition-colors"
+          >
+            Ver Alerta
+          </button>
+        ),
+      },
+    ],
+    [],
+  );
+
+  const filterBar = (
+    <div className="flex flex-wrap items-center gap-3">
+      <div className="flex items-center gap-1.5">
+        <Filter className="size-3.5 text-muted-foreground" />
+        <select
+          value={estatusFilter ?? ""}
+          onChange={(e) => {
+            const val = e.target.value as EstatusAlerta | "";
+            setEstatusFilter(val ? val : undefined);
+            setPage(0);
+          }}
+          className="rounded-md border border-border bg-card px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+        >
+          <option value="">Todos los estatus</option>
+          <option value="A">Activas (A)</option>
+          <option value="B">Bloqueadas (B)</option>
+          <option value="S">Suspendidas (S)</option>
+          <option value="E">Evaluadas (E)</option>
+        </select>
+      </div>
+
+      <div className="flex items-center gap-1.5">
+        <Calendar className="size-3.5 text-muted-foreground" />
+        <label className="text-[11px] text-muted-foreground">Desde:</label>
+        <input
+          type="date"
+          value={fechaDesde}
+          onChange={(e) => {
+            setFechaDesde(e.target.value);
+            setPage(0);
+          }}
+          className="rounded-md border border-border bg-card px-2 py-1 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+        />
+      </div>
+
+      <div className="flex items-center gap-1.5">
+        <label className="text-[11px] text-muted-foreground">Hasta:</label>
+        <input
+          type="date"
+          value={fechaHasta}
+          onChange={(e) => {
+            setFechaHasta(e.target.value);
+            setPage(0);
+          }}
+          className="rounded-md border border-border bg-card px-2 py-1 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+        />
+      </div>
+
+      {hayFiltros && (
+        <button
+          type="button"
+          onClick={limpiarFiltros}
+          className="inline-flex items-center gap-1 rounded-md border border-border bg-muted/60 px-2.5 py-1 text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+        >
+          <X className="size-3" />
+          Limpiar
+        </button>
+      )}
+    </div>
+  );
+
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
-            {es.buzon.alertsTitle}
-          </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            {es.buzon.alertsSubtitle}
-          </p>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <FilterIcon className="h-4 w-4 text-slate-400" />
-          <select
-            value={estatusFilter ?? ""}
-            onChange={(e) => {
-              const val = e.target.value as EstatusAlerta | "";
-              setEstatusFilter(val ? val : undefined);
-              setPage(0);
-            }}
-            className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
-          >
-            <option value="">Todos los estatus</option>
-            <option value="A">Activas (A)</option>
-            <option value="B">Bloqueadas (B)</option>
-            <option value="S">Suspendidas (S)</option>
-            <option value="E">Evaluadas (E)</option>
-          </select>
-        </div>
+      <div>
+        <h1 className="text-xl font-bold tracking-tight text-foreground">
+          {es.buzon.alertsTitle}
+        </h1>
+        <p className="text-xs text-muted-foreground">{es.buzon.alertsSubtitle}</p>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xs dark:border-slate-800 dark:bg-slate-900">
-        {isLoading ? (
-          <div className="space-y-3 p-6">
-            {[1, 2, 3].map((n) => (
-              <div key={n} className="h-10 w-full animate-pulse rounded-md bg-slate-100 dark:bg-slate-800" />
-            ))}
-          </div>
-        ) : !data || data.content.length === 0 ? (
-          <div className="py-12 text-center text-xs text-slate-500 dark:text-slate-400">
-            {es.common.empty}
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="border-b border-slate-200 bg-slate-50 text-slate-600 dark:border-slate-800 dark:bg-slate-800/60 dark:text-slate-300">
-                <tr>
-                  <th className="px-4 py-3 font-semibold">ID</th>
-                  <th className="px-4 py-3 font-semibold">Descripción</th>
-                  <th className="px-4 py-3 font-semibold">Importe</th>
-                  <th className="px-4 py-3 font-semibold">Estatus</th>
-                  <th className="px-4 py-3 font-semibold">Fecha</th>
-                  <th className="px-4 py-3 font-semibold text-right">Acción</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {data.content.map((alerta) => (
-                  <tr key={alerta.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40">
-                    <td className="px-4 py-3 font-mono font-bold text-slate-900 dark:text-white">
-                      #{alerta.id}
-                    </td>
-                    <td className="max-w-xs truncate px-4 py-3 text-slate-800 dark:text-slate-200 font-medium">
-                      {alerta.descripcion}
-                    </td>
-                    <td className="px-4 py-3 font-mono text-slate-700 dark:text-slate-300">
-                      ${alerta.importe?.toLocaleString("es-MX") ?? 0}
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className={`inline-block rounded-full px-2.5 py-0.5 text-[10px] font-bold ${ALERTA_BADGES[alerta.estatus]}`}>
-                        {es.buzon.alertStatusLabels[alerta.estatus]}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-slate-500">
-                      {new Date(alerta.createdAt).toLocaleDateString("es-MX")}
-                    </td>
-                    <td className="px-4 py-3 text-right">
-                      <button
-                        type="button"
-                        onClick={() => setSelectedAlertaId(alerta.id)}
-                        className="rounded-md bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
-                      >
-                        Ver Alerta
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+      <DataTable
+        data={data?.content}
+        columns={columns}
+        isLoading={isLoading}
+        emptyMessage={es.common.empty}
+        pagination={{
+          mode: "server",
+          page,
+          rowsPerPage,
+          totalCount: data?.totalElements ?? 0,
+          onPageChange: (_: React.MouseEvent<HTMLButtonElement> | null, newPage: number) =>
+            setPage(newPage),
+          onRowsPerPageChange: (e: React.ChangeEvent<HTMLSelectElement>) => {
+            setRowsPerPage(parseInt(e.target.value, 10));
+            setPage(0);
+          },
+        }}
+        onRowDoubleClick={(item) => setSelectedAlertaId(item.id)}
+        doubleClickTitle="Doble clic para ver detalle de la alerta"
+        filterBar={filterBar}
+      />
 
-      {/* Alerta Detail Modal */}
+      {/* Modal de Detalle de Alerta */}
       {selectedAlertaId && alertaDetalle && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-xs p-4">
-          <div className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100">
-            <div className="flex items-center justify-between border-b border-slate-200 pb-3 dark:border-slate-800">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
+          <div className="w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-2xl text-foreground">
+            <div className="flex items-center justify-between border-b border-border pb-3">
               <div className="flex items-center gap-2">
                 <ShieldSearchIcon className="h-5 w-5 text-amber-500" />
-                <h2 className="text-base font-bold text-slate-900 dark:text-white">
+                <h2 className="text-base font-bold text-foreground">
                   Alerta PLD #{alertaDetalle.id}
                 </h2>
               </div>
               <button
                 type="button"
                 onClick={() => setSelectedAlertaId(null)}
-                className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+                className="rounded-lg p-1 text-muted-foreground hover:bg-muted"
               >
-                <XIcon className="h-5 w-5" />
+                <X className="h-5 w-5" />
               </button>
             </div>
 
             <div className="mt-4 space-y-3 text-xs">
               <div>
-                <span className="font-semibold text-slate-500">Descripción:</span>
-                <p className="mt-1 text-slate-800 dark:text-slate-200 font-medium">{alertaDetalle.descripcion}</p>
+                <span className="font-semibold text-muted-foreground">Descripción:</span>
+                <p className="mt-1 text-foreground font-medium">{alertaDetalle.descripcion}</p>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <span className="font-semibold text-slate-500">Importe:</span>
-                  <p className="font-mono text-slate-800 dark:text-slate-200">${alertaDetalle.importe?.toLocaleString("es-MX")}</p>
+                  <span className="font-semibold text-muted-foreground">Importe:</span>
+                  <p className="font-mono text-foreground">${alertaDetalle.importe?.toLocaleString("es-MX")}</p>
                 </div>
                 <div>
-                  <span className="font-semibold text-slate-500">Moneda:</span>
-                  <p className="text-slate-800 dark:text-slate-200">{alertaDetalle.importeMonedaAcronimo || "MXN"}</p>
+                  <span className="font-semibold text-muted-foreground">Moneda:</span>
+                  <p className="text-foreground">{alertaDetalle.importeMonedaAcronimo || "MXN"}</p>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <span className="font-semibold text-slate-500">Forma de Pago:</span>
-                  <p className="text-slate-800 dark:text-slate-200">{alertaDetalle.formaPago || "N/A"}</p>
+                  <span className="font-semibold text-muted-foreground">Forma de Pago:</span>
+                  <p className="text-foreground">{alertaDetalle.formaPago || "N/A"}</p>
                 </div>
                 <div>
-                  <span className="font-semibold text-slate-500">Estatus:</span>
-                  <p className="font-bold text-emerald-600">{es.buzon.alertStatusLabels[alertaDetalle.estatus]}</p>
+                  <span className="font-semibold text-muted-foreground">Estatus:</span>
+                  <p className="font-bold text-emerald-600 dark:text-emerald-400">{es.buzon.alertStatusLabels[alertaDetalle.estatus]}</p>
                 </div>
               </div>
             </div>

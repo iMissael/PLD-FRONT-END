@@ -15,7 +15,7 @@ const ETIQUETAS_FACTOR: Record<string, string> = {
 };
 
 const ETIQUETAS_SUBFACTOR: Record<string, string> = {
-  "ubicacion geografica": "Ubicación Geográfica",
+  "Ubicacion geografica": "Ubicación Geográfica",
   "tipo persona": "Tipo de Persona",
   edad: "Edad",
   nacionalidad: "Nacionalidad",

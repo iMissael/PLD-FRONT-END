@@ -282,7 +282,7 @@ export function CampoCatalogo({
                         aria-haspopup="listbox"
                         title={`Buscar en el catálogo: ${label}`}
                         className={cn(
-                          "aria-invalid:border-destructive flex h-10 min-w-0 flex-1 items-center justify-between gap-2 border border-slate-300 bg-slate-50 px-3 text-left text-sm font-semibold text-slate-800 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50",
+                          "aria-invalid:border-destructive flex h-10 min-w-0 flex-1 items-center justify-between gap-2 border border-slate-300 bg-slate-50 dark:border-border dark:bg-card px-3 text-left text-sm font-semibold text-slate-800 dark:text-foreground outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50",
                           actual?.codigo ? "rounded-r-lg" : "rounded-lg",
                         )}
                       >
@@ -336,8 +336,8 @@ export function CampoCatalogo({
                         aria-selected={opcion.valor === field.value}
                         onClick={() => elegir(opcion.valor)}
                         className={cn(
-                          "flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm outline-none hover:bg-slate-100 focus-visible:bg-slate-100",
-                          opcion.valor === field.value && "bg-primary-soft font-semibold",
+                          "flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm outline-none hover:bg-slate-100 focus-visible:bg-slate-100 dark:hover:bg-slate-800 dark:focus-visible:bg-slate-800",
+                          opcion.valor === field.value && "bg-primary-soft dark:bg-slate-800 font-semibold",
                         )}
                       >
                         {opcion.codigo && (
@@ -403,7 +403,7 @@ export function CampoGenero({
             <div
               role="radiogroup"
               aria-label="Género"
-              className="flex h-10 items-center gap-1 rounded-lg border border-slate-200 bg-slate-50 p-1"
+              className="flex h-10 items-center gap-1 rounded-lg border border-slate-200 bg-slate-50 p-1 dark:border-border dark:bg-card"
             >
               <UserRound className="text-primary mx-1.5 size-4 shrink-0" />
               {segmentos.map((segmento) => {
@@ -419,7 +419,7 @@ export function CampoGenero({
                       "h-full flex-1 truncate rounded-md px-2 text-xs font-bold outline-none focus-visible:ring-ring/40 focus-visible:ring-2",
                       activo
                         ? "bg-primary text-primary-foreground shadow-sm"
-                        : "text-slate-600 hover:bg-slate-200/70",
+                        : "text-slate-600 dark:text-slate-300 hover:bg-slate-200/70 dark:hover:bg-slate-800",
                     )}
                   >
                     {segmento}
@@ -458,8 +458,8 @@ export function SeccionFicha({
   children: ReactNode;
 }) {
   return (
-    <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm print:break-inside-avoid print:shadow-none">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white px-6 py-4">
+    <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-border dark:bg-card print:break-inside-avoid print:shadow-none">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white px-6 py-4 dark:border-border dark:from-slate-900/40 dark:to-card">
         <div className="flex items-center gap-3">
           <span
             className={cn(
@@ -470,10 +470,10 @@ export function SeccionFicha({
             <Icono className="size-4" />
           </span>
           <div>
-            <h2 className="text-base font-bold tracking-tight text-slate-900">
+            <h2 className="text-base font-bold tracking-tight text-slate-900 dark:text-foreground">
               {titulo}
             </h2>
-            <p className="text-xs text-slate-500">{descripcion}</p>
+            <p className="text-xs text-slate-500 dark:text-muted-foreground">{descripcion}</p>
           </div>
         </div>
         {insignia}
@@ -496,7 +496,7 @@ export function InsigniaSeccion({
         "inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-medium",
         tono === "ok"
           ? "border-success/30 bg-success-soft text-success-hover font-semibold"
-          : "border-slate-200 bg-slate-100 text-slate-600",
+          : "border-slate-200 bg-slate-100 text-slate-600 dark:border-border dark:bg-slate-800 dark:text-slate-300",
       )}
     >
       {children}

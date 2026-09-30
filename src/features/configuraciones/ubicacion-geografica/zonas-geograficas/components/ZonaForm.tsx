@@ -13,6 +13,7 @@ import type {
 
 interface ZonaFormProps {
   zona: ZonaGeograficaResponse | null;
+  defaultTipo?: EntidadPais;
   onGuardar: (input: CrearZonaGeograficaInput) => void;
   onCancelar: () => void;
   isPending?: boolean;
@@ -25,19 +26,22 @@ interface FormState {
   estatus: EstatusZona;
 }
 
-const VACIO: FormState = {
-  nombre: "",
-  nivelRiesgoId: "",
-  entidadPais: "P",
-  estatus: "A",
-};
-
-function aFormState(zona: ZonaGeograficaResponse | null): FormState {
-  if (!zona) return VACIO;
+function aFormState(
+  zona: ZonaGeograficaResponse | null,
+  defaultTipo: EntidadPais = "P",
+): FormState {
+  if (!zona) {
+    return {
+      nombre: "",
+      nivelRiesgoId: "",
+      entidadPais: defaultTipo,
+      estatus: "A",
+    };
+  }
   return {
     nombre: zona.nombre,
     nivelRiesgoId: zona.nivelRiesgoId,
-    entidadPais: zona.entidadPais ?? "P",
+    entidadPais: zona.entidadPais ?? defaultTipo,
     estatus: zona.estatus,
   };
 }
@@ -47,12 +51,18 @@ function aFormState(zona: ZonaGeograficaResponse | null): FormState {
  * entidades/países vive aparte (ZonaAsignaciones), porque el backend la
  * expone como sub-recursos independientes (`PUT /{id}/entidades|paises`).
  */
-export function ZonaForm({ zona, onGuardar, onCancelar, isPending }: ZonaFormProps) {
-  const [form, setForm] = useState<FormState>(() => aFormState(zona));
+export function ZonaForm({
+  zona,
+  defaultTipo = "P",
+  onGuardar,
+  onCancelar,
+  isPending,
+}: ZonaFormProps) {
+  const [form, setForm] = useState<FormState>(() => aFormState(zona, defaultTipo));
 
   useEffect(() => {
-    setForm(aFormState(zona));
-  }, [zona]);
+    setForm(aFormState(zona, defaultTipo));
+  }, [zona, defaultTipo]);
 
   const esNueva = zona === null;
 

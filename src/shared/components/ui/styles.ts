@@ -9,7 +9,7 @@
  */
 
 /** Panel/card: el contenedor blanco con borde que envuelve tablas y formularios. */
-export const card = "rounded-lg border border-border bg-card";
+export const card = "rounded-xl border border-border bg-card shadow-xs";
 
 /** Campo de texto y `<select>`: misma caja para que se vean iguales. */
 export const field =
@@ -26,16 +26,18 @@ export const hint = "text-xs text-muted-foreground";
 export const table = {
   /** Contenedor con el borde redondeado; la tabla va dentro. */
   wrapper: `overflow-hidden ${card}`,
-  root: "min-w-full divide-y divide-border text-sm",
-  head: "bg-muted",
-  headCell: "px-3 py-2 text-left font-medium text-muted-foreground",
+  root: "w-full min-w-full text-left text-xs sm:text-sm",
+  head: "border-b border-border bg-muted/50 text-muted-foreground",
+  headCell: "px-4 py-3 text-left font-semibold text-muted-foreground whitespace-nowrap",
   body: "divide-y divide-border",
   /** Fila clicable. `seleccionada` la resalta con un tinte del acento. */
   row: (seleccionada: boolean) =>
-    seleccionada ? "cursor-pointer bg-primary/10" : "cursor-pointer hover:bg-muted",
-  cell: "px-3 py-2 text-foreground",
-  cellMuted: "px-3 py-2 text-muted-foreground",
-  cellStrong: "px-3 py-2 font-medium text-foreground",
+    seleccionada
+      ? "cursor-pointer bg-primary/10 transition-colors select-none"
+      : "cursor-pointer hover:bg-muted/40 transition-colors select-none",
+  cell: "px-4 py-3 text-foreground",
+  cellMuted: "px-4 py-3 text-muted-foreground",
+  cellStrong: "px-4 py-3 font-semibold text-foreground",
 };
 
 /** Mensaje de estado vacío o de carga, dentro de un panel. */

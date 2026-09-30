@@ -94,6 +94,11 @@ export function EdadesPage() {
           setCreandoNueva(false);
           setMensajeError(null);
         }}
+        onDoubleClick={(edad) => {
+          setSeleccionada(edad);
+          setCreandoNueva(false);
+          setMensajeError(null);
+        }}
       />
 
       {mostrarFormulario ? (
