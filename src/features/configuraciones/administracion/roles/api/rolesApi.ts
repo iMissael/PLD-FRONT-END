@@ -15,19 +15,19 @@ export async function crearRol(payload: CrearRolRequest) {
   return data;
 }
 
-export async function eliminarRol(id: string) {
+export async function eliminarRol(id: number) {
   await apiClient.delete(`/roles/${id}`);
 }
 
-export async function listarPermisosDeRol(rolId: string) {
+export async function listarPermisosDeRol(rolId: number) {
   const { data } = await apiClient.get<PermisoResponse[]>(`/roles/${rolId}/permisos`);
   return data;
 }
 
-export async function asignarPermisoARol(rolId: string, permisoId: string) {
+export async function asignarPermisoARol(rolId: number, permisoId: number) {
   await apiClient.post(`/roles/${rolId}/permisos/${permisoId}`);
 }
 
-export async function revocarPermisoDeRol(rolId: string, permisoId: string) {
+export async function revocarPermisoDeRol(rolId: number, permisoId: number) {
   await apiClient.delete(`/roles/${rolId}/permisos/${permisoId}`);
 }

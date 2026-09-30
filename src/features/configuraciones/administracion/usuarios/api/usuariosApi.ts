@@ -24,7 +24,7 @@ export async function listarUsuarios() {
   return data;
 }
 
-export async function obtenerUsuario(id: string) {
+export async function obtenerUsuario(id: number) {
   const { data } = await apiClient.get<UsuarioResponse>(`/usuarios/${id}`);
   return data;
 }
@@ -34,12 +34,12 @@ export async function crearUsuario(payload: CrearUsuarioRequest) {
   return data;
 }
 
-export async function eliminarUsuario(id: string) {
+export async function eliminarUsuario(id: number) {
   await apiClient.delete(`/usuarios/${id}`);
 }
 
 export async function crearDomicilioUsuario(
-  usuarioId: string,
+  usuarioId: number,
   payload: DomicilioUsuarioRequest,
 ) {
   const { data } = await apiClient.post<DomicilioUsuarioResponse>(
@@ -49,7 +49,10 @@ export async function crearDomicilioUsuario(
   return data;
 }
 
-export async function crearOficial(usuarioId: string, payload: OficialRequest) {
+// El backend ya no tiene /usuarios/{id}/oficial (ver types/usuarios.ts): estas tres
+// funciones quedan apuntando a un endpoint que ya no existe, solo para no romper en
+// runtime el import de la feature "oficial-cumplimiento" mientras se decide su rediseño.
+export async function crearOficial(usuarioId: number, payload: OficialRequest) {
   const { data } = await apiClient.post<OficialResponse>(
     `/usuarios/${usuarioId}/oficial`,
     payload,
@@ -57,36 +60,36 @@ export async function crearOficial(usuarioId: string, payload: OficialRequest) {
   return data;
 }
 
-// El PUT de usuario reemplaza el registro completo: hay que reenviar todos los campos.
-export async function actualizarUsuario(id: string, payload: ActualizarUsuarioRequest) {
-  const { data } = await apiClient.put<UsuarioResponse>(`/usuarios/${id}`, payload);
-  return data;
-}
-
-export function obtenerDomicilioUsuario(usuarioId: string) {
-  return nullSiNoExiste(
-    apiClient.get<DomicilioUsuarioResponse>(`/usuarios/${usuarioId}/domicilio`),
-  );
-}
-
-export function obtenerOficial(usuarioId: string) {
+export function obtenerOficial(usuarioId: number) {
   return nullSiNoExiste(apiClient.get<OficialResponse>(`/usuarios/${usuarioId}/oficial`));
 }
 
-export async function guardarDomicilioUsuario(
-  usuarioId: string,
-  payload: DomicilioUsuarioRequest,
-) {
-  const { data } = await apiClient.put<DomicilioUsuarioResponse>(
-    `/usuarios/${usuarioId}/domicilio`,
+export async function guardarOficial(usuarioId: number, payload: OficialRequest) {
+  const { data } = await apiClient.put<OficialResponse>(
+    `/usuarios/${usuarioId}/oficial`,
     payload,
   );
   return data;
 }
 
-export async function guardarOficial(usuarioId: string, payload: OficialRequest) {
-  const { data } = await apiClient.put<OficialResponse>(
-    `/usuarios/${usuarioId}/oficial`,
+// El PUT de usuario reemplaza el registro completo: hay que reenviar todos los campos.
+export async function actualizarUsuario(id: number, payload: ActualizarUsuarioRequest) {
+  const { data } = await apiClient.put<UsuarioResponse>(`/usuarios/${id}`, payload);
+  return data;
+}
+
+export function obtenerDomicilioUsuario(usuarioId: number) {
+  return nullSiNoExiste(
+    apiClient.get<DomicilioUsuarioResponse>(`/usuarios/${usuarioId}/domicilio`),
+  );
+}
+
+export async function guardarDomicilioUsuario(
+  usuarioId: number,
+  payload: DomicilioUsuarioRequest,
+) {
+  const { data } = await apiClient.put<DomicilioUsuarioResponse>(
+    `/usuarios/${usuarioId}/domicilio`,
     payload,
   );
   return data;

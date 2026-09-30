@@ -37,7 +37,6 @@ import {
 } from "@/features/operacion/consulta-listas/types/consultaListasSchema";
 import type { ConsultaLista } from "@/features/operacion/consulta-listas/types/Quienesquien";
 import { useAuthStore } from "@/shared/auth/authStore";
-import { useSucursalActivaStore } from "@/shared/auth/sucursalActivaStore";
 
 function aTextoOIndefinido(valor: string | undefined) {
   return valor ? valor : undefined;
@@ -84,10 +83,9 @@ export function ConsultaListasForm({
 
   function onSubmit(values: ConsultaListasFormValues) {
     const verificadoPor = useAuthStore.getState().usuario?.id;
-    const sucursalId = useSucursalActivaStore.getState().sucursalActiva?.id;
 
-    if (!verificadoPor || !sucursalId) {
-      toast.error("No se pudo determinar el usuario o la sucursal activa.");
+    if (!verificadoPor) {
+      toast.error("No se pudo determinar el usuario.");
       return;
     }
 
@@ -102,12 +100,10 @@ export function ConsultaListasForm({
         nombre: aTextoOIndefinido(values.nombre),
         primerApellido: aTextoOIndefinido(values.primerApellido),
         segundoApellido: aTextoOIndefinido(values.segundoApellido),
-        fechaNacimiento: aTextoOIndefinido(values.fechaNacimiento),
         rfc: aTextoOIndefinido(values.rfc),
         curp: aTextoOIndefinido(values.curp),
         tipoPersona: aTextoOIndefinido(values.tipoPersona),
         verificadoPor,
-        sucursalId,
       },
       {
         onSuccess: (respuesta) => {

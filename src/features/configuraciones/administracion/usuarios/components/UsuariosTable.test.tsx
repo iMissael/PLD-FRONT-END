@@ -8,10 +8,9 @@ describe("UsuariosTable", () => {
     renderWithProviders(<UsuariosTable />);
 
     await waitFor(() => {
-      expect(screen.getByText("Administrador")).toBeInTheDocument();
+      expect(screen.getByText("@admin")).toBeInTheDocument();
     });
 
-    expect(screen.getByText("@admin")).toBeInTheDocument();
     expect(screen.getByText("ROLE_ADMIN")).toBeInTheDocument();
   });
 });

@@ -30,15 +30,15 @@ import {
 } from "@/features/configuraciones/administracion/usuarios/hooks/useUsuarios";
 import type { UsuarioResponse } from "@/features/configuraciones/administracion/usuarios/types/usuarios";
 
-function inicialesDe(nombre: string | undefined, username: string | undefined) {
-  const base = nombre?.trim() || username || "?";
+function inicialesDe(username: string | undefined) {
+  const base = username?.trim() || "?";
   return base.charAt(0).toUpperCase();
 }
 
 function AvatarUsuario({ usuario }: { usuario: UsuarioResponse }) {
   return (
     <span className="from-primary-hover to-primary flex size-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-sm font-bold text-white">
-      {inicialesDe(usuario.nombre, usuario.username)}
+      {inicialesDe(usuario.username)}
     </span>
   );
 }
@@ -87,14 +87,14 @@ function BotonEliminar({ usuario }: { usuario: UsuarioResponse }) {
           variant="ghost"
           size="icon-sm"
           className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-          aria-label={`Eliminar a ${usuario.nombre ?? usuario.username}`}
+          aria-label={`Eliminar a ${usuario.username}`}
         >
           <Trash2 />
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>¿Eliminar a {usuario.nombre ?? usuario.username}?</AlertDialogTitle>
+          <AlertDialogTitle>¿Eliminar a {usuario.username}?</AlertDialogTitle>
           <AlertDialogDescription>
             Su acceso quedará bloqueado de inmediato y se limpiarán sus permisos y
             domicilio asociados. Esta acción no se puede deshacer desde aquí.
@@ -124,7 +124,7 @@ export function UsuariosTable() {
 
   const nombreDeRol = useMemo(() => {
     const mapa = new Map(roles?.map((rol) => [rol.idRol, rol.nombre]) ?? []);
-    return (rolId: string | undefined) => (rolId ? (mapa.get(rolId) ?? "—") : "—");
+    return (rolId: number | undefined) => (rolId ? (mapa.get(rolId) ?? "—") : "—");
   }, [roles]);
 
   const usuariosFiltrados = useMemo(() => {
@@ -132,7 +132,7 @@ export function UsuariosTable() {
     const query = busqueda.trim().toLowerCase();
     if (!query) return usuarios;
     return usuarios.filter((usuario) =>
-      [usuario.nombre, usuario.username, usuario.correo]
+      [usuario.username, usuario.empleadoId?.toString()]
         .filter(Boolean)
         .some((campo) => campo!.toLowerCase().includes(query)),
     );
@@ -153,7 +153,7 @@ export function UsuariosTable() {
         <Input
           value={busqueda}
           onChange={(event) => setBusqueda(event.target.value)}
-          placeholder="Buscar por nombre, usuario o correo…"
+          placeholder="Buscar por usuario o empleado…"
           className="pl-8"
         />
       </div>
@@ -163,7 +163,7 @@ export function UsuariosTable() {
           <TableHeader>
             <TableRow className="hover:bg-transparent">
               <TableHead>Usuario</TableHead>
-              <TableHead>Correo</TableHead>
+              <TableHead>Empleado</TableHead>
               <TableHead>Rol</TableHead>
               <TableHead>Estado</TableHead>
               <TableHead className="text-right">Acciones</TableHead>
@@ -195,17 +195,12 @@ export function UsuariosTable() {
                     <div className="flex items-center gap-3">
                       <AvatarUsuario usuario={usuario} />
                       <div className="min-w-0">
-                        <p className="truncate font-medium">
-                          {usuario.nombre ?? usuario.username}
-                        </p>
-                        <p className="text-muted-foreground truncate text-xs">
-                          @{usuario.username}
-                        </p>
+                        <p className="truncate font-medium">@{usuario.username}</p>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell className="text-muted-foreground">
-                    {usuario.correo ?? "—"}
+                    {usuario.empleadoId ?? "—"}
                   </TableCell>
                   <TableCell>{nombreDeRol(usuario.rolId)}</TableCell>
                   <TableCell>

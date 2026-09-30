@@ -14,6 +14,6 @@ export async function crearPermiso(payload: CrearPermisoRequest) {
   return data;
 }
 
-export async function eliminarPermiso(id: string) {
+export async function eliminarPermiso(id: number) {
   await apiClient.delete(`/permisos/${id}`);
 }

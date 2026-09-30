@@ -32,7 +32,7 @@ export function RolPermisosManager({ rolId }: { rolId: string }) {
 
   function handleAsignar() {
     if (!permisoSeleccionado) return;
-    asignarPermiso.mutate(permisoSeleccionado, {
+    asignarPermiso.mutate(Number(permisoSeleccionado), {
       onSuccess: () => {
         toast.success("Permiso asignado");
         setPermisoSeleccionado("");
@@ -52,7 +52,7 @@ export function RolPermisosManager({ rolId }: { rolId: string }) {
             </SelectTrigger>
             <SelectContent>
               {permisosDisponibles.map((permiso) => (
-                <SelectItem key={permiso.idPermiso} value={permiso.idPermiso ?? ""}>
+                <SelectItem key={permiso.idPermiso} value={String(permiso.idPermiso ?? "")}>
                   {permiso.recurso}:{permiso.accion}
                 </SelectItem>
               ))}

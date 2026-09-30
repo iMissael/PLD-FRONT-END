@@ -26,10 +26,8 @@ import { ConsultaListasPage } from "@/features/operacion/consulta-listas/pages/Q
 import { RevisionCoincidenciasPage } from "@/features/operacion/revision-coincidencias/pages/RevisionCoincidenciasPage";
 import { EvaluacionRiesgoPage } from "@/features/operacion/evaluacion-riesgo/pages/EvaluacionRiesgoPage";
 import { OperacionPage } from "@/features/operacion/pages/OperacionPage";
-import { SeleccionarSucursalPage } from "@/features/sucursales/pages/SeleccionarSucursalPage";
 import { RequireAuth } from "@/shared/auth/RequireAuth";
 import { RequierePermiso } from "@/shared/auth/RequierePermiso";
-import { RequireSucursal } from "@/shared/auth/RequireSucursal";
 import { PlaceholderPage } from "@/shared/components/PlaceholderPage";
 import { AppLayout } from "@/shared/layouts/AppLayout";
 import { ContenidoAcotado } from "@/shared/layouts/ContenidoAcotado";
@@ -43,9 +41,7 @@ import { TenantRouteLayout } from "@/shared/layouts/TenantRouteLayout";
  * cualquier página hija dispare un request.
  *
  * Dentro del tenant: `login` y el buzón anónimo (`buzon/denuncias` y sus
- * alias) son públicos; lo demás exige sesión (`RequireAuth`), y las
- * pantallas de trabajo además exigen haber elegido sucursal
- * (`RequireSucursal`).
+ * alias) son públicos; lo demás exige sesión (`RequireAuth`).
  */
 export const router = createBrowserRouter([
   {
@@ -60,148 +56,140 @@ export const router = createBrowserRouter([
       {
         element: <RequireAuth />,
         children: [
-          { path: "seleccionar-sucursal", element: <SeleccionarSucursalPage /> },
           {
-            element: <RequireSucursal />,
+            element: <AppLayout />,
             children: [
               {
-                element: <AppLayout />,
+                index: true,
+                element: <Navigate to="configuracion-alertas" replace />,
+              },
+              {
+                path: "configuraciones/ubicacion-geografica/zonas-geograficas",
+                element: <ZonasGeograficasPage />,
+              },
+              {
+                path: "configuraciones/ubicacion-geografica/entidades",
+                element: <EntidadesPage />,
+              },
+              {
+                path: "configuraciones/ubicacion-geografica/localidades",
+                element: <LocalidadesPage />,
+              },
+              {
+                path: "configuraciones/ubicacion-geografica/paises",
+                element: <PaisesPage />,
+              },
+              {
+                path: "configuracion-alertas",
+                element: <ConsultaBloqueadosPage />,
+              },
+              {
+                path: "configuracion-alertas/carga-masiva",
+                element: <CargaMasivaPage />,
+              },
+              {
+                path: "operacion",
+                element: <OperacionPage />,
+              },
+              {
+                path: "control",
+                element: <ControlPage />,
+              },
+              // Sin ancho acotado: la matriz de riesgo necesita todo el ancho
+              // disponible (expediente del cliente + tabla de factores lado a lado).
+              {
+                path: "operacion/evaluacion-riesgo",
+                element: <EvaluacionRiesgoPage />,
+              },
+              {
+                path: "configuraciones/administracion/usuarios",
+                element: <UsuariosPage />,
+              },
+              {
+                path: "acerca-de",
+                element: (
+                  <PlaceholderPage
+                    title="Acerca de"
+                    description="Información del sistema (versión, soporte, etc.). Pendiente de definir."
+                  />
+                ),
+              },
+              {
+                path: "ayuda",
+                element: (
+                  <PlaceholderPage
+                    title="Ayuda"
+                    description="Centro de ayuda del sistema. Pendiente de definir."
+                  />
+                ),
+              },
+              // Pantallas con ancho de lectura acotado.
+              {
+                element: <ContenidoAcotado />,
                 children: [
                   {
-                    index: true,
-                    element: <Navigate to="configuracion-alertas" replace />,
-                  },
-                  {
-                    path: "configuraciones/ubicacion-geografica/zonas-geograficas",
-                    element: <ZonasGeograficasPage />,
-                  },
-                  {
-                    path: "configuraciones/ubicacion-geografica/entidades",
-                    element: <EntidadesPage />,
-                  },
-                  {
-                    path: "configuraciones/ubicacion-geografica/localidades",
-                    element: <LocalidadesPage />,
-                  },
-                  {
-                    path: "configuraciones/ubicacion-geografica/paises",
-                    element: <PaisesPage />,
-                  },
-                  {
-                    path: "configuracion-alertas",
-                    element: <ConsultaBloqueadosPage />,
-                  },
-                  {
-                    path: "configuracion-alertas/carga-masiva",
-                    element: <CargaMasivaPage />,
-                  },
-                  {
-                    path: "operacion",
-                    element: <OperacionPage />,
-                  },
-                  {
-                    path: "control",
-                    element: <ControlPage />,
-                  },
-                  // Sin ancho acotado: la matriz de riesgo necesita todo el ancho
-                  // disponible (expediente del cliente + tabla de factores lado a lado).
-                  {
-                    path: "operacion/evaluacion-riesgo",
-                    element: <EvaluacionRiesgoPage />,
-                  },
-                  // Sin ancho acotado: la tabla de usuarios y el formulario de alta
-                  // (con muchos campos en varias columnas) aprovechan todo el ancho.
-                  {
-                    path: "configuraciones/administracion/usuarios",
-                    element: <UsuariosPage />,
-                  },
-                  {
-                    path: "acerca-de",
+                    path: "buzon/gestion",
                     element: (
-                      <PlaceholderPage
-                        title="Acerca de"
-                        description="Información del sistema (versión, soporte, etc.). Pendiente de definir."
-                      />
+                      <RequierePermiso recurso="denuncias" accion="ver">
+                        <GestionDenunciasPage />
+                      </RequierePermiso>
                     ),
                   },
                   {
-                    path: "ayuda",
+                    path: "buzon/alertas",
                     element: (
-                      <PlaceholderPage
-                        title="Ayuda"
-                        description="Centro de ayuda del sistema. Pendiente de definir."
-                      />
+                      <RequierePermiso recurso="alertas" accion="ver">
+                        <GestionAlertasPage />
+                      </RequierePermiso>
                     ),
                   },
-                  // Pantallas con ancho de lectura acotado.
                   {
-                    element: <ContenidoAcotado />,
-                    children: [
-                      {
-                        path: "buzon/gestion",
-                        element: (
-                          <RequierePermiso recurso="denuncias" accion="ver">
-                            <GestionDenunciasPage />
-                          </RequierePermiso>
-                        ),
-                      },
-                      {
-                        path: "buzon/alertas",
-                        element: (
-                          <RequierePermiso recurso="alertas" accion="ver">
-                            <GestionAlertasPage />
-                          </RequierePermiso>
-                        ),
-                      },
-                      {
-                        path: "configuraciones/oficial-cumplimiento",
-                        element: <OficialCumplimientoPage />,
-                      },
-                      {
-                        path: "configuraciones/matriz-riesgo",
-                        element: <MatrizRiesgoPage />,
-                      },
-                      {
-                        path: "configuraciones/administracion/roles",
-                        element: <RolesPage />,
-                      },
-                      {
-                        path: "configuraciones/administracion/roles/:rolId/permisos",
-                        element: <RolPermisosPage />,
-                      },
-                      {
-                        path: "configuraciones/administracion/permisos",
-                        element: <PermisosPage />,
-                      },
-                      {
-                        path: "control/quienesquien",
-                        element: <ConsultaListasPage />,
-                      },
-                      {
-                        path: "operacion/coincidencias",
-                        element: <RevisionCoincidenciasPage />,
-                      },
-                      {
-                        path: "configuraciones/personas",
-                        element: <TiposPersonaPage />,
-                      },
-                      {
-                        path: "configuraciones/edades/rangos-edad",
-                        element: <EdadesPage />,
-                      },
-                      {
-                        path: "configuraciones/edades/tiempo-constitucion",
-                        element: <TiemposConstitucionPage />,
-                      },
-                      {
-                        path: "configuraciones/experiencia-actividad",
-                        element: <ExperienciasActividadPage />,
-                      },
-                      {
-                        path: "configuraciones/actividad-economica",
-                        element: <ActividadesEconomicasPage />,
-                      },
-                    ],
+                    path: "configuraciones/oficial-cumplimiento",
+                    element: <OficialCumplimientoPage />,
+                  },
+                  {
+                    path: "configuraciones/matriz-riesgo",
+                    element: <MatrizRiesgoPage />,
+                  },
+                  {
+                    path: "configuraciones/administracion/roles",
+                    element: <RolesPage />,
+                  },
+                  {
+                    path: "configuraciones/administracion/roles/:rolId/permisos",
+                    element: <RolPermisosPage />,
+                  },
+                  {
+                    path: "configuraciones/administracion/permisos",
+                    element: <PermisosPage />,
+                  },
+                  {
+                    path: "control/quienesquien",
+                    element: <ConsultaListasPage />,
+                  },
+                  {
+                    path: "operacion/coincidencias",
+                    element: <RevisionCoincidenciasPage />,
+                  },
+                  {
+                    path: "configuraciones/personas",
+                    element: <TiposPersonaPage />,
+                  },
+                  {
+                    path: "configuraciones/edades/rangos-edad",
+                    element: <EdadesPage />,
+                  },
+                  {
+                    path: "configuraciones/edades/tiempo-constitucion",
+                    element: <TiemposConstitucionPage />,
+                  },
+                  {
+                    path: "configuraciones/experiencia-actividad",
+                    element: <ExperienciasActividadPage />,
+                  },
+                  {
+                    path: "configuraciones/actividad-economica",
+                    element: <ActividadesEconomicasPage />,
                   },
                 ],
               },
