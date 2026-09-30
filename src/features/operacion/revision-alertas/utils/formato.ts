@@ -6,12 +6,6 @@ export function formatearFecha(valor: string | null | undefined): string {
   return `${dia}/${mes}/${anio}`;
 }
 
-const PESOS = new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" });
-
-export function formatearImporte(valor: number | null | undefined): string {
-  return valor === null || valor === undefined ? "—" : PESOS.format(valor);
-}
-
 /** Primer día del mes anterior hasta hoy: rango por defecto de la revisión. */
 export function rangoPorDefecto(hoy = new Date()): { desde: string; hasta: string } {
   const iso = (fecha: Date) =>

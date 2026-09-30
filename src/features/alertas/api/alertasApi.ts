@@ -5,6 +5,7 @@ import type {
   CrearAlertaManualInput,
   DictamenInput,
   EmpleadoExterno,
+  ExpedienteAlerta,
   FiltroAlertas,
   RazonAlerta,
   TipoAlerta,
@@ -33,6 +34,13 @@ export async function listarAlertas(filtro: FiltroAlertas): Promise<Alerta[]> {
     Object.entries(filtro).filter(([, valor]) => valor !== undefined && valor !== ""),
   );
   const { data } = await apiClient.get<Alerta[]>(`${BASE}/alertas`, { params });
+  return data;
+}
+
+export async function obtenerExpedienteAlerta(id: number): Promise<ExpedienteAlerta> {
+  const { data } = await apiClient.get<ExpedienteAlerta>(
+    `${BASE}/alertas/${id}/expediente`,
+  );
   return data;
 }
 

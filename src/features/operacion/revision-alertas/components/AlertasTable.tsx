@@ -41,6 +41,7 @@ export function AlertasTable({
             <th className={table.headCell}>Folio</th>
             <th className={table.headCell}>Fecha</th>
             <th className={table.headCell}>Tipo</th>
+            <th className={table.headCell}>Referencia</th>
             <th className={table.headCell}>Reportado</th>
             <th className={table.headCell}>Origen</th>
             <th className={table.headCell}>Estatus</th>
@@ -56,6 +57,7 @@ export function AlertasTable({
               <td className={table.cellStrong}>{alerta.folio}</td>
               <td className={table.cellMuted}>{formatearFecha(alerta.fechaAlerta)}</td>
               <td className={table.cell}>{alerta.tipoAlertaDescripcion}</td>
+              <td className={table.cellMuted}>{alerta.reportado?.referencia ?? "—"}</td>
               <td className={table.cell}>{alerta.reportado?.nombre ?? "—"}</td>
               <td className={table.cellMuted}>
                 {alerta.origen === "AUTOMATICA" ? "Automática" : "Manual"}

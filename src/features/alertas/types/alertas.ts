@@ -68,13 +68,34 @@ export interface Alerta {
   /** Captura manual. */
   actoHecho: string | null;
   informacionAdicional: string | null;
-  importeAproximado: number | null;
   folioOperacion: string | null;
   estatus: EstatusAlerta;
   sucursalId: string | null;
   usuarioCapturaId: string | null;
   reportado: ReportadoAlerta | null;
   updatedAt: string;
+}
+
+/** `ExpedienteAlertaResponse`: panel inferior de "Revisión de alertas". */
+export interface ExpedienteAlerta {
+  /** null si la alerta no tiene reportado. */
+  evaluado: {
+    tipoReportado: TipoReportado;
+    referencia: string;
+    nombre: string;
+    rfc: string | null;
+    /** Solo clientes; se consulta en vivo al servicio de socios. */
+    curp: string | null;
+    domicilio: string | null;
+    puesto: string | null;
+    sucursal: string | null;
+  } | null;
+  /** Mes de la fecha de la alerta. */
+  resumenPeriodo: {
+    desde: string;
+    hasta: string;
+    alertasEmitidas: number;
+  };
 }
 
 /** `CrearAlertaManualRequest`. */

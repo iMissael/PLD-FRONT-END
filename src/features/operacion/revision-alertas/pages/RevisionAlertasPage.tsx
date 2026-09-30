@@ -11,14 +11,12 @@ import { rangoPorDefecto } from "../utils/formato";
 
 /**
  * "Operación › Revisión de alertas" (manual Sicanet 4.3.5): manuales y las que
- * generan los movimientos de cajas. Arranca con las pendientes del último mes,
- * que son las que el oficial tiene que dictaminar.
+ * generan los movimientos de cajas. Arranca con todos los estatus del último mes:
+ * las manuales nacen CONFIRMADAS y con un filtro de pendientes no se verían. Solo
+ * las PENDIENTES se dictaminan.
  */
 export function RevisionAlertasPage() {
-  const [filtro, setFiltro] = useState<FiltroAlertas>(() => ({
-    ...rangoPorDefecto(),
-    estatus: "PENDIENTE",
-  }));
+  const [filtro, setFiltro] = useState<FiltroAlertas>(rangoPorDefecto);
   const [seleccionada, setSeleccionada] = useState<Alerta | null>(null);
   const [aviso, setAviso] = useState<string | null>(null);
   const { data: alertas, isLoading } = useListaAlertas(filtro);
@@ -44,7 +42,7 @@ export function RevisionAlertasPage() {
 
       {aviso ? <Alert tono="exito">{aviso}</Alert> : null}
 
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+      <div className="flex flex-col gap-6">
         <AlertasTable
           alertas={alertas}
           isLoading={isLoading}

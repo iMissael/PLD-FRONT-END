@@ -7,6 +7,7 @@ import {
   listarAlertas,
   listarRazonesAlerta,
   listarTiposAlerta,
+  obtenerExpedienteAlerta,
 } from "../api/alertasApi";
 import type {
   CrearAlertaManualInput,
@@ -21,6 +22,8 @@ export const alertasKeys = {
     [...alertasKeys.all, "razones", acronimo ?? "todas"] as const,
   listas: () => [...alertasKeys.all, "lista"] as const,
   lista: (filtro: FiltroAlertas) => [...alertasKeys.listas(), filtro] as const,
+  expedientes: () => [...alertasKeys.all, "expediente"] as const,
+  expediente: (id: number) => [...alertasKeys.expedientes(), id] as const,
 };
 
 /** Catálogo de tipos de alerta (cambia muy poco). */
@@ -49,11 +52,23 @@ export function useListaAlertas(filtro: FiltroAlertas) {
   });
 }
 
+/** Evaluado y resumen del periodo de la alerta seleccionada en la revisión. */
+export function useExpedienteAlerta(id: number) {
+  return useQuery({
+    queryKey: alertasKeys.expediente(id),
+    queryFn: () => obtenerExpedienteAlerta(id),
+  });
+}
+
 export function useCapturarAlerta() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (input: CrearAlertaManualInput) => capturarAlertaManual(input),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: alertasKeys.listas() }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: alertasKeys.listas() });
+      // Una alerta nueva cambia las "Alertas emitidas" del resumen del periodo.
+      queryClient.invalidateQueries({ queryKey: alertasKeys.expedientes() });
+    },
   });
 }
 

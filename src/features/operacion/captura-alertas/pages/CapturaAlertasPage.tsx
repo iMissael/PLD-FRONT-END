@@ -11,9 +11,13 @@ import type { Alerta, TipoAlerta, TipoReportado } from "@/features/alertas/types
 import { BuscadorSocios } from "@/features/operacion/evaluacion-riesgo/components/BuscadorSocios";
 import { useSucursalActivaStore } from "@/shared/auth/sucursalActivaStore";
 import { Alert } from "@/shared/components/ui/Alert";
+import { CalendarioFecha } from "@/shared/components/ui/CalendarioFecha";
 import { Button } from "@/shared/components/ui/CatalogoButton";
 import { card, field, hint, label } from "@/shared/components/ui/styles";
-import { hoyIso } from "@/shared/utils/fechas";
+import { haceAniosIso, hoyIso } from "@/shared/utils/fechas";
+
+/** Antigüedad máxima de una incidencia capturable (hoy es el límite superior). */
+const ANIOS_ATRAS_INCIDENCIA = 5;
 
 interface Reportado {
   referencia: string;
@@ -75,6 +79,8 @@ export function CapturaAlertasPage() {
   );
   const razones = (razonesTipo ?? []).filter((r) => r.estado === "ACTIVO");
   const requiereRazon = razones.length > 0;
+  const fechaMinima = haceAniosIso(ANIOS_ATRAS_INCIDENCIA);
+  const fechaMaxima = hoyIso();
 
   const elegirTipo = (acronimo: string) => {
     // Cambiar de tipo puede cambiar a quién se reporta (cliente/empleado): se limpia.
@@ -97,6 +103,13 @@ export function CapturaAlertasPage() {
     if (!form.reportado) {
       return setMensajeError(
         `Seleccione al ${ETIQUETA_REPORTADO[tipo.tipoReportado].toLowerCase()} a reportar.`,
+      );
+    }
+    if (!form.fechaIncidencia)
+      return setMensajeError("Seleccione la fecha de incidencia.");
+    if (form.fechaIncidencia < fechaMinima || form.fechaIncidencia > fechaMaxima) {
+      return setMensajeError(
+        `La fecha de incidencia debe estar entre hace ${ANIOS_ATRAS_INCIDENCIA} años y hoy.`,
       );
     }
 
@@ -245,16 +258,14 @@ export function CapturaAlertasPage() {
                 <label htmlFor="fechaIncidencia" className={label}>
                   Fecha de incidencia
                 </label>
-                <input
+                <CalendarioFecha
                   id="fechaIncidencia"
-                  type="date"
-                  required
-                  max={hoyIso()}
-                  value={form.fechaIncidencia}
-                  onChange={(e) =>
-                    setForm((prev) => ({ ...prev, fechaIncidencia: e.target.value }))
+                  min={fechaMinima}
+                  max={fechaMaxima}
+                  valor={form.fechaIncidencia}
+                  onCambiar={(fecha) =>
+                    setForm((prev) => ({ ...prev, fechaIncidencia: fecha }))
                   }
-                  className={field}
                 />
               </div>
             </div>
