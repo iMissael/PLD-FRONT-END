@@ -26,9 +26,9 @@ export const hint = "text-xs text-muted-foreground";
 export const table = {
   /** Contenedor con el borde redondeado; la tabla va dentro. */
   wrapper: `overflow-hidden ${card}`,
-  root: "w-full text-left text-xs sm:text-sm",
+  root: "w-full min-w-full text-left text-xs sm:text-sm",
   head: "border-b border-border bg-muted/50 text-muted-foreground",
-  headCell: "px-4 py-3 text-left font-semibold text-muted-foreground",
+  headCell: "px-4 py-3 text-left font-semibold text-muted-foreground whitespace-nowrap",
   body: "divide-y divide-border",
   /** Fila clicable. `seleccionada` la resalta con un tinte del acento. */
   row: (seleccionada: boolean) =>

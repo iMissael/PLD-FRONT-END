@@ -3,7 +3,6 @@ import { useMemo, useState } from "react";
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
 import { Button } from "@/shared/components/ui/CatalogoButton";
-import { TablePagination } from "@/shared/components/TablePagination";
 
 import { ActividadEconomicaForm } from "../components/ActividadEconomicaForm";
 import { ActividadesEconomicasTable } from "../components/ActividadesEconomicasTable";
@@ -15,8 +14,6 @@ import {
   useEliminarActividadEconomica,
 } from "../hooks/useActividadesEconomicasMutations";
 import type { ActividadEconomicaResponse } from "../types/actividadEconomica";
-
-const FILAS_POR_PAGINA = 50;
 
 /** Quita acentos para que "nomina" encuentre "Consumo Nómina". */
 function normalizar(texto: string): string {
@@ -33,7 +30,6 @@ export function ActividadesEconomicasPage() {
   const { data: actividades, isLoading } = useActividadesEconomicas();
 
   const [busqueda, setBusqueda] = useState("");
-  const [pagina, setPagina] = useState(0);
   const [seleccionada, setSeleccionada] = useState<ActividadEconomicaResponse | null>(
     null,
   );
@@ -45,8 +41,6 @@ export function ActividadesEconomicasPage() {
   const eliminar = useEliminarActividadEconomica();
 
   // El backend devuelve el catálogo completo; el filtro corre en memoria.
-  // Se depende de `actividades` (la referencia estable de TanStack Query) en
-  // vez de un `?? []` intermedio, que cambiaría en cada render.
   const filtradas = useMemo(() => {
     const lista = actividades ?? [];
     const termino = normalizar(busqueda.trim());
@@ -57,13 +51,6 @@ export function ActividadesEconomicasPage() {
   }, [actividades, busqueda]);
 
   const totalGeneral = actividades?.length ?? 0;
-
-  const totalPaginas = Math.max(1, Math.ceil(filtradas.length / FILAS_POR_PAGINA));
-  // Si el filtro reduce los resultados, la página actual puede quedar fuera de
-  // rango; se acota al vuelo en vez de resetearla en un efecto.
-  const paginaActual = Math.min(pagina, totalPaginas - 1);
-  const offset = paginaActual * FILAS_POR_PAGINA;
-  const pagina_actual_filas = filtradas.slice(offset, offset + FILAS_POR_PAGINA);
 
   const handleGuardar = (input: Parameters<typeof crear.mutate>[0]) => {
     setMensajeError(null);
@@ -129,14 +116,13 @@ export function ActividadesEconomicasPage() {
         valor={busqueda}
         onCambiar={(valor) => {
           setBusqueda(valor);
-          setPagina(0);
         }}
         totalFiltrado={filtradas.length}
         totalGeneral={totalGeneral}
       />
 
       <ActividadesEconomicasTable
-        actividades={pagina_actual_filas}
+        actividades={filtradas}
         isLoading={isLoading}
         seleccionadaId={seleccionada?.id ?? null}
         onSeleccionar={(actividad) => {
@@ -149,17 +135,6 @@ export function ActividadesEconomicasPage() {
           setCreandoNueva(false);
           setMensajeError(null);
         }}
-        offset={offset}
-      />
-
-      <TablePagination
-        component="div"
-        count={filtradas.length}
-        page={paginaActual}
-        onPageChange={(_e: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => setPagina(newPage)}
-        rowsPerPage={FILAS_POR_PAGINA}
-        showFirstButton
-        showLastButton
       />
 
       {mostrarFormulario ? (

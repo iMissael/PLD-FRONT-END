@@ -1,38 +1,33 @@
-import type { ButtonHTMLAttributes } from "react";
+import * as React from "react";
+import { Button as BaseButton, type buttonVariants } from "@/shared/components/ui/button";
+import type { VariantProps } from "class-variance-authority";
 
 type Variante = "primario" | "secundario" | "peligro";
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface CatalogoButtonProps
+  extends Omit<React.ComponentProps<"button">, "ref">,
+    VariantProps<typeof buttonVariants> {
   variante?: Variante;
+  asChild?: boolean;
 }
 
-/**
- * Botón de la app. Los colores vienen de los tokens del tema
- * (`estilos/paleta_colores.md`): el primario es el acento indigo, el
- * secundario es un contorno neutro y el de peligro usa el rojo de la guía.
- */
-const CLASES_BASE =
-  "rounded-md px-4 py-2 text-sm font-medium transition-colors " +
-  "focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none " +
-  "disabled:opacity-50 disabled:cursor-not-allowed";
-
-const POR_VARIANTE: Record<Variante, string> = {
-  primario: "bg-primary text-white hover:bg-primary-hover",
-  secundario: "border border-border bg-card text-foreground hover:bg-muted",
-  peligro: "border border-destructive/40 text-destructive hover:bg-destructive-soft",
+const VARIANTE_MAP: Record<Variante, "default" | "outline" | "destructive"> = {
+  primario: "default",
+  secundario: "outline",
+  peligro: "destructive",
 };
 
+/**
+ * Botón unificado de la aplicación.
+ * Compatible con la API tradicional de catálogos (`variante`) y la API estándar (`variant`).
+ */
 export function Button({
-  variante = "primario",
+  variante,
+  variant,
   className = "",
-  type = "button",
   ...props
-}: ButtonProps) {
-  return (
-    <button
-      type={type}
-      className={`${CLASES_BASE} ${POR_VARIANTE[variante]} ${className}`.trim()}
-      {...props}
-    />
-  );
+}: CatalogoButtonProps) {
+  const resolvedVariant = variant ?? (variante ? VARIANTE_MAP[variante] : "default");
+
+  return <BaseButton variant={resolvedVariant} className={className} {...props} />;
 }

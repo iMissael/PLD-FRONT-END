@@ -1,15 +1,11 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
 import { Button } from "@/shared/components/ui/CatalogoButton";
+import { DataTable, type ColumnDef } from "@/shared/components/DataTable";
 
-import {
-  BusquedaEntidadesForm,
-  type FiltroEntidades,
-} from "../components/BusquedaEntidadesForm";
 import { EntidadForm } from "../components/EntidadForm";
-import { EntidadesTable } from "../components/EntidadesTable";
 import { useEntidades } from "../hooks/useEntidades";
 import {
   useActualizarEntidad,
@@ -18,61 +14,23 @@ import {
 } from "../hooks/useEntidadesMutations";
 import type { CrearEntidadInput, EntidadResponse } from "../types/entidad";
 
-const ENTIDADES_POR_PAGINA = 15;
-
 /**
  * Normaliza texto para comparar en la búsqueda: mayúsculas y sin acentos,
  * así "mexico" encuentra "MÉXICO" sin que el usuario tenga que escribir el
- * acento. Igual que en Países.
+ * acento.
  */
 function normalizar(texto: string): string {
   return texto.normalize("NFD").replace(/[̀-ͯ]/g, "").toUpperCase();
 }
 
 export function EntidadesPage() {
-  const [busqueda, setBusqueda] = useState("");
-  const [filtro, setFiltro] = useState<FiltroEntidades>("ENTIDAD");
-  const [pagina, setPagina] = useState(1);
-
-  // Se trae el catálogo completo una sola vez (es pequeño, un puñado de
-  // entidades) y el filtrado (por nombre/clave CURP o por nombre de zona)
-  // se hace aquí mismo, en memoria, para que la búsqueda responda al
-  // instante con cada letra en vez de ir al backend en cada tecla — igual
-  // que en Países.
-  const { data: entidadesBackend, isLoading } = useEntidades();
-
-  const entidadesFiltradas = useMemo(() => {
-    if (!entidadesBackend) return entidadesBackend;
-    const termino = normalizar(busqueda.trim());
-    if (!termino) return entidadesBackend;
-
-    if (filtro === "ZONA") {
-      return entidadesBackend.filter((entidad) =>
-        normalizar(entidad.nombreZona ?? "").includes(termino),
-      );
-    }
-
-    return entidadesBackend.filter(
-      (entidad) =>
-        normalizar(entidad.nombre).includes(termino) ||
-        normalizar(entidad.claveCurp ?? "").includes(termino),
-    );
-  }, [entidadesBackend, filtro, busqueda]);
-
-  const totalPaginas = Math.max(
-    1,
-    Math.ceil((entidadesFiltradas?.length ?? 0) / ENTIDADES_POR_PAGINA),
-  );
-  const paginaActual = Math.min(pagina, totalPaginas);
-  const entidades = useMemo(() => {
-    if (!entidadesFiltradas) return entidadesFiltradas;
-    const inicio = (paginaActual - 1) * ENTIDADES_POR_PAGINA;
-    return entidadesFiltradas.slice(inicio, inicio + ENTIDADES_POR_PAGINA);
-  }, [entidadesFiltradas, paginaActual]);
+  const { data: entidades, isLoading } = useEntidades();
 
   const [seleccionada, setSeleccionada] = useState<EntidadResponse | null>(null);
   const [creandoNueva, setCreandoNueva] = useState(false);
   const [mensajeError, setMensajeError] = useState<string | null>(null);
+
+  const formRef = useRef<HTMLDivElement | null>(null);
 
   const crear = useCrearEntidad();
   const actualizar = useActualizarEntidad();
@@ -88,7 +46,10 @@ export function EntidadesPage() {
     };
 
     if (creandoNueva) {
-      crear.mutate(input, { onSuccess: () => setCreandoNueva(false), onError });
+      crear.mutate(input, {
+        onSuccess: () => setCreandoNueva(false),
+        onError,
+      });
     } else if (seleccionada) {
       actualizar.mutate(
         { id: seleccionada.idEntidad, input },
@@ -113,6 +74,49 @@ export function EntidadesPage() {
     });
   };
 
+  const handleEditar = (entidad: EntidadResponse) => {
+    setSeleccionada(entidad);
+    setCreandoNueva(false);
+    setMensajeError(null);
+    setTimeout(() => {
+      formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 50);
+  };
+
+  const columns: ColumnDef<EntidadResponse>[] = useMemo(
+    () => [
+      {
+        header: "Clave CURP",
+        accessorKey: "claveCurp",
+        className: "font-mono font-semibold text-foreground",
+        width: "120px",
+      },
+      {
+        header: "Nombre",
+        accessorKey: "nombre",
+        className: "font-medium text-foreground",
+      },
+      {
+        header: "País",
+        accessorKey: "nombrePais",
+        className: "text-muted-foreground",
+      },
+      {
+        header: "Zona",
+        accessorKey: "nombreZona",
+        className: "text-muted-foreground",
+      },
+      {
+        header: "Nivel de riesgo",
+        cell: (item) =>
+          item.nivelRiesgoDescripcion
+            ? `${item.nivelRiesgoDescripcion} (${item.nivelRiesgoValor})`
+            : "—",
+      },
+    ],
+    [],
+  );
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
@@ -127,6 +131,9 @@ export function EntidadesPage() {
             setCreandoNueva(true);
             setSeleccionada(null);
             setMensajeError(null);
+            setTimeout(() => {
+              formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+            }, 50);
           }}
         >
           Nueva entidad
@@ -135,55 +142,42 @@ export function EntidadesPage() {
 
       {mensajeError ? <Alert>{mensajeError}</Alert> : null}
 
-      <BusquedaEntidadesForm
-        onBuscar={(texto, nuevoFiltro) => {
-          setBusqueda(texto);
-          setFiltro(nuevoFiltro);
-          setPagina(1);
-        }}
-      />
-
-      <EntidadesTable
-        entidades={entidades}
+      <DataTable
+        data={entidades}
+        columns={columns}
         isLoading={isLoading}
-        seleccionadaId={seleccionada?.idEntidad ?? null}
-        onSeleccionar={(entidad) => {
+        loadingMessage="Cargando entidades..."
+        emptyMessage="No hay entidades registradas."
+        seleccionadoId={seleccionada?.idEntidad ?? null}
+        getRowId={(entidad) => entidad.idEntidad}
+        onRowClick={(entidad) => {
           setSeleccionada(entidad);
           setCreandoNueva(false);
           setMensajeError(null);
         }}
+        onRowDoubleClick={handleEditar}
+        doubleClickTitle="Doble clic para modificar este registro"
+        search={{
+          placeholder: "Buscar entidad por nombre, clave CURP o zona...",
+          filterFn: (entidad, query) => {
+            const q = normalizar(query);
+            return (
+              normalizar(entidad.nombre).includes(q) ||
+              normalizar(entidad.claveCurp ?? "").includes(q) ||
+              normalizar(entidad.nombreZona ?? "").includes(q) ||
+              normalizar(entidad.nombrePais ?? "").includes(q)
+            );
+          },
+        }}
+        pagination={{
+          mode: "client",
+          defaultRowsPerPage: 10,
+          rowsPerPageOptions: [5, 10, 15, 25, 50],
+        }}
       />
 
-      {!isLoading && (entidadesFiltradas?.length ?? 0) > 0 ? (
-        <div className="flex items-center justify-between text-sm text-muted-foreground">
-          <span>
-            {entidadesFiltradas?.length} entidad
-            {entidadesFiltradas?.length === 1 ? "" : "es"} — página {paginaActual} de{" "}
-            {totalPaginas}
-          </span>
-          <div className="flex gap-2">
-            <Button
-              variante="secundario"
-              className="px-3 py-1.5"
-              onClick={() => setPagina((p) => Math.max(1, p - 1))}
-              disabled={paginaActual === 1}
-            >
-              Anterior
-            </Button>
-            <Button
-              variante="secundario"
-              className="px-3 py-1.5"
-              onClick={() => setPagina((p) => Math.min(totalPaginas, p + 1))}
-              disabled={paginaActual === totalPaginas}
-            >
-              Siguiente
-            </Button>
-          </div>
-        </div>
-      ) : null}
-
       {mostrarFormulario ? (
-        <div className="flex flex-col gap-3">
+        <div ref={formRef} className="flex flex-col gap-3 scroll-mt-4">
           <EntidadForm
             entidad={entidadEnEdicion}
             onGuardar={handleGuardar}

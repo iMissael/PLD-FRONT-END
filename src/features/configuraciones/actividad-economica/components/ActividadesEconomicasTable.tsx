@@ -1,5 +1,5 @@
-import { emptyState, table } from "@/shared/components/ui/styles";
-
+import { useMemo } from "react";
+import { DataTable, type ColumnDef } from "@/shared/components/DataTable";
 import { useNivelesRiesgo } from "../../ubicacion-geografica/niveles-riesgo/hooks/useNivelesRiesgo";
 import type { ActividadEconomicaResponse } from "../types/actividadEconomica";
 
@@ -9,8 +9,6 @@ interface ActividadesEconomicasTableProps {
   seleccionadaId: string | null;
   onSeleccionar: (actividad: ActividadEconomicaResponse) => void;
   onDoubleClick?: (actividad: ActividadEconomicaResponse) => void;
-  /** Índice de la primera fila de la página, para que el consecutivo continúe. */
-  offset: number;
 }
 
 export function ActividadesEconomicasTable({
@@ -19,61 +17,50 @@ export function ActividadesEconomicasTable({
   seleccionadaId,
   onSeleccionar,
   onDoubleClick,
-  offset,
 }: ActividadesEconomicasTableProps) {
   const { data: niveles } = useNivelesRiesgo();
 
-  const descripcionNivel = (catNivelRiesgoId: number) => {
-    const nivel = niveles?.find((item) => item.id === catNivelRiesgoId);
-    if (!nivel) return String(catNivelRiesgoId);
-    return `${nivel.nivelRiesgoDescripcion} (${nivel.nivelRiesgoValor})`;
-  };
-
-  if (isLoading) {
-    return <p className={emptyState}>Cargando actividades económicas...</p>;
-  }
-
-  if (actividades.length === 0) {
-    return <p className={emptyState}>No hay actividades económicas que coincidan.</p>;
-  }
+  const columns: ColumnDef<ActividadEconomicaResponse>[] = useMemo(
+    () => [
+      {
+        header: "#",
+        width: "60px",
+        className: "text-muted-foreground",
+        cell: (_, __, globalIndex) => globalIndex + 1,
+      },
+      {
+        header: "Clave SAT",
+        accessorKey: "claveSat",
+        className: "font-mono text-xs text-muted-foreground",
+        width: "120px",
+      },
+      {
+        header: "Descripción",
+        accessorKey: "descripcion",
+        className: "font-semibold text-foreground",
+      },
+      {
+        header: "Nivel de riesgo",
+        cell: (item) => {
+          const nivel = niveles?.find((n) => n.id === item.catNivelRiesgoId);
+          return nivel ? `${nivel.nivelRiesgoDescripcion} (${nivel.nivelRiesgoValor})` : String(item.catNivelRiesgoId);
+        },
+      },
+    ],
+    [niveles],
+  );
 
   return (
-    <div className={table.wrapper}>
-      <table className={table.root}>
-        <thead className={table.head}>
-          <tr>
-            <th className={`w-20 ${table.headCell}`}>#</th>
-            <th className={`w-32 ${table.headCell}`}>Clave</th>
-            <th className={table.headCell}>Descripción</th>
-            <th className={table.headCell}>Nivel de riesgo</th>
-          </tr>
-        </thead>
-        <tbody className={table.body}>
-          {actividades.map((actividad, indice) => (
-            <tr
-              key={actividad.id}
-              onClick={() => onSeleccionar(actividad)}
-              onDoubleClick={() => {
-                if (onDoubleClick) onDoubleClick(actividad);
-                else onSeleccionar(actividad);
-              }}
-              title="Doble clic para modificar este registro"
-              className={`${table.row(actividad.id === seleccionadaId)} select-none`}
-            >
-              {/* Consecutivo de fila dentro del listado filtrado, no el id
-                  del registro. `offset` lo continúa entre páginas. */}
-              <td className={table.cellMuted}>{offset + indice + 1}</td>
-              <td className={`${table.cellMuted} font-mono text-xs`}>
-                {actividad.claveSat}
-              </td>
-              <td className={table.cellStrong}>{actividad.descripcion}</td>
-              <td className={table.cell}>
-                {descripcionNivel(actividad.catNivelRiesgoId)}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <DataTable
+      data={actividades}
+      columns={columns}
+      isLoading={isLoading}
+      loadingMessage="Cargando actividades económicas..."
+      emptyMessage="No hay actividades económicas que coincidan."
+      seleccionadoId={seleccionadaId}
+      onRowClick={onSeleccionar}
+      onRowDoubleClick={onDoubleClick}
+      doubleClickTitle="Doble clic para modificar este registro"
+    />
   );
 }

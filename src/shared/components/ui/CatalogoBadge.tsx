@@ -1,23 +1,18 @@
 import type { ReactNode } from "react";
-
-type Tono = "activo" | "inactivo" | "neutro";
+import { StatusBadge, type StatusType } from "./StatusBadge";
 
 interface BadgeProps {
-  tono?: Tono;
+  tono?: "activo" | "inactivo" | "neutro";
+  status?: StatusType;
   children: ReactNode;
+  className?: string;
 }
 
-const POR_TONO: Record<Tono, string> = {
-  activo: "bg-success-soft text-success-hover",
-  inactivo: "bg-muted text-muted-foreground",
-  neutro: "bg-primary/10 text-primary",
-};
-
-/** Píldora de estatus para las tablas (Activa / Inactiva). */
-export function Badge({ tono = "neutro", children }: BadgeProps) {
+/** Píldora unificada de estatus para las tablas (Activa / Inactiva, etc.). */
+export function Badge({ tono, status, children, className }: BadgeProps) {
   return (
-    <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${POR_TONO[tono]}`}>
+    <StatusBadge tono={tono} status={status} className={className}>
       {children}
-    </span>
+    </StatusBadge>
   );
 }
