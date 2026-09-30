@@ -1,5 +1,6 @@
+import { useState, useMemo } from "react";
 import { emptyState, table } from "@/shared/components/ui/styles";
-
+import { TablePagination } from "@/shared/components/TablePagination";
 import { useNivelesRiesgo } from "../../../ubicacion-geografica/niveles-riesgo/hooks/useNivelesRiesgo";
 import type { DestinoRecursoResponse } from "../types/destinoRecurso";
 
@@ -8,6 +9,7 @@ interface DestinosRecursoTableProps {
   isLoading: boolean;
   seleccionadoId: string | null;
   onSeleccionar: (destino: DestinoRecursoResponse) => void;
+  onDoubleClick?: (destino: DestinoRecursoResponse) => void;
 }
 
 export function DestinosRecursoTable({
@@ -15,8 +17,28 @@ export function DestinosRecursoTable({
   isLoading,
   seleccionadoId,
   onSeleccionar,
+  onDoubleClick,
 }: DestinosRecursoTableProps) {
   const { data: niveles } = useNivelesRiesgo();
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const totalElements = destinos?.length ?? 0;
+  const paginatedDestinos = useMemo(() => {
+    if (!destinos) return [];
+    const start = page * rowsPerPage;
+    return destinos.slice(start, start + rowsPerPage);
+  }, [destinos, page, rowsPerPage]);
+
+  const handleChangePage = (_: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setRowsPerPage(parseInt(e.target.value, 10));
+    setPage(0);
+  };
 
   const descripcionNivel = (catNivelRiesgoId: number) => {
     const nivel = niveles?.find((item) => item.id === catNivelRiesgoId);
@@ -34,29 +56,48 @@ export function DestinosRecursoTable({
 
   return (
     <div className={table.wrapper}>
-      <table className={table.root}>
-        <thead className={table.head}>
-          <tr>
-            <th className={`w-16 ${table.headCell}`}>#</th>
-            <th className={table.headCell}>Nombre</th>
-            <th className={table.headCell}>Nivel de riesgo</th>
-          </tr>
-        </thead>
-        <tbody className={table.body}>
-          {destinos.map((destino, indice) => (
-            <tr
-              key={destino.id}
-              onClick={() => onSeleccionar(destino)}
-              className={table.row(destino.id === seleccionadoId)}
-            >
-              {/* Consecutivo de fila, no el id del registro. */}
-              <td className={table.cellMuted}>{indice + 1}</td>
-              <td className={table.cellStrong}>{destino.nombre}</td>
-              <td className={table.cell}>{descripcionNivel(destino.catNivelRiesgoId)}</td>
+      <div className="overflow-x-auto">
+        <table className={table.root}>
+          <thead className={table.head}>
+            <tr>
+              <th className={`w-16 ${table.headCell}`}>#</th>
+              <th className={table.headCell}>Nombre</th>
+              <th className={table.headCell}>Nivel de riesgo</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className={table.body}>
+            {paginatedDestinos.map((destino, indice) => (
+              <tr
+                key={destino.id}
+                onClick={() => onSeleccionar(destino)}
+                onDoubleClick={() => {
+                  if (onDoubleClick) {
+                    onDoubleClick(destino);
+                  } else {
+                    onSeleccionar(destino);
+                  }
+                }}
+                title="Doble clic para modificar este registro"
+                className={table.row(destino.id === seleccionadoId)}
+              >
+                <td className={table.cellMuted}>{page * rowsPerPage + indice + 1}</td>
+                <td className={table.cellStrong}>{destino.nombre}</td>
+                <td className={table.cell}>{descripcionNivel(destino.catNivelRiesgoId)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <TablePagination
+        component="div"
+        count={totalElements}
+        page={page}
+        onPageChange={handleChangePage}
+        rowsPerPage={rowsPerPage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        rowsPerPageOptions={[5, 10, 25, 50]}
+      />
     </div>
   );
 }

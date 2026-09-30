@@ -94,6 +94,11 @@ export function DestinosRecursoPage() {
           setCreandoNuevo(false);
           setMensajeError(null);
         }}
+        onDoubleClick={(destino) => {
+          setSeleccionado(destino);
+          setCreandoNuevo(false);
+          setMensajeError(null);
+        }}
       />
 
       {mostrarFormulario ? (

@@ -81,6 +81,22 @@ export const router = createBrowserRouter([
                     element: <ZonasGeograficasPage />,
                   },
                   {
+                    path: "configuraciones/ubicacion-geografica/zonas-geograficas/paises",
+                    element: <ZonasGeograficasPage tipo="P" />,
+                  },
+                  {
+                    path: "configuraciones/ubicacion-geografica/zonas-geograficas/entidades",
+                    element: <ZonasGeograficasPage tipo="E" />,
+                  },
+                  {
+                    path: "configuraciones/ubicacion-geografica/zonas-paises",
+                    element: <ZonasGeograficasPage tipo="P" />,
+                  },
+                  {
+                    path: "configuraciones/ubicacion-geografica/zonas-entidades",
+                    element: <ZonasGeograficasPage tipo="E" />,
+                  },
+                  {
                     path: "configuraciones/ubicacion-geografica/entidades",
                     element: <EntidadesPage />,
                   },

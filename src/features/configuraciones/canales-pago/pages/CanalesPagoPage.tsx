@@ -95,6 +95,11 @@ export function CanalesPagoPage() {
           setCreandoNuevo(false);
           setMensajeError(null);
         }}
+        onDoubleClick={(canal) => {
+          setSeleccionado(canal);
+          setCreandoNuevo(false);
+          setMensajeError(null);
+        }}
       />
 
       {mostrarFormulario ? (

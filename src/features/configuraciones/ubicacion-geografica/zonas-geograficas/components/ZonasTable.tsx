@@ -5,13 +5,14 @@ import { Button } from "@/shared/components/ui/CatalogoButton";
 import { TablePagination } from "@/shared/components/TablePagination";
 import { emptyState, table } from "@/shared/components/ui/styles";
 
-import type { ZonaGeograficaResponse } from "../types/zonaGeografica";
+import type { EntidadPais, ZonaGeograficaResponse } from "../types/zonaGeografica";
 
 interface ZonasTableProps {
   zonas: ZonaGeograficaResponse[] | undefined;
   isLoading: boolean;
   seleccionadaId: string | null;
   verId: string | null;
+  tipoFiltro?: EntidadPais;
   onSeleccionar: (zona: ZonaGeograficaResponse) => void;
   onVer: (zona: ZonaGeograficaResponse) => void;
   onDoubleClick?: (zona: ZonaGeograficaResponse) => void;
@@ -22,6 +23,7 @@ export function ZonasTable({
   isLoading,
   seleccionadaId,
   verId,
+  tipoFiltro,
   onSeleccionar,
   onVer,
   onDoubleClick,
@@ -30,17 +32,41 @@ export function ZonasTable({
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const zonasFiltradas = useMemo(() => {
+  const zonasSegunTipo = useMemo(() => {
     if (!zonas) return [];
-    if (!busqueda.trim()) return zonas;
+    if (!tipoFiltro) return zonas;
+
+    if (tipoFiltro === "P") {
+      return zonas.filter(
+        (z) =>
+          z.entidadPais === "P" ||
+          (z.entidadPais === null && z.totalPaisesAsignados > 0) ||
+          (z.entidadPais === null && z.totalEntidadesAsignadas === 0),
+      );
+    }
+
+    if (tipoFiltro === "E") {
+      return zonas.filter(
+        (z) =>
+          z.entidadPais === "E" ||
+          (z.entidadPais === null && z.totalEntidadesAsignadas > 0),
+      );
+    }
+
+    return zonas;
+  }, [zonas, tipoFiltro]);
+
+  const zonasFiltradas = useMemo(() => {
+    if (!zonasSegunTipo) return [];
+    if (!busqueda.trim()) return zonasSegunTipo;
     const term = busqueda.toLowerCase().trim();
-    return zonas.filter(
+    return zonasSegunTipo.filter(
       (z) =>
         z.nombre.toLowerCase().includes(term) ||
         z.nivelRiesgoDescripcion?.toLowerCase().includes(term) ||
         (z.estatus === "A" ? "activa" : "inactiva").includes(term),
     );
-  }, [zonas, busqueda]);
+  }, [zonasSegunTipo, busqueda]);
 
   const totalElements = zonasFiltradas.length;
   const paginatedZonas = useMemo(() => {
@@ -101,20 +127,23 @@ export function ZonasTable({
               <tr>
                 <th className={table.headCell}>Nombre</th>
                 <th className={table.headCell}>Nivel de riesgo</th>
-                <th className={table.headCell}>Entidades</th>
-                <th className={table.headCell}>Países</th>
+                {(!tipoFiltro || tipoFiltro === "E") && (
+                  <th className={table.headCell}>Entidades</th>
+                )}
+                {(!tipoFiltro || tipoFiltro === "P") && (
+                  <th className={table.headCell}>Países</th>
+                )}
                 <th className={table.headCell}>Estatus</th>
-                <th className="px-3 py-2 text-right">
-                  <span className="text-[10px] font-normal text-muted-foreground">
-                    (Doble clic para editar)
-                  </span>
-                </th>
+                <th className={`${table.headCell} text-right`}>Doble click para ver</th>
               </tr>
             </thead>
             <tbody className={table.body}>
               {paginatedZonas.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="py-8 text-center text-xs text-muted-foreground">
+                  <td
+                    colSpan={tipoFiltro ? 5 : 6}
+                    className="py-8 text-center text-xs text-muted-foreground"
+                  >
                     No se encontraron zonas que coincidan con la búsqueda.
                   </td>
                 </tr>
@@ -127,24 +156,29 @@ export function ZonasTable({
                       if (onDoubleClick) {
                         onDoubleClick(zona);
                       } else {
+                        onVer(zona);
                         onSeleccionar(zona);
                       }
                     }}
-                    title="Doble clic para modificar este registro"
+                    title="Doble clic para ver asignaciones de este registro"
                     className={`${table.row(zona.id === seleccionadaId)} select-none`}
                   >
                     <td className={table.cellStrong}>{zona.nombre}</td>
                     <td className={table.cell}>
                       {zona.nivelRiesgoDescripcion} ({zona.nivelRiesgoValor})
                     </td>
-                    <td className={table.cell}>{zona.totalEntidadesAsignadas}</td>
-                    <td className={table.cell}>{zona.totalPaisesAsignados}</td>
-                    <td className="px-3 py-2">
+                    {(!tipoFiltro || tipoFiltro === "E") && (
+                      <td className={table.cell}>{zona.totalEntidadesAsignadas}</td>
+                    )}
+                    {(!tipoFiltro || tipoFiltro === "P") && (
+                      <td className={table.cell}>{zona.totalPaisesAsignados}</td>
+                    )}
+                    <td className="px-4 py-3">
                       <Badge tono={zona.estatus === "A" ? "activo" : "inactivo"}>
                         {zona.estatus === "A" ? "Activa" : "Inactiva"}
                       </Badge>
                     </td>
-                    <td className="px-3 py-2 text-right">
+                    <td className="px-4 py-3 text-right">
                       <Button
                         variante="secundario"
                         className={`px-3 py-1 text-xs ${zona.id === verId ? "border-fg text-foreground" : ""}`}

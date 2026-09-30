@@ -147,9 +147,7 @@ export function GestionDenunciasPage() {
                   <th className="px-4 py-3 font-semibold">Descripción</th>
                   <th className="px-4 py-3 font-semibold">Estatus</th>
                   <th className="px-4 py-3 font-semibold text-right">
-                    <span className="text-[10px] font-normal text-muted-foreground">
-                      (Doble clic para editar)
-                    </span>
+                    Doble clic para editar
                   </th>
                 </tr>
               </thead>

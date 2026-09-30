@@ -94,6 +94,11 @@ export function OrigenesRecursoPage() {
           setCreandoNuevo(false);
           setMensajeError(null);
         }}
+        onDoubleClick={(origen) => {
+          setSeleccionado(origen);
+          setCreandoNuevo(false);
+          setMensajeError(null);
+        }}
       />
 
       {mostrarFormulario ? (

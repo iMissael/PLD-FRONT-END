@@ -1,5 +1,6 @@
+import { useState, useMemo } from "react";
 import { emptyState, table } from "@/shared/components/ui/styles";
-
+import { TablePagination } from "@/shared/components/TablePagination";
 import { useNivelesRiesgo } from "../../ubicacion-geografica/niveles-riesgo/hooks/useNivelesRiesgo";
 import type { PrestamoMontoResponse } from "../types/prestamoMonto";
 import { formatearRangoMonto } from "../utils/nombreMonto";
@@ -9,6 +10,7 @@ interface PrestamosMontoTableProps {
   isLoading: boolean;
   seleccionadoId: string | null;
   onSeleccionar: (rango: PrestamoMontoResponse) => void;
+  onDoubleClick?: (rango: PrestamoMontoResponse) => void;
 }
 
 export function PrestamosMontoTable({
@@ -16,8 +18,28 @@ export function PrestamosMontoTable({
   isLoading,
   seleccionadoId,
   onSeleccionar,
+  onDoubleClick,
 }: PrestamosMontoTableProps) {
   const { data: niveles } = useNivelesRiesgo();
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const totalElements = rangos?.length ?? 0;
+  const paginatedRangos = useMemo(() => {
+    if (!rangos) return [];
+    const start = page * rowsPerPage;
+    return rangos.slice(start, start + rowsPerPage);
+  }, [rangos, page, rowsPerPage]);
+
+  const handleChangePage = (_: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setRowsPerPage(parseInt(e.target.value, 10));
+    setPage(0);
+  };
 
   const descripcionNivel = (catNivelRiesgoId: number) => {
     const nivel = niveles?.find((item) => item.id === catNivelRiesgoId);
@@ -35,34 +57,50 @@ export function PrestamosMontoTable({
 
   return (
     <div className={table.wrapper}>
-      <table className={table.root}>
-        <thead className={table.head}>
-          <tr>
-            <th className={`w-16 ${table.headCell}`}>#</th>
-            <th className={table.headCell}>Rango</th>
-            <th className={table.headCell}>Nivel de riesgo</th>
-          </tr>
-        </thead>
-        <tbody className={table.body}>
-          {rangos.map((rango, indice) => (
-            <tr
-              key={rango.id}
-              onClick={() => onSeleccionar(rango)}
-              className={table.row(rango.id === seleccionadoId)}
-            >
-              {/* Consecutivo de fila, no el id del registro. */}
-              <td className={table.cellMuted}>{indice + 1}</td>
-              {/* Se muestra el rango y no el `nombre` guardado: los 5 registros
-                  sembrados se llaman "RANGO UNO".."RANGO CINCO", etiquetas que
-                  no dicen nada de los montos. */}
-              <td className={table.cellStrong}>
-                {formatearRangoMonto(rango.montoMin, rango.montoMax)}
-              </td>
-              <td className={table.cell}>{descripcionNivel(rango.catNivelRiesgoId)}</td>
+      <div className="overflow-x-auto">
+        <table className={table.root}>
+          <thead className={table.head}>
+            <tr>
+              <th className={`w-16 ${table.headCell}`}>#</th>
+              <th className={table.headCell}>Rango</th>
+              <th className={table.headCell}>Nivel de riesgo</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className={table.body}>
+            {paginatedRangos.map((rango, indice) => (
+              <tr
+                key={rango.id}
+                onClick={() => onSeleccionar(rango)}
+                onDoubleClick={() => {
+                  if (onDoubleClick) {
+                    onDoubleClick(rango);
+                  } else {
+                    onSeleccionar(rango);
+                  }
+                }}
+                title="Doble clic para modificar este registro"
+                className={table.row(rango.id === seleccionadoId)}
+              >
+                <td className={table.cellMuted}>{page * rowsPerPage + indice + 1}</td>
+                <td className={table.cellStrong}>
+                  {formatearRangoMonto(rango.montoMin, rango.montoMax)}
+                </td>
+                <td className={table.cell}>{descripcionNivel(rango.catNivelRiesgoId)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <TablePagination
+        component="div"
+        count={totalElements}
+        page={page}
+        onPageChange={handleChangePage}
+        rowsPerPage={rowsPerPage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        rowsPerPageOptions={[5, 10, 25, 50]}
+      />
     </div>
   );
 }
