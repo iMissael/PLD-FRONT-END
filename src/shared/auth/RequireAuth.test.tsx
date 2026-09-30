@@ -5,7 +5,6 @@ import { afterEach, describe, expect, it } from "vitest";
 import { useAuthStore } from "@/shared/auth/authStore";
 import { RequireAuth } from "@/shared/auth/RequireAuth";
 import { RequireSucursal } from "@/shared/auth/RequireSucursal";
-import { useSucursalActivaStore } from "@/shared/auth/sucursalActivaStore";
 
 const sesion = {
   token: "jwt",
@@ -51,17 +50,8 @@ describe("RequireAuth y RequireSucursal", () => {
     expect(screen.getByText("pantalla de login")).toBeInTheDocument();
   });
 
-  it("con sesión pero sin sucursal pide elegir sucursal", () => {
+  it("con sesión deja ver el contenido directamente sin exigir sucursal", () => {
     useAuthStore.getState().setSession("tenant-a", sesion, false);
-
-    montar("/SICANETSC/PLD/tenant-a/operacion");
-
-    expect(screen.getByText("elige sucursal")).toBeInTheDocument();
-  });
-
-  it("con sesión y sucursal deja ver el contenido", () => {
-    useAuthStore.getState().setSession("tenant-a", sesion, false);
-    useSucursalActivaStore.getState().setSucursalActiva({ id: "s1", nombre: "Matriz" });
 
     montar("/SICANETSC/PLD/tenant-a/operacion");
 

@@ -67,7 +67,7 @@ describe("unauthorizedInterceptor", () => {
 
   it("cierra la sesión y vuelve al login del tenant ante un 401", async () => {
     await expect(
-      unauthorizedInterceptor(error(401, "/SICANETSC/PLD/tenant-a/api/usuarios")),
+      unauthorizedInterceptor(error(401, "/SICANETSC/PLD/tenant-a/usuarios")),
     ).rejects.toBeDefined();
 
     expect(useAuthStore.getState().token).toBeNull();
@@ -76,7 +76,7 @@ describe("unauthorizedInterceptor", () => {
 
   it("no cierra la sesión por un 401 del propio login (credenciales malas)", async () => {
     await expect(
-      unauthorizedInterceptor(error(401, "/SICANETSC/PLD/tenant-a/api/auth/login")),
+      unauthorizedInterceptor(error(401, "/SICANETSC/PLD/tenant-a/auth/login")),
     ).rejects.toBeDefined();
 
     expect(useAuthStore.getState().token).toBe("jwt-de-prueba");
@@ -85,7 +85,7 @@ describe("unauthorizedInterceptor", () => {
 
   it("deja pasar otros errores sin tocar la sesión", async () => {
     await expect(
-      unauthorizedInterceptor(error(500, "/SICANETSC/PLD/tenant-a/api/usuarios")),
+      unauthorizedInterceptor(error(500, "/SICANETSC/PLD/tenant-a/usuarios")),
     ).rejects.toBeDefined();
 
     expect(useAuthStore.getState().token).toBe("jwt-de-prueba");
@@ -96,7 +96,7 @@ describe("unauthorizedInterceptor", () => {
     useAuthStore.getState().logout();
 
     await expect(
-      unauthorizedInterceptor(error(401, "/SICANETSC/PLD/tenant-a/api/catalogos/tipos-alerta/buzon")),
+      unauthorizedInterceptor(error(401, "/SICANETSC/PLD/tenant-a/catalogos/tipos-alerta/buzon")),
     ).rejects.toBeDefined();
 
     expect(asignar).not.toHaveBeenCalled();

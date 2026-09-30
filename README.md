@@ -207,4 +207,4 @@ del backend. `personas-bloqueadas` y `auth` siguen con tipos escritos a mano.
 Las pruebas de componentes usan `renderWithProviders` (`test/test-utils.tsx`):
 fija el tenant de prueba y monta React Query y un router en memoria. Los
 endpoints se simulan con MSW en `test/mocks/handlers.ts`; las URLs llevan
-`/SICANETSC/PLD/{tenant}/api/...` igual que en producción.
+`/SICANETSC/PLD/{tenant}/...` igual que en producción.

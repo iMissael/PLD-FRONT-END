@@ -9,7 +9,7 @@ import { rutaTenant } from "@/shared/tenant/tenantPaths";
  *
  *  1. Como prefijo de la URL: `/SICANETSC/PLD/{tenantId}/api` antes de la
  *     ruta relativa que pide cada función de `api/` (p. ej. `/personas-bloqueadas`
- *     queda en `/SICANETSC/PLD/{tenantId}/api/personas-bloqueadas`). Los
+ *     queda en `/SICANETSC/PLD/{tenantId}/personas-bloqueadas`). Los
  *     controllers del backend cuelgan de `/api/...` y el prefijo del tenant
  *     se les antepone, así que sin el `/api` la ruta no existe.
  *  2. Como header `X-Tenant-Id`, que el backend usa para validar contra el
@@ -34,6 +34,6 @@ export function tenantInterceptor(
   }
 
   config.headers.set("X-Tenant-Id", tenantId);
-  config.url = `${rutaTenant(tenantId, "api")}${config.url ?? ""}`;
+  config.url = `${rutaTenant(tenantId)}${config.url ?? ""}`;
   return config;
 }

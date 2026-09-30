@@ -19,24 +19,22 @@ export async function crearDenunciaAnonima(
   evidencias?: File[],
   signal?: AbortSignal,
 ): Promise<Denuncia> {
-  if (evidencias && evidencias.length > 0) {
-    const formData = new FormData();
-    const jsonBlob = new Blob([JSON.stringify(input)], { type: "application/json" });
-    formData.append("denuncia", jsonBlob);
-    evidencias.forEach((file) => formData.append("evidencias", file));
+  const formData = new FormData();
+  const jsonBlob = new Blob([JSON.stringify(input)], { type: "application/json" });
+  formData.append("denuncia", jsonBlob);
+  evidencias?.forEach((file) => formData.append("evidencias", file));
 
-    const { data } = await apiClient.post<Denuncia>("/buzon/denuncias", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+  const { data } = await apiClient.post<Denuncia>("/buzon/denuncias", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
       signal,
     });
     return data;
-  }
+  } 
 
-  const { data } = await apiClient.post<Denuncia>("/buzon/denuncias", input, { signal });
-  return data;
-}
+
+
 
 /** Listar denuncias paginadas con filtros */
 export async function listarDenuncias(
@@ -74,17 +72,44 @@ export async function editarDenuncia(
 }
 
 /** Cambiar estatus de la denuncia (R->V, V->A, V->D) */
+
 export async function cambiarEstatusDenuncia(
   id: number,
   input: CambiarEstatusInput,
   signal?: AbortSignal,
 ): Promise<Denuncia> {
-  const { data } = await apiClient.patch<Denuncia>(
-    `/buzon/denuncias/${id}/estatus`,
-    input,
-    { signal },
-  );
-  return data;
+  const payload = {
+    nuevoEstatus: input.nuevoEstatus,
+    estatus: input.nuevoEstatus,
+    estado: input.nuevoEstatus,
+  };
+  try {
+    const { data } = await apiClient.patch<Denuncia>(
+      `/buzon/denuncias/${id}/estatus`,
+      payload,
+      {
+        params: {
+          nuevoEstatus: input.nuevoEstatus,
+          estatus: input.nuevoEstatus,
+        },
+        signal,
+      },
+    );
+    return data;
+  } catch {
+    const { data } = await apiClient.patch<Denuncia>(
+      `/buzon/denuncias/${id}/estatus`,
+      payload,
+      {
+        params: {
+          nuevoEstatus: input.nuevoEstatus,
+          estatus: input.nuevoEstatus,
+        },
+        signal,
+      },
+    );
+    return data;
+  }
 }
 
 /** Listar evidencias asociadas */
@@ -121,6 +146,18 @@ export async function adjuntarEvidencia(
   return data;
 }
 
+/** Obtener archivo de evidencia por ID (binario multimedia / Blob para visualización) */
+export async function verEvidenciaPorId(
+  id: number,
+  signal?: AbortSignal,
+): Promise<Blob> {
+  const { data } = await apiClient.get<Blob>(`/buzon/evidencias/${id}`, {
+    responseType: "blob",
+    signal,
+  });
+  return data;
+}
+
 /** Listar observaciones de una denuncia */
 export async function listarObservaciones(
   denunciaId: number,
@@ -141,7 +178,7 @@ export async function agregarObservacion(
 ): Promise<ObservacionDenuncia> {
   const { data } = await apiClient.post<ObservacionDenuncia>(
     `/buzon/denuncias/${denunciaId}/observaciones`,
-    { request: input },
+    input,
     { signal },
   );
   return data;
