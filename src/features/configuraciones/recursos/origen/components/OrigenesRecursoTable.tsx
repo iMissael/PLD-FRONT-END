@@ -1,5 +1,5 @@
-import { emptyState, table } from "@/shared/components/ui/styles";
-
+import { useMemo } from "react";
+import { DataTable, type ColumnDef } from "@/shared/components/DataTable";
 import { useNivelesRiesgo } from "../../../ubicacion-geografica/niveles-riesgo/hooks/useNivelesRiesgo";
 import type { OrigenRecursoResponse } from "../types/origenRecurso";
 
@@ -8,6 +8,7 @@ interface OrigenesRecursoTableProps {
   isLoading: boolean;
   seleccionadoId: string | null;
   onSeleccionar: (origen: OrigenRecursoResponse) => void;
+  onDoubleClick?: (origen: OrigenRecursoResponse) => void;
 }
 
 export function OrigenesRecursoTable({
@@ -15,48 +16,60 @@ export function OrigenesRecursoTable({
   isLoading,
   seleccionadoId,
   onSeleccionar,
+  onDoubleClick,
 }: OrigenesRecursoTableProps) {
   const { data: niveles } = useNivelesRiesgo();
 
-  const descripcionNivel = (catNivelRiesgoId: number) => {
-    const nivel = niveles?.find((item) => item.id === catNivelRiesgoId);
-    if (!nivel) return String(catNivelRiesgoId);
-    return `${nivel.nivelRiesgoDescripcion} (${nivel.nivelRiesgoValor})`;
-  };
+  const listaNiveles = Array.isArray(niveles)
+    ? niveles
+    : Array.isArray((niveles as unknown as { contenido?: typeof niveles })?.contenido)
+    ? ((niveles as unknown as { contenido: typeof niveles }).contenido ?? [])
+    : [];
 
-  if (isLoading) {
-    return <p className={emptyState}>Cargando orígenes de recurso...</p>;
-  }
-
-  if (!origenes || origenes.length === 0) {
-    return <p className={emptyState}>No hay orígenes de recurso registrados.</p>;
-  }
+  const columns: ColumnDef<OrigenRecursoResponse>[] = useMemo(
+    () => [
+      {
+        header: "#",
+        width: "60px",
+        className: "text-muted-foreground",
+        cell: (_, __, globalIndex) => globalIndex + 1,
+      },
+      {
+        header: "Nombre",
+        accessorKey: "nombre",
+        className: "font-semibold text-foreground",
+      },
+      {
+        header: "Nivel de riesgo",
+        cell: (item) => {
+          const nivel = listaNiveles.find((n) => n.id === item.catNivelRiesgoId);
+          if (!nivel) return String(item.catNivelRiesgoId);
+          return `${nivel.nivelRiesgoDescripcion} (${nivel.nivelRiesgoValor})`;
+        },
+      },
+    ],
+    [listaNiveles],
+  );
 
   return (
-    <div className={table.wrapper}>
-      <table className={table.root}>
-        <thead className={table.head}>
-          <tr>
-            <th className={`w-16 ${table.headCell}`}>#</th>
-            <th className={table.headCell}>Nombre</th>
-            <th className={table.headCell}>Nivel de riesgo</th>
-          </tr>
-        </thead>
-        <tbody className={table.body}>
-          {origenes.map((origen, indice) => (
-            <tr
-              key={origen.id}
-              onClick={() => onSeleccionar(origen)}
-              className={table.row(origen.id === seleccionadoId)}
-            >
-              {/* Consecutivo de fila, no el id del registro. */}
-              <td className={table.cellMuted}>{indice + 1}</td>
-              <td className={table.cellStrong}>{origen.nombre}</td>
-              <td className={table.cell}>{descripcionNivel(origen.catNivelRiesgoId)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <DataTable
+      data={origenes}
+      columns={columns}
+      isLoading={isLoading}
+      loadingMessage="Cargando orígenes de recurso..."
+      emptyMessage="No hay orígenes de recurso registrados."
+      seleccionadoId={seleccionadoId}
+      onRowClick={onSeleccionar}
+      onRowDoubleClick={onDoubleClick}
+      doubleClickTitle="Doble clic para modificar este registro"
+      search={{
+        placeholder: "Buscar origen de recurso...",
+      }}
+      pagination={{
+        mode: "client",
+        defaultRowsPerPage: 10,
+        rowsPerPageOptions: [5, 10, 25, 50],
+      }}
+    />
   );
 }

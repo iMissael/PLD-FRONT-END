@@ -46,7 +46,9 @@ export interface ReportadoAlerta {
   nombre: string;
   rfc: string | null;
   puesto: string | null;
-  sucursal: string | null;
+  fechaEmisionFuente: string | null;
+  fuenteInformacion: string | null;
+  estatusReportado: string | null;
 }
 
 /** `AlertaResponse`. */
@@ -70,7 +72,6 @@ export interface Alerta {
   informacionAdicional: string | null;
   folioOperacion: string | null;
   estatus: EstatusAlerta;
-  sucursalId: string | null;
   usuarioCapturaId: string | null;
   reportado: ReportadoAlerta | null;
   updatedAt: string;
@@ -88,7 +89,6 @@ export interface ExpedienteAlerta {
     curp: string | null;
     domicilio: string | null;
     puesto: string | null;
-    sucursal: string | null;
   } | null;
   /** Mes de la fecha de la alerta. */
   resumenPeriodo: {
@@ -109,7 +109,9 @@ export interface CrearAlertaManualInput {
   fechaIncidencia: string;
   actoHecho: string;
   informacionAdicional?: string;
-  sucursalId?: string;
+  fechaEmisionFuente?: string;
+  fuenteInformacion?: string;
+  estatusReportado?: string;
 }
 
 /** Filtros de `GET /v1/pld/alertas`; todos opcionales. */

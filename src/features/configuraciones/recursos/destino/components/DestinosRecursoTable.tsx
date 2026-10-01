@@ -1,5 +1,5 @@
-import { emptyState, table } from "@/shared/components/ui/styles";
-
+import { useMemo } from "react";
+import { DataTable, type ColumnDef } from "@/shared/components/DataTable";
 import { useNivelesRiesgo } from "../../../ubicacion-geografica/niveles-riesgo/hooks/useNivelesRiesgo";
 import type { DestinoRecursoResponse } from "../types/destinoRecurso";
 
@@ -8,6 +8,7 @@ interface DestinosRecursoTableProps {
   isLoading: boolean;
   seleccionadoId: string | null;
   onSeleccionar: (destino: DestinoRecursoResponse) => void;
+  onDoubleClick?: (destino: DestinoRecursoResponse) => void;
 }
 
 export function DestinosRecursoTable({
@@ -15,48 +16,60 @@ export function DestinosRecursoTable({
   isLoading,
   seleccionadoId,
   onSeleccionar,
+  onDoubleClick,
 }: DestinosRecursoTableProps) {
   const { data: niveles } = useNivelesRiesgo();
 
-  const descripcionNivel = (catNivelRiesgoId: number) => {
-    const nivel = niveles?.find((item) => item.id === catNivelRiesgoId);
-    if (!nivel) return String(catNivelRiesgoId);
-    return `${nivel.nivelRiesgoDescripcion} (${nivel.nivelRiesgoValor})`;
-  };
+  const listaNiveles = Array.isArray(niveles)
+    ? niveles
+    : Array.isArray((niveles as unknown as { contenido?: typeof niveles })?.contenido)
+    ? ((niveles as unknown as { contenido: typeof niveles }).contenido ?? [])
+    : [];
 
-  if (isLoading) {
-    return <p className={emptyState}>Cargando destinos de recurso...</p>;
-  }
-
-  if (!destinos || destinos.length === 0) {
-    return <p className={emptyState}>No hay destinos de recurso registrados.</p>;
-  }
+  const columns: ColumnDef<DestinoRecursoResponse>[] = useMemo(
+    () => [
+      {
+        header: "#",
+        width: "60px",
+        className: "text-muted-foreground",
+        cell: (_, __, globalIndex) => globalIndex + 1,
+      },
+      {
+        header: "Nombre",
+        accessorKey: "nombre",
+        className: "font-semibold text-foreground",
+      },
+      {
+        header: "Nivel de riesgo",
+        cell: (item) => {
+          const nivel = listaNiveles.find((n) => n.id === item.catNivelRiesgoId);
+          if (!nivel) return String(item.catNivelRiesgoId);
+          return `${nivel.nivelRiesgoDescripcion} (${nivel.nivelRiesgoValor})`;
+        },
+      },
+    ],
+    [listaNiveles],
+  );
 
   return (
-    <div className={table.wrapper}>
-      <table className={table.root}>
-        <thead className={table.head}>
-          <tr>
-            <th className={`w-16 ${table.headCell}`}>#</th>
-            <th className={table.headCell}>Nombre</th>
-            <th className={table.headCell}>Nivel de riesgo</th>
-          </tr>
-        </thead>
-        <tbody className={table.body}>
-          {destinos.map((destino, indice) => (
-            <tr
-              key={destino.id}
-              onClick={() => onSeleccionar(destino)}
-              className={table.row(destino.id === seleccionadoId)}
-            >
-              {/* Consecutivo de fila, no el id del registro. */}
-              <td className={table.cellMuted}>{indice + 1}</td>
-              <td className={table.cellStrong}>{destino.nombre}</td>
-              <td className={table.cell}>{descripcionNivel(destino.catNivelRiesgoId)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <DataTable
+      data={destinos}
+      columns={columns}
+      isLoading={isLoading}
+      loadingMessage="Cargando destinos de recurso..."
+      emptyMessage="No hay destinos de recurso registrados."
+      seleccionadoId={seleccionadoId}
+      onRowClick={onSeleccionar}
+      onRowDoubleClick={onDoubleClick}
+      doubleClickTitle="Doble clic para modificar este registro"
+      search={{
+        placeholder: "Buscar destino de recurso...",
+      }}
+      pagination={{
+        mode: "client",
+        defaultRowsPerPage: 10,
+        rowsPerPageOptions: [5, 10, 25, 50],
+      }}
+    />
   );
 }

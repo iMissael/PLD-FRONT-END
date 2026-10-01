@@ -18,8 +18,15 @@ import type { EstadoRegla, FiltroReglas, ReglaAlerta } from "../types/reglaAlert
  * (`useCrearRegla`, `useActualizarRegla`, ...) siguen disponibles para cuando se habilite.
  */
 export function ReglasAlertaPage() {
-  const [filtro, setFiltro] = useState<FiltroReglas>({});
-  const { data: reglas, isLoading } = useReglasAlerta(filtro);
+  const [filtro, setFiltroState] = useState<FiltroReglas>({});
+  const [pagina, setPagina] = useState(0);
+  const [tamanio, setTamanio] = useState(20);
+  const { data, isLoading } = useReglasAlerta(filtro, pagina, tamanio);
+
+  const setFiltro = (actualizar: (prev: FiltroReglas) => FiltroReglas) => {
+    setFiltroState(actualizar);
+    setPagina(0);
+  };
   const { data: tipos } = useTiposAlerta();
 
   const [seleccionada, setSeleccionada] = useState<ReglaAlerta | null>(null);
@@ -82,10 +89,18 @@ export function ReglasAlertaPage() {
       </div>
 
       <ReglasTable
-        reglas={reglas}
+        reglas={data?.contenido}
         isLoading={isLoading}
         seleccionadaId={seleccionada?.idConfiguracionAlerta ?? null}
         onSeleccionar={setSeleccionada}
+        pagina={pagina}
+        tamanio={tamanio}
+        totalElementos={data?.totalElementos ?? 0}
+        onCambiarPagina={setPagina}
+        onCambiarTamanio={(nuevo) => {
+          setTamanio(nuevo);
+          setPagina(0);
+        }}
       />
 
       {seleccionada ? (

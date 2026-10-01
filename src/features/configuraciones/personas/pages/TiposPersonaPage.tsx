@@ -96,6 +96,11 @@ export function TiposPersonaPage() {
           setCreandoNuevo(false);
           setMensajeError(null);
         }}
+        onDoubleClick={(tipo) => {
+          setSeleccionado(tipo);
+          setCreandoNuevo(false);
+          setMensajeError(null);
+        }}
       />
 
       {mostrarFormulario ? (

@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { Button } from "@/shared/components/ui/button";
-import { Checkbox } from "@/shared/components/ui/checkbox";
 import { useTenantNombre } from "@/shared/tenant/useTenantNombre";
 import {
   Form,
@@ -115,20 +114,7 @@ export function LoginForm() {
           )}
         />
         <div className="flex items-center justify-between">
-          <FormField
-            control={form.control}
-            name="recordarme"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-center gap-2">
-                <FormControl>
-                  <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                </FormControl>
-                <FormLabel className="text-sm font-normal text-slate-600">
-                  Recuérdame
-                </FormLabel>
-              </FormItem>
-            )}
-          />
+
           <button
             type="button"
             onClick={() =>

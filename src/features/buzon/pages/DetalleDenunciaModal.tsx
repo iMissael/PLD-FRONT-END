@@ -10,6 +10,14 @@ import {
   UserCheckIcon,
   XIcon,
 } from "@/shared/components/icons";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/shared/components/ui/table";
 import { es } from "@/shared/i18n/es";
 import { buscarPersonasDenunciadas, obtenerPersonaPorRef, type PersonaItem } from "../api/busquedaPersonasApi";
 import { useRazonesAlertaPorTipo, useTiposAlertaBuzon } from "../hooks/useCatalogosBuzon";
@@ -452,24 +460,24 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                   {/* Si ya hay persona asignada: Muestra tabla de sólo lectura */}
                   {editDenunciadoVerificadoRef ? (
                     <div className="overflow-hidden rounded-xl border border-border bg-card shadow-xs">
-                      <table className="w-full text-left text-xs">
-                        <thead className="border-b border-border bg-muted/50 text-muted-foreground font-semibold text-[11px]">
-                          <tr>
-                            <th className="px-3 py-2">Ref</th>
-                            <th className="px-3 py-2">Nombre</th>
-                            <th className="px-3 py-2">Empleado / Socio</th>
-                            <th className="px-3 py-2 text-right">Acción</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-border">
-                          <tr className="hover:bg-muted/30 transition-colors">
-                            <td className="px-3 py-2.5 font-mono font-bold text-foreground">
+                      <Table className="w-full text-left text-xs">
+                        <TableHeader>
+                          <TableRow className="border-b border-border bg-muted/50 text-muted-foreground font-semibold text-[11px]">
+                            <TableHead className="px-3 py-2">Ref</TableHead>
+                            <TableHead className="px-3 py-2">Nombre</TableHead>
+                            <TableHead className="px-3 py-2">Empleado / Socio</TableHead>
+                            <TableHead className="px-3 py-2 text-right">Acción</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          <TableRow className="hover:bg-muted/30 transition-colors">
+                            <TableCell className="px-3 py-2.5 font-mono font-bold text-foreground">
                               {editDenunciadoVerificadoRef}
-                            </td>
-                            <td className="px-3 py-2.5 font-medium text-foreground">
+                            </TableCell>
+                            <TableCell className="px-3 py-2.5 font-medium text-foreground">
                               {selectedPersona?.nombreCompleto || "Registro en Catálogo"}
-                            </td>
-                            <td className="px-3 py-2.5">
+                            </TableCell>
+                            <TableCell className="px-3 py-2.5">
                               <span
                                 className={`inline-block rounded px-2 py-0.5 text-[10px] font-bold ${
                                   selectedPersona?.tipo === "EMPLEADO"
@@ -481,8 +489,8 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                               >
                                 {selectedPersona?.tipo || "VERIFICADO"}
                               </span>
-                            </td>
-                            <td className="px-3 py-2.5 text-right space-x-1.5 whitespace-nowrap">
+                            </TableCell>
+                            <TableCell className="px-3 py-2.5 text-right space-x-1.5 whitespace-nowrap">
                               {selectedPersona && (
                                 <button
                                   type="button"
@@ -507,10 +515,10 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                                 <XIcon className="h-3 w-3" />
                                 Cambiar
                               </button>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+                            </TableCell>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
                     </div>
                   ) : (
                     /* Si no hay persona asignada: Muestra el buscador */
@@ -657,24 +665,24 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
 
                 {denuncia.denunciadoVerificadoRef ? (
                   <div className="overflow-hidden rounded-lg border border-border bg-card">
-                    <table className="w-full text-left text-xs">
-                      <thead className="border-b border-border bg-muted/50 text-[10px] text-muted-foreground font-semibold">
-                        <tr>
-                          <th className="px-3 py-1.5">Ref</th>
-                          <th className="px-3 py-1.5">Nombre</th>
-                          <th className="px-3 py-1.5">Empleado / Socio</th>
-                          <th className="px-3 py-1.5 text-right">Acción</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-border">
-                        <tr>
-                          <td className="px-3 py-2 font-mono font-bold text-foreground">
+                    <Table className="w-full text-left text-xs">
+                      <TableHeader>
+                        <TableRow className="border-b border-border bg-muted/50 text-[10px] text-muted-foreground font-semibold">
+                          <TableHead className="px-3 py-1.5">Ref</TableHead>
+                          <TableHead className="px-3 py-1.5">Nombre</TableHead>
+                          <TableHead className="px-3 py-1.5">Empleado / Socio</TableHead>
+                          <TableHead className="px-3 py-1.5 text-right">Acción</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell className="px-3 py-2 font-mono font-bold text-foreground">
                             {denuncia.denunciadoVerificadoRef}
-                          </td>
-                          <td className="px-3 py-2 font-medium text-foreground">
+                          </TableCell>
+                          <TableCell className="px-3 py-2 font-medium text-foreground">
                             {selectedPersona?.nombreCompleto || "Registro en Catálogo"}
-                          </td>
-                          <td className="px-3 py-2">
+                          </TableCell>
+                          <TableCell className="px-3 py-2">
                             <span
                               className={`inline-block rounded px-2 py-0.5 text-[10px] font-bold ${
                                 selectedPersona?.tipo === "EMPLEADO"
@@ -686,8 +694,8 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                             >
                               {selectedPersona?.tipo || "VERIFICADO"}
                             </span>
-                          </td>
-                          <td className="px-3 py-2 text-right">
+                          </TableCell>
+                          <TableCell className="px-3 py-2 text-right">
                             {selectedPersona ? (
                               <button
                                 type="button"
@@ -701,10 +709,10 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                             ) : (
                               <span className="text-[11px] text-muted-foreground">Sin ficha</span>
                             )}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                          </TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
                   </div>
                 ) : (
                   <p className="text-xs text-muted-foreground italic">

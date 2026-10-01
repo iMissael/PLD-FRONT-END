@@ -62,15 +62,21 @@ export function HistorialesCrediticiosPage() {
           setSeleccionado(historial);
           setMensajeError(null);
         }}
+        onDoubleClick={(historial) => {
+          setSeleccionado(historial);
+          setMensajeError(null);
+        }}
       />
 
       {seleccionado ? (
-        <CambiarRiesgoHistorialForm
-          historial={seleccionado}
-          onGuardar={handleGuardar}
-          onCancelar={() => setSeleccionado(null)}
-          isPending={cambiarRiesgo.isPending}
-        />
+        <div className="scroll-mt-4">
+          <CambiarRiesgoHistorialForm
+            historial={seleccionado}
+            onGuardar={handleGuardar}
+            onCancelar={() => setSeleccionado(null)}
+            isPending={cambiarRiesgo.isPending}
+          />
+        </div>
       ) : null}
     </div>
   );

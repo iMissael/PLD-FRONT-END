@@ -13,9 +13,13 @@ import {
   useEliminarZona,
   useActualizarZona,
 } from "../hooks/useZonasGeograficasMutations";
-import type { ZonaGeograficaResponse } from "../types/zonaGeografica";
+import type { EntidadPais, ZonaGeograficaResponse } from "../types/zonaGeografica";
 
-export function ZonasGeograficasPage() {
+interface ZonasGeograficasPageProps {
+  tipo?: EntidadPais;
+}
+
+export function ZonasGeograficasPage({ tipo }: ZonasGeograficasPageProps) {
   const { data: zonas, isLoading } = useZonasGeograficas();
 
   const [seleccionada, setSeleccionada] = useState<ZonaGeograficaResponse | null>(null);
@@ -24,7 +28,6 @@ export function ZonasGeograficasPage() {
   const [mensajeError, setMensajeError] = useState<string | null>(null);
 
   // Al abrir "Ver" debe verse de inmediato, sin tener que bajar la página
-  // (antes quedaba abajo del formulario de edición, si ambos estaban abiertos).
   const verZonaRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     if (verZona) {
@@ -76,24 +79,27 @@ export function ZonasGeograficasPage() {
 
   const formRef = useRef<HTMLDivElement | null>(null);
 
-  const handleEditarZona = (zona: ZonaGeograficaResponse) => {
+  const handleVerZona = (zona: ZonaGeograficaResponse) => {
+    setVerZona(zona);
     setSeleccionada(zona);
-    setCreandoNueva(false);
-    setMensajeError(null);
     setTimeout(() => {
-      formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      verZonaRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 50);
   };
+
+  const subtitulo =
+    tipo === "P"
+      ? "Administra las zonas de riesgo PLD y los países asignados a cada una."
+      : tipo === "E"
+      ? "Administra las zonas de riesgo PLD y las entidades asignadas a cada una."
+      : "Administra las zonas de riesgo PLD y las entidades/países asignados a cada una.";
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-semibold text-foreground">Zonas geográficas</h2>
-          <p className="text-sm text-muted-foreground">
-            Administra las zonas de riesgo PLD y las entidades/países asignados a cada
-            una.
-          </p>
+          <p className="text-sm text-muted-foreground">{subtitulo}</p>
         </div>
         <Button
           onClick={() => {
@@ -117,25 +123,27 @@ export function ZonasGeograficasPage() {
         isLoading={isLoading}
         seleccionadaId={seleccionada?.id ?? null}
         verId={verZona?.id ?? null}
+        tipoFiltro={tipo}
         onSeleccionar={(zona) => {
           setSeleccionada(zona);
           setCreandoNueva(false);
           setMensajeError(null);
         }}
-        onDoubleClick={handleEditarZona}
+        onDoubleClick={handleVerZona}
         onVer={(zona) => setVerZona((prev) => (prev?.id === zona.id ? null : zona))}
       />
 
       {verZona ? (
-        <div ref={verZonaRef}>
+        <div ref={verZonaRef} className="scroll-mt-4">
           <ZonaAsignaciones zona={verZona} onCerrar={() => setVerZona(null)} />
         </div>
       ) : null}
 
       {mostrarFormulario ? (
-        <div ref={formRef} className="flex flex-col gap-3">
+        <div ref={formRef} className="flex flex-col gap-3 scroll-mt-4">
           <ZonaForm
             zona={zonaEnEdicion}
+            defaultTipo={tipo ?? "P"}
             onGuardar={handleGuardar}
             onCancelar={() => {
               setCreandoNueva(false);

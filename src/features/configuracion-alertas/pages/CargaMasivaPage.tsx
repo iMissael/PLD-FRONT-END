@@ -2,6 +2,14 @@ import { useRef, useState } from "react";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { UploadIcon } from "@/shared/components/icons";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/shared/components/ui/table";
 
 import { useCargaMasivaPersonasBloqueadas } from "../hooks/usePersonasBloqueadasMutations";
 
@@ -119,27 +127,27 @@ export function CargaMasivaPage() {
 
           {resultado.detalleErrores.length > 0 && (
             <div className="overflow-x-auto rounded-xl border border-border bg-card shadow-xs">
-              <table className="min-w-full divide-y divide-border text-sm">
-                <thead className="bg-muted/50">
-                  <tr>
-                    <th className="px-4 py-2 text-left font-semibold text-muted-foreground">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="font-semibold text-muted-foreground">
                       Fila
-                    </th>
-                    <th className="px-4 py-2 text-left font-semibold text-muted-foreground">
+                    </TableHead>
+                    <TableHead className="font-semibold text-muted-foreground">
                       Error
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border">
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
                   {resultado.detalleErrores.map((detalle, index) => (
                     // No hay id único en el DTO; fila+índice es estable para esta lista de solo lectura.
-                    <tr key={`${detalle.numeroFila}-${index}`} className="hover:bg-muted/30">
-                      <td className="px-4 py-2 text-foreground font-mono">{detalle.numeroFila}</td>
-                      <td className="px-4 py-2 text-foreground">{detalle.motivo}</td>
-                    </tr>
+                    <TableRow key={`${detalle.numeroFila}-${index}`}>
+                      <TableCell className="text-foreground font-mono">{detalle.numeroFila}</TableCell>
+                      <TableCell className="text-foreground">{detalle.motivo}</TableCell>
+                    </TableRow>
                   ))}
-                </tbody>
-              </table>
+                </TableBody>
+              </Table>
             </div>
           )}
         </div>

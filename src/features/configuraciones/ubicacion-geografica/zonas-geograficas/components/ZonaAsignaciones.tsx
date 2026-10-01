@@ -36,6 +36,18 @@ export function ZonaAsignaciones({ zona, onCerrar }: ZonaAsignacionesProps) {
     !esZonaDeEntidades,
   );
 
+  const listaEntidades = Array.isArray(entidadesDeZona)
+    ? entidadesDeZona
+    : Array.isArray((entidadesDeZona as unknown as { contenido?: typeof entidadesDeZona })?.contenido)
+    ? ((entidadesDeZona as unknown as { contenido: typeof entidadesDeZona }).contenido ?? [])
+    : [];
+
+  const listaPaises = Array.isArray(paisesDeZona)
+    ? paisesDeZona
+    : Array.isArray((paisesDeZona as unknown as { contenido?: typeof paisesDeZona })?.contenido)
+    ? ((paisesDeZona as unknown as { contenido: typeof paisesDeZona }).contenido ?? [])
+    : [];
+
   return (
     <div className={`flex flex-col gap-4 p-4 ${card}`}>
       <div className="flex items-center justify-between">
@@ -54,13 +66,13 @@ export function ZonaAsignaciones({ zona, onCerrar }: ZonaAsignacionesProps) {
       {esZonaDeEntidades ? (
         <div className="flex flex-col gap-2">
           <p className="text-sm font-medium text-foreground">
-            Entidades asignadas ({entidadesDeZona?.length ?? 0})
+            Entidades asignadas ({listaEntidades.length})
           </p>
           {cargandoEntidadesZona ? (
             <p className="text-sm text-muted-foreground">Cargando...</p>
-          ) : entidadesDeZona && entidadesDeZona.length > 0 ? (
+          ) : listaEntidades.length > 0 ? (
             <ul className="max-h-96 divide-y divide-border overflow-y-auto rounded-md border border-border">
-              {entidadesDeZona.map((entidad) => (
+              {listaEntidades.map((entidad) => (
                 <li key={entidad.id} className="px-3 py-2 text-sm text-foreground">
                   {entidad.nombre}
                 </li>
@@ -73,13 +85,13 @@ export function ZonaAsignaciones({ zona, onCerrar }: ZonaAsignacionesProps) {
       ) : (
         <div className="flex flex-col gap-2">
           <p className="text-sm font-medium text-foreground">
-            Países asignados ({paisesDeZona?.length ?? 0})
+            Países asignados ({listaPaises.length})
           </p>
           {cargandoPaisesZona ? (
             <p className="text-sm text-muted-foreground">Cargando...</p>
-          ) : paisesDeZona && paisesDeZona.length > 0 ? (
+          ) : listaPaises.length > 0 ? (
             <ul className="max-h-96 divide-y divide-border overflow-y-auto rounded-md border border-border">
-              {paisesDeZona.map((pais) => (
+              {listaPaises.map((pais) => (
                 <li key={pais.id} className="px-3 py-2 text-sm text-foreground">
                   {pais.nombre}
                 </li>

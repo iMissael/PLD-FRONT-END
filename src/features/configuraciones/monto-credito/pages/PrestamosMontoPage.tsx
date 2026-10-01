@@ -95,10 +95,15 @@ export function PrestamosMontoPage() {
           setCreandoNuevo(false);
           setMensajeError(null);
         }}
+        onDoubleClick={(rango) => {
+          setSeleccionado(rango);
+          setCreandoNuevo(false);
+          setMensajeError(null);
+        }}
       />
 
       {mostrarFormulario ? (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 scroll-mt-4">
           <PrestamoMontoForm
             rango={rangoEnEdicion}
             onGuardar={handleGuardar}

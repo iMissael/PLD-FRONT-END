@@ -1,19 +1,24 @@
 import { useMemo, useState } from "react";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
-import { BuscadorEmpleados } from "@/features/alertas/components/BuscadorEmpleados";
+import { FuenteInformacionMoral } from "@/features/alertas/components/FuenteInformacionMoral";
+import { TablaClientes } from "@/features/alertas/components/TablaClientes";
+import { TablaEmpleados } from "@/features/alertas/components/TablaEmpleados";
 import {
   useCapturarAlerta,
   useRazonesAlerta,
   useTiposAlerta,
 } from "@/features/alertas/hooks/useAlertas";
 import type { Alerta, TipoAlerta, TipoReportado } from "@/features/alertas/types/alertas";
-import { BuscadorSocios } from "@/features/operacion/evaluacion-riesgo/components/BuscadorSocios";
-import { useSucursalActivaStore } from "@/shared/auth/sucursalActivaStore";
+import {
+  type DatosFuenteInformacion,
+  FUENTE_VACIA,
+} from "@/features/alertas/utils/fuenteInformacion";
 import { Alert } from "@/shared/components/ui/Alert";
 import { CalendarioFecha } from "@/shared/components/ui/CalendarioFecha";
 import { Button } from "@/shared/components/ui/CatalogoButton";
 import { card, field, hint, label } from "@/shared/components/ui/styles";
+import { cn } from "@/shared/utils/cn";
 import { haceAniosIso, hoyIso } from "@/shared/utils/fechas";
 
 /** Antigüedad máxima de una incidencia capturable (hoy es el límite superior). */
@@ -22,6 +27,7 @@ const ANIOS_ATRAS_INCIDENCIA = 5;
 interface Reportado {
   referencia: string;
   nombre: string;
+  esMoral: boolean;
 }
 
 interface FormState {
@@ -31,6 +37,7 @@ interface FormState {
   fechaIncidencia: string;
   actoHecho: string;
   informacionAdicional: string;
+  fuente: DatosFuenteInformacion;
 }
 
 const VACIO: FormState = {
@@ -40,6 +47,7 @@ const VACIO: FormState = {
   fechaIncidencia: "",
   actoHecho: "",
   informacionAdicional: "",
+  fuente: FUENTE_VACIA,
 };
 
 function aMayusculas(texto: string) {
@@ -51,6 +59,29 @@ const ETIQUETA_REPORTADO: Record<TipoReportado, string> = {
   EMPLEADO: "Empleado",
 };
 
+type Campo =
+  | "razon"
+  | "reportado"
+  | "fechaIncidencia"
+  | "fechaEmisionFuente"
+  | "fuenteInformacion"
+  | "estatusReportado"
+  | "actoHecho"
+  | "informacionAdicional";
+
+const ETIQUETA_CAMPO: Record<Campo, string> = {
+  razon: "Razón de la alerta",
+  reportado: "Persona a reportar",
+  fechaIncidencia: "Fecha de incidencia",
+  fechaEmisionFuente: "Fecha de emisión de la fuente de información",
+  fuenteInformacion: "Fuente de información",
+  estatusReportado: "Estatus del reportado",
+  actoHecho: "Acto o hecho",
+  informacionAdicional: "Información adicional",
+};
+
+const MARCA_FALTANTE = "rounded-md ring-2 ring-warning";
+
 /**
  * "Operación › Captura de alertas" (manual Sicanet 4.3.4). Relevante e Inusual se
  * levantan sobre un cliente; Interna preocupante sobre un empleado. Qué tipos se
@@ -59,11 +90,11 @@ const ETIQUETA_REPORTADO: Record<TipoReportado, string> = {
  * CONFIRMADA: quien la captura ya la dictaminó.
  */
 export function CapturaAlertasPage() {
-  const sucursalActiva = useSucursalActivaStore((s) => s.sucursalActiva);
   const { data: tipos, isLoading: cargandoTipos } = useTiposAlerta();
   const [form, setForm] = useState<FormState>(VACIO);
   const [creada, setCreada] = useState<Alerta | null>(null);
   const [mensajeError, setMensajeError] = useState<string | null>(null);
+  const [intentoGuardar, setIntentoGuardar] = useState(false);
   const capturar = useCapturarAlerta();
 
   const tiposCapturables = useMemo(
@@ -79,8 +110,30 @@ export function CapturaAlertasPage() {
   );
   const razones = (razonesTipo ?? []).filter((r) => r.estado === "ACTIVO");
   const requiereRazon = razones.length > 0;
+  const razon = razones.find((r) => r.idRazonAlerta === form.razonAlertaId);
+  const esAlerta24Horas = razon?.es24Horas === "S";
+  const esMoral = form.reportado?.esMoral ?? false;
   const fechaMinima = haceAniosIso(ANIOS_ATRAS_INCIDENCIA);
   const fechaMaxima = hoyIso();
+
+  const faltantes: Campo[] = [];
+  if (requiereRazon && form.razonAlertaId === "") faltantes.push("razon");
+  if (!form.reportado) faltantes.push("reportado");
+  if (!form.fechaIncidencia) faltantes.push("fechaIncidencia");
+  if (esMoral) {
+    if (!form.fuente.fechaEmisionFuente) faltantes.push("fechaEmisionFuente");
+    if (!form.fuente.fuenteInformacion.trim()) faltantes.push("fuenteInformacion");
+    if (!form.fuente.estatusReportado.trim()) faltantes.push("estatusReportado");
+  }
+  if (!form.actoHecho.trim()) faltantes.push("actoHecho");
+  if (!form.informacionAdicional.trim()) faltantes.push("informacionAdicional");
+
+  const fechaFueraDeRango =
+    Boolean(form.fechaIncidencia) &&
+    (form.fechaIncidencia < fechaMinima || form.fechaIncidencia > fechaMaxima);
+  const mostrarFaltantes = intentoGuardar && (faltantes.length > 0 || fechaFueraDeRango);
+  const marcar = (campo: Campo) =>
+    intentoGuardar && faltantes.includes(campo) ? MARCA_FALTANTE : "";
 
   const elegirTipo = (acronimo: string) => {
     // Cambiar de tipo puede cambiar a quién se reporta (cliente/empleado): se limpia.
@@ -89,29 +142,20 @@ export function CapturaAlertasPage() {
       alertaAcronimo: acronimo,
       razonAlertaId: "",
       reportado: null,
+      fuente: FUENTE_VACIA,
     }));
     setCreada(null);
+    setIntentoGuardar(false);
+    setMensajeError(null);
   };
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     setMensajeError(null);
-    if (!tipo?.tipoReportado) return setMensajeError("Seleccione el tipo de alerta.");
-    if (requiereRazon && form.razonAlertaId === "") {
-      return setMensajeError("Seleccione la razón de la alerta.");
-    }
-    if (!form.reportado) {
-      return setMensajeError(
-        `Seleccione al ${ETIQUETA_REPORTADO[tipo.tipoReportado].toLowerCase()} a reportar.`,
-      );
-    }
-    if (!form.fechaIncidencia)
-      return setMensajeError("Seleccione la fecha de incidencia.");
-    if (form.fechaIncidencia < fechaMinima || form.fechaIncidencia > fechaMaxima) {
-      return setMensajeError(
-        `La fecha de incidencia debe estar entre hace ${ANIOS_ATRAS_INCIDENCIA} años y hoy.`,
-      );
-    }
+    setCreada(null);
+    setIntentoGuardar(true);
+    if (!tipo?.tipoReportado || !form.reportado) return;
+    if (faltantes.length > 0 || fechaFueraDeRango) return;
 
     capturar.mutate(
       {
@@ -123,13 +167,20 @@ export function CapturaAlertasPage() {
         // Todo el texto del sistema va en mayúsculas; aquí se convierte al guardar para
         // no perder los saltos de línea ni mover el cursor mientras se escribe.
         actoHecho: aMayusculas(form.actoHecho),
-        informacionAdicional: aMayusculas(form.informacionAdicional) || undefined,
-        sucursalId: sucursalActiva?.id,
+        informacionAdicional: aMayusculas(form.informacionAdicional),
+        ...(esMoral
+          ? {
+              fechaEmisionFuente: form.fuente.fechaEmisionFuente,
+              fuenteInformacion: aMayusculas(form.fuente.fuenteInformacion),
+              estatusReportado: aMayusculas(form.fuente.estatusReportado),
+            }
+          : {}),
       },
       {
         onSuccess: (alerta) => {
           setCreada(alerta);
           setForm(VACIO);
+          setIntentoGuardar(false);
         },
         onError: (error) =>
           setMensajeError(
@@ -155,9 +206,34 @@ export function CapturaAlertasPage() {
           {creada.tipoAlertaDescripcion}) para {creada.reportado?.nombre}.
         </Alert>
       ) : null}
-      {mensajeError ? <Alert>{mensajeError}</Alert> : null}
+      {mensajeError ? (
+        <Alert tono="error">
+          <strong>No se pudo generar la alerta.</strong> {mensajeError}
+        </Alert>
+      ) : null}
+      {mostrarFaltantes ? (
+        <Alert tono="advertencia">
+          {faltantes.length > 0 ? (
+            <>
+              <strong>Faltan datos por capturar:</strong>{" "}
+              {faltantes.map((c) => ETIQUETA_CAMPO[c]).join(", ")}.
+            </>
+          ) : null}
+          {fechaFueraDeRango ? (
+            <>
+              {faltantes.length > 0 ? " " : null}
+              La fecha de incidencia debe estar entre hace {ANIOS_ATRAS_INCIDENCIA} años y
+              hoy.
+            </>
+          ) : null}
+        </Alert>
+      ) : null}
 
-      <form onSubmit={handleSubmit} className={`flex flex-col gap-5 p-4 ${card}`}>
+      <form
+        noValidate
+        onSubmit={handleSubmit}
+        className={`flex flex-col gap-5 p-4 ${card}`}
+      >
         <fieldset className="flex flex-col gap-2">
           <legend className={label}>Tipo de alerta</legend>
           {cargandoTipos ? (
@@ -186,33 +262,53 @@ export function CapturaAlertasPage() {
             {cargandoRazones ? (
               <p className={hint}>Cargando razones…</p>
             ) : requiereRazon ? (
-              <div className="flex flex-col gap-1">
-                <label htmlFor="razon" className={label}>
-                  Razón de la alerta
-                </label>
-                <select
-                  id="razon"
-                  required
-                  value={form.razonAlertaId}
-                  onChange={(e) =>
-                    setForm((prev) => ({
-                      ...prev,
-                      razonAlertaId: e.target.value === "" ? "" : Number(e.target.value),
-                    }))
-                  }
-                  className={field}
-                >
-                  <option value="">Seleccione una razón</option>
-                  {razones.map((r) => (
-                    <option key={r.idRazonAlerta} value={r.idRazonAlerta}>
-                      {r.numeroRazonAlerta ? `${r.numeroRazonAlerta}. ` : ""}
-                      {r.descripcionRazonAlerta.length > 140
-                        ? `${r.descripcionRazonAlerta.slice(0, 140)}…`
-                        : r.descripcionRazonAlerta}
-                    </option>
-                  ))}
-                </select>
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-1 sm:max-w-xs">
+                  <label htmlFor="razon" className={label}>
+                    Razón de la alerta
+                  </label>
+                  <select
+                    id="razon"
+                    value={form.razonAlertaId}
+                    onChange={(e) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        razonAlertaId:
+                          e.target.value === "" ? "" : Number(e.target.value),
+                      }))
+                    }
+                    className={cn(field, marcar("razon"))}
+                  >
+                    <option value="">Seleccione una razón</option>
+                    {razones.map((r) => (
+                      <option key={r.idRazonAlerta} value={r.idRazonAlerta}>
+                        {r.numeroRazonAlerta ?? r.idRazonAlerta}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label htmlFor="descripcionRazon" className={label}>
+                    Descripción de razón de alerta
+                  </label>
+                  <textarea
+                    id="descripcionRazon"
+                    readOnly
+                    tabIndex={-1}
+                    rows={4}
+                    value={razon?.descripcionRazonAlerta ?? ""}
+                    placeholder="Se muestra al seleccionar la razón de la alerta"
+                    className={`${field} bg-muted/40 resize-none`}
+                  />
+                </div>
               </div>
+            ) : null}
+
+            {esAlerta24Horas ? (
+              <Alert tono="exito">
+                <strong>Alerta de 24 horas.</strong> Esta razón debe reportarse dentro de
+                las siguientes 24 horas.
+              </Alert>
             ) : null}
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -220,55 +316,91 @@ export function CapturaAlertasPage() {
                 <label htmlFor="reportado" className={label}>
                   {ETIQUETA_REPORTADO[tipo.tipoReportado!]} a reportar
                 </label>
-                {tipo.tipoReportado === "EMPLEADO" ? (
-                  <BuscadorEmpleados
+                <div className={marcar("reportado")}>
+                  <input
                     id="reportado"
-                    valor={
+                    readOnly
+                    value={
                       form.reportado
-                        ? `${form.reportado.referencia} · ${form.reportado.nombre}`
+                        ? tipo.tipoReportado === "EMPLEADO"
+                          ? `${form.reportado.referencia} · ${form.reportado.nombre}`
+                          : form.reportado.nombre
                         : ""
                     }
-                    onSeleccionar={(e) =>
-                      setForm((prev) => ({
-                        ...prev,
-                        reportado: { referencia: e.id, nombre: e.nombre },
-                      }))
+                    placeholder={
+                      tipo.tipoReportado === "EMPLEADO"
+                        ? "Seleccione un empleado de la tabla"
+                        : "Seleccione un cliente de la tabla"
                     }
+                    className={`${field} bg-muted/40 w-full`}
                   />
-                ) : (
-                  <BuscadorSocios
-                    variante="panel"
-                    valor={
-                      form.reportado
-                        ? `${form.reportado.referencia} · ${form.reportado.nombre}`
-                        : ""
-                    }
-                    placeholder="Referencia, número de cliente o nombre"
-                    onSeleccionar={(s) =>
-                      setForm((prev) => ({
-                        ...prev,
-                        reportado: { referencia: s.id ?? "", nombre: s.nombre ?? "" },
-                      }))
-                    }
-                  />
-                )}
+                </div>
               </div>
 
               <div className="flex flex-col gap-1">
                 <label htmlFor="fechaIncidencia" className={label}>
                   Fecha de incidencia
                 </label>
-                <CalendarioFecha
-                  id="fechaIncidencia"
-                  min={fechaMinima}
-                  max={fechaMaxima}
-                  valor={form.fechaIncidencia}
-                  onCambiar={(fecha) =>
-                    setForm((prev) => ({ ...prev, fechaIncidencia: fecha }))
+                <div
+                  className={
+                    intentoGuardar &&
+                    (faltantes.includes("fechaIncidencia") || fechaFueraDeRango)
+                      ? MARCA_FALTANTE
+                      : ""
                   }
-                />
+                >
+                  <CalendarioFecha
+                    id="fechaIncidencia"
+                    min={fechaMinima}
+                    max={fechaMaxima}
+                    valor={form.fechaIncidencia}
+                    onCambiar={(fecha) =>
+                      setForm((prev) => ({ ...prev, fechaIncidencia: fecha }))
+                    }
+                  />
+                </div>
               </div>
             </div>
+
+            {tipo.tipoReportado === "SOCIO" ? (
+              <TablaClientes
+                seleccionadoId={form.reportado?.referencia ?? null}
+                onSeleccionar={(s) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    reportado: {
+                      referencia: s.id ?? "",
+                      nombre: s.nombre ?? "",
+                      esMoral: s.tipoPersona === "MORAL",
+                    },
+                    fuente: FUENTE_VACIA,
+                  }))
+                }
+              />
+            ) : (
+              <TablaEmpleados
+                seleccionadoId={form.reportado?.referencia ?? null}
+                onSeleccionar={(e) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    reportado: { referencia: e.id, nombre: e.nombre, esMoral: false },
+                  }))
+                }
+              />
+            )}
+
+            {esMoral ? (
+              <FuenteInformacionMoral
+                datos={form.fuente}
+                fechaMaxima={fechaMaxima}
+                faltantes={{
+                  fechaEmisionFuente: Boolean(marcar("fechaEmisionFuente")),
+                  fuenteInformacion: Boolean(marcar("fuenteInformacion")),
+                  estatusReportado: Boolean(marcar("estatusReportado")),
+                }}
+                onCambiar={(fuente) => setForm((prev) => ({ ...prev, fuente }))}
+              />
+            ) : null}
 
             <div className="flex flex-col gap-1">
               <label htmlFor="actoHecho" className={label}>
@@ -276,13 +408,12 @@ export function CapturaAlertasPage() {
               </label>
               <textarea
                 id="actoHecho"
-                required
                 rows={4}
                 value={form.actoHecho}
                 onChange={(e) =>
                   setForm((prev) => ({ ...prev, actoHecho: e.target.value }))
                 }
-                className={`${field} uppercase`}
+                className={cn(field, "uppercase", marcar("actoHecho"))}
               />
               <p className={hint}>Qué ocurrió: operación, montos, conducta observada.</p>
             </div>
@@ -298,7 +429,7 @@ export function CapturaAlertasPage() {
                 onChange={(e) =>
                   setForm((prev) => ({ ...prev, informacionAdicional: e.target.value }))
                 }
-                className={`${field} uppercase`}
+                className={cn(field, "uppercase", marcar("informacionAdicional"))}
               />
             </div>
 
@@ -308,6 +439,7 @@ export function CapturaAlertasPage() {
                 onClick={() => {
                   setForm(VACIO);
                   setMensajeError(null);
+                  setIntentoGuardar(false);
                 }}
               >
                 Limpiar

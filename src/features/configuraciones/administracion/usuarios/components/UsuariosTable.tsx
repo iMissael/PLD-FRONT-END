@@ -126,21 +126,43 @@ export function UsuariosTable() {
   const { data: usuarios, isLoading, isError } = useUsuarios();
   const { data: roles } = useRoles();
 
-  const nombreDeRol = useMemo(() => {
-    const mapa = new Map(roles?.map((rol) => [rol.idRol, rol.nombre]) ?? []);
-    return (rolId: number | undefined) => (rolId ? (mapa.get(rolId) ?? "—") : "—");
+  const listaRoles = useMemo(() => {
+    if (!roles) return [];
+    if (Array.isArray(roles)) return roles;
+    if (Array.isArray((roles as unknown as { contenido?: typeof roles })?.contenido)) {
+      return (roles as unknown as { contenido: typeof roles }).contenido ?? [];
+    }
+    return [];
   }, [roles]);
 
-  const usuariosFiltrados = useMemo(() => {
+  const listaUsuarios = useMemo(() => {
     if (!usuarios) return [];
+    if (Array.isArray(usuarios)) return usuarios;
+    if (Array.isArray((usuarios as unknown as { contenido?: typeof usuarios })?.contenido)) {
+      return (usuarios as unknown as { contenido: typeof usuarios }).contenido ?? [];
+    }
+    return [];
+  }, [usuarios]);
+
+  const nombreDeRol = useMemo(() => {
+    const mapa = new Map<string, string>(
+      listaRoles
+        .filter((rol) => Boolean(rol.idRol))
+        .map((rol) => [String(rol.idRol), String(rol.nombre ?? "—")]),
+    );
+    return (rolId: string | number | undefined): string =>
+      rolId ? (mapa.get(String(rolId)) ?? "—") : "—";
+  }, [listaRoles]);
+
+  const usuariosFiltrados = useMemo(() => {
     const query = busqueda.trim().toLowerCase();
-    if (!query) return usuarios;
-    return usuarios.filter((usuario) =>
+    if (!query) return listaUsuarios;
+    return listaUsuarios.filter((usuario) =>
       [usuario.nombre, usuario.username, usuario.correo]
         .filter(Boolean)
         .some((campo) => campo!.toLowerCase().includes(query)),
     );
-  }, [usuarios, busqueda]);
+  }, [listaUsuarios, busqueda]);
 
   const totalElements = usuariosFiltrados.length;
   const paginatedUsuarios = useMemo(() => {

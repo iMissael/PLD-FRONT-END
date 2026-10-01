@@ -1,5 +1,13 @@
 import { CheckCircle2, CircleHelp, XCircle } from "lucide-react";
 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/shared/components/ui/table";
 import type { PersonaEnLista, SocioEnRevision } from "../types/coincidencias";
 import { coinciden } from "../utils/comparar";
 
@@ -56,30 +64,30 @@ export function ComparacionPersona({ socio, persona }: ComparacionPersonaProps) 
 
   return (
     <div className="space-y-4 rounded-lg border p-4">
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="text-left text-xs uppercase tracking-wide text-muted-foreground">
-            <th className="pb-2 font-medium">Dato</th>
-            <th className="pb-2 font-medium">Socio</th>
-            <th className="pb-2 font-medium">En la lista</th>
-            <th className="pb-2 font-medium" aria-label="Resultado" />
-          </tr>
-        </thead>
-        <tbody className="divide-y">
+      <Table className="w-full text-sm">
+        <TableHeader>
+          <TableRow className="text-left text-xs uppercase tracking-wide text-muted-foreground">
+            <TableHead className="pb-2 font-medium">Dato</TableHead>
+            <TableHead className="pb-2 font-medium">Socio</TableHead>
+            <TableHead className="pb-2 font-medium">En la lista</TableHead>
+            <TableHead className="pb-2 font-medium" aria-label="Resultado" />
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {filas.map((fila) => (
-            <tr key={fila.campo}>
-              <th scope="row" className="py-2 pr-2 text-left font-medium">
+            <TableRow key={fila.campo}>
+              <TableCell className="py-2 pr-2 text-left font-medium">
                 {fila.campo}
-              </th>
-              <td className="py-2 pr-2 break-words">{fila.socio || "—"}</td>
-              <td className="py-2 pr-2 break-words">{fila.lista || "—"}</td>
-              <td className="py-2 whitespace-nowrap">
+              </TableCell>
+              <TableCell className="py-2 pr-2 break-words">{fila.socio || "—"}</TableCell>
+              <TableCell className="py-2 pr-2 break-words">{fila.lista || "—"}</TableCell>
+              <TableCell className="py-2 whitespace-nowrap">
                 <Indicador resultado={coinciden(fila.socio, fila.lista)} />
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
 
       <dl className="grid grid-cols-2 gap-3 border-t pt-4">
         <Dato label="Lista" valor={persona.lista} />

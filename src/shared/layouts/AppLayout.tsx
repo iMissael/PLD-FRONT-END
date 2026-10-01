@@ -68,11 +68,15 @@ const NAV_ITEMS: NavNode[] = [
       },
       { label: "Matriz de riesgo", to: "configuraciones/matriz-riesgo" },
       {
-        label: "ubicación geográfica",
+        label: "Ubicación geográfica",
         children: [
           {
-            label: "Zonas geográficas",
-            to: "configuraciones/ubicacion-geografica/zonas-geograficas",
+            label: "Zonas geográficas (Países)",
+            to: "configuraciones/ubicacion-geografica/zonas-geograficas/paises",
+          },
+          {
+            label: "Zonas geográficas (Entidades)",
+            to: "configuraciones/ubicacion-geografica/zonas-geograficas/entidades",
           },
           {
             label: "Entidades",

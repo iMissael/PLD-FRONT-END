@@ -24,6 +24,12 @@ export function NivelRiesgoSelect({
 }: NivelRiesgoSelectProps) {
   const { data: niveles, isLoading } = useNivelesRiesgo();
 
+  const listaNiveles = Array.isArray(niveles)
+    ? niveles
+    : Array.isArray((niveles as unknown as { contenido?: typeof niveles })?.contenido)
+    ? ((niveles as unknown as { contenido: typeof niveles }).contenido ?? [])
+    : [];
+
   return (
     <select
       id={id}
@@ -34,7 +40,7 @@ export function NivelRiesgoSelect({
       className={field}
     >
       <option value="">{isLoading ? "Cargando..." : "Selecciona un nivel"}</option>
-      {niveles?.map((nivel) => (
+      {listaNiveles.map((nivel) => (
         <option key={nivel.id} value={nivel.id}>
           {nivel.nivelRiesgoDescripcion} ({nivel.nivelRiesgoValor})
         </option>

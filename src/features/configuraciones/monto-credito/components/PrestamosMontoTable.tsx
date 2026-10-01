@@ -1,5 +1,5 @@
-import { emptyState, table } from "@/shared/components/ui/styles";
-
+import { useMemo } from "react";
+import { DataTable, type ColumnDef } from "@/shared/components/DataTable";
 import { useNivelesRiesgo } from "../../ubicacion-geografica/niveles-riesgo/hooks/useNivelesRiesgo";
 import type { PrestamoMontoResponse } from "../types/prestamoMonto";
 import { formatearRangoMonto } from "../utils/nombreMonto";
@@ -9,6 +9,7 @@ interface PrestamosMontoTableProps {
   isLoading: boolean;
   seleccionadoId: string | null;
   onSeleccionar: (rango: PrestamoMontoResponse) => void;
+  onDoubleClick?: (rango: PrestamoMontoResponse) => void;
 }
 
 export function PrestamosMontoTable({
@@ -16,53 +17,59 @@ export function PrestamosMontoTable({
   isLoading,
   seleccionadoId,
   onSeleccionar,
+  onDoubleClick,
 }: PrestamosMontoTableProps) {
   const { data: niveles } = useNivelesRiesgo();
 
-  const descripcionNivel = (catNivelRiesgoId: number) => {
-    const nivel = niveles?.find((item) => item.id === catNivelRiesgoId);
-    if (!nivel) return String(catNivelRiesgoId);
-    return `${nivel.nivelRiesgoDescripcion} (${nivel.nivelRiesgoValor})`;
-  };
+  const listaNiveles = Array.isArray(niveles)
+    ? niveles
+    : Array.isArray((niveles as unknown as { contenido?: typeof niveles })?.contenido)
+    ? ((niveles as unknown as { contenido: typeof niveles }).contenido ?? [])
+    : [];
 
-  if (isLoading) {
-    return <p className={emptyState}>Cargando rangos de monto...</p>;
-  }
-
-  if (!rangos || rangos.length === 0) {
-    return <p className={emptyState}>No hay rangos de monto registrados.</p>;
-  }
+  const columns: ColumnDef<PrestamoMontoResponse>[] = useMemo(
+    () => [
+      {
+        header: "#",
+        width: "60px",
+        className: "text-muted-foreground",
+        cell: (_, __, globalIndex) => globalIndex + 1,
+      },
+      {
+        header: "Rango",
+        className: "font-semibold text-foreground",
+        cell: (item) => formatearRangoMonto(item.montoMin, item.montoMax),
+      },
+      {
+        header: "Nivel de riesgo",
+        cell: (item) => {
+          const nivel = listaNiveles.find((n) => n.id === item.catNivelRiesgoId);
+          return nivel ? `${nivel.nivelRiesgoDescripcion} (${nivel.nivelRiesgoValor})` : String(item.catNivelRiesgoId);
+        },
+      },
+    ],
+    [listaNiveles],
+  );
 
   return (
-    <div className={table.wrapper}>
-      <table className={table.root}>
-        <thead className={table.head}>
-          <tr>
-            <th className={`w-16 ${table.headCell}`}>#</th>
-            <th className={table.headCell}>Rango</th>
-            <th className={table.headCell}>Nivel de riesgo</th>
-          </tr>
-        </thead>
-        <tbody className={table.body}>
-          {rangos.map((rango, indice) => (
-            <tr
-              key={rango.id}
-              onClick={() => onSeleccionar(rango)}
-              className={table.row(rango.id === seleccionadoId)}
-            >
-              {/* Consecutivo de fila, no el id del registro. */}
-              <td className={table.cellMuted}>{indice + 1}</td>
-              {/* Se muestra el rango y no el `nombre` guardado: los 5 registros
-                  sembrados se llaman "RANGO UNO".."RANGO CINCO", etiquetas que
-                  no dicen nada de los montos. */}
-              <td className={table.cellStrong}>
-                {formatearRangoMonto(rango.montoMin, rango.montoMax)}
-              </td>
-              <td className={table.cell}>{descripcionNivel(rango.catNivelRiesgoId)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <DataTable
+      data={rangos}
+      columns={columns}
+      isLoading={isLoading}
+      loadingMessage="Cargando rangos de monto..."
+      emptyMessage="No hay rangos de monto registrados."
+      seleccionadoId={seleccionadoId}
+      onRowClick={onSeleccionar}
+      onRowDoubleClick={onDoubleClick}
+      doubleClickTitle="Doble clic para modificar este registro"
+      search={{
+        placeholder: "Buscar rango de monto...",
+      }}
+      pagination={{
+        mode: "client",
+        defaultRowsPerPage: 10,
+        rowsPerPageOptions: [5, 10, 25, 50],
+      }}
+    />
   );
 }
