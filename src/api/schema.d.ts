@@ -160,6 +160,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/SICANETSC/PLD/{tenantId}/pld/coincidencias/{socioRef}/confirmacion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Confirmar o descartar una coincidencia
+         * @description Requiere el permiso coincidencias:confirmar asignado al rol (el administrador no lo tiene por omisión: separación de funciones). es_la_persona=true bloquea al socio (ya no se evalúa); es_la_persona=false descarta la coincidencia y la evaluación corre normalmente.
+         */
+        put: operations["resolver"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/SICANETSC/PLD/{tenantId}/personas-bloqueadas": {
         parameters: {
             query?: never;
@@ -199,7 +219,7 @@ export interface paths {
          * Obtener persona bloqueada por ID
          * @description Consulta una persona bloqueada por su identificador único
          */
-        get: operations["obtener"];
+        get: operations["obtener_1"];
         /**
          * Actualizar persona bloqueada por ID
          * @description Modifica los datos de una persona bloqueada existente
@@ -2258,6 +2278,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/SICANETSC/PLD/{tenantId}/pld/coincidencias/{socioRef}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Coincidencias de un socio
+         * @description Estado de la revisión de las coincidencias del socio.
+         */
+        get: operations["obtener"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/pld/coincidencias/pendientes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Coincidencias pendientes de revisión
+         * @description Socios con coincidencia en lista negra o bloqueada que el oficial aún no confirma ni descarta.
+         */
+        get: operations["pendientes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/SICANETSC/PLD/{tenantId}/personas-bloqueadas/consulta-bloqueados": {
         parameters: {
             query?: never;
@@ -2973,6 +3033,61 @@ export interface components {
             descripcion?: string;
             /** @enum {string} */
             estado?: "ACTIVO" | "INACTIVO" | "ELIMINADO";
+        };
+        ResolverCoincidenciaRequest: {
+            es_la_persona: boolean;
+            comentario?: string;
+        };
+        CoincidenciaListaResponse: {
+            socio_ref?: string;
+            estado?: string;
+            lista_negra?: components["schemas"]["ListaDto"];
+            lista_bloqueadas?: components["schemas"]["ListaDto"];
+            lista_peps?: components["schemas"]["ListaDto"];
+            sucursal?: string;
+            /** Format: date-time */
+            fecha_registro?: string;
+            /** Format: date-time */
+            fecha_modificacion?: string;
+            revision?: components["schemas"]["RevisionDto"];
+            socio?: components["schemas"]["SocioRevisionDto"];
+            personas_en_lista?: components["schemas"]["PersonaEnListaDto"][];
+        };
+        ListaDto: {
+            coincide?: boolean;
+            nombre_encontrado?: string;
+            confirmacion?: string;
+            alias?: string;
+            origen?: string;
+        };
+        PersonaEnListaDto: {
+            nombre?: string;
+            rfc?: string;
+            curp?: string;
+            /** Format: date */
+            fecha_nacimiento?: string;
+            pais?: string;
+            lista?: string;
+            oficio?: string;
+            motivo?: string;
+            /** Format: date */
+            fecha_publicacion?: string;
+            alias_coincidentes?: string[];
+        };
+        RevisionDto: {
+            /** Format: int64 */
+            confirmado_por?: number;
+            /** Format: date-time */
+            fecha_confirmacion?: string;
+            comentario?: string;
+        };
+        SocioRevisionDto: {
+            nombre?: string;
+            tipo_persona?: string;
+            rfc?: string;
+            curp?: string;
+            /** Format: date */
+            fecha_nacimiento?: string;
         };
         PersonaBloqueadaRequest: {
             nombreCompleto: string;
@@ -3852,6 +3967,22 @@ export interface components {
             pep_nacional_id?: string;
             actividad_economica_id: string;
         };
+        ProblemDetailsResponse: {
+            type?: string;
+            title?: string;
+            /** Format: int32 */
+            status?: number;
+            detail?: string;
+            instance?: string;
+            /** Format: date-time */
+            timestamp?: string;
+            invalidParams?: {
+                [key: string]: string;
+            };
+            coincidencias?: {
+                [key: string]: string;
+            }[];
+        };
         DesglosePuntuacion: {
             factores?: components["schemas"]["PuntajeFactor"][];
         };
@@ -3896,19 +4027,6 @@ export interface components {
             valor?: number;
             ponderacion?: number;
             puntaje?: number;
-        };
-        ProblemDetailsResponse: {
-            type?: string;
-            title?: string;
-            /** Format: int32 */
-            status?: number;
-            detail?: string;
-            instance?: string;
-            /** Format: date-time */
-            timestamp?: string;
-            invalidParams?: {
-                [key: string]: string;
-            };
         };
         CargaMasivaResponse: {
             /** Format: int32 */
@@ -4051,61 +4169,6 @@ export interface components {
             verificadoPor: number;
             sucursalId?: string;
         };
-        CoincidenciaListaResponse: {
-            socio_ref?: string;
-            estado?: string;
-            lista_negra?: components["schemas"]["ListaDto"];
-            lista_bloqueadas?: components["schemas"]["ListaDto"];
-            lista_peps?: components["schemas"]["ListaDto"];
-            sucursal?: string;
-            /** Format: date-time */
-            fecha_registro?: string;
-            /** Format: date-time */
-            fecha_modificacion?: string;
-            revision?: components["schemas"]["RevisionDto"];
-            socio?: components["schemas"]["SocioRevisionDto"];
-            personas_en_lista?: components["schemas"]["PersonaEnListaDto"][];
-        };
-        ListaDto: {
-            coincide?: boolean;
-            nombre_encontrado?: string;
-            confirmacion?: string;
-            alias?: string;
-            origen?: string;
-        };
-        PersonaEnListaDto: {
-            nombre?: string;
-            rfc?: string;
-            curp?: string;
-            /** Format: date */
-            fecha_nacimiento?: string;
-            pais?: string;
-            lista?: string;
-            oficio?: string;
-            motivo?: string;
-            /** Format: date */
-            fecha_publicacion?: string;
-            alias_coincidentes?: string[];
-        };
-        RevisionDto: {
-            /** Format: int64 */
-            confirmado_por?: number;
-            /** Format: date-time */
-            fecha_confirmacion?: string;
-            comentario?: string;
-        };
-        SocioRevisionDto: {
-            nombre?: string;
-            tipo_persona?: string;
-            rfc?: string;
-            curp?: string;
-            /** Format: date */
-            fecha_nacimiento?: string;
-        };
-        ResultadoConsultaListas: {
-            resultados: components["schemas"]["ConsultaLista"][];
-            proveedorExternoNoDisponible: boolean;
-        };
         ConsultaLista: {
             /** Format: int64 */
             id?: number;
@@ -4119,6 +4182,79 @@ export interface components {
             fechaVerificacion?: string;
             /** Format: int64 */
             verificadoPor?: number;
+        };
+        SocioPerfilRiesgoResponse: {
+            referencia?: string;
+            nombre?: string;
+            nombres?: string;
+            apellidoPaterno?: string;
+            apellidoMaterno?: string;
+            rfc?: string;
+            curp?: string;
+            /** Format: date */
+            fechaNacimiento?: string;
+            esPep?: boolean;
+            tipoPersona?: components["schemas"]["TipoPersonaInfo"];
+            nacionalidad?: components["schemas"]["NacionalidadInfo"];
+            actividadEconomica?: components["schemas"]["ActividadEconomicaInfo"];
+            sucursal?: string;
+            domicilio?: components["schemas"]["DomicilioSocio"];
+            /** Format: int32 */
+            antiguedadGiroAnios?: number;
+            pepNacionalId?: string;
+            creditoSolicitado?: components["schemas"]["CreditoSolicitadoInfo"];
+            historialCrediticio?: components["schemas"]["CreditoAnteriorInfo"][];
+        };
+        TipoPersonaInfo: {
+            id?: string;
+            nombre?: string;
+        };
+        NacionalidadInfo: {
+            id?: string;
+            nombre?: string;
+        };
+        ActividadEconomicaInfo: {
+            id?: string;
+            descripcion?: string;
+        };
+        DomicilioSocio: {
+            paisId?: string;
+            entidadId?: string;
+            municipioId?: string;
+            localidadId?: string;
+            calle?: string;
+            tipoCalle?: string;
+            /** Format: int32 */
+            noExterior?: number;
+            /** Format: int32 */
+            noInterior?: number;
+            codigoPostal?: string;
+            tipoAsentamiento?: string;
+            nombreAsentamiento?: string;
+            latitud?: string;
+            longitud?: string;
+        };
+        CreditoSolicitadoInfo: {
+            referencia?: string;
+            tipo?: string;
+            monto?: number;
+            origenRecursos?: string;
+            destinoRecursos?: string;
+            /** Format: int64 */
+            canalPagoId?: number;
+            estatus?: string;
+        };
+        CreditoAnteriorInfo: {
+            referencia?: string;
+            tipo?: string;
+            monto?: number;
+            /** Format: date */
+            fechaOtorgamiento?: string;
+            estatus?: string;
+        };
+        ResultadoConsultaListas: {
+            resultados?: components["schemas"]["ConsultaLista"][];
+            proveedorExternoNoDisponible?: boolean;
         };
         ConfiguracionMatrizComando: {
             pesosFactores?: components["schemas"]["FactorRiesgoComando"][];
@@ -4670,8 +4806,8 @@ export interface components {
             /** Format: int64 */
             offset?: number;
             sort?: components["schemas"]["SortObject"];
-            paged?: boolean;
             unpaged?: boolean;
+            paged?: boolean;
         };
         SortObject: {
             sorted?: boolean;
@@ -5147,6 +5283,34 @@ export interface operations {
             };
         };
     };
+    resolver: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                socioRef: string;
+                /** @description Identificador del Tenant */
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResolverCoincidenciaRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CoincidenciaListaResponse"];
+                };
+            };
+        };
+    };
     actualizarPorRfcOCurp: {
         parameters: {
             query: {
@@ -5228,7 +5392,7 @@ export interface operations {
             };
         };
     };
-    obtener: {
+    obtener_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -10102,6 +10266,53 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ProblemDetailsResponse"];
+                };
+            };
+        };
+    };
+    obtener: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                socioRef: string;
+                /** @description Identificador del Tenant */
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CoincidenciaListaResponse"];
+                };
+            };
+        };
+    };
+    pendientes: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Identificador del Tenant */
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CoincidenciaListaResponse"][];
                 };
             };
         };

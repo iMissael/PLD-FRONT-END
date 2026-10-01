@@ -38,7 +38,7 @@ export function MatrizRiesgoDetalle({ factores }: { factores: FactorRiesgo[] }) 
 
       {factores.map((factor) => {
         const sumaSubfactores = sumaActivos(
-          (factor.subfactores ?? []).map((s) => ({
+          (factor.subfactoresRef ?? []).map((s) => ({
             estatus: s.estatus,
             valor: s.ponderacion ?? 0,
           })),
@@ -55,7 +55,7 @@ export function MatrizRiesgoDetalle({ factores }: { factores: FactorRiesgo[] }) 
               <span className="text-sm font-semibold">{factor.peso}%</span>
             </div>
 
-            {factor.subfactores && factor.subfactores.length > 0 && (
+            {factor.subfactoresRef && factor.subfactoresRef.length > 0 && (
               <div className="mt-3 space-y-2">
                 <Table>
                   <TableHeader>
@@ -66,7 +66,7 @@ export function MatrizRiesgoDetalle({ factores }: { factores: FactorRiesgo[] }) 
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {factor.subfactores.map((sub) => (
+                    {factor.subfactoresRef.map((sub) => (
                       <TableRow key={sub.id}>
                         <TableCell>{sub.descripcion}</TableCell>
                         <TableCell>{sub.ponderacion}%</TableCell>

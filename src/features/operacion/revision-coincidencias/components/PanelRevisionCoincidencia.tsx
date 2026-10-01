@@ -1,3 +1,4 @@
+import { X } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -15,15 +16,8 @@ import {
 } from "@/shared/components/ui/alert-dialog";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/shared/components/ui/card";
 import { Label } from "@/shared/components/ui/label";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/shared/components/ui/sheet";
 
 import { useResolverCoincidencia } from "../hooks/useCoincidencias";
 import type { CoincidenciaSocio } from "../types/coincidencias";
@@ -107,141 +101,143 @@ export function PanelRevisionCoincidencia({
     );
   }
 
-  const personas = coincidencia?.personas_en_lista ?? [];
+  if (!coincidencia) return null;
+
+  const personas = coincidencia.personas_en_lista ?? [];
   const nombreExterno =
-    coincidencia?.lista_negra?.coincide && coincidencia.lista_negra.nombre_encontrado;
+    coincidencia.lista_negra?.coincide && coincidencia.lista_negra.nombre_encontrado;
 
   return (
-    <Sheet open={coincidencia !== null} onOpenChange={(abierto) => !abierto && cerrar()}>
-      <SheetContent className="w-full overflow-y-auto sm:max-w-xl">
-        {coincidencia && (
-          <>
-            <SheetHeader>
-              <SheetTitle>
-                {coincidencia.socio?.nombre ?? coincidencia.socio_ref}
-              </SheetTitle>
-              <SheetDescription>
-                Socio {coincidencia.socio_ref}
-                {coincidencia.sucursal ? ` · ${coincidencia.sucursal}` : ""}. Compara sus
-                datos con los de la lista y decide si es la misma persona.
-              </SheetDescription>
-              <div className="flex flex-wrap gap-1 pt-1">
-                {listasCoincidentes(coincidencia).map((lista) => (
-                  <Badge key={lista} variant="destructive">
-                    {lista}
-                  </Badge>
-                ))}
-              </div>
-            </SheetHeader>
+    <Card>
+      <CardHeader className="flex flex-row items-start justify-between gap-4 space-y-0">
+        <div className="space-y-1.5">
+          <h2 className="text-lg leading-none font-semibold">
+            {coincidencia.socio?.nombre ?? coincidencia.socio_ref}
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Socio {coincidencia.socio_ref}
+            {coincidencia.sucursal ? ` · ${coincidencia.sucursal}` : ""}. Compara sus
+            datos con los de la lista y decide si es la misma persona.
+          </p>
+          <div className="flex flex-wrap gap-1 pt-1">
+            {listasCoincidentes(coincidencia).map((lista) => (
+              <Badge key={lista} variant="destructive">
+                {lista}
+              </Badge>
+            ))}
+          </div>
+        </div>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="shrink-0"
+          aria-label="Cerrar"
+          onClick={cerrar}
+        >
+          <X />
+        </Button>
+      </CardHeader>
 
-            <div className="space-y-4 px-4">
-              {personas.map((persona) => (
-                <ComparacionPersona
-                  key={`${persona.rfc}-${persona.curp}-${persona.nombre}`}
-                  socio={coincidencia.socio}
-                  persona={persona}
-                />
-              ))}
+      <CardContent className="space-y-4">
+        {personas.map((persona) => (
+          <ComparacionPersona
+            key={`${persona.rfc}-${persona.curp}-${persona.nombre}`}
+            socio={coincidencia.socio}
+            persona={persona}
+          />
+        ))}
 
-              {nombreExterno ? (
-                <div className="rounded-lg border p-4 text-sm">
-                  <p className="font-medium">Lista negra (proveedor externo)</p>
-                  <p className="text-muted-foreground">
-                    Nombre encontrado: {nombreExterno}
-                  </p>
-                </div>
-              ) : null}
+        {nombreExterno ? (
+          <div className="rounded-lg border p-4 text-sm">
+            <p className="font-medium">Lista negra (proveedor externo)</p>
+            <p className="text-muted-foreground">Nombre encontrado: {nombreExterno}</p>
+          </div>
+        ) : null}
 
-              {!personas.length && !nombreExterno ? (
-                <p className="text-sm text-muted-foreground">
-                  No hay detalle de la persona en la lista para esta coincidencia.
-                </p>
-              ) : null}
+        {!personas.length && !nombreExterno ? (
+          <p className="text-sm text-muted-foreground">
+            No hay detalle de la persona en la lista para esta coincidencia.
+          </p>
+        ) : null}
 
-              {esOficial ? (
-                <div className="space-y-2">
-                  <Label htmlFor="comentario-revision">Comentario (opcional)</Label>
-                  <textarea
-                    id="comentario-revision"
-                    value={comentario}
-                    maxLength={MAX_COMENTARIO}
-                    onChange={(evento) => setComentario(evento.target.value)}
-                    rows={3}
-                    placeholder="Sustento de la decisión, p. ej. “RFC y CURP idénticos”."
-                    className="w-full rounded-md border bg-card px-3 py-2 text-sm shadow-xs outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
-                  />
-                  <p className="text-right text-xs text-muted-foreground">
-                    {comentario.length}/{MAX_COMENTARIO}
-                  </p>
-                </div>
-              ) : (
-                <p className="rounded-md bg-muted p-3 text-sm text-muted-foreground">
-                  Solo el oficial de cumplimiento puede confirmar o descartar
-                  coincidencias.
-                </p>
-              )}
-            </div>
-
-            {esOficial && (
-              <SheetFooter className="flex-row justify-end gap-2">
-                <Button
-                  variant="outline"
-                  disabled={resolver.isPending}
-                  onClick={() => setDecision("descartar")}
-                >
-                  No es la persona
-                </Button>
-                <Button
-                  variant="destructive"
-                  disabled={resolver.isPending}
-                  onClick={() => setDecision("confirmar")}
-                >
-                  Es la persona
-                </Button>
-              </SheetFooter>
-            )}
-
-            <AlertDialog
-              open={decision !== null}
-              onOpenChange={(abierto) =>
-                !abierto && !resolver.isPending && setDecision(null)
-              }
-            >
-              <AlertDialogContent>
-                {decision && (
-                  <>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>{TEXTOS[decision].titulo}</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        {TEXTOS[decision].descripcion}
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel disabled={resolver.isPending}>
-                        Cancelar
-                      </AlertDialogCancel>
-                      <AlertDialogAction
-                        disabled={resolver.isPending}
-                        className={
-                          decision === "confirmar"
-                            ? "bg-destructive text-white hover:bg-destructive-hover"
-                            : undefined
-                        }
-                        onClick={(evento) => {
-                          evento.preventDefault();
-                          aplicarDecision();
-                        }}
-                      >
-                        {resolver.isPending ? "Guardando…" : TEXTOS[decision].accion}
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </>
-                )}
-              </AlertDialogContent>
-            </AlertDialog>
-          </>
+        {esOficial ? (
+          <div className="space-y-2">
+            <Label htmlFor="comentario-revision">Comentario (opcional)</Label>
+            <textarea
+              id="comentario-revision"
+              value={comentario}
+              maxLength={MAX_COMENTARIO}
+              onChange={(evento) => setComentario(evento.target.value)}
+              rows={3}
+              placeholder="Sustento de la decisión, p. ej. “RFC y CURP idénticos”."
+              className="w-full rounded-md border bg-card px-3 py-2 text-sm shadow-xs outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+            />
+            <p className="text-right text-xs text-muted-foreground">
+              {comentario.length}/{MAX_COMENTARIO}
+            </p>
+          </div>
+        ) : (
+          <p className="rounded-md bg-muted p-3 text-sm text-muted-foreground">
+            Solo el oficial de cumplimiento puede confirmar o descartar coincidencias.
+          </p>
         )}
-      </SheetContent>
-    </Sheet>
+
+        {esOficial && (
+          <div className="flex justify-end gap-2 border-t pt-4">
+            <Button
+              variant="outline"
+              disabled={resolver.isPending}
+              onClick={() => setDecision("descartar")}
+            >
+              No es la persona
+            </Button>
+            <Button
+              variant="destructive"
+              disabled={resolver.isPending}
+              onClick={() => setDecision("confirmar")}
+            >
+              Es la persona
+            </Button>
+          </div>
+        )}
+      </CardContent>
+
+      <AlertDialog
+        open={decision !== null}
+        onOpenChange={(abierto) => !abierto && !resolver.isPending && setDecision(null)}
+      >
+        <AlertDialogContent>
+          {decision && (
+            <>
+              <AlertDialogHeader>
+                <AlertDialogTitle>{TEXTOS[decision].titulo}</AlertDialogTitle>
+                <AlertDialogDescription>
+                  {TEXTOS[decision].descripcion}
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel disabled={resolver.isPending}>
+                  Cancelar
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  disabled={resolver.isPending}
+                  className={
+                    decision === "confirmar"
+                      ? "bg-destructive text-white hover:bg-destructive-hover"
+                      : undefined
+                  }
+                  onClick={(evento) => {
+                    evento.preventDefault();
+                    aplicarDecision();
+                  }}
+                >
+                  {resolver.isPending ? "Guardando…" : TEXTOS[decision].accion}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </>
+          )}
+        </AlertDialogContent>
+      </AlertDialog>
+    </Card>
   );
 }

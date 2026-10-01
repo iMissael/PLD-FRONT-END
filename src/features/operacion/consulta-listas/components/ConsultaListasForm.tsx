@@ -113,8 +113,9 @@ export function ConsultaListasForm({
       },
       {
         onSuccess: (respuesta) => {
-          onResultados(respuesta.resultados, respuesta.proveedorExternoNoDisponible);
-          if (respuesta.proveedorExternoNoDisponible) {
+          const proveedorNoDisponible = respuesta.proveedorExternoNoDisponible ?? false;
+          onResultados(respuesta.resultados ?? [], proveedorNoDisponible);
+          if (proveedorNoDisponible) {
             toast.warning(
               "El proveedor externo de listas no respondió: la verificación quedó incompleta.",
             );
