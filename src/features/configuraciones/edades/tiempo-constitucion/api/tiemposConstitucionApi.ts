@@ -1,4 +1,5 @@
 import { apiClient } from "@/api/client";
+import { listarCatalogoCompleto } from "@/api/paginacion";
 
 import type {
   ActualizarTiempoConstitucionInput,
@@ -10,11 +11,12 @@ const BASE_PATH = "/catalogos/tiempos-constitucion";
 
 /**
  * El backend hace soft-delete (`estatus = 'E'`) y ya filtra los eliminados
- * en el listado, así que no hace falta ningún parámetro de estatus.
+ * en el listado, así que no hace falta ningún parámetro de estatus. El
+ * endpoint pagina: se traen todas las páginas porque esta tabla todavía no
+ * tiene controles de paginación propios.
  */
 export async function listarTiemposConstitucion(): Promise<TiempoConstitucionResponse[]> {
-  const { data } = await apiClient.get<TiempoConstitucionResponse[]>(BASE_PATH);
-  return data;
+  return listarCatalogoCompleto<TiempoConstitucionResponse>(BASE_PATH);
 }
 
 export async function obtenerTiempoConstitucion(

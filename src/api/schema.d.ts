@@ -320,6 +320,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/SICANETSC/PLD/{tenantId}/catalogos/tipos-prestamo/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["obtenerPorId_5"];
+        put: operations["actualizar_4"];
+        post?: never;
+        delete: operations["eliminar_4"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/SICANETSC/PLD/{tenantId}/catalogos/tipos-persona/{id}": {
         parameters: {
             query?: never;
@@ -331,18 +347,18 @@ export interface paths {
          * Obtener tipo de persona por ID
          * @description Consulta un tipo de persona por su identificador único
          */
-        get: operations["obtenerPorId_5"];
+        get: operations["obtenerPorId_6"];
         /**
          * Actualizar tipo de persona
          * @description Modifica los datos de un tipo de persona existente
          */
-        put: operations["actualizar_4"];
+        put: operations["actualizar_5"];
         post?: never;
         /**
          * Eliminar tipo de persona
          * @description Elimina un tipo de persona por su ID
          */
-        delete: operations["eliminar_4"];
+        delete: operations["eliminar_5"];
         options?: never;
         head?: never;
         patch?: never;
@@ -359,18 +375,18 @@ export interface paths {
          * Obtener tipo de pago por ID
          * @description Consulta un tipo de pago por su identificador único
          */
-        get: operations["obtenerPorId_6"];
+        get: operations["obtenerPorId_7"];
         /**
          * Actualizar tipo de pago
          * @description Modifica los datos de un tipo de pago existente
          */
-        put: operations["actualizar_5"];
+        put: operations["actualizar_6"];
         post?: never;
         /**
          * Eliminar tipo de pago
          * @description Elimina un tipo de pago por su ID
          */
-        delete: operations["eliminar_5"];
+        delete: operations["eliminar_6"];
         options?: never;
         head?: never;
         patch?: never;
@@ -387,18 +403,18 @@ export interface paths {
          * Obtener tipo de crédito por ID
          * @description Consulta un tipo de crédito por su identificador único
          */
-        get: operations["obtenerPorId_7"];
+        get: operations["obtenerPorId_8"];
         /**
          * Actualizar tipo de crédito
          * @description Modifica los datos de un tipo de crédito existente
          */
-        put: operations["actualizar_6"];
+        put: operations["actualizar_7"];
         post?: never;
         /**
          * Eliminar tipo de crédito
          * @description Elimina un tipo de crédito por su ID
          */
-        delete: operations["eliminar_6"];
+        delete: operations["eliminar_7"];
         options?: never;
         head?: never;
         patch?: never;
@@ -415,18 +431,18 @@ export interface paths {
          * Obtener tipo de alerta por ID
          * @description Consulta un tipo de alerta específico por su ID numérico
          */
-        get: operations["obtenerPorId_8"];
+        get: operations["obtenerPorId_9"];
         /**
          * Actualizar tipo de alerta
          * @description Modifica los datos (nombre, estatus, plazos, buzon) de un tipo de alerta existente
          */
-        put: operations["actualizar_7"];
+        put: operations["actualizar_8"];
         post?: never;
         /**
          * Eliminar tipo de alerta (Soft Delete)
          * @description Marca el tipo de alerta como inactivo/eliminado (soft delete)
          */
-        delete: operations["eliminar_7"];
+        delete: operations["eliminar_8"];
         options?: never;
         head?: never;
         patch?: never;
@@ -443,18 +459,18 @@ export interface paths {
          * Obtener rango de tiempo de constitución por ID
          * @description Consulta un rango de tiempo de constitución por su identificador único
          */
-        get: operations["obtenerPorId_9"];
+        get: operations["obtenerPorId_10"];
         /**
          * Actualizar rango de tiempo de constitución
          * @description Modifica los datos de un rango de tiempo de constitución existente
          */
-        put: operations["actualizar_8"];
+        put: operations["actualizar_9"];
         post?: never;
         /**
          * Eliminar rango de tiempo de constitución
          * @description Elimina un rango de tiempo de constitución por su ID
          */
-        delete: operations["eliminar_8"];
+        delete: operations["eliminar_9"];
         options?: never;
         head?: never;
         patch?: never;
@@ -471,18 +487,18 @@ export interface paths {
          * Obtener razón de alerta por ID
          * @description Consulta una razón de alerta específica por su ID numérico
          */
-        get: operations["obtenerPorId_10"];
+        get: operations["obtenerPorId_11"];
         /**
          * Actualizar razón de alerta
          * @description Modifica los datos (nombre, estatus, tipo alerta, descripcion, 24 horas) de una razón de alerta existente
          */
-        put: operations["actualizar_9"];
+        put: operations["actualizar_10"];
         post?: never;
         /**
          * Eliminar razón de alerta (Soft Delete)
          * @description Marca la razón de alerta como inactiva/eliminada (soft delete)
          */
-        delete: operations["eliminar_9"];
+        delete: operations["eliminar_10"];
         options?: never;
         head?: never;
         patch?: never;
@@ -499,18 +515,18 @@ export interface paths {
          * Obtener rango de monto de préstamo por ID
          * @description Consulta un rango de monto de préstamo por su identificador único
          */
-        get: operations["obtenerPorId_11"];
+        get: operations["obtenerPorId_12"];
         /**
          * Actualizar rango de monto de préstamo
          * @description Modifica los datos de un rango de monto de préstamo existente
          */
-        put: operations["actualizar_10"];
+        put: operations["actualizar_11"];
         post?: never;
         /**
          * Eliminar rango de monto de préstamo
          * @description Elimina un rango de monto de préstamo por su ID
          */
-        delete: operations["eliminar_10"];
+        delete: operations["eliminar_11"];
         options?: never;
         head?: never;
         patch?: never;
@@ -527,18 +543,18 @@ export interface paths {
          * Obtener categoría PEP por ID
          * @description Consulta una categoría PEP por su identificador único
          */
-        get: operations["obtenerPorId_12"];
+        get: operations["obtenerPorId_13"];
         /**
          * Actualizar categoría PEP
          * @description Modifica los datos de una categoría PEP existente
          */
-        put: operations["actualizar_11"];
+        put: operations["actualizar_12"];
         post?: never;
         /**
          * Eliminar categoría PEP
          * @description Elimina una categoría PEP por su ID
          */
-        delete: operations["eliminar_11"];
+        delete: operations["eliminar_12"];
         options?: never;
         head?: never;
         patch?: never;
@@ -599,18 +615,18 @@ export interface paths {
          * Obtener origen de recurso por ID
          * @description Consulta un origen de recurso por su identificador único
          */
-        get: operations["obtenerPorId_13"];
+        get: operations["obtenerPorId_14"];
         /**
          * Actualizar origen de recurso
          * @description Modifica los datos de un origen de recurso existente
          */
-        put: operations["actualizar_12"];
+        put: operations["actualizar_13"];
         post?: never;
         /**
          * Eliminar origen de recurso
          * @description Elimina un origen de recurso por su ID
          */
-        delete: operations["eliminar_12"];
+        delete: operations["eliminar_13"];
         options?: never;
         head?: never;
         patch?: never;
@@ -627,18 +643,18 @@ export interface paths {
          * Obtener nivel de riesgo por ID
          * @description Consulta un nivel de riesgo por su identificador único
          */
-        get: operations["obtenerPorId_14"];
+        get: operations["obtenerPorId_15"];
         /**
          * Actualizar nivel de riesgo
          * @description Modifica los datos de un nivel de riesgo existente
          */
-        put: operations["actualizar_13"];
+        put: operations["actualizar_14"];
         post?: never;
         /**
          * Eliminar nivel de riesgo
          * @description Elimina un nivel de riesgo por su ID
          */
-        delete: operations["eliminar_13"];
+        delete: operations["eliminar_14"];
         options?: never;
         head?: never;
         patch?: never;
@@ -731,18 +747,18 @@ export interface paths {
          * Obtener lista restrictiva por ID
          * @description Consulta una lista restrictiva por su identificador único
          */
-        get: operations["obtenerPorId_15"];
+        get: operations["obtenerPorId_16"];
         /**
          * Actualizar lista restrictiva
          * @description Modifica los datos de una lista restrictiva existente
          */
-        put: operations["actualizar_14"];
+        put: operations["actualizar_15"];
         post?: never;
         /**
          * Eliminar lista restrictiva
          * @description Elimina una lista restrictiva por su ID
          */
-        delete: operations["eliminar_14"];
+        delete: operations["eliminar_15"];
         options?: never;
         head?: never;
         patch?: never;
@@ -755,10 +771,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["obtenerPorId_16"];
-        put: operations["actualizar_15"];
+        get: operations["obtenerPorId_17"];
+        put: operations["actualizar_16"];
         post?: never;
-        delete: operations["eliminar_15"];
+        delete: operations["eliminar_16"];
         options?: never;
         head?: never;
         patch?: never;
@@ -775,18 +791,18 @@ export interface paths {
          * Obtener rango de experiencia por ID
          * @description Consulta un rango de experiencia en la actividad por su identificador único
          */
-        get: operations["obtenerPorId_17"];
+        get: operations["obtenerPorId_18"];
         /**
          * Actualizar rango de experiencia en la actividad
          * @description Modifica los datos de un rango de experiencia existente
          */
-        put: operations["actualizar_16"];
+        put: operations["actualizar_17"];
         post?: never;
         /**
          * Eliminar rango de experiencia en la actividad
          * @description Elimina un rango de experiencia por su ID
          */
-        delete: operations["eliminar_16"];
+        delete: operations["eliminar_17"];
         options?: never;
         head?: never;
         patch?: never;
@@ -814,7 +830,7 @@ export interface paths {
          * Eliminar entidad federativa
          * @description Elimina (desactiva) una entidad federativa por su ID
          */
-        delete: operations["eliminar_17"];
+        delete: operations["eliminar_18"];
         options?: never;
         head?: never;
         patch?: never;
@@ -851,18 +867,18 @@ export interface paths {
          * Obtener rango de edad por ID
          * @description Consulta un rango de edad por su identificador único
          */
-        get: operations["obtenerPorId_18"];
+        get: operations["obtenerPorId_19"];
         /**
          * Actualizar rango de edad
          * @description Modifica los datos de un rango de edad existente
          */
-        put: operations["actualizar_17"];
+        put: operations["actualizar_18"];
         post?: never;
         /**
          * Eliminar rango de edad
          * @description Elimina un rango de edad por su ID
          */
-        delete: operations["eliminar_18"];
+        delete: operations["eliminar_19"];
         options?: never;
         head?: never;
         patch?: never;
@@ -879,18 +895,18 @@ export interface paths {
          * Obtener destino de recurso por ID
          * @description Consulta un destino de recurso por su identificador único
          */
-        get: operations["obtenerPorId_19"];
+        get: operations["obtenerPorId_20"];
         /**
          * Actualizar destino de recurso
          * @description Modifica los datos de un destino de recurso existente
          */
-        put: operations["actualizar_18"];
+        put: operations["actualizar_19"];
         post?: never;
         /**
          * Eliminar destino de recurso
          * @description Elimina un destino de recurso por su ID
          */
-        delete: operations["eliminar_19"];
+        delete: operations["eliminar_20"];
         options?: never;
         head?: never;
         patch?: never;
@@ -907,18 +923,18 @@ export interface paths {
          * Obtener canal de pago por ID
          * @description Consulta un canal de pago por su identificador único
          */
-        get: operations["obtenerPorId_20"];
+        get: operations["obtenerPorId_21"];
         /**
          * Actualizar canal de pago
          * @description Modifica los datos de un canal de pago existente
          */
-        put: operations["actualizar_19"];
+        put: operations["actualizar_20"];
         post?: never;
         /**
          * Eliminar canal de pago
          * @description Elimina un canal de pago por su ID
          */
-        delete: operations["eliminar_20"];
+        delete: operations["eliminar_21"];
         options?: never;
         head?: never;
         patch?: never;
@@ -991,18 +1007,18 @@ export interface paths {
          * Obtener actividad económica por ID
          * @description Consulta una actividad económica por su identificador único
          */
-        get: operations["obtenerPorId_21"];
+        get: operations["obtenerPorId_22"];
         /**
          * Actualizar actividad económica
          * @description Modifica los datos de una actividad económica existente
          */
-        put: operations["actualizar_20"];
+        put: operations["actualizar_21"];
         post?: never;
         /**
          * Eliminar actividad económica
          * @description Marca como inactiva o elimina una actividad económica
          */
-        delete: operations["eliminar_21"];
+        delete: operations["eliminar_22"];
         options?: never;
         head?: never;
         patch?: never;
@@ -1324,8 +1340,8 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Listar zonas de riesgo
-         * @description Consulta la lista de zonas de riesgo geográfico
+         * Listar zonas de riesgo (paginado)
+         * @description Consulta paginada de la lista de zonas de riesgo geográfico
          */
         get: operations["listarZonas"];
         put?: never;
@@ -1340,6 +1356,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/SICANETSC/PLD/{tenantId}/catalogos/tipos-prestamo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar Tipos de Préstamo (paginado)
+         * @description Consulta paginada de Tipos de Préstamo registrados
+         */
+        get: operations["listarTodos"];
+        put?: never;
+        post: operations["crear_4"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/SICANETSC/PLD/{tenantId}/catalogos/tipos-persona": {
         parameters: {
             query?: never;
@@ -1348,16 +1384,16 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Listar tipos de persona
-         * @description Consulta el catálogo completo de tipos de persona registrados
+         * Listar Tipos de Persona / Socio (paginado)
+         * @description Consulta paginada de Tipos de Persona / Socio registrados
          */
-        get: operations["listarTodos"];
+        get: operations["listarTodos_1"];
         put?: never;
         /**
          * Crear tipo de persona
          * @description Registra un nuevo tipo de persona en el catálogo
          */
-        post: operations["crear_4"];
+        post: operations["crear_5"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1372,16 +1408,16 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Listar tipos de pago
-         * @description Consulta el catálogo completo de tipos de pago registrados
+         * Listar Tipos de Pago (paginado)
+         * @description Consulta paginada de Tipos de Pago registrados
          */
-        get: operations["listarTodos_1"];
+        get: operations["listarTodos_2"];
         put?: never;
         /**
          * Crear tipo de pago
          * @description Registra un nuevo tipo de pago en el catálogo
          */
-        post: operations["crear_5"];
+        post: operations["crear_6"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1396,16 +1432,16 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Listar tipos de crédito
-         * @description Consulta el catálogo completo de tipos de crédito registrados
+         * Listar Tipos de Crédito (paginado)
+         * @description Consulta paginada de Tipos de Crédito registrados
          */
-        get: operations["listarTodos_2"];
+        get: operations["listarTodos_3"];
         put?: never;
         /**
          * Crear tipo de crédito
          * @description Registra un nuevo tipo de crédito en el catálogo
          */
-        post: operations["crear_6"];
+        post: operations["crear_7"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1420,16 +1456,16 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Listar tipos de alerta
-         * @description Lista tipos de alerta activos, con opción de filtrar por buzon ('S' o 'N')
+         * Listar tipos de alerta (paginado)
+         * @description Lista paginada de tipos de alerta activos, con opción de filtrar por buzon ('S' o 'N')
          */
-        get: operations["listarTodos_3"];
+        get: operations["listarTodos_4"];
         put?: never;
         /**
          * Crear tipo de alerta
          * @description Registra un nuevo tipo de alerta en el catálogo PLD
          */
-        post: operations["crear_7"];
+        post: operations["crear_8"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1444,16 +1480,16 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Listar rangos de tiempo de constitución
-         * @description Consulta el catálogo completo de rangos de tiempo de constitución registrados
+         * Listar Tiempos de Constitución (paginado)
+         * @description Consulta paginada de Tiempos de Constitución registrados
          */
-        get: operations["listarTodos_4"];
+        get: operations["listarTodos_5"];
         put?: never;
         /**
          * Crear rango de tiempo de constitución
          * @description Registra un nuevo rango de tiempo de constitución en el catálogo
          */
-        post: operations["crear_8"];
+        post: operations["crear_9"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1468,16 +1504,16 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Listar razones de alerta
-         * @description Lista todas las razones de alerta activas o filtradas por tipo de alerta para menú de creación de denuncias
+         * Listar razones de alerta (paginado)
+         * @description Lista paginada de razones de alerta activas o filtradas por tipo de alerta
          */
-        get: operations["listarTodos_5"];
+        get: operations["listarTodos_6"];
         put?: never;
         /**
          * Crear razón de alerta
          * @description Registra una nueva razón de alerta en el catálogo PLD
          */
-        post: operations["crear_9"];
+        post: operations["crear_10"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1492,16 +1528,16 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Listar rangos de monto de préstamo
-         * @description Consulta el catálogo completo de rangos de monto de préstamo registrados
+         * Listar Montos de Préstamo (paginado)
+         * @description Consulta paginada de Montos de Préstamo registrados
          */
-        get: operations["listarTodos_6"];
+        get: operations["listarTodos_7"];
         put?: never;
         /**
          * Crear rango de monto de préstamo
          * @description Registra un nuevo rango de monto de préstamo en el catálogo
          */
-        post: operations["crear_10"];
+        post: operations["crear_11"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1516,16 +1552,16 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Listar categorías PEP
-         * @description Consulta el catálogo completo de categorías PEP registradas
+         * Listar PEPs (paginado)
+         * @description Consulta paginada de PEPs registrados
          */
-        get: operations["listarTodos_7"];
+        get: operations["listarTodos_8"];
         put?: never;
         /**
          * Crear categoría PEP
          * @description Registra una nueva categoría PEP en el catálogo
          */
-        post: operations["crear_11"];
+        post: operations["crear_12"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1540,8 +1576,8 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Listar países
-         * @description Consulta la lista de países con filtro opcional de búsqueda
+         * Listar países (paginado)
+         * @description Consulta paginada de la lista de países con filtro opcional de búsqueda
          */
         get: operations["listarPaises"];
         put?: never;
@@ -1604,16 +1640,16 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Listar orígenes de recurso
-         * @description Consulta el catálogo completo de orígenes de recurso registrados
+         * Listar Orígenes de Recurso (paginado)
+         * @description Consulta paginada de Orígenes de Recurso registrados
          */
-        get: operations["listarTodos_8"];
+        get: operations["listarTodos_9"];
         put?: never;
         /**
          * Crear origen de recurso
          * @description Registra un nuevo origen de recurso en el catálogo
          */
-        post: operations["crear_12"];
+        post: operations["crear_13"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1628,16 +1664,16 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Listar niveles de riesgo
-         * @description Consulta el catálogo completo de niveles de riesgo registrados
+         * Listar Niveles de Riesgo (paginado)
+         * @description Consulta paginada de Niveles de Riesgo registrados
          */
-        get: operations["listarTodos_9"];
+        get: operations["listarTodos_10"];
         put?: never;
         /**
          * Crear nivel de riesgo
          * @description Registra un nuevo nivel de riesgo en el catálogo
          */
-        post: operations["crear_13"];
+        post: operations["crear_14"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1652,10 +1688,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Listar municipios
-         * @description Lista los municipios con opción a filtrar por entidad federativa
+         * Listar municipios (paginado)
+         * @description Consulta paginada de municipios con opción a filtrar por entidad federativa
          */
-        get: operations["findAll"];
+        get: operations["listarMunicipios"];
         put?: never;
         /**
          * Crear municipio
@@ -1740,16 +1776,16 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Listar listas restrictivas
-         * @description Consulta el catálogo completo de listas restrictivas registradas
+         * Listar Listas Restrictivas (paginado)
+         * @description Consulta paginada de Listas Restrictivas registrados
          */
-        get: operations["listarTodos_10"];
+        get: operations["listarTodos_11"];
         put?: never;
         /**
          * Crear lista restrictiva
          * @description Registra una nueva lista restrictiva en el catálogo
          */
-        post: operations["crear_14"];
+        post: operations["crear_15"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1763,9 +1799,13 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["listarTodos_11"];
+        /**
+         * Listar Historiales Crediticios (paginado)
+         * @description Consulta paginada de Historiales Crediticios registrados
+         */
+        get: operations["listarTodos_12"];
         put?: never;
-        post: operations["crear_15"];
+        post: operations["crear_16"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1780,16 +1820,16 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Listar rangos de experiencia en la actividad
-         * @description Consulta el catálogo completo de rangos de experiencia registrados
+         * Listar Experiencias en Actividades (paginado)
+         * @description Consulta paginada de Experiencias en Actividades registrados
          */
-        get: operations["listarTodos_12"];
+        get: operations["listarTodos_13"];
         put?: never;
         /**
          * Crear rango de experiencia en la actividad
          * @description Registra un nuevo rango de experiencia en el catálogo
          */
-        post: operations["crear_16"];
+        post: operations["crear_17"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1804,8 +1844,8 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Listar entidades federativas
-         * @description Consulta la lista de entidades federativas
+         * Listar entidades federativas (paginado)
+         * @description Consulta paginada de la lista de entidades federativas
          */
         get: operations["listarEntidades"];
         put?: never;
@@ -1828,16 +1868,16 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Listar rangos de edad
-         * @description Consulta el catálogo completo de rangos de edad registrados
+         * Listar Rangos de Edad (paginado)
+         * @description Consulta paginada de Rangos de Edad registrados
          */
-        get: operations["listarTodos_13"];
+        get: operations["listarTodos_14"];
         put?: never;
         /**
          * Crear rango de edad
          * @description Registra un nuevo rango de edad en el catálogo
          */
-        post: operations["crear_17"];
+        post: operations["crear_18"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1852,16 +1892,16 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Listar destinos de recurso
-         * @description Consulta el catálogo completo de destinos de recurso registrados
+         * Listar Destinos de Recurso (paginado)
+         * @description Consulta paginada de Destinos de Recurso registrados
          */
-        get: operations["listarTodos_14"];
+        get: operations["listarTodos_15"];
         put?: never;
         /**
          * Crear destino de recurso
          * @description Registra un nuevo destino de recurso en el catálogo
          */
-        post: operations["crear_18"];
+        post: operations["crear_19"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1876,16 +1916,16 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Listar canales de pago
-         * @description Consulta el catálogo completo de canales de pago registrados
+         * Listar Canales de Pago (paginado)
+         * @description Consulta paginada de Canales de Pago registrados
          */
-        get: operations["listarTodos_15"];
+        get: operations["listarTodos_16"];
         put?: never;
         /**
          * Crear canal de pago
          * @description Registra un nuevo canal de pago en el catálogo
          */
-        post: operations["crear_19"];
+        post: operations["crear_20"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1948,16 +1988,16 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Listar actividades económicas
-         * @description Consulta el catálogo completo de actividades económicas registradas
+         * Listar actividades económicas (paginado)
+         * @description Consulta paginada de actividades económicas registradas
          */
-        get: operations["listarTodos_16"];
+        get: operations["listarTodos_17"];
         put?: never;
         /**
          * Crear actividad económica
          * @description Registra una nueva actividad económica en el catálogo
          */
-        post: operations["crear_20"];
+        post: operations["crear_21"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2198,6 +2238,22 @@ export interface paths {
          * @description Ruta alternativa para obtener las claves públicas en formato JWKS
          */
         get: operations["getJwks"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/socios/{referencia}/perfil-riesgo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["obtenerPerfilRiesgo"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2526,8 +2582,8 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Listar sucursales activas
-         * @description Consulta las sucursales activas, usadas para poblar el combo al dar de alta un usuario
+         * Listar sucursales (paginado)
+         * @description Consulta de sucursales activas paginadas
          */
         get: operations["listarActivas"];
         put?: never;
@@ -3175,6 +3231,55 @@ export interface components {
         AsignarCatEntidadesRequest: {
             entidadIds: string[];
         };
+        ActualizarCatTipoPrestamoRequest: {
+            nombre?: string;
+            tasaInteresNormalMinima?: number;
+            tasaInteresNormalMaxima?: number;
+            tasaInteresMoratorioMinima?: number;
+            tasaInteresMoratorioMaxima?: number;
+            reciprocidad?: number;
+            catTipoGarantiaId?: string;
+            prestamosInversion?: string;
+            /** Format: int32 */
+            maximoVigente?: number;
+            individual?: string;
+            grupal?: string;
+            catBuroTipoPrestamoPfId?: string;
+            catBuroTipoPrestamoPmId?: string;
+            tipoResponsabilidadCuenta?: string;
+            tipoCuentaBuro?: string;
+            documentacion?: string;
+            configuracionJson?: string;
+            /** @enum {string} */
+            estatus?: "A" | "B" | "S" | "E";
+        };
+        CatTipoPrestamoResponse: {
+            id?: string;
+            nombre?: string;
+            tasaInteresNormalMinima?: number;
+            tasaInteresNormalMaxima?: number;
+            tasaInteresMoratorioMinima?: number;
+            tasaInteresMoratorioMaxima?: number;
+            reciprocidad?: number;
+            catTipoGarantiaId?: string;
+            prestamosInversion?: string;
+            /** Format: int32 */
+            maximoVigente?: number;
+            individual?: string;
+            grupal?: string;
+            catBuroTipoPrestamoPfId?: string;
+            catBuroTipoPrestamoPmId?: string;
+            tipoResponsabilidadCuenta?: string;
+            tipoCuentaBuro?: string;
+            documentacion?: string;
+            configuracionJson?: string;
+            /** @enum {string} */
+            estatus?: "A" | "B" | "S" | "E";
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+        };
         ActualizarCatTipoSocioRequest: {
             nombre?: string;
             /** Format: int64 */
@@ -3219,6 +3324,7 @@ export interface components {
             nombre?: string;
             /** Format: int64 */
             catNivelRiesgoId?: number;
+            catTipoPrestamoId?: string;
             estatus?: string;
         };
         CatTipoCreditoResponse: {
@@ -3226,6 +3332,7 @@ export interface components {
             nombre?: string;
             /** Format: int64 */
             catNivelRiesgoId?: number;
+            catTipoPrestamoId?: string;
             estatus?: string;
             /** Format: date-time */
             createdAt?: string;
@@ -3691,7 +3798,6 @@ export interface components {
         ActualizarCatCanalPagoRequest: {
             clave?: string;
             nombre?: string;
-            descripcion?: string;
             acronimo?: string;
             /** Format: int64 */
             catNivelRiesgoId?: number;
@@ -3701,7 +3807,6 @@ export interface components {
             id?: string;
             clave?: string;
             nombre?: string;
-            descripcion?: string;
             acronimo?: string;
             /** Format: int64 */
             catNivelRiesgoId?: number;
@@ -4183,75 +4288,6 @@ export interface components {
             /** Format: int64 */
             verificadoPor?: number;
         };
-        SocioPerfilRiesgoResponse: {
-            referencia?: string;
-            nombre?: string;
-            nombres?: string;
-            apellidoPaterno?: string;
-            apellidoMaterno?: string;
-            rfc?: string;
-            curp?: string;
-            /** Format: date */
-            fechaNacimiento?: string;
-            esPep?: boolean;
-            tipoPersona?: components["schemas"]["TipoPersonaInfo"];
-            nacionalidad?: components["schemas"]["NacionalidadInfo"];
-            actividadEconomica?: components["schemas"]["ActividadEconomicaInfo"];
-            sucursal?: string;
-            domicilio?: components["schemas"]["DomicilioSocio"];
-            /** Format: int32 */
-            antiguedadGiroAnios?: number;
-            pepNacionalId?: string;
-            creditoSolicitado?: components["schemas"]["CreditoSolicitadoInfo"];
-            historialCrediticio?: components["schemas"]["CreditoAnteriorInfo"][];
-        };
-        TipoPersonaInfo: {
-            id?: string;
-            nombre?: string;
-        };
-        NacionalidadInfo: {
-            id?: string;
-            nombre?: string;
-        };
-        ActividadEconomicaInfo: {
-            id?: string;
-            descripcion?: string;
-        };
-        DomicilioSocio: {
-            paisId?: string;
-            entidadId?: string;
-            municipioId?: string;
-            localidadId?: string;
-            calle?: string;
-            tipoCalle?: string;
-            /** Format: int32 */
-            noExterior?: number;
-            /** Format: int32 */
-            noInterior?: number;
-            codigoPostal?: string;
-            tipoAsentamiento?: string;
-            nombreAsentamiento?: string;
-            latitud?: string;
-            longitud?: string;
-        };
-        CreditoSolicitadoInfo: {
-            referencia?: string;
-            tipo?: string;
-            monto?: number;
-            origenRecursos?: string;
-            destinoRecursos?: string;
-            /** Format: int64 */
-            canalPagoId?: number;
-            estatus?: string;
-        };
-        CreditoAnteriorInfo: {
-            referencia?: string;
-            tipo?: string;
-            monto?: number;
-            /** Format: date */
-            fechaOtorgamiento?: string;
-            estatus?: string;
-        };
         ResultadoConsultaListas: {
             resultados?: components["schemas"]["ConsultaLista"][];
             proveedorExternoNoDisponible?: boolean;
@@ -4307,6 +4343,29 @@ export interface components {
             /** @enum {string} */
             estatus: "A" | "B" | "S" | "E";
         };
+        CrearCatTipoPrestamoRequest: {
+            id?: string;
+            nombre: string;
+            tasaInteresNormalMinima?: number;
+            tasaInteresNormalMaxima?: number;
+            tasaInteresMoratorioMinima?: number;
+            tasaInteresMoratorioMaxima?: number;
+            reciprocidad?: number;
+            catTipoGarantiaId?: string;
+            prestamosInversion?: string;
+            /** Format: int32 */
+            maximoVigente?: number;
+            individual?: string;
+            grupal?: string;
+            catBuroTipoPrestamoPfId?: string;
+            catBuroTipoPrestamoPmId?: string;
+            tipoResponsabilidadCuenta?: string;
+            tipoCuentaBuro?: string;
+            documentacion?: string;
+            configuracionJson?: string;
+            /** @enum {string} */
+            estatus?: "A" | "B" | "S" | "E";
+        };
         CrearCatTipoSocioRequest: {
             nombre: string;
             /** Format: int64 */
@@ -4324,10 +4383,11 @@ export interface components {
             estatus?: "A" | "B" | "S" | "E";
         };
         CrearCatTipoCreditoRequest: {
-            id: string;
+            id?: string;
             nombre: string;
             /** Format: int64 */
             catNivelRiesgoId: number;
+            catTipoPrestamoId?: string;
             estatus?: string;
         };
         /** @description Petición para crear un nuevo tipo de alerta */
@@ -4529,10 +4589,9 @@ export interface components {
             estatus?: string;
         };
         CrearCatCanalPagoRequest: {
-            id: string;
+            id?: string;
             clave?: string;
             nombre: string;
-            descripcion?: string;
             acronimo?: string;
             /** Format: int64 */
             catNivelRiesgoId?: number;
@@ -4680,12 +4739,80 @@ export interface components {
              */
             nuevoEstatus: "R" | "V" | "A" | "D";
         };
+        ActividadEconomicaInfo: {
+            id?: string;
+            descripcion?: string;
+        };
+        CreditoAnteriorInfo: {
+            referencia?: string;
+            tipo?: string;
+            monto?: number;
+            /** Format: date */
+            fechaOtorgamiento?: string;
+            estatus?: string;
+        };
+        CreditoSolicitadoInfo: {
+            referencia?: string;
+            tipo?: string;
+            monto?: number;
+            origenRecursos?: string;
+            destinoRecursos?: string;
+            /** Format: int64 */
+            canalPagoId?: number;
+            estatus?: string;
+        };
+        DomicilioSocio: {
+            paisId?: string;
+            entidadId?: string;
+            municipioId?: string;
+            localidadId?: string;
+            calle?: string;
+            tipoCalle?: string;
+            /** Format: int32 */
+            noExterior?: number;
+            /** Format: int32 */
+            noInterior?: number;
+            codigoPostal?: string;
+            tipoAsentamiento?: string;
+            nombreAsentamiento?: string;
+            latitud?: string;
+            longitud?: string;
+        };
+        NacionalidadInfo: {
+            id?: string;
+            nombre?: string;
+        };
+        SocioPerfilRiesgoResponse: {
+            referencia?: string;
+            nombre?: string;
+            nombres?: string;
+            apellidoPaterno?: string;
+            apellidoMaterno?: string;
+            rfc?: string;
+            curp?: string;
+            /** Format: date */
+            fechaNacimiento?: string;
+            esPep?: boolean;
+            tipoPersona?: components["schemas"]["TipoPersonaInfo"];
+            nacionalidad?: components["schemas"]["NacionalidadInfo"];
+            actividadEconomica?: components["schemas"]["ActividadEconomicaInfo"];
+            sucursal?: string;
+            domicilio?: components["schemas"]["DomicilioSocio"];
+            /** Format: int32 */
+            antiguedadGiroAnios?: number;
+            pepNacionalId?: string;
+            creditoSolicitado?: components["schemas"]["CreditoSolicitadoInfo"];
+            historialCrediticio?: components["schemas"]["CreditoAnteriorInfo"][];
+        };
+        TipoPersonaInfo: {
+            id?: string;
+            nombre?: string;
+        };
         SocioInfo: {
             id?: string;
             nombre?: string;
             status?: string;
             rfc?: string;
-            tipoPersona?: string;
         };
         ResultadoBusquedaResponse: {
             personaPrincipal?: components["schemas"]["PersonaBloqueadaResponse"];
@@ -4744,6 +4871,17 @@ export interface components {
             /** Format: date-time */
             updatedAt?: string;
         };
+        PaginaResponseCatZonaRiesgoResponse: {
+            contenido?: components["schemas"]["CatZonaRiesgoResponse"][];
+            /** Format: int32 */
+            pagina?: number;
+            /** Format: int32 */
+            tamanio?: number;
+            /** Format: int64 */
+            totalElementos?: number;
+            /** Format: int32 */
+            totalPaginas?: number;
+        };
         PaisAsignadoResponse: {
             id?: string;
             codigoIso?: string;
@@ -4760,13 +4898,178 @@ export interface components {
             claveCurp?: string;
             nombre?: string;
         };
+        PaginaResponseCatTipoPrestamoResponse: {
+            contenido?: components["schemas"]["CatTipoPrestamoResponse"][];
+            /** Format: int32 */
+            pagina?: number;
+            /** Format: int32 */
+            tamanio?: number;
+            /** Format: int64 */
+            totalElementos?: number;
+            /** Format: int32 */
+            totalPaginas?: number;
+        };
+        PaginaResponseCatTipoSocioResponse: {
+            contenido?: components["schemas"]["CatTipoSocioResponse"][];
+            /** Format: int32 */
+            pagina?: number;
+            /** Format: int32 */
+            tamanio?: number;
+            /** Format: int64 */
+            totalElementos?: number;
+            /** Format: int32 */
+            totalPaginas?: number;
+        };
+        PaginaResponseCatTipoPagoResponse: {
+            contenido?: components["schemas"]["CatTipoPagoResponse"][];
+            /** Format: int32 */
+            pagina?: number;
+            /** Format: int32 */
+            tamanio?: number;
+            /** Format: int64 */
+            totalElementos?: number;
+            /** Format: int32 */
+            totalPaginas?: number;
+        };
+        PaginaResponseCatTipoCreditoResponse: {
+            contenido?: components["schemas"]["CatTipoCreditoResponse"][];
+            /** Format: int32 */
+            pagina?: number;
+            /** Format: int32 */
+            tamanio?: number;
+            /** Format: int64 */
+            totalElementos?: number;
+            /** Format: int32 */
+            totalPaginas?: number;
+        };
+        PaginaResponseCatTipoAlertaResponse: {
+            contenido?: components["schemas"]["CatTipoAlertaResponse"][];
+            /** Format: int32 */
+            pagina?: number;
+            /** Format: int32 */
+            tamanio?: number;
+            /** Format: int64 */
+            totalElementos?: number;
+            /** Format: int32 */
+            totalPaginas?: number;
+        };
+        PaginaResponseCatTiempoConstitucionResponse: {
+            contenido?: components["schemas"]["CatTiempoConstitucionResponse"][];
+            /** Format: int32 */
+            pagina?: number;
+            /** Format: int32 */
+            tamanio?: number;
+            /** Format: int64 */
+            totalElementos?: number;
+            /** Format: int32 */
+            totalPaginas?: number;
+        };
+        PaginaResponseSucursalResponse: {
+            contenido?: components["schemas"]["SucursalResponse"][];
+            /** Format: int32 */
+            pagina?: number;
+            /** Format: int32 */
+            tamanio?: number;
+            /** Format: int64 */
+            totalElementos?: number;
+            /** Format: int32 */
+            totalPaginas?: number;
+        };
         SucursalResponse: {
             id?: string;
             codigoSucursal?: string;
             nombre?: string;
         };
+        PaginaResponseCatRazonAlertaResponse: {
+            contenido?: components["schemas"]["CatRazonAlertaResponse"][];
+            /** Format: int32 */
+            pagina?: number;
+            /** Format: int32 */
+            tamanio?: number;
+            /** Format: int64 */
+            totalElementos?: number;
+            /** Format: int32 */
+            totalPaginas?: number;
+        };
+        PaginaResponseCatPrestamoMontoResponse: {
+            contenido?: components["schemas"]["CatPrestamoMontoResponse"][];
+            /** Format: int32 */
+            pagina?: number;
+            /** Format: int32 */
+            tamanio?: number;
+            /** Format: int64 */
+            totalElementos?: number;
+            /** Format: int32 */
+            totalPaginas?: number;
+        };
+        PaginaResponseCatPepResponse: {
+            contenido?: components["schemas"]["CatPepResponse"][];
+            /** Format: int32 */
+            pagina?: number;
+            /** Format: int32 */
+            tamanio?: number;
+            /** Format: int64 */
+            totalElementos?: number;
+            /** Format: int32 */
+            totalPaginas?: number;
+        };
+        PaginaResponseCatPaisResponse: {
+            contenido?: components["schemas"]["CatPaisResponse"][];
+            /** Format: int32 */
+            pagina?: number;
+            /** Format: int32 */
+            tamanio?: number;
+            /** Format: int64 */
+            totalElementos?: number;
+            /** Format: int32 */
+            totalPaginas?: number;
+        };
+        PaginaResponseCatOrigenRecursoResponse: {
+            contenido?: components["schemas"]["CatOrigenRecursoResponse"][];
+            /** Format: int32 */
+            pagina?: number;
+            /** Format: int32 */
+            tamanio?: number;
+            /** Format: int64 */
+            totalElementos?: number;
+            /** Format: int32 */
+            totalPaginas?: number;
+        };
+        PaginaResponseCatNivelRiesgoResponse: {
+            contenido?: components["schemas"]["CatNivelRiesgoResponse"][];
+            /** Format: int32 */
+            pagina?: number;
+            /** Format: int32 */
+            tamanio?: number;
+            /** Format: int64 */
+            totalElementos?: number;
+            /** Format: int32 */
+            totalPaginas?: number;
+        };
+        PaginaResponseCatMunicipioResponse: {
+            contenido?: components["schemas"]["CatMunicipioResponse"][];
+            /** Format: int32 */
+            pagina?: number;
+            /** Format: int32 */
+            tamanio?: number;
+            /** Format: int64 */
+            totalElementos?: number;
+            /** Format: int32 */
+            totalPaginas?: number;
+        };
         PaginaResponseCatLocalidadResponse: {
             contenido?: components["schemas"]["CatLocalidadResponse"][];
+            /** Format: int32 */
+            pagina?: number;
+            /** Format: int32 */
+            tamanio?: number;
+            /** Format: int64 */
+            totalElementos?: number;
+            /** Format: int32 */
+            totalPaginas?: number;
+        };
+        PaginaResponseListaRestrictivaResponse: {
+            contenido?: components["schemas"]["ListaRestrictivaResponse"][];
             /** Format: int32 */
             pagina?: number;
             /** Format: int32 */
@@ -4780,6 +5083,83 @@ export interface components {
             id?: string;
             clave?: string;
             descripcion?: string;
+        };
+        PaginaResponseCatHistorialCrediticioResponse: {
+            contenido?: components["schemas"]["CatHistorialCrediticioResponse"][];
+            /** Format: int32 */
+            pagina?: number;
+            /** Format: int32 */
+            tamanio?: number;
+            /** Format: int64 */
+            totalElementos?: number;
+            /** Format: int32 */
+            totalPaginas?: number;
+        };
+        PaginaResponseCatExperienciaActividadResponse: {
+            contenido?: components["schemas"]["CatExperienciaActividadResponse"][];
+            /** Format: int32 */
+            pagina?: number;
+            /** Format: int32 */
+            tamanio?: number;
+            /** Format: int64 */
+            totalElementos?: number;
+            /** Format: int32 */
+            totalPaginas?: number;
+        };
+        PaginaResponseEntidadCatGeograficaResponse: {
+            contenido?: components["schemas"]["EntidadCatGeograficaResponse"][];
+            /** Format: int32 */
+            pagina?: number;
+            /** Format: int32 */
+            tamanio?: number;
+            /** Format: int64 */
+            totalElementos?: number;
+            /** Format: int32 */
+            totalPaginas?: number;
+        };
+        PaginaResponseCatEdadResponse: {
+            contenido?: components["schemas"]["CatEdadResponse"][];
+            /** Format: int32 */
+            pagina?: number;
+            /** Format: int32 */
+            tamanio?: number;
+            /** Format: int64 */
+            totalElementos?: number;
+            /** Format: int32 */
+            totalPaginas?: number;
+        };
+        PaginaResponseCatDestinoRecursoResponse: {
+            contenido?: components["schemas"]["CatDestinoRecursoResponse"][];
+            /** Format: int32 */
+            pagina?: number;
+            /** Format: int32 */
+            tamanio?: number;
+            /** Format: int64 */
+            totalElementos?: number;
+            /** Format: int32 */
+            totalPaginas?: number;
+        };
+        PaginaResponseCatCanalPagoResponse: {
+            contenido?: components["schemas"]["CatCanalPagoResponse"][];
+            /** Format: int32 */
+            pagina?: number;
+            /** Format: int32 */
+            tamanio?: number;
+            /** Format: int64 */
+            totalElementos?: number;
+            /** Format: int32 */
+            totalPaginas?: number;
+        };
+        PaginaResponseCatActividadEconomicaResponse: {
+            contenido?: components["schemas"]["CatActividadEconomicaResponse"][];
+            /** Format: int32 */
+            pagina?: number;
+            /** Format: int32 */
+            tamanio?: number;
+            /** Format: int64 */
+            totalElementos?: number;
+            /** Format: int32 */
+            totalPaginas?: number;
         };
         PageDenunciaResponse: {
             /** Format: int32 */
@@ -5728,6 +6108,80 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                id: string;
+                /** @description Identificador del Tenant */
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatTipoPrestamoResponse"];
+                };
+            };
+        };
+    };
+    actualizar_4: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                /** @description Identificador del Tenant */
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ActualizarCatTipoPrestamoRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatTipoPrestamoResponse"];
+                };
+            };
+        };
+    };
+    eliminar_4: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                /** @description Identificador del Tenant */
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    obtenerPorId_6: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
                 /** @description ID único del tipo de persona */
                 id: string;
                 /** @description Identificador del Tenant */
@@ -5748,7 +6202,7 @@ export interface operations {
             };
         };
     };
-    actualizar_4: {
+    actualizar_5: {
         parameters: {
             query?: never;
             header?: never;
@@ -5777,7 +6231,7 @@ export interface operations {
             };
         };
     };
-    eliminar_4: {
+    eliminar_5: {
         parameters: {
             query?: never;
             header?: never;
@@ -5800,7 +6254,7 @@ export interface operations {
             };
         };
     };
-    obtenerPorId_6: {
+    obtenerPorId_7: {
         parameters: {
             query?: never;
             header?: never;
@@ -5825,7 +6279,7 @@ export interface operations {
             };
         };
     };
-    actualizar_5: {
+    actualizar_6: {
         parameters: {
             query?: never;
             header?: never;
@@ -5854,7 +6308,7 @@ export interface operations {
             };
         };
     };
-    eliminar_5: {
+    eliminar_6: {
         parameters: {
             query?: never;
             header?: never;
@@ -5877,7 +6331,7 @@ export interface operations {
             };
         };
     };
-    obtenerPorId_7: {
+    obtenerPorId_8: {
         parameters: {
             query?: never;
             header?: never;
@@ -5902,7 +6356,7 @@ export interface operations {
             };
         };
     };
-    actualizar_6: {
+    actualizar_7: {
         parameters: {
             query?: never;
             header?: never;
@@ -5931,7 +6385,7 @@ export interface operations {
             };
         };
     };
-    eliminar_6: {
+    eliminar_7: {
         parameters: {
             query?: never;
             header?: never;
@@ -5954,7 +6408,7 @@ export interface operations {
             };
         };
     };
-    obtenerPorId_8: {
+    obtenerPorId_9: {
         parameters: {
             query?: never;
             header?: never;
@@ -5988,7 +6442,7 @@ export interface operations {
             };
         };
     };
-    actualizar_7: {
+    actualizar_8: {
         parameters: {
             query?: never;
             header?: never;
@@ -6053,7 +6507,7 @@ export interface operations {
             };
         };
     };
-    eliminar_7: {
+    eliminar_8: {
         parameters: {
             query?: never;
             header?: never;
@@ -6097,7 +6551,7 @@ export interface operations {
             };
         };
     };
-    obtenerPorId_9: {
+    obtenerPorId_10: {
         parameters: {
             query?: never;
             header?: never;
@@ -6122,7 +6576,7 @@ export interface operations {
             };
         };
     };
-    actualizar_8: {
+    actualizar_9: {
         parameters: {
             query?: never;
             header?: never;
@@ -6151,7 +6605,7 @@ export interface operations {
             };
         };
     };
-    eliminar_8: {
+    eliminar_9: {
         parameters: {
             query?: never;
             header?: never;
@@ -6174,7 +6628,7 @@ export interface operations {
             };
         };
     };
-    obtenerPorId_10: {
+    obtenerPorId_11: {
         parameters: {
             query?: never;
             header?: never;
@@ -6208,7 +6662,7 @@ export interface operations {
             };
         };
     };
-    actualizar_9: {
+    actualizar_10: {
         parameters: {
             query?: never;
             header?: never;
@@ -6273,7 +6727,7 @@ export interface operations {
             };
         };
     };
-    eliminar_9: {
+    eliminar_10: {
         parameters: {
             query?: never;
             header?: never;
@@ -6317,7 +6771,7 @@ export interface operations {
             };
         };
     };
-    obtenerPorId_11: {
+    obtenerPorId_12: {
         parameters: {
             query?: never;
             header?: never;
@@ -6342,7 +6796,7 @@ export interface operations {
             };
         };
     };
-    actualizar_10: {
+    actualizar_11: {
         parameters: {
             query?: never;
             header?: never;
@@ -6371,7 +6825,7 @@ export interface operations {
             };
         };
     };
-    eliminar_10: {
+    eliminar_11: {
         parameters: {
             query?: never;
             header?: never;
@@ -6394,7 +6848,7 @@ export interface operations {
             };
         };
     };
-    obtenerPorId_12: {
+    obtenerPorId_13: {
         parameters: {
             query?: never;
             header?: never;
@@ -6419,7 +6873,7 @@ export interface operations {
             };
         };
     };
-    actualizar_11: {
+    actualizar_12: {
         parameters: {
             query?: never;
             header?: never;
@@ -6448,7 +6902,7 @@ export interface operations {
             };
         };
     };
-    eliminar_11: {
+    eliminar_12: {
         parameters: {
             query?: never;
             header?: never;
@@ -6604,7 +7058,7 @@ export interface operations {
             };
         };
     };
-    obtenerPorId_13: {
+    obtenerPorId_14: {
         parameters: {
             query?: never;
             header?: never;
@@ -6629,7 +7083,7 @@ export interface operations {
             };
         };
     };
-    actualizar_12: {
+    actualizar_13: {
         parameters: {
             query?: never;
             header?: never;
@@ -6658,7 +7112,7 @@ export interface operations {
             };
         };
     };
-    eliminar_12: {
+    eliminar_13: {
         parameters: {
             query?: never;
             header?: never;
@@ -6681,7 +7135,7 @@ export interface operations {
             };
         };
     };
-    obtenerPorId_14: {
+    obtenerPorId_15: {
         parameters: {
             query?: never;
             header?: never;
@@ -6706,7 +7160,7 @@ export interface operations {
             };
         };
     };
-    actualizar_13: {
+    actualizar_14: {
         parameters: {
             query?: never;
             header?: never;
@@ -6735,7 +7189,7 @@ export interface operations {
             };
         };
     };
-    eliminar_13: {
+    eliminar_14: {
         parameters: {
             query?: never;
             header?: never;
@@ -6953,7 +7407,7 @@ export interface operations {
             };
         };
     };
-    obtenerPorId_15: {
+    obtenerPorId_16: {
         parameters: {
             query?: never;
             header?: never;
@@ -6978,7 +7432,7 @@ export interface operations {
             };
         };
     };
-    actualizar_14: {
+    actualizar_15: {
         parameters: {
             query?: never;
             header?: never;
@@ -7007,7 +7461,7 @@ export interface operations {
             };
         };
     };
-    eliminar_14: {
+    eliminar_15: {
         parameters: {
             query?: never;
             header?: never;
@@ -7030,7 +7484,7 @@ export interface operations {
             };
         };
     };
-    obtenerPorId_16: {
+    obtenerPorId_17: {
         parameters: {
             query?: never;
             header?: never;
@@ -7054,7 +7508,7 @@ export interface operations {
             };
         };
     };
-    actualizar_15: {
+    actualizar_16: {
         parameters: {
             query?: never;
             header?: never;
@@ -7082,7 +7536,7 @@ export interface operations {
             };
         };
     };
-    eliminar_15: {
+    eliminar_16: {
         parameters: {
             query?: never;
             header?: never;
@@ -7104,7 +7558,7 @@ export interface operations {
             };
         };
     };
-    obtenerPorId_17: {
+    obtenerPorId_18: {
         parameters: {
             query?: never;
             header?: never;
@@ -7129,7 +7583,7 @@ export interface operations {
             };
         };
     };
-    actualizar_16: {
+    actualizar_17: {
         parameters: {
             query?: never;
             header?: never;
@@ -7158,7 +7612,7 @@ export interface operations {
             };
         };
     };
-    eliminar_16: {
+    eliminar_17: {
         parameters: {
             query?: never;
             header?: never;
@@ -7241,7 +7695,7 @@ export interface operations {
             };
         };
     };
-    eliminar_17: {
+    eliminar_18: {
         parameters: {
             query?: never;
             header?: never;
@@ -7293,7 +7747,7 @@ export interface operations {
             };
         };
     };
-    obtenerPorId_18: {
+    obtenerPorId_19: {
         parameters: {
             query?: never;
             header?: never;
@@ -7318,7 +7772,7 @@ export interface operations {
             };
         };
     };
-    actualizar_17: {
+    actualizar_18: {
         parameters: {
             query?: never;
             header?: never;
@@ -7347,7 +7801,7 @@ export interface operations {
             };
         };
     };
-    eliminar_18: {
+    eliminar_19: {
         parameters: {
             query?: never;
             header?: never;
@@ -7370,7 +7824,7 @@ export interface operations {
             };
         };
     };
-    obtenerPorId_19: {
+    obtenerPorId_20: {
         parameters: {
             query?: never;
             header?: never;
@@ -7395,7 +7849,7 @@ export interface operations {
             };
         };
     };
-    actualizar_18: {
+    actualizar_19: {
         parameters: {
             query?: never;
             header?: never;
@@ -7424,7 +7878,7 @@ export interface operations {
             };
         };
     };
-    eliminar_19: {
+    eliminar_20: {
         parameters: {
             query?: never;
             header?: never;
@@ -7447,7 +7901,7 @@ export interface operations {
             };
         };
     };
-    obtenerPorId_20: {
+    obtenerPorId_21: {
         parameters: {
             query?: never;
             header?: never;
@@ -7472,7 +7926,7 @@ export interface operations {
             };
         };
     };
-    actualizar_19: {
+    actualizar_20: {
         parameters: {
             query?: never;
             header?: never;
@@ -7501,7 +7955,7 @@ export interface operations {
             };
         };
     };
-    eliminar_20: {
+    eliminar_21: {
         parameters: {
             query?: never;
             header?: never;
@@ -7672,7 +8126,7 @@ export interface operations {
             };
         };
     };
-    obtenerPorId_21: {
+    obtenerPorId_22: {
         parameters: {
             query?: never;
             header?: never;
@@ -7697,7 +8151,7 @@ export interface operations {
             };
         };
     };
-    actualizar_20: {
+    actualizar_21: {
         parameters: {
             query?: never;
             header?: never;
@@ -7726,7 +8180,7 @@ export interface operations {
             };
         };
     };
-    eliminar_21: {
+    eliminar_22: {
         parameters: {
             query?: never;
             header?: never;
@@ -8347,6 +8801,14 @@ export interface operations {
             query?: {
                 /** @description Filtro por estatus (A/INA) */
                 estatus?: string;
+                /** @description Búsqueda por nombre o descripción */
+                busqueda?: string;
+                /** @description Criterio de filtrado */
+                filtrarPor?: string;
+                /** @description Página (base 0) */
+                pagina?: number;
+                /** @description Filas por página (máximo 50) */
+                tamanio?: number;
             };
             header?: never;
             path: {
@@ -8363,7 +8825,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["CatZonaRiesgoResponse"][];
+                    "*/*": components["schemas"]["PaginaResponseCatZonaRiesgoResponse"];
                 };
             };
         };
@@ -8397,7 +8859,16 @@ export interface operations {
     };
     listarTodos: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Búsqueda por nombre o descripción */
+                busqueda?: string;
+                /** @description Criterio de filtrado */
+                filtrarPor?: string;
+                /** @description Página (base 0) */
+                pagina?: number;
+                /** @description Filas por página (máximo 50) */
+                tamanio?: number;
+            };
             header?: never;
             path: {
                 /** @description Identificador del Tenant */
@@ -8413,12 +8884,71 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CatTipoSocioResponse"][];
+                    "application/json": components["schemas"]["PaginaResponseCatTipoPrestamoResponse"];
                 };
             };
         };
     };
     crear_4: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Identificador del Tenant */
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CrearCatTipoPrestamoRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatTipoPrestamoResponse"];
+                };
+            };
+        };
+    };
+    listarTodos_1: {
+        parameters: {
+            query?: {
+                /** @description Búsqueda por nombre o descripción */
+                busqueda?: string;
+                /** @description Criterio de filtrado */
+                filtrarPor?: string;
+                /** @description Página (base 0) */
+                pagina?: number;
+                /** @description Filas por página (máximo 50) */
+                tamanio?: number;
+            };
+            header?: never;
+            path: {
+                /** @description Identificador del Tenant */
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginaResponseCatTipoSocioResponse"];
+                };
+            };
+        };
+    };
+    crear_5: {
         parameters: {
             query?: never;
             header?: never;
@@ -8445,9 +8975,18 @@ export interface operations {
             };
         };
     };
-    listarTodos_1: {
+    listarTodos_2: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Búsqueda por nombre o descripción */
+                busqueda?: string;
+                /** @description Criterio de filtrado */
+                filtrarPor?: string;
+                /** @description Página (base 0) */
+                pagina?: number;
+                /** @description Filas por página (máximo 50) */
+                tamanio?: number;
+            };
             header?: never;
             path: {
                 /** @description Identificador del Tenant */
@@ -8463,12 +9002,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CatTipoPagoResponse"][];
+                    "application/json": components["schemas"]["PaginaResponseCatTipoPagoResponse"];
                 };
             };
         };
     };
-    crear_5: {
+    crear_6: {
         parameters: {
             query?: never;
             header?: never;
@@ -8495,9 +9034,18 @@ export interface operations {
             };
         };
     };
-    listarTodos_2: {
+    listarTodos_3: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Búsqueda por nombre o descripción */
+                busqueda?: string;
+                /** @description Criterio de filtrado */
+                filtrarPor?: string;
+                /** @description Página (base 0) */
+                pagina?: number;
+                /** @description Filas por página (máximo 50) */
+                tamanio?: number;
+            };
             header?: never;
             path: {
                 /** @description Identificador del Tenant */
@@ -8513,12 +9061,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CatTipoCreditoResponse"][];
+                    "application/json": components["schemas"]["PaginaResponseCatTipoCreditoResponse"];
                 };
             };
         };
     };
-    crear_6: {
+    crear_7: {
         parameters: {
             query?: never;
             header?: never;
@@ -8545,11 +9093,19 @@ export interface operations {
             };
         };
     };
-    listarTodos_3: {
+    listarTodos_4: {
         parameters: {
             query?: {
                 /** @description Filtro opcional por buzon (ej. 'S' o 'N') */
                 buzon?: string;
+                /** @description Búsqueda por nombre o descripción */
+                busqueda?: string;
+                /** @description Criterio de filtrado */
+                filtrarPor?: string;
+                /** @description Página (base 0) */
+                pagina?: number;
+                /** @description Filas por página (máximo 50) */
+                tamanio?: number;
             };
             header?: never;
             path: {
@@ -8560,18 +9116,18 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Listado de tipos de alerta obtenido exitosamente */
+            /** @description Listado paginado de tipos de alerta obtenido exitosamente */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CatTipoAlertaResponse"][];
+                    "application/json": components["schemas"]["PaginaResponseCatTipoAlertaResponse"];
                 };
             };
         };
     };
-    crear_7: {
+    crear_8: {
         parameters: {
             query?: never;
             header?: never;
@@ -8625,9 +9181,18 @@ export interface operations {
             };
         };
     };
-    listarTodos_4: {
+    listarTodos_5: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Búsqueda por nombre o descripción */
+                busqueda?: string;
+                /** @description Criterio de filtrado */
+                filtrarPor?: string;
+                /** @description Página (base 0) */
+                pagina?: number;
+                /** @description Filas por página (máximo 50) */
+                tamanio?: number;
+            };
             header?: never;
             path: {
                 /** @description Identificador del Tenant */
@@ -8643,12 +9208,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CatTiempoConstitucionResponse"][];
+                    "application/json": components["schemas"]["PaginaResponseCatTiempoConstitucionResponse"];
                 };
             };
         };
     };
-    crear_8: {
+    crear_9: {
         parameters: {
             query?: never;
             header?: never;
@@ -8675,11 +9240,19 @@ export interface operations {
             };
         };
     };
-    listarTodos_5: {
+    listarTodos_6: {
         parameters: {
             query?: {
                 /** @description ID opcional del tipo de alerta para filtrar */
                 tipoAlertaId?: number;
+                /** @description Búsqueda por nombre o descripción */
+                busqueda?: string;
+                /** @description Criterio de filtrado */
+                filtrarPor?: string;
+                /** @description Página (base 0) */
+                pagina?: number;
+                /** @description Filas por página (máximo 50) */
+                tamanio?: number;
             };
             header?: never;
             path: {
@@ -8690,18 +9263,18 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Listado de razones de alerta obtenido exitosamente */
+            /** @description Listado paginado de razones de alerta obtenido exitosamente */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CatRazonAlertaResponse"][];
+                    "application/json": components["schemas"]["PaginaResponseCatRazonAlertaResponse"];
                 };
             };
         };
     };
-    crear_9: {
+    crear_10: {
         parameters: {
             query?: never;
             header?: never;
@@ -8755,9 +9328,18 @@ export interface operations {
             };
         };
     };
-    listarTodos_6: {
+    listarTodos_7: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Búsqueda por nombre o descripción */
+                busqueda?: string;
+                /** @description Criterio de filtrado */
+                filtrarPor?: string;
+                /** @description Página (base 0) */
+                pagina?: number;
+                /** @description Filas por página (máximo 50) */
+                tamanio?: number;
+            };
             header?: never;
             path: {
                 /** @description Identificador del Tenant */
@@ -8773,12 +9355,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CatPrestamoMontoResponse"][];
+                    "application/json": components["schemas"]["PaginaResponseCatPrestamoMontoResponse"];
                 };
             };
         };
     };
-    crear_10: {
+    crear_11: {
         parameters: {
             query?: never;
             header?: never;
@@ -8805,9 +9387,18 @@ export interface operations {
             };
         };
     };
-    listarTodos_7: {
+    listarTodos_8: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Búsqueda por nombre o descripción */
+                busqueda?: string;
+                /** @description Criterio de filtrado */
+                filtrarPor?: string;
+                /** @description Página (base 0) */
+                pagina?: number;
+                /** @description Filas por página (máximo 50) */
+                tamanio?: number;
+            };
             header?: never;
             path: {
                 /** @description Identificador del Tenant */
@@ -8823,12 +9414,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CatPepResponse"][];
+                    "application/json": components["schemas"]["PaginaResponseCatPepResponse"];
                 };
             };
         };
     };
-    crear_11: {
+    crear_12: {
         parameters: {
             query?: never;
             header?: never;
@@ -8862,6 +9453,14 @@ export interface operations {
                 busqueda?: string;
                 /** @description Criterio de filtrado */
                 filtrarPor?: string;
+                /** @description Página (base 0) */
+                pagina?: number;
+                /**
+                 * @description Filas por páEl hecho de que la paginación sea idéntica en ambas pantallas es la mejor pista de que ya comparten un componente común (<DataTable /> o al menos <Pagination />). El siguiente paso natural es extender ese componente compartido para que también estandarice:
+                 *
+                 *     gina (máximo 50)
+                 */
+                tamanio?: number;
             };
             header?: never;
             path: {
@@ -8878,7 +9477,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["CatPaisResponse"][];
+                    "*/*": components["schemas"]["PaginaResponseCatPaisResponse"];
                 };
             };
         };
@@ -8964,9 +9563,18 @@ export interface operations {
             };
         };
     };
-    listarTodos_8: {
+    listarTodos_9: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Búsqueda por nombre o descripción */
+                busqueda?: string;
+                /** @description Criterio de filtrado */
+                filtrarPor?: string;
+                /** @description Página (base 0) */
+                pagina?: number;
+                /** @description Filas por página (máximo 50) */
+                tamanio?: number;
+            };
             header?: never;
             path: {
                 /** @description Identificador del Tenant */
@@ -8982,12 +9590,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CatOrigenRecursoResponse"][];
+                    "application/json": components["schemas"]["PaginaResponseCatOrigenRecursoResponse"];
                 };
             };
         };
     };
-    crear_12: {
+    crear_13: {
         parameters: {
             query?: never;
             header?: never;
@@ -9014,9 +9622,18 @@ export interface operations {
             };
         };
     };
-    listarTodos_9: {
+    listarTodos_10: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Búsqueda por nombre o descripción */
+                busqueda?: string;
+                /** @description Criterio de filtrado */
+                filtrarPor?: string;
+                /** @description Página (base 0) */
+                pagina?: number;
+                /** @description Filas por página (máximo 50) */
+                tamanio?: number;
+            };
             header?: never;
             path: {
                 /** @description Identificador del Tenant */
@@ -9032,12 +9649,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CatNivelRiesgoResponse"][];
+                    "application/json": components["schemas"]["PaginaResponseCatNivelRiesgoResponse"];
                 };
             };
         };
     };
-    crear_13: {
+    crear_14: {
         parameters: {
             query?: never;
             header?: never;
@@ -9064,7 +9681,7 @@ export interface operations {
             };
         };
     };
-    findAll: {
+    listarMunicipios: {
         parameters: {
             query?: {
                 /** @description Búsqueda por nombre de municipio */
@@ -9073,6 +9690,10 @@ export interface operations {
                 filtrarPor?: string;
                 /** @description ID de la entidad federativa */
                 entidadId?: string;
+                /** @description Página (base 0) */
+                pagina?: number;
+                /** @description Filas por página (máximo 50) */
+                tamanio?: number;
             };
             header?: never;
             path: {
@@ -9089,7 +9710,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["CatMunicipioResponse"][];
+                    "*/*": components["schemas"]["PaginaResponseCatMunicipioResponse"];
                 };
             };
         };
@@ -9136,7 +9757,7 @@ export interface operations {
                 idNivelRiesgo?: number;
                 /** @description Página (base 0) */
                 pagina?: number;
-                /** @description Filas por página (máximo 200) */
+                /** @description Filas por página (máximo 50) */
                 tamanio?: number;
             };
             header?: never;
@@ -9240,9 +9861,18 @@ export interface operations {
             };
         };
     };
-    listarTodos_10: {
+    listarTodos_11: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Búsqueda por nombre o descripción */
+                busqueda?: string;
+                /** @description Criterio de filtrado */
+                filtrarPor?: string;
+                /** @description Página (base 0) */
+                pagina?: number;
+                /** @description Filas por página (máximo 50) */
+                tamanio?: number;
+            };
             header?: never;
             path: {
                 /** @description Identificador del Tenant */
@@ -9258,12 +9888,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ListaRestrictivaResponse"][];
+                    "application/json": components["schemas"]["PaginaResponseListaRestrictivaResponse"];
                 };
             };
         };
     };
-    crear_14: {
+    crear_15: {
         parameters: {
             query?: never;
             header?: never;
@@ -9290,9 +9920,18 @@ export interface operations {
             };
         };
     };
-    listarTodos_11: {
+    listarTodos_12: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Búsqueda por nombre o descripción */
+                busqueda?: string;
+                /** @description Criterio de filtrado */
+                filtrarPor?: string;
+                /** @description Página (base 0) */
+                pagina?: number;
+                /** @description Filas por página (máximo 50) */
+                tamanio?: number;
+            };
             header?: never;
             path: {
                 /** @description Identificador del Tenant */
@@ -9308,12 +9947,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CatHistorialCrediticioResponse"][];
+                    "application/json": components["schemas"]["PaginaResponseCatHistorialCrediticioResponse"];
                 };
             };
         };
     };
-    crear_15: {
+    crear_16: {
         parameters: {
             query?: never;
             header?: never;
@@ -9340,9 +9979,18 @@ export interface operations {
             };
         };
     };
-    listarTodos_12: {
+    listarTodos_13: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Búsqueda por nombre o descripción */
+                busqueda?: string;
+                /** @description Criterio de filtrado */
+                filtrarPor?: string;
+                /** @description Página (base 0) */
+                pagina?: number;
+                /** @description Filas por página (máximo 50) */
+                tamanio?: number;
+            };
             header?: never;
             path: {
                 /** @description Identificador del Tenant */
@@ -9358,12 +10006,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CatExperienciaActividadResponse"][];
+                    "application/json": components["schemas"]["PaginaResponseCatExperienciaActividadResponse"];
                 };
             };
         };
     };
-    crear_16: {
+    crear_17: {
         parameters: {
             query?: never;
             header?: never;
@@ -9399,6 +10047,10 @@ export interface operations {
                 filtrarPor?: string;
                 /** @description ID de la zona de riesgo asociada */
                 idZona?: string;
+                /** @description Página (base 0) */
+                pagina?: number;
+                /** @description Filas por página (máximo 50) */
+                tamanio?: number;
             };
             header?: never;
             path: {
@@ -9415,7 +10067,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["EntidadCatGeograficaResponse"][];
+                    "*/*": components["schemas"]["PaginaResponseEntidadCatGeograficaResponse"];
                 };
             };
         };
@@ -9447,9 +10099,18 @@ export interface operations {
             };
         };
     };
-    listarTodos_13: {
+    listarTodos_14: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Búsqueda por nombre o descripción */
+                busqueda?: string;
+                /** @description Criterio de filtrado */
+                filtrarPor?: string;
+                /** @description Página (base 0) */
+                pagina?: number;
+                /** @description Filas por página (máximo 50) */
+                tamanio?: number;
+            };
             header?: never;
             path: {
                 /** @description Identificador del Tenant */
@@ -9465,12 +10126,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CatEdadResponse"][];
+                    "application/json": components["schemas"]["PaginaResponseCatEdadResponse"];
                 };
             };
         };
     };
-    crear_17: {
+    crear_18: {
         parameters: {
             query?: never;
             header?: never;
@@ -9497,9 +10158,18 @@ export interface operations {
             };
         };
     };
-    listarTodos_14: {
+    listarTodos_15: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Búsqueda por nombre o descripción */
+                busqueda?: string;
+                /** @description Criterio de filtrado */
+                filtrarPor?: string;
+                /** @description Página (base 0) */
+                pagina?: number;
+                /** @description Filas por página (máximo 50) */
+                tamanio?: number;
+            };
             header?: never;
             path: {
                 /** @description Identificador del Tenant */
@@ -9515,12 +10185,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CatDestinoRecursoResponse"][];
+                    "application/json": components["schemas"]["PaginaResponseCatDestinoRecursoResponse"];
                 };
             };
         };
     };
-    crear_18: {
+    crear_19: {
         parameters: {
             query?: never;
             header?: never;
@@ -9547,9 +10217,18 @@ export interface operations {
             };
         };
     };
-    listarTodos_15: {
+    listarTodos_16: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Búsqueda por nombre o descripción */
+                busqueda?: string;
+                /** @description Criterio de filtrado */
+                filtrarPor?: string;
+                /** @description Página (base 0) */
+                pagina?: number;
+                /** @description Filas por página (máximo 50) */
+                tamanio?: number;
+            };
             header?: never;
             path: {
                 /** @description Identificador del Tenant */
@@ -9565,12 +10244,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CatCanalPagoResponse"][];
+                    "application/json": components["schemas"]["PaginaResponseCatCanalPagoResponse"];
                 };
             };
         };
     };
-    crear_19: {
+    crear_20: {
         parameters: {
             query?: never;
             header?: never;
@@ -9697,9 +10376,18 @@ export interface operations {
             };
         };
     };
-    listarTodos_16: {
+    listarTodos_17: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Búsqueda por nombre o clave SAT */
+                busqueda?: string;
+                /** @description Criterio de filtrado */
+                filtrarPor?: string;
+                /** @description Página (base 0) */
+                pagina?: number;
+                /** @description Filas por página (máximo 50) */
+                tamanio?: number;
+            };
             header?: never;
             path: {
                 /** @description Identificador del Tenant */
@@ -9715,12 +10403,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CatActividadEconomicaResponse"][];
+                    "application/json": components["schemas"]["PaginaResponseCatActividadEconomicaResponse"];
                 };
             };
         };
     };
-    crear_20: {
+    crear_21: {
         parameters: {
             query?: never;
             header?: never;
@@ -10161,6 +10849,30 @@ export interface operations {
             };
         };
     };
+    obtenerPerfilRiesgo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                referencia: string;
+                /** @description Identificador del Tenant */
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["SocioPerfilRiesgoResponse"];
+                };
+            };
+        };
+    };
     buscarPorId_1: {
         parameters: {
             query?: never;
@@ -10591,7 +11303,12 @@ export interface operations {
     };
     listarActivas: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Página (base 0) */
+                pagina?: number;
+                /** @description Filas por página (máximo 50) */
+                tamanio?: number;
+            };
             header?: never;
             path: {
                 /** @description Identificador del Tenant */
@@ -10607,7 +11324,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["SucursalResponse"][];
+                    "*/*": components["schemas"]["PaginaResponseSucursalResponse"];
                 };
             };
         };

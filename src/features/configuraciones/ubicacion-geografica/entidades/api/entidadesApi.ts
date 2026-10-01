@@ -1,4 +1,5 @@
 import { apiClient } from "@/api/client";
+import { listarCatalogoCompleto } from "@/api/paginacion";
 
 import type {
   ActualizarEntidadInput,
@@ -8,13 +9,14 @@ import type {
 
 const BASE_PATH = "/catalogos/entidades";
 
+// El endpoint pagina: se traen todas las páginas porque esta tabla todavía no
+// tiene controles de paginación propios.
 export async function listarEntidades(params?: {
   busqueda?: string;
   filtrarPor?: string;
   idZona?: string;
 }): Promise<EntidadResponse[]> {
-  const { data } = await apiClient.get<EntidadResponse[]>(BASE_PATH, { params });
-  return data;
+  return listarCatalogoCompleto<EntidadResponse>(BASE_PATH, params);
 }
 
 export async function obtenerEntidad(id: string): Promise<EntidadResponse> {

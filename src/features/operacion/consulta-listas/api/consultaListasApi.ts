@@ -1,4 +1,5 @@
 import { apiClient } from "@/api/client";
+import { listarCatalogoCompleto } from "@/api/paginacion";
 import type {
   ConsultaListasRequest,
   ListaRestrictiva,
@@ -10,9 +11,8 @@ export async function consultarListas(payload: ConsultaListasRequest) {
   return data;
 }
 
+// El endpoint pagina: se traen todas las páginas porque esta tabla todavía no
+// tiene controles de paginación propios.
 export async function listarListasRestrictivas() {
-  const { data } = await apiClient.get<ListaRestrictiva[]>(
-    "/catalogos/listas-restrictivas",
-  );
-  return data;
+  return listarCatalogoCompleto<ListaRestrictiva>("/catalogos/listas-restrictivas");
 }

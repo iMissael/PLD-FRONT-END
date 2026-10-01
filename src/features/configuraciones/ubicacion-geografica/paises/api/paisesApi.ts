@@ -1,15 +1,17 @@
 import { apiClient } from "@/api/client";
+import { listarCatalogoCompleto } from "@/api/paginacion";
 
 import type { ActualizarPaisInput, CrearPaisInput, PaisResponse } from "../types/pais";
 
 const BASE_PATH = "/catalogos/paises";
 
+// El endpoint pagina (cat_pais tiene ~192 filas): se traen todas las páginas
+// porque esta tabla todavía no tiene controles de paginación propios.
 export async function listarPaises(params?: {
   busqueda?: string;
   filtrarPor?: string;
 }): Promise<PaisResponse[]> {
-  const { data } = await apiClient.get<PaisResponse[]>(BASE_PATH, { params });
-  return data;
+  return listarCatalogoCompleto<PaisResponse>(BASE_PATH, params);
 }
 
 export async function obtenerPais(id: string): Promise<PaisResponse> {

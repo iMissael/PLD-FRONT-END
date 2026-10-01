@@ -1,4 +1,5 @@
 import { apiClient } from "@/api/client";
+import { listarCatalogoCompleto } from "@/api/paginacion";
 
 import type { ActualizarEdadInput, CrearEdadInput, EdadResponse } from "../types/edad";
 
@@ -6,11 +7,12 @@ const BASE_PATH = "/catalogos/edades";
 
 /**
  * El backend hace soft-delete (`estatus = 'E'`) y ya filtra los eliminados
- * en el listado, así que no hace falta ningún parámetro de estatus.
+ * en el listado, así que no hace falta ningún parámetro de estatus. El
+ * endpoint pagina: se traen todas las páginas porque esta tabla todavía no
+ * tiene controles de paginación propios.
  */
 export async function listarEdades(): Promise<EdadResponse[]> {
-  const { data } = await apiClient.get<EdadResponse[]>(BASE_PATH);
-  return data;
+  return listarCatalogoCompleto<EdadResponse>(BASE_PATH);
 }
 
 export async function obtenerEdad(id: string): Promise<EdadResponse> {

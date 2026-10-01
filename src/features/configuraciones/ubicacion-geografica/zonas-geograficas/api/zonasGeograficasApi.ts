@@ -1,4 +1,5 @@
 import { apiClient } from "@/api/client";
+import { listarCatalogoCompleto } from "@/api/paginacion";
 
 import type {
   ActualizarZonaGeograficaInput,
@@ -11,13 +12,15 @@ import type {
 
 const BASE_PATH = "/catalogos/zonas-geograficas";
 
+// El endpoint pagina: se traen todas las páginas porque esta tabla todavía no
+// tiene controles de paginación propios.
 export async function listarZonas(
   estatus?: EstatusZona,
 ): Promise<ZonaGeograficaResponse[]> {
-  const { data } = await apiClient.get<ZonaGeograficaResponse[]>(BASE_PATH, {
-    params: estatus ? { estatus } : undefined,
-  });
-  return data;
+  return listarCatalogoCompleto<ZonaGeograficaResponse>(
+    BASE_PATH,
+    estatus ? { estatus } : undefined,
+  );
 }
 
 export async function obtenerZona(id: string): Promise<ZonaGeograficaResponse> {
