@@ -137,6 +137,7 @@ const NAV_ITEMS: NavNode[] = [
     label: "Configuración de alertas",
     icon: ShieldSearchIcon,
     children: [
+      { label: "Configuración de alertas", to: "configuracion-alertas/reglas" },
       { label: "Consulta Personas bloqueados", to: "configuracion-alertas" },
       { label: "Carga de Personas Bloqueadas", to: "configuracion-alertas/carga-masiva" },
     ],
@@ -147,7 +148,12 @@ const NAV_ITEMS: NavNode[] = [
     children: [
       { label: "Resumen", to: "operacion" },
       { label: "Evaluación de riesgo", to: "operacion/evaluacion-riesgo" },
+<<<<<<< HEAD
       { label: "Revisión de coincidencias", to: "operacion/coincidencias" },
+=======
+      { label: "Captura de alertas", to: "operacion/captura-alertas" },
+      { label: "Revisión de alertas", to: "operacion/revision-alertas" },
+>>>>>>> origin/Evaluacion
     ],
   },
   {
@@ -156,6 +162,12 @@ const NAV_ITEMS: NavNode[] = [
     children: [
       { label: "Resumen", to: "control" },
       { label: "Quien es quien", to: "control/quienesquien" },
+<<<<<<< HEAD
+=======
+      { label: "Revisión de coincidencias", to: "control/coincidencias" },
+      // Provisional: falta decidir dónde va (el manual de Sicanet lo pone en Control, 4.4.1).
+      { label: "Control dólar", to: "control-dolar" },
+>>>>>>> origin/Evaluacion
     ],
   },
   {

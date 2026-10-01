@@ -16,3 +16,10 @@ export function hoyIso(hoy = new Date()) {
   const dia = String(hoy.getDate()).padStart(2, "0");
   return `${hoy.getFullYear()}-${mes}-${dia}`;
 }
+
+/** Fecha de hace `anios` años (hora local) como AAAA-MM-DD; un 29-feb cae al 28-feb. */
+export function haceAniosIso(anios: number, hoy = new Date()) {
+  const fecha = new Date(hoy.getFullYear() - anios, hoy.getMonth(), hoy.getDate());
+  if (fecha.getMonth() !== hoy.getMonth()) fecha.setDate(0);
+  return hoyIso(fecha);
+}

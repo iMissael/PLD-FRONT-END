@@ -6,6 +6,7 @@ import { GestionAlertasPage } from "@/features/buzon/pages/GestionAlertasPage";
 import { GestionDenunciasPage } from "@/features/buzon/pages/GestionDenunciasPage";
 import { CargaMasivaPage } from "@/features/configuracion-alertas/pages/CargaMasivaPage";
 import { ConsultaBloqueadosPage } from "@/features/configuracion-alertas/pages/ConsultaBloqueadosPage";
+import { ReglasAlertaPage } from "@/features/configuracion-alertas/reglas/pages/ReglasAlertaPage";
 import { ActividadesEconomicasPage } from "@/features/configuraciones/actividad-economica/pages/ActividadesEconomicasPage";
 import { PermisosPage } from "@/features/configuraciones/administracion/permisos/pages/PermisosPage";
 import { RolesPage } from "@/features/configuraciones/administracion/roles/pages/RolesPage";
@@ -27,11 +28,18 @@ import { EntidadesPage } from "@/features/configuraciones/ubicacion-geografica/e
 import { LocalidadesPage } from "@/features/configuraciones/ubicacion-geografica/localidades/pages/LocalidadesPage";
 import { PaisesPage } from "@/features/configuraciones/ubicacion-geografica/paises/pages/PaisesPage";
 import { ZonasGeograficasPage } from "@/features/configuraciones/ubicacion-geografica/zonas-geograficas/pages/ZonasGeograficasPage";
+import { ControlDolarPage } from "@/features/control-dolar/pages/ControlDolarPage";
 import { ControlPage } from "@/features/control/pages/ControlPage";
+import { CapturaAlertasPage } from "@/features/operacion/captura-alertas/pages/CapturaAlertasPage";
 import { ConsultaListasPage } from "@/features/operacion/consulta-listas/pages/Quienesquien";
 import { RevisionCoincidenciasPage } from "@/features/operacion/revision-coincidencias/pages/RevisionCoincidenciasPage";
 import { EvaluacionRiesgoPage } from "@/features/operacion/evaluacion-riesgo/pages/EvaluacionRiesgoPage";
 import { OperacionPage } from "@/features/operacion/pages/OperacionPage";
+<<<<<<< HEAD
+=======
+import { RevisionAlertasPage } from "@/features/operacion/revision-alertas/pages/RevisionAlertasPage";
+import { SeleccionarSucursalPage } from "@/features/sucursales/pages/SeleccionarSucursalPage";
+>>>>>>> origin/Evaluacion
 import { RequireAuth } from "@/shared/auth/RequireAuth";
 import { RequierePermiso } from "@/shared/auth/RequierePermiso";
 import { PlaceholderPage } from "@/shared/components/PlaceholderPage";
@@ -134,7 +142,69 @@ export const router = createBrowserRouter([
                 element: <ContenidoAcotado />,
                 children: [
                   {
+<<<<<<< HEAD
                     path: "buzon/gestion",
+=======
+                    index: true,
+                    element: <Navigate to="configuracion-alertas" replace />,
+                  },
+                  {
+                    path: "configuraciones/ubicacion-geografica/zonas-geograficas",
+                    element: <ZonasGeograficasPage />,
+                  },
+                  {
+                    path: "configuraciones/ubicacion-geografica/entidades",
+                    element: <EntidadesPage />,
+                  },
+                  {
+                    path: "configuraciones/ubicacion-geografica/localidades",
+                    element: <LocalidadesPage />,
+                  },
+                  {
+                    path: "configuraciones/ubicacion-geografica/paises",
+                    element: <PaisesPage />,
+                  },
+                  {
+                    path: "configuracion-alertas",
+                    element: <ConsultaBloqueadosPage />,
+                  },
+                  {
+                    path: "configuracion-alertas/carga-masiva",
+                    element: <CargaMasivaPage />,
+                  },
+                  // Sin ancho acotado: la tabla de reglas tiene muchas columnas.
+                  {
+                    path: "configuracion-alertas/reglas",
+                    element: <ReglasAlertaPage />,
+                  },
+                  // Sin ancho acotado: la lista y el detalle de la alerta van lado a lado.
+                  {
+                    path: "operacion/revision-alertas",
+                    element: <RevisionAlertasPage />,
+                  },
+                  {
+                    path: "operacion",
+                    element: <OperacionPage />,
+                  },
+                  {
+                    path: "control",
+                    element: <ControlPage />,
+                  },
+                  // Sin ancho acotado: la matriz de riesgo necesita todo el ancho
+                  // disponible (expediente del cliente + tabla de factores lado a lado).
+                  {
+                    path: "operacion/evaluacion-riesgo",
+                    element: <EvaluacionRiesgoPage />,
+                  },
+                  // Sin ancho acotado: la tabla de usuarios y el formulario de alta
+                  // (con muchos campos en varias columnas) aprovechan todo el ancho.
+                  {
+                    path: "configuraciones/administracion/usuarios",
+                    element: <UsuariosPage />,
+                  },
+                  {
+                    path: "acerca-de",
+>>>>>>> origin/Evaluacion
                     element: (
                       <RequierePermiso recurso="denuncias" accion="ver">
                         <GestionDenunciasPage />
@@ -150,6 +220,7 @@ export const router = createBrowserRouter([
                     ),
                   },
                   {
+<<<<<<< HEAD
                     path: "configuraciones/oficial-cumplimiento",
                     element: <OficialCumplimientoPage />,
                   },
@@ -224,6 +295,85 @@ export const router = createBrowserRouter([
                   {
                     path: "configuraciones/canales-pago",
                     element: <CanalesPagoPage />,
+=======
+                    element: <ContenidoAcotado />,
+                    children: [
+                      {
+                        path: "buzon/gestion",
+                        element: (
+                          <RequierePermiso recurso="denuncias" accion="ver">
+                            <GestionDenunciasPage />
+                          </RequierePermiso>
+                        ),
+                      },
+                      {
+                        path: "buzon/alertas",
+                        element: (
+                          <RequierePermiso recurso="alertas" accion="ver">
+                            <GestionAlertasPage />
+                          </RequierePermiso>
+                        ),
+                      },
+                      {
+                        path: "configuraciones/oficial-cumplimiento",
+                        element: <OficialCumplimientoPage />,
+                      },
+                      {
+                        path: "configuraciones/matriz-riesgo",
+                        element: <MatrizRiesgoPage />,
+                      },
+                      {
+                        path: "configuraciones/administracion/roles",
+                        element: <RolesPage />,
+                      },
+                      {
+                        path: "configuraciones/administracion/roles/:rolId/permisos",
+                        element: <RolPermisosPage />,
+                      },
+                      {
+                        path: "configuraciones/administracion/permisos",
+                        element: <PermisosPage />,
+                      },
+                      {
+                        path: "operacion/captura-alertas",
+                        element: <CapturaAlertasPage />,
+                      },
+                      // Ruta propia (no "control/..."): su lugar en el menú todavía no
+                      // está decidido y así moverlo no cambia la URL.
+                      {
+                        path: "control-dolar",
+                        element: <ControlDolarPage />,
+                      },
+                      {
+                        path: "control/quienesquien",
+                        element: <ConsultaListasPage />,
+                      },
+                      {
+                        path: "control/coincidencias",
+                        element: <RevisionCoincidenciasPage />,
+                      },
+                      {
+                        path: "configuraciones/personas",
+                        element: <TiposPersonaPage />,
+                      },
+                      {
+                        path: "configuraciones/edades/rangos-edad",
+                        element: <EdadesPage />,
+                      },
+                      {
+                        path: "configuraciones/edades/tiempo-constitucion",
+                        element: <TiemposConstitucionPage />,
+                      },
+                      {
+                        path: "configuraciones/experiencia-actividad",
+                        element: <ExperienciasActividadPage />,
+                      },
+                      {
+                        path: "configuraciones/actividad-economica",
+                        element: <ActividadesEconomicasPage />,
+                      },
+                    ],
+>>>>>>> origin/Evaluacion
                   },
                 ],
               },
