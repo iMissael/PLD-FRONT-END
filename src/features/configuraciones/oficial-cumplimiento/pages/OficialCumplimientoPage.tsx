@@ -53,10 +53,10 @@ export function OficialCumplimientoPage() {
       ),
     [usuarios, roles],
   );
-  const usuarioId =
-    seleccion ??
+  const usuarioIdPorDefecto =
     oficiales.find((oficial) => oficial.idUsuario === miId)?.idUsuario ??
     oficiales[0]?.idUsuario;
+  const usuarioId = seleccion !== undefined ? Number(seleccion) : usuarioIdPorDefecto;
 
   const { usuario, domicilio, oficial, cargando, hayError } =
     useOficialCumplimiento(usuarioId);
@@ -70,7 +70,10 @@ export function OficialCumplimientoPage() {
         >
           Oficial de cumplimiento
         </Label>
-        <Select value={usuarioId} onValueChange={setSeleccion}>
+        <Select
+          value={usuarioId !== undefined ? String(usuarioId) : undefined}
+          onValueChange={setSeleccion}
+        >
           <SelectTrigger
             id="selector-oficial"
             className="h-10 w-full border-border bg-card text-foreground font-semibold data-[size=default]:h-10"
@@ -79,7 +82,7 @@ export function OficialCumplimientoPage() {
           </SelectTrigger>
           <SelectContent>
             {oficiales.map((item) => (
-              <SelectItem key={item.idUsuario} value={item.idUsuario ?? ""}>
+              <SelectItem key={item.idUsuario} value={String(item.idUsuario ?? "")}>
                 {nombreCompleto(item)}
               </SelectItem>
             ))}

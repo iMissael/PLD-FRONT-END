@@ -30,7 +30,9 @@ import type { CoincidenciaSocio } from "../types/coincidencias";
 import { listasCoincidentes } from "../utils/comparar";
 import { ComparacionPersona } from "./ComparacionPersona";
 
-const ROL_OFICIAL = "ROLE_OFICIAL_CUMPLIMIENTO";
+// Solo quien tiene el permiso asignado en su rol resuelve (el backend no aplica aquí el acceso
+// total del administrador: separación de funciones).
+const PERMISO_CONFIRMAR = { recurso: "coincidencias", accion: "confirmar" } as const;
 const MAX_COMENTARIO = 500;
 
 type Decision = "confirmar" | "descartar";
@@ -60,7 +62,11 @@ export function PanelRevisionCoincidencia({
   coincidencia,
   onClose,
 }: PanelRevisionCoincidenciaProps) {
-  const esOficial = useAuthStore((estado) => estado.rol?.nombre === ROL_OFICIAL);
+  const esOficial = useAuthStore((estado) =>
+    estado.permisos.some(
+      (p) => p.recurso === PERMISO_CONFIRMAR.recurso && p.accion === PERMISO_CONFIRMAR.accion,
+    ),
+  );
   const resolver = useResolverCoincidencia();
   const [comentario, setComentario] = useState("");
   const [decision, setDecision] = useState<Decision | null>(null);

@@ -175,7 +175,11 @@ export const router = createBrowserRouter([
                   },
                   {
                     path: "operacion/coincidencias",
-                    element: <RevisionCoincidenciasPage />,
+                    element: (
+                      <RequierePermiso recurso="coincidencias" accion="ver">
+                        <RevisionCoincidenciasPage />
+                      </RequierePermiso>
+                    ),
                   },
                   {
                     path: "configuraciones/personas",

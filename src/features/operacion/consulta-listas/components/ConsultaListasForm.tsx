@@ -29,7 +29,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import { alfanumerico, nombrePropio, rfc } from "@/shared/utils/entradas";
+import { alfanumerico, mayusculas, nombrePropio, rfc } from "@/shared/utils/entradas";
+import { calcularEdad } from "@/shared/utils/fechas";
 import { useConsultarListas } from "@/features/operacion/consulta-listas/hooks/useConsultaListas";
 import {
   consultaListasSchema,
@@ -42,19 +43,9 @@ function aTextoOIndefinido(valor: string | undefined) {
   return valor ? valor : undefined;
 }
 
-function calcularEdad(fechaNacimiento: string | undefined): string {
-  if (!fechaNacimiento) return "";
-  const nacimiento = new Date(fechaNacimiento);
-  if (Number.isNaN(nacimiento.getTime())) return "";
-
-  const hoy = new Date();
-  let edad = hoy.getFullYear() - nacimiento.getFullYear();
-  const aunNoCumple =
-    hoy.getMonth() < nacimiento.getMonth() ||
-    (hoy.getMonth() === nacimiento.getMonth() && hoy.getDate() < nacimiento.getDate());
-  if (aunNoCumple) edad -= 1;
-
-  return edad >= 0 ? String(edad) : "";
+function describirTiempo(anios: number | null) {
+  if (anios === null) return "";
+  return anios === 1 ? "1 año" : `${anios} años`;
 }
 
 export function ConsultaListasForm({
@@ -69,26 +60,29 @@ export function ConsultaListasForm({
   const form = useForm<ConsultaListasFormValues>({
     resolver: zodResolver(consultaListasSchema),
     defaultValues: {
+      tipoPersona: "FISICA",
       nombre: "",
       primerApellido: "",
       segundoApellido: "",
-      fechaNacimiento: "",
+      fechaConstitucion: "",
       rfc: "",
       curp: "",
-      tipoPersona: "",
     },
   });
 
-  const form = useForm<ConsultaListasFormValues>({
-    resolver: zodResolver(consultaListasSchema),
-    defaultValues: {
-      nombre: "",
-      fechaConstitucion: "",
-      rfc: "",
-      tipoPersona: "",
-    },
-  });
-  const edad = calcularEdad(form.watch("fechaNacimiento"));
+  const esMoral = form.watch("tipoPersona") === "MORAL";
+  const tiempoConstitucion = describirTiempo(calcularEdad(form.watch("fechaConstitucion")));
+
+  function cambiarTipoPersona(tipo: ConsultaListasFormValues["tipoPersona"]) {
+    form.setValue("tipoPersona", tipo);
+    // La persona moral no tiene apellidos ni CURP: se limpian para no enviarlos.
+    if (tipo === "MORAL") {
+      form.setValue("primerApellido", "");
+      form.setValue("segundoApellido", "");
+      form.setValue("curp", "");
+    }
+    form.clearErrors();
+  }
 
   function onSubmit(values: ConsultaListasFormValues) {
     const verificadoPor = useAuthStore.getState().usuario?.id;
@@ -98,7 +92,10 @@ export function ConsultaListasForm({
       return;
     }
 
-    const nombreCompleto = [values.nombre, values.primerApellido, values.segundoApellido]
+    const moral = values.tipoPersona === "MORAL";
+    const primerApellido = moral ? undefined : aTextoOIndefinido(values.primerApellido);
+    const segundoApellido = moral ? undefined : aTextoOIndefinido(values.segundoApellido);
+    const nombreCompleto = [values.nombre, primerApellido, segundoApellido]
       .filter((parte) => parte && parte.trim().length > 0)
       .join(" ");
 
@@ -107,19 +104,13 @@ export function ConsultaListasForm({
       {
         nombreCompleto,
         nombre: aTextoOIndefinido(values.nombre),
-        primerApellido: aTextoOIndefinido(values.primerApellido),
-        segundoApellido: aTextoOIndefinido(values.segundoApellido),
+        primerApellido,
+        segundoApellido,
         rfc: aTextoOIndefinido(values.rfc),
-        curp: aTextoOIndefinido(values.curp),
-        tipoPersona: aTextoOIndefinido(values.tipoPersona),
+        curp: moral ? undefined : aTextoOIndefinido(values.curp),
+        tipoPersona: values.tipoPersona,
         verificadoPor,
       },
-      {
-        nombreCompleto,
-        nombre: aTextoOIndefinido(values.nombre),
-        fechaConstitucion: aTextoOIndefinido(values.fechaNacimiento),
-        rfc: aTextoOIndefinido(values.rfc),
-      }
       {
         onSuccess: (respuesta) => {
           onResultados(respuesta.resultados, respuesta.proveedorExternoNoDisponible);
@@ -140,8 +131,6 @@ export function ConsultaListasForm({
   }
 
   return (
-    
-    
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid gap-4 sm:grid-cols-3">
@@ -151,7 +140,7 @@ export function ConsultaListasForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Tipo de persona</FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
+                <Select onValueChange={cambiarTipoPersona} value={field.value}>
                   <FormControl>
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Selecciona un tipo" />
@@ -171,47 +160,55 @@ export function ConsultaListasForm({
             name="nombre"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Nombre(s)</FormLabel>
+                <FormLabel>{esMoral ? "Nombre persona" : "Nombre"}</FormLabel>
                 <FormControl>
-                  <InputFormateado placeholder="Juan" {...field} formato={nombrePropio} maxLength={150} />
+                  <InputFormateado
+                    placeholder={esMoral ? "EMPRESA S.A. DE C.V." : "JUAN"}
+                    {...field}
+                    formato={esMoral ? mayusculas : nombrePropio}
+                    maxLength={150}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+          {!esMoral && (
+            <>
+              <FormField
+                control={form.control}
+                name="primerApellido"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Apellido paterno</FormLabel>
+                    <FormControl>
+                      <InputFormateado placeholder="PÉREZ" {...field} formato={nombrePropio} maxLength={100} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="segundoApellido"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Apellido materno</FormLabel>
+                    <FormControl>
+                      <InputFormateado placeholder="GÓMEZ" {...field} formato={nombrePropio} maxLength={100} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </>
+          )}
           <FormField
             control={form.control}
-            name="primerApellido"
+            name="fechaConstitucion"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Primer apellido</FormLabel>
-                <FormControl>
-                  <InputFormateado placeholder="Pérez" {...field} formato={nombrePropio} maxLength={100} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="segundoApellido"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Segundo apellido</FormLabel>
-                <FormControl>
-                  <InputFormateado placeholder="Gómez" {...field} formato={nombrePropio} maxLength={100} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-  
-          <FormField
-            control={form.control}
-            name="fechaNacimiento"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Fecha de nacimiento</FormLabel>
+                <FormLabel>Fecha de constitución</FormLabel>
                 <FormControl>
                   <Input type="date" {...field} />
                 </FormControl>
@@ -220,9 +217,9 @@ export function ConsultaListasForm({
             )}
           />
           <FormItem>
-            <FormLabel>Edad</FormLabel>
+            <FormLabel>Tiempo de constitución</FormLabel>
             <FormControl>
-              <Input value={edad} placeholder="—" disabled />
+              <Input value={tiempoConstitucion} placeholder="—" disabled />
             </FormControl>
           </FormItem>
           <FormField
@@ -232,30 +229,37 @@ export function ConsultaListasForm({
               <FormItem>
                 <FormLabel>RFC</FormLabel>
                 <FormControl>
-                  <InputFormateado placeholder="PEGJ800101ABC" {...field} formato={rfc} maxLength={13} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="curp"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>CURP</FormLabel>
-                <FormControl>
                   <InputFormateado
-                    placeholder="PEGJ800101HDFRZN01"
+                    placeholder={esMoral ? "EMP800101ABC" : "PEGJ800101ABC"}
                     {...field}
-                    formato={alfanumerico}
-                    maxLength={18}
+                    formato={rfc}
+                    maxLength={esMoral ? 12 : 13}
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+          {!esMoral && (
+            <FormField
+              control={form.control}
+              name="curp"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>CURP</FormLabel>
+                  <FormControl>
+                    <InputFormateado
+                      placeholder="PEGJ800101HDFRZN01"
+                      {...field}
+                      formato={alfanumerico}
+                      maxLength={18}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
         </div>
 
         <Button type="submit" disabled={enviando}>

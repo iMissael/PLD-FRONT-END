@@ -4,7 +4,7 @@ import { hoyIso } from "@/shared/utils/fechas";
 import { valoresIniciales } from "@/features/configuraciones/oficial-cumplimiento/utils/oficialCumplimiento";
 
 const valido = {
-  ...valoresIniciales({ nombre: "OLGA", nacionalidadId: "n1" }, null, null),
+  ...valoresIniciales({ nombre: "OLGA", nacionalidad: "MEXICANA" }, null, null),
   domicilioPaisId: "165",
   domicilioEntidadId: "1",
   municipioId: "1",

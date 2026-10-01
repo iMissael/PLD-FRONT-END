@@ -4039,7 +4039,7 @@ export interface components {
             personaRef?: string;
         };
         ConsultaListasRequest: {
-            socioRef: string;
+            socioRef?: string;
             nombreCompleto?: string;
             curp?: string;
             rfc?: string;
@@ -4049,7 +4049,62 @@ export interface components {
             tipoPersona?: string;
             /** Format: int64 */
             verificadoPor: number;
-            sucursalId: string;
+            sucursalId?: string;
+        };
+        CoincidenciaListaResponse: {
+            socio_ref?: string;
+            estado?: string;
+            lista_negra?: components["schemas"]["ListaDto"];
+            lista_bloqueadas?: components["schemas"]["ListaDto"];
+            lista_peps?: components["schemas"]["ListaDto"];
+            sucursal?: string;
+            /** Format: date-time */
+            fecha_registro?: string;
+            /** Format: date-time */
+            fecha_modificacion?: string;
+            revision?: components["schemas"]["RevisionDto"];
+            socio?: components["schemas"]["SocioRevisionDto"];
+            personas_en_lista?: components["schemas"]["PersonaEnListaDto"][];
+        };
+        ListaDto: {
+            coincide?: boolean;
+            nombre_encontrado?: string;
+            confirmacion?: string;
+            alias?: string;
+            origen?: string;
+        };
+        PersonaEnListaDto: {
+            nombre?: string;
+            rfc?: string;
+            curp?: string;
+            /** Format: date */
+            fecha_nacimiento?: string;
+            pais?: string;
+            lista?: string;
+            oficio?: string;
+            motivo?: string;
+            /** Format: date */
+            fecha_publicacion?: string;
+            alias_coincidentes?: string[];
+        };
+        RevisionDto: {
+            /** Format: int64 */
+            confirmado_por?: number;
+            /** Format: date-time */
+            fecha_confirmacion?: string;
+            comentario?: string;
+        };
+        SocioRevisionDto: {
+            nombre?: string;
+            tipo_persona?: string;
+            rfc?: string;
+            curp?: string;
+            /** Format: date */
+            fecha_nacimiento?: string;
+        };
+        ResultadoConsultaListas: {
+            resultados: components["schemas"]["ConsultaLista"][];
+            proveedorExternoNoDisponible: boolean;
         };
         ConsultaLista: {
             /** Format: int64 */
@@ -8058,7 +8113,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ConsultaLista"][];
+                    "*/*": components["schemas"]["ResultadoConsultaListas"];
                 };
             };
         };

@@ -29,7 +29,7 @@ export const oficialCumplimientoSchema = z
       .regex(PATRON_NOMBRE, MENSAJE_NOMBRE),
     primerApellido: conFormato(100, PATRON_NOMBRE, MENSAJE_NOMBRE),
     segundoApellido: conFormato(100, PATRON_NOMBRE, MENSAJE_NOMBRE),
-    nacionalidadId: z.string().min(1, "La nacionalidad es obligatoria"),
+    nacionalidad: z.string().min(1, "La nacionalidad es obligatoria"),
     paisNacimientoId: z.string().optional(),
     entidadNacimientoId: z.string().optional(),
     lugarDeNacimiento: texto(100),
@@ -48,10 +48,10 @@ export const oficialCumplimientoSchema = z
       PATRON_CURP,
       "CURP inválida: debe tener 18 caracteres con el formato oficial",
     ),
-    estadoCivilId: z.string().optional(),
+    estadoCivil: z.string().optional(),
     numDependientes: conFormato(2, /^\d{1,2}$/, "Solo números enteros, de 0 a 99"),
-    nivelEstudiosId: z.string().optional(),
-    tipoIdentificacionId: z.string().optional(),
+    nivelEstudios: z.string().optional(),
+    tipoIdentificacion: z.string().optional(),
     folioIdentificacion: conFormato(50, /^[A-Z0-9]+$/, "Solo letras y números"),
     telefono: conFormato(10, /^\d{10}$/, "El teléfono debe tener exactamente 10 dígitos"),
     correo: z
@@ -65,8 +65,8 @@ export const oficialCumplimientoSchema = z
       .optional(),
 
     // Domicilio
-    tipoComprobanteId: z.string().optional(),
-    tipoVialidadId: z.string().optional(),
+    tipoComprobante: z.string().optional(),
+    tipoVialidad: z.string().optional(),
     calle: texto(100),
     numExterior: conFormato(
       10,
@@ -81,7 +81,7 @@ export const oficialCumplimientoSchema = z
     nombreCalleIzquierda: texto(50),
     nombreCalleDerecha: texto(50),
     referencia: texto(100),
-    laCasaEsId: z.string().optional(),
+    posesionVivienda: z.string().optional(),
     antiguedadDomicilio: fechaNoFutura("La fecha no puede ser futura"),
     codigoPostal: conFormato(5, /^\d{5}$/, "El código postal debe tener 5 dígitos"),
     tipoAsentamiento: texto(50),

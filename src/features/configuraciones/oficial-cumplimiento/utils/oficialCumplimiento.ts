@@ -34,7 +34,7 @@ export function valoresIniciales(
     nombre: mayusculas(texto(usuario.nombre)),
     primerApellido: mayusculas(texto(usuario.primerApellido)),
     segundoApellido: mayusculas(texto(usuario.segundoApellido)),
-    nacionalidadId: texto(usuario.nacionalidadId),
+    nacionalidad: texto(usuario.nacionalidad),
     paisNacimientoId: texto(usuario.paisNacimientoId),
     entidadNacimientoId: texto(usuario.entidadNacimientoId),
     lugarDeNacimiento: mayusculas(texto(usuario.lugarDeNacimiento)),
@@ -42,23 +42,23 @@ export function valoresIniciales(
     genero: texto(usuario.genero),
     rfc: mayusculas(texto(usuario.rfc)),
     curp: mayusculas(texto(usuario.curp)),
-    estadoCivilId: texto(usuario.estadoCivilId),
+    estadoCivil: texto(usuario.estadoCivil),
     numDependientes: texto(usuario.numDependientes),
-    nivelEstudiosId: texto(usuario.nivelEstudiosId),
-    tipoIdentificacionId: texto(usuario.tipoIdentificacionId),
+    nivelEstudios: texto(usuario.nivelEstudios),
+    tipoIdentificacion: texto(usuario.tipoIdentificacion),
     folioIdentificacion: mayusculas(texto(usuario.folioIdentificacion)),
     telefono: soloDigitos(texto(usuario.telefono)),
     correo: correo(texto(usuario.correo)),
 
-    tipoComprobanteId: texto(domicilio?.tipoComprobanteId),
-    tipoVialidadId: texto(domicilio?.tipoVialidadId),
+    tipoComprobante: texto(domicilio?.tipoComprobante),
+    tipoVialidad: texto(domicilio?.tipoVialidad),
     calle: mayusculas(texto(domicilio?.calle)),
     numExterior: mayusculas(texto(domicilio?.numExterior)),
     numInterior: mayusculas(texto(domicilio?.numInterior)),
     nombreCalleIzquierda: mayusculas(texto(domicilio?.nombreCalleIzquierda)),
     nombreCalleDerecha: mayusculas(texto(domicilio?.nombreCalleDerecha)),
     referencia: mayusculas(texto(domicilio?.referencia)),
-    laCasaEsId: texto(domicilio?.laCasaEsId),
+    posesionVivienda: texto(domicilio?.posesionVivienda),
     antiguedadDomicilio: texto(domicilio?.antiguedadDomicilio),
     codigoPostal: soloDigitos(texto(domicilio?.codigoPostal)),
     tipoAsentamiento: texto(domicilio?.tipoAsentamiento),
@@ -93,16 +93,18 @@ export function aUsuarioPayload(
     sucursalId: textoOIndefinido(sucursalId),
     entidadNacimientoId: textoOIndefinido(values.entidadNacimientoId),
     paisNacimientoId: textoOIndefinido(values.paisNacimientoId),
-    nacionalidadId: values.nacionalidadId,
+    nacionalidad: values.nacionalidad as ActualizarUsuarioRequest["nacionalidad"],
     lugarDeNacimiento: textoOIndefinido(values.lugarDeNacimiento),
     fechaNacimiento: textoOIndefinido(values.fechaNacimiento),
     genero: textoOIndefinido(values.genero),
     rfc: textoOIndefinido(values.rfc?.toUpperCase()),
     curp: textoOIndefinido(values.curp?.toUpperCase()),
-    estadoCivilId: textoOIndefinido(values.estadoCivilId),
+    estadoCivil: textoOIndefinido(values.estadoCivil) as ActualizarUsuarioRequest["estadoCivil"],
     numDependientes: numeroOIndefinido(values.numDependientes),
-    nivelEstudiosId: textoOIndefinido(values.nivelEstudiosId),
-    tipoIdentificacionId: textoOIndefinido(values.tipoIdentificacionId),
+    nivelEstudios: textoOIndefinido(values.nivelEstudios) as ActualizarUsuarioRequest["nivelEstudios"],
+    tipoIdentificacion: textoOIndefinido(
+      values.tipoIdentificacion,
+    ) as ActualizarUsuarioRequest["tipoIdentificacion"],
     folioIdentificacion: textoOIndefinido(values.folioIdentificacion),
     telefono: textoOIndefinido(values.telefono),
     correo: textoOIndefinido(values.correo),
@@ -113,15 +115,21 @@ export function aDomicilioPayload(
   values: OficialCumplimientoFormValues,
 ): DomicilioUsuarioRequest {
   return {
-    tipoComprobanteId: textoOIndefinido(values.tipoComprobanteId),
-    tipoVialidadId: textoOIndefinido(values.tipoVialidadId),
+    tipoComprobante: textoOIndefinido(
+      values.tipoComprobante,
+    ) as DomicilioUsuarioRequest["tipoComprobante"],
+    tipoVialidad: textoOIndefinido(
+      values.tipoVialidad,
+    ) as DomicilioUsuarioRequest["tipoVialidad"],
     calle: textoOIndefinido(values.calle),
     numExterior: textoOIndefinido(values.numExterior),
     numInterior: textoOIndefinido(values.numInterior),
     nombreCalleIzquierda: textoOIndefinido(values.nombreCalleIzquierda),
     nombreCalleDerecha: textoOIndefinido(values.nombreCalleDerecha),
     referencia: textoOIndefinido(values.referencia),
-    laCasaEsId: textoOIndefinido(values.laCasaEsId),
+    posesionVivienda: textoOIndefinido(
+      values.posesionVivienda,
+    ) as DomicilioUsuarioRequest["posesionVivienda"],
     antiguedadDomicilio: textoOIndefinido(values.antiguedadDomicilio),
     codigoPostal: textoOIndefinido(values.codigoPostal),
     tipoAsentamiento: textoOIndefinido(values.tipoAsentamiento),
@@ -135,11 +143,8 @@ export function aDomicilioPayload(
   };
 }
 
-// Si no se manda estatus el backend lo reinicia a ACTIVO, así que se reenvía el actual.
-export function aOficialPayload(
-  values: OficialCumplimientoFormValues,
-  estatus: OficialResponse["estatus"],
-): OficialRequest {
+// El backend conserva el estatus existente al actualizar (no hace falta reenviarlo).
+export function aOficialPayload(values: OficialCumplimientoFormValues): OficialRequest {
   return {
     tipoPersona: values.tipoPersona,
     claveDelOficialDeCumplimiento: textoOIndefinido(values.claveDelOficialDeCumplimiento),
@@ -149,7 +154,6 @@ export function aOficialPayload(
       values.monedaDeOperacionPrincipal?.toUpperCase(),
     ),
     actividadEconomicaId: textoOIndefinido(values.actividadEconomicaId),
-    estatus,
   };
 }
 
