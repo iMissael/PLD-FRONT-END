@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { Button } from "@/shared/components/ui/button";
+import { useTenantNombre } from "@/shared/tenant/useTenantNombre";
 import {
   Form,
   FormControl,
@@ -26,6 +27,9 @@ const MENSAJE_ERROR_GENERICO = "Usuario o contraseña incorrectos";
 export function LoginForm() {
   const navigate = useNavigate();
   const { tenantId = "" } = useParams<{ tenantId: string }>();
+  const { data: tenantNombre } = useTenantNombre(tenantId);
+
+  const nombre = tenantNombre ?? "SICANET WEB";
   const login = useLogin();
   const [mostrarPassword, setMostrarPassword] = useState(false);
 
@@ -40,7 +44,7 @@ export function LoginForm() {
       {
         onSuccess: (data: LoginResponse) => {
           useAuthStore.getState().setSession(tenantId, data, values.recordarme);
-          navigate(rutaTenant(tenantId, "configuracion-alertas"), { replace: true });
+          navigate(rutaTenant(tenantId), { replace: true });
         },
         onError: (error: unknown) => {
           // Credenciales malas llegan como 401/403: se muestra el mensaje fijo.
@@ -54,6 +58,7 @@ export function LoginForm() {
 
   return (
     <Form {...form}>
+       <h2 className="text-2xl font-bold text-blue-700 uppercase">{nombre}</h2>
       <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
         <FormField
           control={form.control}
@@ -63,9 +68,9 @@ export function LoginForm() {
               <FormLabel className="text-primary">Usuario</FormLabel>
               <FormControl>
                 <Input
-                  autoComplete="username"
+                  autoComplete="USUARIO"
                   autoFocus
-                  placeholder="Ingrese su usuario"
+                  placeholder="INGRESE SU USUARIO"
                   {...field}
                 />
               </FormControl>
@@ -85,7 +90,7 @@ export function LoginForm() {
                     className="pr-9"
                     type={mostrarPassword ? "text" : "password"}
                     autoComplete="current-password"
-                    placeholder="Ingrese su contraseña"
+                    placeholder="INGRESE SU CONTRASEÑA"
                     {...field}
                   />
                 </FormControl>

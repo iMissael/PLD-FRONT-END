@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { useWatch, type UseFormReturn } from "react-hook-form";
 import {
   FormControl,
@@ -18,8 +17,13 @@ import {
 } from "@/shared/components/ui/select";
 import { useActividadesEconomicas } from "@/features/catalogos/hooks/useCatalogos";
 import { useRoles } from "@/features/configuraciones/administracion/roles/hooks/useRoles";
-import type { CrearUsuarioFormValues } from "@/features/configuraciones/administracion/usuarios/types/usuarioSchema";
 import { esRolOficial } from "@/features/configuraciones/administracion/usuarios/utils/usuarios";
+import type { CrearUsuarioFormValues } from "@/features/configuraciones/administracion/usuarios/types/usuarioSchema";
+
+const TIPOS_PERSONA = [
+  { valor: "FISICA", etiqueta: "Persona física" },
+  { valor: "MORAL", etiqueta: "Persona moral" },
+];
 
 export function TipoUsuarioStep({
   form,
@@ -28,12 +32,8 @@ export function TipoUsuarioStep({
 }) {
   const { data: roles } = useRoles();
   const { data: actividadesEconomicas } = useActividadesEconomicas();
-
   const rolSeleccionado = useWatch({ control: form.control, name: "rolId" });
-  const esOficial = useMemo(
-    () => esRolOficial(roles, rolSeleccionado),
-    [roles, rolSeleccionado],
-  );
+  const esOficial = esRolOficial(roles, rolSeleccionado);
 
   return (
     <div className="space-y-8">
@@ -54,7 +54,7 @@ export function TipoUsuarioStep({
                   </FormControl>
                   <SelectContent>
                     {roles?.map((rol) => (
-                      <SelectItem key={rol.idRol} value={rol.idRol ?? ""}>
+                      <SelectItem key={rol.idRol} value={String(rol.idRol ?? "")}>
                         {rol.nombre}
                       </SelectItem>
                     ))}
@@ -70,7 +70,7 @@ export function TipoUsuarioStep({
       {esOficial && (
         <fieldset className="space-y-4">
           <legend className="text-sm font-semibold">
-            Datos de Oficial de Cumplimiento
+            Parámetros PLD del oficial de cumplimiento
           </legend>
           <div className="grid items-start gap-4 sm:grid-cols-3">
             <FormField
@@ -86,8 +86,11 @@ export function TipoUsuarioStep({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="FISICA">Persona física</SelectItem>
-                      <SelectItem value="MORAL">Persona moral</SelectItem>
+                      {TIPOS_PERSONA.map((tipo) => (
+                        <SelectItem key={tipo.valor} value={tipo.valor}>
+                          {tipo.etiqueta}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -120,7 +123,7 @@ export function TipoUsuarioStep({
                   <FormLabel>Clave del sujeto obligado</FormLabel>
                   <FormControl>
                     <InputFormateado
-                      placeholder="SO-001"
+                      placeholder="SUJ-001"
                       {...field}
                       formato={clave}
                       maxLength={50}
@@ -135,10 +138,10 @@ export function TipoUsuarioStep({
               name="claveOrganoSuperior"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Clave del órgano superior</FormLabel>
+                  <FormLabel>Clave del órgano supervisor (CNBV / CONDUSEF)</FormLabel>
                   <FormControl>
                     <InputFormateado
-                      placeholder="OS-001"
+                      placeholder="CNBV-001"
                       {...field}
                       formato={clave}
                       maxLength={50}
@@ -179,13 +182,11 @@ export function TipoUsuarioStep({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {actividadesEconomicas
-                        ?.filter((item) => item.estatus === "A")
-                        .map((item) => (
-                          <SelectItem key={item.id} value={item.id ?? ""}>
-                            {item.descripcion}
-                          </SelectItem>
-                        ))}
+                      {actividadesEconomicas?.map((item) => (
+                        <SelectItem key={item.id} value={item.id ?? ""}>
+                          {item.descripcion}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />

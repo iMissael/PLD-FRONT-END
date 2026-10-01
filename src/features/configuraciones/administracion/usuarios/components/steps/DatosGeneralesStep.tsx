@@ -202,7 +202,7 @@ export function DatosGeneralesStep({
           />
           <FormField
             control={form.control}
-            name="nacionalidadId"
+            name="nacionalidad"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Nacionalidad</FormLabel>
@@ -371,7 +371,7 @@ export function DatosGeneralesStep({
           />
           <FormField
             control={form.control}
-            name="estadoCivilId"
+            name="estadoCivil"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Estado civil</FormLabel>
@@ -395,7 +395,7 @@ export function DatosGeneralesStep({
           />
           <FormField
             control={form.control}
-            name="nivelEstudiosId"
+            name="nivelEstudios"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Nivel de estudios</FormLabel>
@@ -444,7 +444,7 @@ export function DatosGeneralesStep({
         <div className="grid items-start gap-4 sm:grid-cols-3">
           <FormField
             control={form.control}
-            name="tipoIdentificacionId"
+            name="tipoIdentificacion"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Tipo de identificación</FormLabel>

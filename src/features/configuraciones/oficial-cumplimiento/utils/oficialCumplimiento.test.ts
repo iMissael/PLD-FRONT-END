@@ -59,7 +59,7 @@ describe("valoresIniciales: todo en mayúsculas y con formato", () => {
 });
 
 describe("payloads", () => {
-  const base = valoresIniciales({ nombre: "Ana", nacionalidadId: "n1" }, null, null);
+  const base = valoresIniciales({ nombre: "Ana", nacionalidad: "MEXICANA" }, null, null);
 
   it("conserva la sucursal y omite los campos vacíos del usuario", () => {
     const payload = aUsuarioPayload(
@@ -89,19 +89,21 @@ describe("payloads", () => {
     });
   });
 
-  it("reenvía el estatus actual del oficial para no reiniciarlo a ACTIVO", () => {
-    const payload = aOficialPayload(
-      { ...base, tipoPersona: "FISICA", monedaDeOperacionPrincipal: "mxn" },
-      "BLOQUEADO",
-    );
-    expect(payload.estatus).toBe("BLOQUEADO");
+  it("mapea los parámetros PLD del oficial (el backend conserva el estatus existente)", () => {
+    const payload = aOficialPayload({
+      ...base,
+      tipoPersona: "FISICA",
+      monedaDeOperacionPrincipal: "mxn",
+    });
+    expect(payload.tipoPersona).toBe("FISICA");
     expect(payload.monedaDeOperacionPrincipal).toBe("MXN");
+    expect(payload).not.toHaveProperty("estatus");
   });
 });
 
 describe("aUsuarioPayload: espacios sobrantes", () => {
   it("recorta los espacios de los extremos y omite lo que queda vacío", () => {
-    const base = valoresIniciales({ nombre: "Ana", nacionalidadId: "n1" }, null, null);
+    const base = valoresIniciales({ nombre: "Ana", nacionalidad: "MEXICANA" }, null, null);
     const payload = aUsuarioPayload(
       { ...base, primerApellido: "  PÉREZ ", curp: "   " },
       undefined,

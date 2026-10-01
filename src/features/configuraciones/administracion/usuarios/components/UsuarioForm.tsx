@@ -1,11 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMemo, useState } from "react";
-import { useForm, useWatch } from "react-hook-form";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "@/shared/components/ui/button";
 import { Form } from "@/shared/components/ui/form";
 import { useCrearUsuarioCompleto } from "@/features/configuraciones/administracion/usuarios/hooks/useUsuarios";
 import { useRoles } from "@/features/configuraciones/administracion/roles/hooks/useRoles";
+import { esRolOficial } from "@/features/configuraciones/administracion/usuarios/utils/usuarios";
 import {
   crearUsuarioSchema,
   PASO1_CAMPOS,
@@ -20,7 +21,12 @@ import type {
 import { DatosGeneralesStep } from "@/features/configuraciones/administracion/usuarios/components/steps/DatosGeneralesStep";
 import { DomicilioStep } from "@/features/configuraciones/administracion/usuarios/components/steps/DomicilioStep";
 import { TipoUsuarioStep } from "@/features/configuraciones/administracion/usuarios/components/steps/TipoUsuarioStep";
-import { esRolOficial } from "@/features/configuraciones/administracion/usuarios/utils/usuarios";
+
+const CAMPOS_OFICIAL_REQUERIDOS = [
+  { campo: "tipoPersona", mensaje: "El tipo de persona es obligatorio" },
+  { campo: "claveDelSujetoObligado", mensaje: "La clave del sujeto obligado es obligatoria" },
+  { campo: "claveOrganoSuperior", mensaje: "La clave del órgano supervisor es obligatoria" },
+] as const;
 
 const PASOS = [
   { numero: 1, titulo: "Datos generales" },
@@ -42,12 +48,11 @@ function aUsuarioPayload(values: CrearUsuarioFormValues): CrearUsuarioRequest {
   return {
     username: values.username,
     password: values.password,
+    rolId: Number(values.rolId),
     nombre: values.nombre,
-    correo: values.correo,
-    telefono: aTextoOIndefinido(values.telefono),
     primerApellido: aTextoOIndefinido(values.primerApellido),
     segundoApellido: aTextoOIndefinido(values.segundoApellido),
-    nacionalidadId: values.nacionalidadId,
+    nacionalidad: aTextoOIndefinido(values.nacionalidad) as CrearUsuarioRequest["nacionalidad"],
     paisNacimientoId: aTextoOIndefinido(values.paisNacimientoId),
     entidadNacimientoId: aTextoOIndefinido(values.entidadNacimientoId),
     lugarDeNacimiento: aTextoOIndefinido(values.lugarDeNacimiento),
@@ -55,26 +60,46 @@ function aUsuarioPayload(values: CrearUsuarioFormValues): CrearUsuarioRequest {
     genero: aTextoOIndefinido(values.genero),
     rfc: aTextoOIndefinido(values.rfc),
     curp: aTextoOIndefinido(values.curp),
-    estadoCivilId: aTextoOIndefinido(values.estadoCivilId),
+    estadoCivil: aTextoOIndefinido(values.estadoCivil) as CrearUsuarioRequest["estadoCivil"],
     numDependientes: aNumeroOIndefinido(values.numDependientes),
-    nivelEstudiosId: aTextoOIndefinido(values.nivelEstudiosId),
-    tipoIdentificacionId: aTextoOIndefinido(values.tipoIdentificacionId),
+    nivelEstudios: aTextoOIndefinido(values.nivelEstudios) as CrearUsuarioRequest["nivelEstudios"],
+    tipoIdentificacion: aTextoOIndefinido(
+      values.tipoIdentificacion,
+    ) as CrearUsuarioRequest["tipoIdentificacion"],
     folioIdentificacion: aTextoOIndefinido(values.folioIdentificacion),
-    rolId: values.rolId,
+    telefono: aTextoOIndefinido(values.telefono),
+    correo: aTextoOIndefinido(values.correo),
+  };
+}
+
+function aOficialPayload(values: CrearUsuarioFormValues): OficialRequest {
+  return {
+    tipoPersona: values.tipoPersona ?? "",
+    claveDelOficialDeCumplimiento: aTextoOIndefinido(values.claveDelOficialDeCumplimiento),
+    claveDelSujetoObligado: values.claveDelSujetoObligado ?? "",
+    claveOrganoSuperior: values.claveOrganoSuperior ?? "",
+    monedaDeOperacionPrincipal: aTextoOIndefinido(values.monedaDeOperacionPrincipal),
+    actividadEconomicaId: aTextoOIndefinido(values.actividadEconomicaId),
   };
 }
 
 function aDomicilioPayload(values: CrearUsuarioFormValues): DomicilioUsuarioRequest {
   return {
-    tipoComprobanteId: aTextoOIndefinido(values.tipoComprobanteId),
-    tipoVialidadId: aTextoOIndefinido(values.tipoVialidadId),
+    tipoComprobante: aTextoOIndefinido(
+      values.tipoComprobante,
+    ) as DomicilioUsuarioRequest["tipoComprobante"],
+    tipoVialidad: aTextoOIndefinido(
+      values.tipoVialidad,
+    ) as DomicilioUsuarioRequest["tipoVialidad"],
     calle: aTextoOIndefinido(values.calle),
     numExterior: aTextoOIndefinido(values.numExterior),
     numInterior: aTextoOIndefinido(values.numInterior),
     nombreCalleIzquierda: aTextoOIndefinido(values.nombreCalleIzquierda),
     nombreCalleDerecha: aTextoOIndefinido(values.nombreCalleDerecha),
     referencia: aTextoOIndefinido(values.referencia),
-    laCasaEsId: aTextoOIndefinido(values.laCasaEsId),
+    posesionVivienda: aTextoOIndefinido(
+      values.posesionVivienda,
+    ) as DomicilioUsuarioRequest["posesionVivienda"],
     antiguedadDomicilio: aTextoOIndefinido(values.antiguedadDomicilio),
     codigoPostal: aTextoOIndefinido(values.codigoPostal),
     tipoAsentamiento: aTextoOIndefinido(values.tipoAsentamiento),
@@ -85,19 +110,6 @@ function aDomicilioPayload(values: CrearUsuarioFormValues): DomicilioUsuarioRequ
     entidadId: values.domicilioEntidadId,
     municipioId: values.municipioId,
     localidadId: values.localidadId,
-  };
-}
-
-function aOficialPayload(values: CrearUsuarioFormValues): OficialRequest {
-  return {
-    tipoPersona: values.tipoPersona ?? "",
-    claveDelOficialDeCumplimiento: aTextoOIndefinido(
-      values.claveDelOficialDeCumplimiento,
-    ),
-    claveDelSujetoObligado: values.claveDelSujetoObligado ?? "",
-    claveOrganoSuperior: values.claveOrganoSuperior ?? "",
-    monedaDeOperacionPrincipal: aTextoOIndefinido(values.monedaDeOperacionPrincipal),
-    actividadEconomicaId: aTextoOIndefinido(values.actividadEconomicaId),
   };
 }
 
@@ -112,12 +124,12 @@ export function UsuarioForm({ onCreado }: { onCreado?: () => void }) {
       username: "",
       password: "",
       confirmarPassword: "",
+      correo: "",
+      telefono: "",
       nombre: "",
       primerApellido: "",
       segundoApellido: "",
-      correo: "",
-      telefono: "",
-      nacionalidadId: "",
+      nacionalidad: "",
       paisNacimientoId: "",
       entidadNacimientoId: "",
       lugarDeNacimiento: "",
@@ -125,20 +137,20 @@ export function UsuarioForm({ onCreado }: { onCreado?: () => void }) {
       genero: "",
       rfc: "",
       curp: "",
-      estadoCivilId: "",
+      estadoCivil: "",
       numDependientes: "",
-      nivelEstudiosId: "",
-      tipoIdentificacionId: "",
+      nivelEstudios: "",
+      tipoIdentificacion: "",
       folioIdentificacion: "",
-      tipoComprobanteId: "",
-      tipoVialidadId: "",
+      tipoComprobante: "",
+      tipoVialidad: "",
       calle: "",
       numExterior: "",
       numInterior: "",
       nombreCalleIzquierda: "",
       nombreCalleDerecha: "",
       referencia: "",
-      laCasaEsId: "",
+      posesionVivienda: "",
       antiguedadDomicilio: "",
       codigoPostal: "",
       tipoAsentamiento: "",
@@ -159,12 +171,6 @@ export function UsuarioForm({ onCreado }: { onCreado?: () => void }) {
     },
   });
 
-  const rolSeleccionado = useWatch({ control: form.control, name: "rolId" });
-  const esOficial = useMemo(
-    () => esRolOficial(roles, rolSeleccionado),
-    [roles, rolSeleccionado],
-  );
-
   async function irAPaso2() {
     if (await form.trigger(PASO1_CAMPOS)) setPaso(2);
   }
@@ -174,25 +180,19 @@ export function UsuarioForm({ onCreado }: { onCreado?: () => void }) {
   }
 
   function onSubmit(values: CrearUsuarioFormValues) {
+    const esOficial = esRolOficial(roles, values.rolId);
     if (esOficial) {
-      let valido = true;
-      if (!values.tipoPersona) {
-        form.setError("tipoPersona", { message: "El tipo de persona es obligatorio" });
-        valido = false;
+      let faltaAlgo = false;
+      for (const { campo, mensaje } of CAMPOS_OFICIAL_REQUERIDOS) {
+        if (!values[campo]) {
+          form.setError(campo, { message: mensaje });
+          faltaAlgo = true;
+        }
       }
-      if (!values.claveDelSujetoObligado) {
-        form.setError("claveDelSujetoObligado", {
-          message: "La clave del sujeto obligado es obligatoria",
-        });
-        valido = false;
+      if (faltaAlgo) {
+        toast.error("Revisa los parámetros del oficial de cumplimiento");
+        return;
       }
-      if (!values.claveOrganoSuperior) {
-        form.setError("claveOrganoSuperior", {
-          message: "La clave del órgano superior es obligatoria",
-        });
-        valido = false;
-      }
-      if (!valido) return;
     }
 
     crearUsuarioCompleto.mutate(

@@ -49,7 +49,7 @@ export function SeccionDomicilio({ form }: { form: FichaForm }) {
   const { data: paises } = usePaises();
   const { data: entidades } = useEntidades();
 
-  const comprobante = useWatch({ control: form.control, name: "tipoComprobanteId" });
+  const comprobante = useWatch({ control: form.control, name: "tipoComprobante" });
   const pais = useWatch({ control: form.control, name: "domicilioPaisId" });
   const entidad = useWatch({ control: form.control, name: "domicilioEntidadId" });
   const municipio = useWatch({ control: form.control, name: "municipioId" });
@@ -82,7 +82,7 @@ export function SeccionDomicilio({ form }: { form: FichaForm }) {
         .map((item) => ({
           valor: String(item.idEntidad),
           etiqueta: item.nombre ?? "",
-          codigo: item.claveInegi,
+          codigo: item.claveCurp,
         })),
     [entidades, pais],
   );
@@ -91,7 +91,6 @@ export function SeccionDomicilio({ form }: { form: FichaForm }) {
       (municipios ?? []).map((item) => ({
         valor: String(item.id),
         etiqueta: item.nombre ?? "",
-        codigo: item.claveInegi,
       })),
     [municipios],
   );
@@ -143,7 +142,7 @@ export function SeccionDomicilio({ form }: { form: FichaForm }) {
       <div className="grid grid-cols-1 items-start gap-5 sm:grid-cols-2 lg:grid-cols-12">
         <CampoSelect
           form={form}
-          name="tipoComprobanteId"
+          name="tipoComprobante"
           label="Tipo de comprobante"
           placeholder="Selecciona un comprobante"
           opciones={opcionesDe(tiposComprobante)}
@@ -151,7 +150,7 @@ export function SeccionDomicilio({ form }: { form: FichaForm }) {
         />
         <CampoSelect
           form={form}
-          name="tipoVialidadId"
+          name="tipoVialidad"
           label="Tipo de vialidad"
           placeholder="Selecciona una vialidad"
           opciones={opcionesDe(tiposVialidad)}
@@ -216,7 +215,7 @@ export function SeccionDomicilio({ form }: { form: FichaForm }) {
         />
         <CampoSelect
           form={form}
-          name="laCasaEsId"
+          name="posesionVivienda"
           label="La casa es"
           placeholder="Selecciona una opción"
           opciones={opcionesDe(posesionesVivienda)}

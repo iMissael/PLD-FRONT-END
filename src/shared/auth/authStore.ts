@@ -2,7 +2,6 @@ import { create } from "zustand";
 import { createJSONStorage, persist, type StateStorage } from "zustand/middleware";
 
 import type { LoginResponse } from "@/features/auth/types/auth";
-import { useSucursalActivaStore } from "@/shared/auth/sucursalActivaStore";
 
 const REMEMBER_FLAG_KEY = "auth-remember";
 const STORAGE_KEY = "auth-storage";
@@ -52,8 +51,6 @@ export const useAuthStore = create<AuthState>()(
       },
       setSession: (tenantId, data, remember) => {
         localStorage.setItem(REMEMBER_FLAG_KEY, String(remember));
-        // Una sesión nueva siempre vuelve a pedir la sucursal.
-        useSucursalActivaStore.getState().limpiarSucursalActiva();
         set({
           token: data.token,
           tenantId,
@@ -67,7 +64,6 @@ export const useAuthStore = create<AuthState>()(
         localStorage.removeItem(REMEMBER_FLAG_KEY);
         sessionStorage.removeItem(STORAGE_KEY);
         localStorage.removeItem(STORAGE_KEY);
-        useSucursalActivaStore.getState().limpiarSucursalActiva();
       },
     }),
     { name: STORAGE_KEY, storage: createJSONStorage(() => rememberAwareStorage) },

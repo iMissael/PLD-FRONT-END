@@ -59,13 +59,13 @@ export function CalendarioFecha({
   const hoy = hoyIso();
   const inicial = valor || (max && max < hoy ? max : hoy);
   const [vista, setVista] = useState(() => {
-    const [anio, mes] = inicial.split("-").map(Number);
+    const [anio, mes] = inicial.split("-").map(Number) as [number, number];
     return { anio, mes: mes - 1 };
   });
 
   const abrir = (siguiente: boolean) => {
     if (siguiente) {
-      const [anio, mes] = inicial.split("-").map(Number);
+      const [anio, mes] = inicial.split("-").map(Number) as [number, number];
       setVista({ anio, mes: mes - 1 });
     }
     setAbierto(siguiente);

@@ -9,12 +9,11 @@ const valido: CrearUsuarioFormValues = {
   password: "Secreta123!",
   confirmarPassword: "Secreta123!",
   nombre: "JUAN",
-  nacionalidadId: "1",
+  rolId: "rol-1",
   domicilioPaisId: "MX",
   domicilioEntidadId: "20",
   municipioId: "390",
   localidadId: "0001",
-  rolId: "rol-1",
 };
 
 function errores(cambios: Partial<CrearUsuarioFormValues>) {
@@ -50,8 +49,6 @@ describe("crearUsuarioSchema", () => {
       numExterior: "12-A",
       latitud: "19.4326",
       longitud: "-99.1332",
-      claveDelOficialDeCumplimiento: "OC-001",
-      monedaDeOperacionPrincipal: "MXN",
     };
     expect(errores(completo)).toEqual({});
   });
@@ -86,6 +83,10 @@ describe("crearUsuarioSchema", () => {
     it("el correo, si se captura, debe ser válido", () => {
       expect(errores({ correo: "jdoe@" })).toHaveProperty("correo");
       expect(errores({ correo: "" })).toEqual({});
+    });
+
+    it("el rol es obligatorio", () => {
+      expect(errores({ rolId: "" })).toHaveProperty("rolId");
     });
   });
 
@@ -162,22 +163,12 @@ describe("crearUsuarioSchema", () => {
         "antiguedadDomicilio",
       );
     });
-  });
 
-  describe("datos del oficial", () => {
-    it("las claves solo llevan letras, números y guion", () => {
-      expect(errores({ claveDelSujetoObligado: "SO 001" })).toHaveProperty(
-        "claveDelSujetoObligado",
-      );
-      expect(errores({ claveDelOficialDeCumplimiento: "A".repeat(13) })).toHaveProperty(
-        "claveDelOficialDeCumplimiento",
-      );
-    });
-
-    it("la moneda es un código de 3 letras", () => {
-      expect(errores({ monedaDeOperacionPrincipal: "PESO" })).toHaveProperty(
-        "monedaDeOperacionPrincipal",
-      );
+    it("país, entidad, municipio y localidad son obligatorios", () => {
+      expect(errores({ domicilioPaisId: "" })).toHaveProperty("domicilioPaisId");
+      expect(errores({ domicilioEntidadId: "" })).toHaveProperty("domicilioEntidadId");
+      expect(errores({ municipioId: "" })).toHaveProperty("municipioId");
+      expect(errores({ localidadId: "" })).toHaveProperty("localidadId");
     });
   });
 });

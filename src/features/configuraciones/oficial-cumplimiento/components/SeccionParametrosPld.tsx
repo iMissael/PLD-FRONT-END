@@ -43,7 +43,7 @@ export function SeccionParametrosPld({ form }: { form: FichaForm }) {
   );
   const esVulnerable = actividades?.find(
     (item) => item.id === actividadActual,
-  )?.es_actividad_vulnerable;
+  )?.esActividadVulnerable;
 
   return (
     <SeccionFicha

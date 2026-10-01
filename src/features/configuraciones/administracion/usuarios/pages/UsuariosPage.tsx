@@ -38,7 +38,7 @@ export function UsuariosPage() {
           <CardHeader>
             <CardTitle>Nuevo usuario</CardTitle>
             <CardDescription>
-              Completa los 3 pasos para dar de alta un usuario y su acceso al sistema.
+              Completa los 2 pasos para dar de alta un usuario y su acceso al sistema.
             </CardDescription>
             <CardAction>
               <Button

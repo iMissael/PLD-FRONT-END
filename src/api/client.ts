@@ -6,12 +6,6 @@ import { authInterceptor, unauthorizedInterceptor } from "./interceptors/authInt
 import { errorInterceptor } from "./interceptors/errorInterceptor";
 import { tenantInterceptor } from "./interceptors/tenantInterceptor";
 
-/**
- * Instancia única de Axios para toda la app. Los `features/*` NUNCA
- * importan Axios directamente: siempre pasan por esta instancia, para que
- * el header de tenant, el token de sesión y la normalización de errores
- * apliquen siempre.
- */
 export const apiClient = axios.create({
   baseURL: env.VITE_API_BASE_URL,
   headers: {

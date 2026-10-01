@@ -1,3 +1,4 @@
+import { AlertTriangle } from "lucide-react";
 import { Badge } from "@/shared/components/ui/badge";
 import {
   Table,
@@ -17,8 +18,12 @@ function formatearFecha(fecha: string | undefined) {
 
 export function ResultadosConsultaListas({
   resultados,
+  proveedorExternoNoDisponible,
 }: {
   resultados: ConsultaLista[];
+  /** El proveedor externo (PEP/OFAC/DEA/PGR) no respondió: lo que se ve aquí no es una
+   * verificación completa, solo lo que alcanzó a revisarse. */
+  proveedorExternoNoDisponible?: boolean;
 }) {
   const { data: listas } = useListasRestrictivas();
 
@@ -30,11 +35,26 @@ export function ResultadosConsultaListas({
 
   return (
     <div className="space-y-3">
+      {proveedorExternoNoDisponible && (
+        <div className="border-warning-soft bg-warning-soft text-warning-hover flex items-start gap-2 rounded-lg border p-3 text-sm">
+          <AlertTriangle className="mt-0.5 size-4 shrink-0" />
+          <p>
+            No se pudo consultar el proveedor externo de listas (PEP/OFAC/DEA/PGR): el
+            servicio no respondió. El resultado de abajo no es una verificación completa;
+            vuelve a intentar la consulta antes de tomar una decisión.
+          </p>
+        </div>
+      )}
+
       <div className="flex items-center gap-2">
         <span className="text-sm font-medium">Resultado general:</span>
-        <Badge variant={hayCoincidencia ? "destructive" : "secondary"}>
-          {hayCoincidencia ? "Coincidencia encontrada" : "Sin coincidencias"}
-        </Badge>
+        {proveedorExternoNoDisponible && !hayCoincidencia ? (
+          <Badge variant="outline">No se pudo verificar</Badge>
+        ) : (
+          <Badge variant={hayCoincidencia ? "destructive" : "secondary"}>
+            {hayCoincidencia ? "Coincidencia encontrada" : "Sin coincidencias"}
+          </Badge>
+        )}
       </div>
 
       <Table>

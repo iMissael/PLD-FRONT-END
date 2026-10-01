@@ -150,7 +150,8 @@ export function UsuariosTable() {
         .filter((rol) => Boolean(rol.idRol))
         .map((rol) => [String(rol.idRol), String(rol.nombre ?? "—")]),
     );
-    return (rolId: string | undefined): string => (rolId ? (mapa.get(rolId) ?? "—") : "—");
+    return (rolId: string | number | undefined): string =>
+      rolId ? (mapa.get(String(rolId)) ?? "—") : "—";
   }, [listaRoles]);
 
   const usuariosFiltrados = useMemo(() => {

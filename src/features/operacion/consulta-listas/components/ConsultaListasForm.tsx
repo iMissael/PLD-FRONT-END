@@ -2,6 +2,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogFooter,
+} from "@/shared/components/ui/alert-dialog";
 import { Button } from "@/shared/components/ui/button";
 import {
   Form,
@@ -12,6 +21,7 @@ import {
   FormMessage,
 } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
+import { InputFormateado } from "@/shared/components/InputFormateado";
 import {
   Select,
   SelectContent,
@@ -19,6 +29,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
+import { alfanumerico, mayusculas, nombrePropio, rfc } from "@/shared/utils/entradas";
+import { calcularEdad } from "@/shared/utils/fechas";
 import { useConsultarListas } from "@/features/operacion/consulta-listas/hooks/useConsultaListas";
 import {
   consultaListasSchema,
@@ -26,60 +38,64 @@ import {
 } from "@/features/operacion/consulta-listas/types/consultaListasSchema";
 import type { ConsultaLista } from "@/features/operacion/consulta-listas/types/Quienesquien";
 import { useAuthStore } from "@/shared/auth/authStore";
-import { useSucursalActivaStore } from "@/shared/auth/sucursalActivaStore";
 
 function aTextoOIndefinido(valor: string | undefined) {
   return valor ? valor : undefined;
 }
 
-function calcularEdad(fechaNacimiento: string | undefined): string {
-  if (!fechaNacimiento) return "";
-  const nacimiento = new Date(fechaNacimiento);
-  if (Number.isNaN(nacimiento.getTime())) return "";
-
-  const hoy = new Date();
-  let edad = hoy.getFullYear() - nacimiento.getFullYear();
-  const aunNoCumple =
-    hoy.getMonth() < nacimiento.getMonth() ||
-    (hoy.getMonth() === nacimiento.getMonth() && hoy.getDate() < nacimiento.getDate());
-  if (aunNoCumple) edad -= 1;
-
-  return edad >= 0 ? String(edad) : "";
+function describirTiempo(anios: number | null) {
+  if (anios === null) return "";
+  return anios === 1 ? "1 año" : `${anios} años`;
 }
 
 export function ConsultaListasForm({
   onResultados,
 }: {
-  onResultados: (resultados: ConsultaLista[]) => void;
+  onResultados: (resultados: ConsultaLista[], proveedorExternoNoDisponible: boolean) => void;
 }) {
   const [enviando, setEnviando] = useState(false);
+  const [errorServicio, setErrorServicio] = useState(false);
   const consultarListas = useConsultarListas();
 
   const form = useForm<ConsultaListasFormValues>({
     resolver: zodResolver(consultaListasSchema),
     defaultValues: {
+      tipoPersona: "FISICA",
       nombre: "",
       primerApellido: "",
       segundoApellido: "",
-      fechaNacimiento: "",
+      fechaConstitucion: "",
       rfc: "",
       curp: "",
-      tipoPersona: "",
     },
   });
 
-  const edad = calcularEdad(form.watch("fechaNacimiento"));
+  const esMoral = form.watch("tipoPersona") === "MORAL";
+  const tiempoConstitucion = describirTiempo(calcularEdad(form.watch("fechaConstitucion")));
+
+  function cambiarTipoPersona(tipo: ConsultaListasFormValues["tipoPersona"]) {
+    form.setValue("tipoPersona", tipo);
+    // La persona moral no tiene apellidos ni CURP: se limpian para no enviarlos.
+    if (tipo === "MORAL") {
+      form.setValue("primerApellido", "");
+      form.setValue("segundoApellido", "");
+      form.setValue("curp", "");
+    }
+    form.clearErrors();
+  }
 
   function onSubmit(values: ConsultaListasFormValues) {
     const verificadoPor = useAuthStore.getState().usuario?.id;
-    const sucursalId = useSucursalActivaStore.getState().sucursalActiva?.id;
 
-    if (!verificadoPor || !sucursalId) {
-      toast.error("No se pudo determinar el usuario o la sucursal activa.");
+    if (!verificadoPor) {
+      toast.error("No se pudo determinar el usuario.");
       return;
     }
 
-    const nombreCompleto = [values.nombre, values.primerApellido, values.segundoApellido]
+    const moral = values.tipoPersona === "MORAL";
+    const primerApellido = moral ? undefined : aTextoOIndefinido(values.primerApellido);
+    const segundoApellido = moral ? undefined : aTextoOIndefinido(values.segundoApellido);
+    const nombreCompleto = [values.nombre, primerApellido, segundoApellido]
       .filter((parte) => parte && parte.trim().length > 0)
       .join(" ");
 
@@ -88,22 +104,26 @@ export function ConsultaListasForm({
       {
         nombreCompleto,
         nombre: aTextoOIndefinido(values.nombre),
-        primerApellido: aTextoOIndefinido(values.primerApellido),
-        segundoApellido: aTextoOIndefinido(values.segundoApellido),
-        fechaNacimiento: aTextoOIndefinido(values.fechaNacimiento),
+        primerApellido,
+        segundoApellido,
         rfc: aTextoOIndefinido(values.rfc),
-        curp: aTextoOIndefinido(values.curp),
-        tipoPersona: aTextoOIndefinido(values.tipoPersona),
+        curp: moral ? undefined : aTextoOIndefinido(values.curp),
+        tipoPersona: values.tipoPersona,
         verificadoPor,
-        sucursalId,
       },
       {
-        onSuccess: (resultados) => {
-          onResultados(resultados);
-          toast.success("Consulta realizada correctamente");
+        onSuccess: (respuesta) => {
+          onResultados(respuesta.resultados, respuesta.proveedorExternoNoDisponible);
+          if (respuesta.proveedorExternoNoDisponible) {
+            toast.warning(
+              "El proveedor externo de listas no respondió: la verificación quedó incompleta.",
+            );
+          } else {
+            toast.success("Consulta realizada correctamente");
+          }
         },
         onError: () => {
-          toast.error("No se pudo completar la consulta de listas");
+          setErrorServicio(true);
         },
         onSettled: () => setEnviando(false),
       },
@@ -116,50 +136,11 @@ export function ConsultaListasForm({
         <div className="grid gap-4 sm:grid-cols-3">
           <FormField
             control={form.control}
-            name="nombre"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Nombre(s)</FormLabel>
-                <FormControl>
-                  <Input placeholder="Juan" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="primerApellido"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Primer apellido</FormLabel>
-                <FormControl>
-                  <Input placeholder="Pérez" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="segundoApellido"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Segundo apellido</FormLabel>
-                <FormControl>
-                  <Input placeholder="Gómez" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
             name="tipoPersona"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Tipo de persona</FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
+                <Select onValueChange={cambiarTipoPersona} value={field.value}>
                   <FormControl>
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Selecciona un tipo" />
@@ -176,10 +157,58 @@ export function ConsultaListasForm({
           />
           <FormField
             control={form.control}
-            name="fechaNacimiento"
+            name="nombre"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Fecha de nacimiento</FormLabel>
+                <FormLabel>{esMoral ? "Nombre persona" : "Nombre"}</FormLabel>
+                <FormControl>
+                  <InputFormateado
+                    placeholder={esMoral ? "EMPRESA S.A. DE C.V." : "JUAN"}
+                    {...field}
+                    formato={esMoral ? mayusculas : nombrePropio}
+                    maxLength={150}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {!esMoral && (
+            <>
+              <FormField
+                control={form.control}
+                name="primerApellido"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Apellido paterno</FormLabel>
+                    <FormControl>
+                      <InputFormateado placeholder="PÉREZ" {...field} formato={nombrePropio} maxLength={100} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="segundoApellido"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Apellido materno</FormLabel>
+                    <FormControl>
+                      <InputFormateado placeholder="GÓMEZ" {...field} formato={nombrePropio} maxLength={100} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </>
+          )}
+          <FormField
+            control={form.control}
+            name="fechaConstitucion"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Fecha de constitución</FormLabel>
                 <FormControl>
                   <Input type="date" {...field} />
                 </FormControl>
@@ -188,9 +217,9 @@ export function ConsultaListasForm({
             )}
           />
           <FormItem>
-            <FormLabel>Edad</FormLabel>
+            <FormLabel>Tiempo de constitución</FormLabel>
             <FormControl>
-              <Input value={edad} placeholder="—" disabled />
+              <Input value={tiempoConstitucion} placeholder="—" disabled />
             </FormControl>
           </FormItem>
           <FormField
@@ -200,31 +229,55 @@ export function ConsultaListasForm({
               <FormItem>
                 <FormLabel>RFC</FormLabel>
                 <FormControl>
-                  <Input placeholder="PEGJ800101ABC" {...field} />
+                  <InputFormateado
+                    placeholder={esMoral ? "EMP800101ABC" : "PEGJ800101ABC"}
+                    {...field}
+                    formato={rfc}
+                    maxLength={esMoral ? 12 : 13}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="curp"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>CURP</FormLabel>
-                <FormControl>
-                  <Input placeholder="PEGJ800101HDFRZN01" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {!esMoral && (
+            <FormField
+              control={form.control}
+              name="curp"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>CURP</FormLabel>
+                  <FormControl>
+                    <InputFormateado
+                      placeholder="PEGJ800101HDFRZN01"
+                      {...field}
+                      formato={alfanumerico}
+                      maxLength={18}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
         </div>
 
         <Button type="submit" disabled={enviando}>
           {enviando ? "Consultando…" : "Consultar"}
         </Button>
       </form>
+
+      <AlertDialog open={errorServicio} onOpenChange={setErrorServicio}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>No se pudo completar la consulta</AlertDialogTitle>
+            <AlertDialogDescription>El servicio de API no funciona</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction>Aceptar</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Form>
   );
 }
