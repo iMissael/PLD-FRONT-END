@@ -148,12 +148,8 @@ const NAV_ITEMS: NavNode[] = [
     children: [
       { label: "Resumen", to: "operacion" },
       { label: "Evaluación de riesgo", to: "operacion/evaluacion-riesgo" },
-<<<<<<< HEAD
-      { label: "Revisión de coincidencias", to: "operacion/coincidencias" },
-=======
       { label: "Captura de alertas", to: "operacion/captura-alertas" },
       { label: "Revisión de alertas", to: "operacion/revision-alertas" },
->>>>>>> origin/Evaluacion
     ],
   },
   {
@@ -162,12 +158,9 @@ const NAV_ITEMS: NavNode[] = [
     children: [
       { label: "Resumen", to: "control" },
       { label: "Quien es quien", to: "control/quienesquien" },
-<<<<<<< HEAD
-=======
       { label: "Revisión de coincidencias", to: "control/coincidencias" },
       // Provisional: falta decidir dónde va (el manual de Sicanet lo pone en Control, 4.4.1).
       { label: "Control dólar", to: "control-dolar" },
->>>>>>> origin/Evaluacion
     ],
   },
   {
@@ -208,26 +201,12 @@ function collectLeaves(node: NavNode): NavLeaf[] {
   return node.children.flatMap(collectLeaves);
 }
 
-/** ¿Alguna hoja de este nodo corresponde a la ruta actual? Se usa solo para
- * decidir si un grupo arranca abierto. Compara la ruta completa de cada
- * hoja (no solo el primer segmento), porque ahora hay `to` anidados que
- * comparten el mismo primer segmento (p.ej. "configuraciones/personas" y
- * "configuraciones/ubicacion-geografica/paises"). */
 function isNodeActive(node: NavNode, pathname: string): boolean {
   return collectLeaves(node).some(
     (hoja) => pathname.endsWith(`/${hoja.to}`) || pathname.includes(`/${hoja.to}/`),
   );
 }
 
-/**
- * Layout base de la app: barra superior (menú hamburguesa, logo, y accesos
- * de usuario) + menú lateral colapsable + contenido de la página activa.
- *
- * Colores: todos vienen de los tokens de `src/index.css` (paleta 60/30/10).
- * El verde vive solo en el menú lateral (item activo en `nav`/`nav-hover`,
- * hover de inactivos en `nav-soft`); el acento indigo (`primary`) se usa
- * para foco y avatar, y el logo combina indigo con el teal de marca.
- */
 export function AppLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const [query, setQuery] = useState("");

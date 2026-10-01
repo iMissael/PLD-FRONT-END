@@ -35,11 +35,8 @@ import { ConsultaListasPage } from "@/features/operacion/consulta-listas/pages/Q
 import { RevisionCoincidenciasPage } from "@/features/operacion/revision-coincidencias/pages/RevisionCoincidenciasPage";
 import { EvaluacionRiesgoPage } from "@/features/operacion/evaluacion-riesgo/pages/EvaluacionRiesgoPage";
 import { OperacionPage } from "@/features/operacion/pages/OperacionPage";
-<<<<<<< HEAD
-=======
 import { RevisionAlertasPage } from "@/features/operacion/revision-alertas/pages/RevisionAlertasPage";
 import { SeleccionarSucursalPage } from "@/features/sucursales/pages/SeleccionarSucursalPage";
->>>>>>> origin/Evaluacion
 import { RequireAuth } from "@/shared/auth/RequireAuth";
 import { RequierePermiso } from "@/shared/auth/RequierePermiso";
 import { PlaceholderPage } from "@/shared/components/PlaceholderPage";
