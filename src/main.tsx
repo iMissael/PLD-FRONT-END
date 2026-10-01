@@ -3,10 +3,14 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 
+import { apiClient } from "@/api/client";
+import { registrarInvalidacionDeEvaluaciones } from "@/features/operacion/evaluacion-riesgo/stores/invalidarEvaluaciones";
 import { router } from "@/routes/router";
 import { Toaster } from "@/shared/components/ui/sonner";
 
 import "./index.css";
+
+registrarInvalidacionDeEvaluaciones(apiClient);
 
 const queryClient = new QueryClient({
   defaultOptions: {

@@ -14,6 +14,8 @@ export interface EvaluacionDeSesion {
 interface EvaluacionesSesionState {
   evaluaciones: Record<string, EvaluacionDeSesion>;
   guardar: (socioRef: string, evaluacion: EvaluacionDeSesion) => void;
+  /** Descarta todas: los catálogos o la matriz cambiaron y hay que volver a evaluar. */
+  limpiar: () => void;
 }
 
 // No hay endpoint para recuperar la evaluación de un socio, así que las hechas en esta
@@ -33,6 +35,7 @@ export const useEvaluacionesSesionStore = create<EvaluacionesSesionState>()(
             [claveEvaluacion(socioRef)]: evaluacion,
           },
         })),
+      limpiar: () => set({ evaluaciones: {} }),
     }),
     {
       name: "evaluaciones-sesion",
@@ -40,3 +43,18 @@ export const useEvaluacionesSesionStore = create<EvaluacionesSesionState>()(
     },
   ),
 );
+
+/**
+ * Una evaluación recordada solo sirve si se calculó con la matriz vigente: si se publicó otra
+ * versión, el socio se evalúa de nuevo. Mientras no se conoce la matriz activa se da por vigente.
+ */
+export function evaluacionVigente(
+  evaluacion: EvaluacionDeSesion | undefined,
+  matrizActivaId: number | undefined,
+) {
+  if (!evaluacion) return undefined;
+  if (matrizActivaId == null) return evaluacion;
+  return evaluacion.resultado.id_configuracion_matriz_riesgo === matrizActivaId
+    ? evaluacion
+    : undefined;
+}
