@@ -4,16 +4,25 @@ import type {
   EstadoRegla,
   FiltroReglas,
   GuardarReglaInput,
+  PaginaReglas,
   ReglaAlerta,
 } from "../types/reglaAlerta";
 
 const BASE_PATH = "/v1/pld/configuracion-alertas";
 
-export async function listarReglas(filtro: FiltroReglas): Promise<ReglaAlerta[]> {
-  const params = Object.fromEntries(
-    Object.entries(filtro).filter(([, v]) => v !== undefined && v !== ""),
-  );
-  const { data } = await apiClient.get<ReglaAlerta[]>(BASE_PATH, { params });
+export async function listarReglas(
+  filtro: FiltroReglas,
+  pagina: number,
+  tamanio: number,
+): Promise<PaginaReglas> {
+  const params = {
+    ...Object.fromEntries(
+      Object.entries(filtro).filter(([, v]) => v !== undefined && v !== ""),
+    ),
+    pagina,
+    tamanio,
+  };
+  const { data } = await apiClient.get<PaginaReglas>(BASE_PATH, { params });
   return data;
 }
 

@@ -1,4 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 
 import {
   actualizarRegla,
@@ -11,13 +16,15 @@ import type { EstadoRegla, FiltroReglas, GuardarReglaInput } from "../types/regl
 
 export const reglasAlertaKeys = {
   all: ["reglas-alerta"] as const,
-  lista: (filtro: FiltroReglas) => [...reglasAlertaKeys.all, "lista", filtro] as const,
+  lista: (filtro: FiltroReglas, pagina: number, tamanio: number) =>
+    [...reglasAlertaKeys.all, "lista", filtro, pagina, tamanio] as const,
 };
 
-export function useReglasAlerta(filtro: FiltroReglas) {
+export function useReglasAlerta(filtro: FiltroReglas, pagina: number, tamanio: number) {
   return useQuery({
-    queryKey: reglasAlertaKeys.lista(filtro),
-    queryFn: () => listarReglas(filtro),
+    queryKey: reglasAlertaKeys.lista(filtro, pagina, tamanio),
+    queryFn: () => listarReglas(filtro, pagina, tamanio),
+    placeholderData: keepPreviousData,
   });
 }
 

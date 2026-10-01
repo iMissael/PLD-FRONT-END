@@ -66,3 +66,11 @@ export interface FiltroReglas {
   alertaAcronimo?: string;
   estado?: EstadoRegla;
 }
+
+export interface PaginaReglas {
+  contenido: ReglaAlerta[];
+  pagina: number;
+  tamanio: number;
+  totalElementos: number;
+  totalPaginas: number;
+}

@@ -147,10 +147,7 @@ export function DetalleAlerta({ alerta, onDictaminada }: DetalleAlertaProps) {
               </Dato>
               <Dato titulo="RFC">{reportado?.rfc}</Dato>
               {esEmpleado ? (
-                <>
-                  <Dato titulo="Puesto">{reportado?.puesto}</Dato>
-                  <Dato titulo="Sucursal">{reportado?.sucursal}</Dato>
-                </>
+                <Dato titulo="Puesto">{reportado?.puesto}</Dato>
               ) : (
                 <>
                   <Dato titulo="CURP">{cargandoExpediente ? "…" : evaluado?.curp}</Dato>

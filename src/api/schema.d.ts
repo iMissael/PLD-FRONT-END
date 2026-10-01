@@ -4184,6 +4184,7 @@ export interface components {
             nombre?: string;
             status?: string;
             rfc?: string;
+            tipoPersona?: string;
         };
         ResultadoBusquedaResponse: {
             personaPrincipal?: components["schemas"]["PersonaBloqueadaResponse"];
