@@ -10,6 +10,7 @@ import type { ResultadoBusquedaResponse } from "@/features/configuracion-alertas
  * `tenantInterceptor.ts` arma la URL real con ese valor.
  */
 export const TEST_TENANT_ID = "test-tenant-id";
+// El tenant se antepone directo al path de cada controller, sin /api (ver tenantInterceptor.ts).
 const API_BASE_URL = `http://localhost:8080/SICANETSC/PLD/${TEST_TENANT_ID}`;
 
 type UsuarioResponse = components["schemas"]["UsuarioResponse"];
@@ -18,19 +19,18 @@ type PermisoResponse = components["schemas"]["PermisoResponse"];
 
 const usuarios: UsuarioResponse[] = [
   {
-    idUsuario: "bbbbbbbb-0000-0000-0000-000000000001",
+    idUsuario: 1,
     username: "admin",
     nombre: "Administrador",
     correo: "admin@example.com",
     estado: "ACTIVO",
-    rolId: "d0000000-0000-0000-0000-000000000001",
-    nacionalidadId: "c1000000-0000-0000-0000-000000000001",
+    rolId: 1,
   },
 ];
 
 const roles: RolResponse[] = [
   {
-    idRol: "d0000000-0000-0000-0000-000000000001",
+    idRol: 1,
     nombre: "ROLE_ADMIN",
     categoria: "ESTANDAR",
     descripcion: "Administrador general del sistema",
@@ -40,7 +40,7 @@ const roles: RolResponse[] = [
 
 const permisos: PermisoResponse[] = [
   {
-    idPermiso: "e0000000-0000-0000-0000-000000000001",
+    idPermiso: 1,
     recurso: "usuarios",
     accion: "crear",
     descripcion: "Permite crear usuarios",
@@ -53,12 +53,12 @@ const loginResponse: LoginResponse = {
   tokenType: "Bearer",
   expiresInSeconds: 28800,
   usuario: {
-    id: "bbbbbbbb-0000-0000-0000-000000000001",
+    id: 1,
     username: "admin",
     nombre: "Administrador",
     correo: "admin@example.com",
   },
-  rol: { id: "d0000000-0000-0000-0000-000000000001", nombre: "ROLE_ADMIN" },
+  rol: { id: 1, nombre: "ROLE_ADMIN" },
   permisos: [{ recurso: "usuarios", accion: "crear" }],
 };
 
@@ -111,7 +111,7 @@ export const handlers = [
   http.post(`${API_BASE_URL}/usuarios`, async ({ request }) => {
     const body = (await request.json()) as Partial<UsuarioResponse>;
     return HttpResponse.json(
-      { ...body, idUsuario: crypto.randomUUID(), estado: "ACTIVO" },
+      { ...body, idUsuario: Math.floor(Math.random() * 100000), estado: "ACTIVO" },
       { status: 201 },
     );
   }),
@@ -120,7 +120,7 @@ export const handlers = [
   http.post(`${API_BASE_URL}/roles`, async ({ request }) => {
     const body = (await request.json()) as Partial<RolResponse>;
     return HttpResponse.json(
-      { ...body, idRol: crypto.randomUUID(), estado: "ACTIVO" },
+      { ...body, idRol: Math.floor(Math.random() * 100000), estado: "ACTIVO" },
       { status: 201 },
     );
   }),
@@ -130,7 +130,7 @@ export const handlers = [
   http.post(`${API_BASE_URL}/permisos`, async ({ request }) => {
     const body = (await request.json()) as Partial<PermisoResponse>;
     return HttpResponse.json(
-      { ...body, idPermiso: crypto.randomUUID(), estado: "ACTIVO" },
+      { ...body, idPermiso: Math.floor(Math.random() * 100000), estado: "ACTIVO" },
       { status: 201 },
     );
   }),

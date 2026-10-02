@@ -14,13 +14,13 @@ export interface LoginResponse {
   tokenType: string;
   expiresInSeconds: number;
   usuario: {
-    id: string;
+    id: number;
     username: string;
     nombre: string;
     correo: string | null;
   };
   rol: {
-    id: string;
+    id: number;
     nombre: string;
   };
   permisos: {

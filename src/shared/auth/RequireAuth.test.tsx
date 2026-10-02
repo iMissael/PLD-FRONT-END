@@ -4,14 +4,13 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import { useAuthStore } from "@/shared/auth/authStore";
 import { RequireAuth } from "@/shared/auth/RequireAuth";
-import { RequireSucursal } from "@/shared/auth/RequireSucursal";
 
 const sesion = {
   token: "jwt",
   tokenType: "Bearer",
   expiresInSeconds: 3600,
-  usuario: { id: "u1", username: "admin", nombre: "Admin", correo: null },
-  rol: { id: "r1", nombre: "ROLE_ADMIN" },
+  usuario: { id: 1, username: "admin", nombre: "Admin", correo: null },
+  rol: { id: 1, nombre: "ROLE_ADMIN" },
   permisos: [],
 };
 
@@ -22,10 +21,7 @@ function montar(ruta: string) {
         <Route path="/SICANETSC/PLD/:tenantId">
           <Route path="login" element={<p>pantalla de login</p>} />
           <Route element={<RequireAuth />}>
-            <Route path="seleccionar-sucursal" element={<p>elige sucursal</p>} />
-            <Route element={<RequireSucursal />}>
-              <Route path="operacion" element={<p>contenido privado</p>} />
-            </Route>
+            <Route path="operacion" element={<p>contenido privado</p>} />
           </Route>
         </Route>
       </Routes>
@@ -33,7 +29,7 @@ function montar(ruta: string) {
   );
 }
 
-describe("RequireAuth y RequireSucursal", () => {
+describe("RequireAuth", () => {
   afterEach(() => useAuthStore.getState().logout());
 
   it("sin sesión lleva al login del mismo tenant", () => {
@@ -50,7 +46,7 @@ describe("RequireAuth y RequireSucursal", () => {
     expect(screen.getByText("pantalla de login")).toBeInTheDocument();
   });
 
-  it("con sesión deja ver el contenido directamente sin exigir sucursal", () => {
+  it("con sesión deja ver el contenido directamente", () => {
     useAuthStore.getState().setSession("tenant-a", sesion, false);
 
     montar("/SICANETSC/PLD/tenant-a/operacion");

@@ -53,7 +53,6 @@ import {
   MONEDA_POR_DEFECTO,
 } from "@/features/operacion/evaluacion-riesgo/utils/solicitud";
 import { useAuthStore } from "@/shared/auth/authStore";
-import { useSucursalActivaStore } from "@/shared/auth/sucursalActivaStore";
 
 const EBR_OPCIONES = [
   { value: "BAJO", label: "Bajo" },
@@ -157,29 +156,24 @@ export function EvaluacionRiesgoForm({
     if (!tiposPago) return [];
     if (!canalPagoSeleccionado) return tiposPago;
     return tiposPago.filter(
-      (tipo) => String(tipo.cat_canal_pago_id ?? "") === canalPagoSeleccionado,
+      (tipo) => String(tipo.catCanalPagoId ?? "") === canalPagoSeleccionado,
     );
   }, [tiposPago, canalPagoSeleccionado]);
 
   function onSubmit(values: EvaluacionRiesgoFormValues) {
-    const sucursalId = useSucursalActivaStore.getState().sucursalActiva?.id;
     const verificadoPor = useAuthStore.getState().usuario?.id;
 
-    if (!sucursalId || !verificadoPor) {
-      toast.error("No se pudo determinar el usuario o la sucursal activa.");
+    if (!verificadoPor) {
+      toast.error("No se pudo determinar el usuario.");
       return;
     }
 
-    const payload = construirSolicitud(values, { sucursalId, verificadoPor });
+    const payload = construirSolicitud(values, { verificadoPor: String(verificadoPor) });
 
     const tipoPersonaSeleccionado = tiposPersona?.find(
       (t) => t.id === values.tipoPersonaId,
     );
-    const cliente = construirCliente(
-      values,
-      tipoPersonaSeleccionado?.nombre,
-      useSucursalActivaStore.getState().sucursalActiva?.nombre,
-    );
+    const cliente = construirCliente(values, tipoPersonaSeleccionado?.nombre, undefined);
 
     const detalles = construirDetalles(values, {
       tiposPersona,

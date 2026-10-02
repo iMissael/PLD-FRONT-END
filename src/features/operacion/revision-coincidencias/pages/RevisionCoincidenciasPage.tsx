@@ -44,6 +44,7 @@ export function RevisionCoincidenciasPage() {
             <TablaCoincidenciasPendientes
               coincidencias={data}
               isLoading={isLoading}
+              socioRefSeleccionado={seleccionada?.socio_ref}
               onRevisar={setSeleccionada}
             />
           )}

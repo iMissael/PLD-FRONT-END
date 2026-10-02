@@ -8,6 +8,8 @@ export type EntidadGeograficaResponse =
   components["schemas"]["EntidadCatGeograficaResponse"];
 export type MunicipioResponse = components["schemas"]["CatMunicipioResponse"];
 export type LocalidadResponse = components["schemas"]["CatLocalidadResponse"];
+export type PaginaLocalidadesResponse =
+  components["schemas"]["PaginaResponseCatLocalidadResponse"];
 export type CatActividadEconomicaResponse =
   components["schemas"]["CatActividadEconomicaResponse"];
 export type TipoPersonaResponse = components["schemas"]["CatTipoSocioResponse"];

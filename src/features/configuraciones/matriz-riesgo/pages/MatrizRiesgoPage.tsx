@@ -47,7 +47,7 @@ export function MatrizRiesgoPage() {
             </p>
           )}
           {activa && !editando && (
-            <MatrizRiesgoDetalle factores={activa.pesosFactores ?? []} />
+            <MatrizRiesgoDetalle factores={activa.factores ?? []} />
           )}
           {activa && editando && (
             <MatrizRiesgoForm base={activa} onSuccess={() => setEditando(false)} />
@@ -78,7 +78,7 @@ export function MatrizRiesgoPage() {
           </CardHeader>
           <CardContent>
             {detalleVersion ? (
-              <MatrizRiesgoDetalle factores={detalleVersion.pesosFactores ?? []} />
+              <MatrizRiesgoDetalle factores={detalleVersion.factores ?? []} />
             ) : (
               <p className="text-muted-foreground text-sm">Cargando detalle…</p>
             )}

@@ -1,4 +1,5 @@
 import { apiClient } from "@/api/client";
+import { listarCatalogoCompleto } from "@/api/paginacion";
 
 import type {
   ActualizarExperienciaActividadInput,
@@ -10,13 +11,14 @@ const BASE_PATH = "/catalogos/experiencias-actividad";
 
 /**
  * El backend hace soft-delete (`estatus = 'E'`) y ya filtra los eliminados
- * en el listado, así que no hace falta ningún parámetro de estatus.
+ * en el listado, así que no hace falta ningún parámetro de estatus. El
+ * endpoint pagina: se traen todas las páginas porque esta tabla todavía no
+ * tiene controles de paginación propios.
  */
 export async function listarExperienciasActividad(): Promise<
   ExperienciaActividadResponse[]
 > {
-  const { data } = await apiClient.get<ExperienciaActividadResponse[]>(BASE_PATH);
-  return data;
+  return listarCatalogoCompleto<ExperienciaActividadResponse>(BASE_PATH);
 }
 
 export async function obtenerExperienciaActividad(

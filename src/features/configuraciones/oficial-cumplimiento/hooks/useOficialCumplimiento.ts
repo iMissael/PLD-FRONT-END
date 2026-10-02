@@ -14,13 +14,13 @@ import type {
 } from "@/features/configuraciones/administracion/usuarios/types/usuarios";
 
 const oficialKeys = {
-  usuario: (id: string) => ["usuarios", id] as const,
-  domicilio: (id: string) => ["usuarios", id, "domicilio"] as const,
-  oficial: (id: string) => ["usuarios", id, "oficial"] as const,
+  usuario: (id: number) => ["usuarios", id] as const,
+  domicilio: (id: number) => ["usuarios", id, "domicilio"] as const,
+  oficial: (id: number) => ["usuarios", id, "oficial"] as const,
 };
 
-export function useOficialCumplimiento(usuarioId: string | undefined) {
-  const id = usuarioId ?? "";
+export function useOficialCumplimiento(usuarioId: number | undefined) {
+  const id = usuarioId ?? 0;
   const usuario = useQuery({
     queryKey: oficialKeys.usuario(id),
     queryFn: () => obtenerUsuario(id),
@@ -52,7 +52,7 @@ export interface GuardarOficialInput {
   oficial: OficialRequest;
 }
 
-export function useGuardarOficialCumplimiento(usuarioId: string) {
+export function useGuardarOficialCumplimiento(usuarioId: number) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ usuario, domicilio, oficial }: GuardarOficialInput) => {

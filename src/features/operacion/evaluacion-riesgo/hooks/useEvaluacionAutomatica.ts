@@ -29,7 +29,6 @@ import {
 } from "@/features/operacion/evaluacion-riesgo/utils/solicitud";
 import type { SocioPerfilRiesgo } from "@/features/socios/types/socios";
 import { useAuthStore } from "@/shared/auth/authStore";
-import { useSucursalActivaStore } from "@/shared/auth/sucursalActivaStore";
 
 export type EstadoEvaluacionAutomatica =
   | { tipo: "inactivo" }
@@ -140,24 +139,20 @@ export function useEvaluacionAutomatica({
       return;
     }
 
-    const sucursalActiva = useSucursalActivaStore.getState().sucursalActiva;
     const verificadoPor = useAuthStore.getState().usuario?.id;
-    if (!sucursalActiva?.id || !verificadoPor) {
+    if (!verificadoPor) {
       registrar({
         tipo: "error",
-        mensaje: "No se pudo determinar el usuario o la sucursal activa.",
+        mensaje: "No se pudo determinar el usuario.",
       });
       return;
     }
 
-    const payload = construirSolicitud(valores, {
-      sucursalId: sucursalActiva.id,
-      verificadoPor,
-    });
+    const payload = construirSolicitud(valores, { verificadoPor: String(verificadoPor) });
     const cliente = construirCliente(
       valores,
       tiposPersona.data?.find((tipo) => tipo.id === valores.tipoPersonaId)?.nombre,
-      sucursalActiva.nombre,
+      undefined,
     );
     const detalles = construirDetalles(valores, {
       tiposPersona: tiposPersona.data,

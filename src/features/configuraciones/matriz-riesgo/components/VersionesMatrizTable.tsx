@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "@/shared/components/ui/table";
 import { useVersionesMatriz } from "@/features/configuraciones/matriz-riesgo/hooks/useMatrizRiesgo";
+import type { ConfiguracionMatrizRiesgo } from "@/features/configuraciones/matriz-riesgo/types/matrizRiesgo";
 
 export function VersionesMatrizTable({
   onVerDetalle,
@@ -37,6 +38,12 @@ export function VersionesMatrizTable({
 
   const ordenadas = [...versiones].sort((a, b) => (b.id ?? 0) - (a.id ?? 0));
 
+  // La configuración no trae su propia fecha de creación: se toma la del primer factor,
+  // ya que todos los factores de una versión se crean en el mismo momento.
+  function fechaDe(version: ConfiguracionMatrizRiesgo) {
+    return version.factores?.[0]?.createdAt;
+  }
+
   return (
     <Table>
       <TableHeader>
@@ -59,7 +66,7 @@ export function VersionesMatrizTable({
             </TableCell>
             <TableCell>{version.creadoPor ?? "—"}</TableCell>
             <TableCell>
-              {version.createdAt ? new Date(version.createdAt).toLocaleString() : "—"}
+              {fechaDe(version) ? new Date(fechaDe(version)!).toLocaleString() : "—"}
             </TableCell>
             <TableCell className="text-right">
               <Button

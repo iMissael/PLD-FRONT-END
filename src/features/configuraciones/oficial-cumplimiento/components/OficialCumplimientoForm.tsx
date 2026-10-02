@@ -55,7 +55,7 @@ export function OficialCumplimientoForm({
   oficial: OficialResponse | null;
   selector?: ReactNode;
 }) {
-  const guardar = useGuardarOficialCumplimiento(usuario.idUsuario ?? "");
+  const guardar = useGuardarOficialCumplimiento(usuario.idUsuario ?? 0);
   const form = useForm<OficialCumplimientoFormValues>({
     resolver: zodResolver(oficialCumplimientoSchema),
     defaultValues: valoresIniciales(usuario, domicilio, oficial),
@@ -76,7 +76,7 @@ export function OficialCumplimientoForm({
       {
         usuario: aUsuarioPayload(values, usuario.sucursalId),
         domicilio: aDomicilioPayload(values),
-        oficial: aOficialPayload(values, oficial?.estatus),
+        oficial: aOficialPayload(values),
       },
       {
         onSuccess: () => {
@@ -112,7 +112,7 @@ export function OficialCumplimientoForm({
         >
           <SeccionDatosGenerales
             form={form}
-            idRegistro={usuario.idUsuario?.slice(0, 8)}
+            idRegistro={usuario.idUsuario !== undefined ? String(usuario.idUsuario) : undefined}
           />
           <SeccionDomicilio form={form} />
           <SeccionParametrosPld form={form} />

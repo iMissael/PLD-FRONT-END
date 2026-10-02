@@ -1,4 +1,5 @@
 import { apiClient } from "@/api/client";
+import { listarCatalogoCompleto } from "@/api/paginacion";
 
 import type {
   CambiarNivelRiesgoHistorialInput,
@@ -8,11 +9,12 @@ import type {
 /** El endpoint dice "historias" aunque la tabla y las clases digan "historial". */
 const BASE_PATH = "/catalogos/historias-crediticias";
 
+// El endpoint pagina: se traen todas las páginas porque esta tabla todavía no
+// tiene controles de paginación propios.
 export async function listarHistorialesCrediticios(): Promise<
   HistorialCrediticioResponse[]
 > {
-  const { data } = await apiClient.get<HistorialCrediticioResponse[]>(BASE_PATH);
-  return data;
+  return listarCatalogoCompleto<HistorialCrediticioResponse>(BASE_PATH);
 }
 
 /**

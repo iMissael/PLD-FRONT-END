@@ -6,6 +6,7 @@ import type { ConsultaLista } from "@/features/operacion/consulta-listas/types/Q
 
 export function ConsultaListasPage() {
   const [resultados, setResultados] = useState<ConsultaLista[] | null>(null);
+  const [proveedorExternoNoDisponible, setProveedorExternoNoDisponible] = useState(false);
 
   return (
     <div className="space-y-6">
@@ -21,7 +22,12 @@ export function ConsultaListasPage() {
           <CardTitle>Nueva consulta</CardTitle>
         </CardHeader>
         <CardContent>
-          <ConsultaListasForm onResultados={setResultados} />
+          <ConsultaListasForm
+            onResultados={(nuevosResultados, noDisponible) => {
+              setResultados(nuevosResultados);
+              setProveedorExternoNoDisponible(noDisponible);
+            }}
+          />
         </CardContent>
       </Card>
 
@@ -31,7 +37,10 @@ export function ConsultaListasPage() {
             <CardTitle>Resultados</CardTitle>
           </CardHeader>
           <CardContent>
-            <ResultadosConsultaListas resultados={resultados} />
+            <ResultadosConsultaListas
+              resultados={resultados}
+              proveedorExternoNoDisponible={proveedorExternoNoDisponible}
+            />
           </CardContent>
         </Card>
       )}

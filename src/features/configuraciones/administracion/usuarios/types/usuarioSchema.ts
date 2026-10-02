@@ -53,7 +53,7 @@ export const crearUsuarioSchema = z
       .regex(PATRON_NOMBRE, MENSAJE_NOMBRE),
     primerApellido: conFormato(100, PATRON_NOMBRE, MENSAJE_NOMBRE),
     segundoApellido: conFormato(100, PATRON_NOMBRE, MENSAJE_NOMBRE),
-    nacionalidadId: z.string().min(1, "La nacionalidad es obligatoria"),
+    nacionalidad: z.string().optional(),
     paisNacimientoId: z.string().optional(),
     entidadNacimientoId: z.string().optional(),
     lugarDeNacimiento: texto(100),
@@ -72,17 +72,17 @@ export const crearUsuarioSchema = z
       PATRON_CURP,
       "CURP inválida: debe tener 18 caracteres con el formato oficial",
     ),
-    estadoCivilId: z.string().optional(),
+    estadoCivil: z.string().optional(),
     numDependientes: conFormato(2, /^\d{1,2}$/, "Solo números enteros, de 0 a 99"),
-    nivelEstudiosId: z.string().optional(),
+    nivelEstudios: z.string().optional(),
 
     // Paso 1 — Identificación
-    tipoIdentificacionId: z.string().optional(),
+    tipoIdentificacion: z.string().optional(),
     folioIdentificacion: conFormato(50, /^[A-Z0-9]+$/, "Solo letras y números"),
 
     // Paso 2 — Domicilio
-    tipoComprobanteId: z.string().optional(),
-    tipoVialidadId: z.string().optional(),
+    tipoComprobante: z.string().optional(),
+    tipoVialidad: z.string().optional(),
     calle: texto(100),
     numExterior: conFormato(
       10,
@@ -97,7 +97,7 @@ export const crearUsuarioSchema = z
     nombreCalleIzquierda: texto(50),
     nombreCalleDerecha: texto(50),
     referencia: texto(100),
-    laCasaEsId: z.string().optional(),
+    posesionVivienda: z.string().optional(),
     antiguedadDomicilio: fechaNoFutura("La fecha no puede ser futura"),
     codigoPostal: conFormato(5, /^\d{5}$/, "El código postal debe tener 5 dígitos"),
     tipoAsentamiento: texto(50),
@@ -109,21 +109,17 @@ export const crearUsuarioSchema = z
     municipioId: z.string().min(1, "El municipio es obligatorio"),
     localidadId: z.string().min(1, "La localidad es obligatoria"),
 
-    // Paso 3 — Tipo (rol + oficial de cumplimiento, si aplica; UsuarioForm exige las claves)
+    // Paso 3 — Tipo
     rolId: z.string().min(1, "El rol es obligatorio"),
+
+    // Paso 3 — Parámetros PLD del oficial de cumplimiento (solo si el rol elegido es
+    // "Oficial de Cumplimiento"; la obligatoriedad se valida en el submit del formulario,
+    // ya que depende del rol seleccionado y no puede fijarse de forma estática aquí).
     tipoPersona: z.string().optional(),
-    claveDelOficialDeCumplimiento: conFormato(
-      12,
-      PATRON_CLAVE,
-      "Solo letras, números y guion",
-    ),
+    claveDelOficialDeCumplimiento: conFormato(12, PATRON_CLAVE, "Solo letras, números y guion"),
     claveDelSujetoObligado: conFormato(50, PATRON_CLAVE, "Solo letras, números y guion"),
     claveOrganoSuperior: conFormato(50, PATRON_CLAVE, "Solo letras, números y guion"),
-    monedaDeOperacionPrincipal: conFormato(
-      3,
-      /^[A-Z]{3}$/,
-      "Usa el código de 3 letras, por ejemplo MXN",
-    ),
+    monedaDeOperacionPrincipal: conFormato(3, /^[A-Z]{3}$/, "Usa el código de 3 letras, por ejemplo MXN"),
     actividadEconomicaId: z.string().optional(),
   })
   .superRefine((datos, contexto) => {
@@ -148,7 +144,7 @@ export const PASO1_CAMPOS = [
   "nombre",
   "primerApellido",
   "segundoApellido",
-  "nacionalidadId",
+  "nacionalidad",
   "paisNacimientoId",
   "entidadNacimientoId",
   "lugarDeNacimiento",
@@ -156,23 +152,23 @@ export const PASO1_CAMPOS = [
   "genero",
   "rfc",
   "curp",
-  "estadoCivilId",
+  "estadoCivil",
   "numDependientes",
-  "nivelEstudiosId",
-  "tipoIdentificacionId",
+  "nivelEstudios",
+  "tipoIdentificacion",
   "folioIdentificacion",
 ] as const;
 
 export const PASO2_CAMPOS = [
-  "tipoComprobanteId",
-  "tipoVialidadId",
+  "tipoComprobante",
+  "tipoVialidad",
   "calle",
   "numExterior",
   "numInterior",
   "nombreCalleIzquierda",
   "nombreCalleDerecha",
   "referencia",
-  "laCasaEsId",
+  "posesionVivienda",
   "antiguedadDomicilio",
   "codigoPostal",
   "tipoAsentamiento",

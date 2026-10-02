@@ -125,7 +125,7 @@ export function datosFaltantes(values: EvaluacionRiesgoFormValues): string[] {
 /** Cuerpo de `POST /pld/evaluaciones` a partir de lo capturado (o cargado del perfil). */
 export function construirSolicitud(
   values: EvaluacionRiesgoFormValues,
-  contexto: { sucursalId: string; verificadoPor: string },
+  contexto: { sucursalId?: string; verificadoPor: string },
   ahora = new Date(),
 ): EvaluacionRiesgoSolicitud {
   const tieneAsentamiento = Boolean(values.asentamientoTipo || values.asentamientoNombre);

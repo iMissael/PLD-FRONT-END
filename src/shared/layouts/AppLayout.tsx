@@ -142,6 +142,7 @@ const NAV_ITEMS: NavNode[] = [
     label: "Configuración de alertas",
     icon: ShieldSearchIcon,
     children: [
+      { label: "Configuración de alertas", to: "configuracion-alertas/reglas" },
       { label: "Consulta Personas bloqueados", to: "configuracion-alertas" },
       { label: "Carga de Personas Bloqueadas", to: "configuracion-alertas/carga-masiva" },
     ],
@@ -152,6 +153,8 @@ const NAV_ITEMS: NavNode[] = [
     children: [
       { label: "Resumen", to: "operacion" },
       { label: "Evaluación de riesgo", to: "operacion/evaluacion-riesgo" },
+      { label: "Captura de alertas", to: "operacion/captura-alertas" },
+      { label: "Revisión de alertas", to: "operacion/revision-alertas" },
     ],
   },
   {
@@ -161,6 +164,8 @@ const NAV_ITEMS: NavNode[] = [
       { label: "Resumen", to: "control" },
       { label: "Quien es quien", to: "control/quienesquien" },
       { label: "Revisión de coincidencias", to: "control/coincidencias" },
+      // Provisional: falta decidir dónde va (el manual de Sicanet lo pone en Control, 4.4.1).
+      { label: "Control dólar", to: "control-dolar" },
     ],
   },
   {
@@ -201,44 +206,10 @@ function collectLeaves(node: NavNode): NavLeaf[] {
   return node.children.flatMap(collectLeaves);
 }
 
-/** ¿Alguna hoja de este nodo corresponde a la ruta actual? Se usa solo para
- * decidir si un grupo arranca abierto. Compara la ruta completa de cada
- * hoja (no solo el primer segmento), porque ahora hay `to` anidados que
- * comparten el mismo primer segmento (p.ej. "configuraciones/personas" y
- * "configuraciones/ubicacion-geografica/paises"). */
 function isNodeActive(node: NavNode, pathname: string): boolean {
   return collectLeaves(node).some(
     (hoja) => pathname.endsWith(`/${hoja.to}`) || pathname.includes(`/${hoja.to}/`),
   );
-}
-
-/**
- * Layout base de la app: barra superior (menú hamburguesa, logo, y accesos
- * de usuario) + menú lateral colapsable + contenido de la página activa.
- *
- * Colores: todos vienen de los tokens de `src/index.css` (paleta 60/30/10).
- * El verde vive solo en el menú lateral (item activo en `nav`/`nav-hover`,
- * hover de inactivos en `nav-soft`); el acento indigo (`primary`) se usa
- * para foco y avatar, y el logo combina indigo con el teal de marca.
- */
-function extractUsernameFromToken(token: string | null): string | null {
-  if (!token) return null;
-  try {
-    const parts = token.split(".");
-    if (parts.length < 2 || !parts[1]) return null;
-    const base64Url = parts[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-        .join(""),
-    );
-    const payload = JSON.parse(jsonPayload);
-    return payload.sub || payload.username || payload.preferred_username || payload.name || null;
-  } catch {
-    return null;
-  }
 }
 
 export function AppLayout() {
@@ -247,11 +218,7 @@ export function AppLayout() {
   const navigate = useNavigate();
   const rutaEnTenant = useRutaTenant();
   const usuario = useAuthStore((estado) => estado.usuario);
-  const token = useAuthStore((estado) => estado.token);
-
-  const tokenUsername = useMemo(() => extractUsernameFromToken(token), [token]);
-  const displayUsername = usuario?.username || tokenUsername || usuario?.nombre || "Usuario";
-  const inicial = displayUsername.trim().charAt(0).toUpperCase() || "U";
+  const inicial = (usuario?.nombre ?? "U").trim().charAt(0).toUpperCase() || "U";
 
   function cerrarSesion() {
     useAuthStore.getState().logout();
@@ -306,7 +273,7 @@ export function AppLayout() {
               {inicial}
             </span>
             <span className="flex flex-col items-start leading-tight">
-              <span className="text-sm font-medium">{displayUsername}</span>
+              <span className="text-sm font-medium">{usuario?.nombre ?? "Usuario"}</span>
             </span>
           </button>
         </div>

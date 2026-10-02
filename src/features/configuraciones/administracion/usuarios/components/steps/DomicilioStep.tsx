@@ -299,7 +299,7 @@ export function DomicilioStep({ form }: { form: UseFormReturn<CrearUsuarioFormVa
         <div className="grid items-start gap-4 sm:grid-cols-3">
           <FormField
             control={form.control}
-            name="tipoVialidadId"
+            name="tipoVialidad"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Tipo de vialidad</FormLabel>
@@ -437,7 +437,7 @@ export function DomicilioStep({ form }: { form: UseFormReturn<CrearUsuarioFormVa
         <div className="grid items-start gap-4 sm:grid-cols-3">
           <FormField
             control={form.control}
-            name="laCasaEsId"
+            name="posesionVivienda"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>La casa es</FormLabel>
@@ -474,7 +474,7 @@ export function DomicilioStep({ form }: { form: UseFormReturn<CrearUsuarioFormVa
           />
           <FormField
             control={form.control}
-            name="tipoComprobanteId"
+            name="tipoComprobante"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Tipo de comprobante</FormLabel>

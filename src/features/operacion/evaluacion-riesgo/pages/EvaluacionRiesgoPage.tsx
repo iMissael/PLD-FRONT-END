@@ -14,11 +14,13 @@ import { MatrizRiesgoDashboard } from "@/features/operacion/evaluacion-riesgo/co
 import type { ClienteMatrizRiesgo } from "@/features/operacion/evaluacion-riesgo/types/evaluacionRiesgo";
 import {
   claveEvaluacion,
+  evaluacionVigente,
   useEvaluacionesSesionStore,
 } from "@/features/operacion/evaluacion-riesgo/stores/evaluacionesSesionStore";
 import type { EvaluacionRiesgoResultado } from "@/features/operacion/evaluacion-riesgo/types/evaluacionRiesgo";
 import { clienteDesdePerfil } from "@/features/operacion/evaluacion-riesgo/utils/clienteDesdePerfil";
 import type { DetallesSubfactor } from "@/features/operacion/evaluacion-riesgo/utils/detalleSubfactor";
+import { useConfiguracionActiva } from "@/features/configuraciones/matriz-riesgo/hooks/useMatrizRiesgo";
 import { usePerfilSocio } from "@/features/socios/hooks/useSocios";
 import type { SocioExterno } from "@/features/socios/types/socios";
 
@@ -28,10 +30,13 @@ export function EvaluacionRiesgoPage() {
   // Socio al que se pidió "Volver a evaluar": se evalúa de nuevo aunque ya tenga una evaluación.
   const [reevaluando, setReevaluando] = useState<string | null>(null);
 
-  const evaluacionGuardada = useEvaluacionesSesionStore((estado) =>
+  const evaluacionRecordada = useEvaluacionesSesionStore((estado) =>
     socio ? estado.evaluaciones[claveEvaluacion(socio.id)] : undefined,
   );
-  // Sin evaluación en la sesión (o si se pide otra), se consulta su perfil y se evalúa solo.
+  // Si se publicó otra versión de la matriz, la evaluación recordada ya no cuenta.
+  const matrizActiva = useConfiguracionActiva();
+  const evaluacionGuardada = evaluacionVigente(evaluacionRecordada, matrizActiva.data?.id);
+  // Sin evaluación vigente en la sesión (o si se pide otra), se consulta su perfil y se evalúa solo.
   const debeEvaluar = !evaluacionGuardada || reevaluando === socio?.id;
   const perfil = usePerfilSocio(debeEvaluar ? socio?.id : undefined);
   const { estado: estadoEvaluacion, reintentar } = useEvaluacionAutomatica({

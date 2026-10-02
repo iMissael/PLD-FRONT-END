@@ -126,7 +126,7 @@ export function SeccionDatosGenerales({
         />
         <CampoSelect
           form={form}
-          name="nacionalidadId"
+          name="nacionalidad"
           label="Nacionalidad"
           placeholder="Selecciona una nacionalidad"
           opciones={opcionesDe(nacionalidades)}
@@ -183,7 +183,7 @@ export function SeccionDatosGenerales({
       <div className="grid grid-cols-1 items-start gap-5 md:grid-cols-3">
         <CampoSelect
           form={form}
-          name="estadoCivilId"
+          name="estadoCivil"
           label="Estado civil"
           placeholder="Selecciona un estado civil"
           opciones={opcionesDe(estadosCiviles)}
@@ -198,7 +198,7 @@ export function SeccionDatosGenerales({
         />
         <CampoSelect
           form={form}
-          name="nivelEstudiosId"
+          name="nivelEstudios"
           label="Nivel de estudios"
           placeholder="Selecciona un nivel"
           opciones={opcionesDe(nivelesEstudios)}
@@ -208,7 +208,7 @@ export function SeccionDatosGenerales({
       <div className="grid grid-cols-1 items-start gap-5 md:grid-cols-2">
         <CampoSelect
           form={form}
-          name="tipoIdentificacionId"
+          name="tipoIdentificacion"
           label="Tipo de identificación oficial"
           placeholder="Selecciona un tipo"
           opciones={opcionesDe(tiposIdentificacion)}

@@ -1,8 +1,7 @@
 import type { components } from "@/api/schema";
 
-export type FactorRiesgo = components["schemas"]["FactorRiesgoDTO"];
-export type SubfactorRiesgo = components["schemas"]["SubfactorRiesgoDTO"];
-export type ConfiguracionMatrizRiesgo =
-  components["schemas"]["ConfiguracionMatrizRiesgoResponseDTO"];
+export type FactorRiesgo = components["schemas"]["FactorRiesgo"];
+export type SubfactorRiesgo = components["schemas"]["SubfactorRiesgo"];
+export type ConfiguracionMatrizRiesgo = components["schemas"]["ConfiguracionMatrizRiesgo"];
 export type ConfiguracionMatrizRiesgoRequest =
-  components["schemas"]["ConfiguracionMatrizRiesgoRequestDTO"];
+  components["schemas"]["ConfiguracionMatrizComando"];

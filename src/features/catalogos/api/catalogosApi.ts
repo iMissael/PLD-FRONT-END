@@ -1,4 +1,5 @@
 import { apiClient } from "@/api/client";
+import { listarCatalogoCompleto } from "@/api/paginacion";
 import type {
   CanalPagoResponse,
   CatActividadEconomicaResponse,
@@ -45,19 +46,15 @@ export async function listarTiposIdentificacion() {
 }
 
 export async function listarSucursales() {
-  const { data } = await apiClient.get<SucursalResponse[]>("/catalogos/sucursales");
-  return data;
+  return listarCatalogoCompleto<SucursalResponse>("/catalogos/sucursales");
 }
 
 export async function listarPaises() {
-  const { data } = await apiClient.get<PaisResponse[]>("/catalogos/paises");
-  return data;
+  return listarCatalogoCompleto<PaisResponse>("/catalogos/paises");
 }
 
 export async function listarEntidades() {
-  const { data } =
-    await apiClient.get<EntidadGeograficaResponse[]>("/catalogos/entidades");
-  return data;
+  return listarCatalogoCompleto<EntidadGeograficaResponse>("/catalogos/entidades");
 }
 
 export async function listarTiposComprobante() {
@@ -89,61 +86,49 @@ export async function listarTiposAsentamiento() {
 }
 
 export async function listarMunicipios(entidadId?: number) {
-  const { data } = await apiClient.get<MunicipioResponse[]>("/catalogos/municipios", {
-    params: entidadId ? { entidadId } : undefined,
-  });
-  return data;
+  return listarCatalogoCompleto<MunicipioResponse>(
+    "/catalogos/municipios",
+    entidadId ? { entidadId } : undefined,
+  );
 }
 
 export async function listarLocalidades(idMunicipio?: number) {
-  const { data } = await apiClient.get<LocalidadResponse[]>("/catalogos/localidades", {
-    params: idMunicipio ? { idMunicipio } : undefined,
-  });
-  return data;
+  return listarCatalogoCompleto<LocalidadResponse>(
+    "/catalogos/localidades",
+    idMunicipio ? { idMunicipio } : undefined,
+  );
 }
 
 export async function listarActividadesEconomicas() {
-  const { data } = await apiClient.get<CatActividadEconomicaResponse[]>(
+  return listarCatalogoCompleto<CatActividadEconomicaResponse>(
     "/catalogos/actividades-economicas",
   );
-  return data;
 }
 
 export async function listarTiposPersona() {
-  const { data } = await apiClient.get<TipoPersonaResponse[]>("/catalogos/tipos-persona");
-  return data;
+  return listarCatalogoCompleto<TipoPersonaResponse>("/catalogos/tipos-persona");
 }
 
 export async function listarPeps() {
-  const { data } = await apiClient.get<PepResponse[]>("/catalogos/peps");
-  return data;
+  return listarCatalogoCompleto<PepResponse>("/catalogos/peps");
 }
 
 export async function listarTiposCredito() {
-  const { data } = await apiClient.get<TipoCreditoResponse[]>("/catalogos/tipos-credito");
-  return data;
+  return listarCatalogoCompleto<TipoCreditoResponse>("/catalogos/tipos-credito");
 }
 
 export async function listarOrigenesRecurso() {
-  const { data } = await apiClient.get<OrigenRecursoResponse[]>(
-    "/catalogos/origenes-recurso",
-  );
-  return data;
+  return listarCatalogoCompleto<OrigenRecursoResponse>("/catalogos/origenes-recurso");
 }
 
 export async function listarDestinosRecurso() {
-  const { data } = await apiClient.get<DestinoRecursoResponse[]>(
-    "/catalogos/destinos-recurso",
-  );
-  return data;
+  return listarCatalogoCompleto<DestinoRecursoResponse>("/catalogos/destinos-recurso");
 }
 
 export async function listarCanalesPago() {
-  const { data } = await apiClient.get<CanalPagoResponse[]>("/catalogos/canales-pago");
-  return data;
+  return listarCatalogoCompleto<CanalPagoResponse>("/catalogos/canales-pago");
 }
 
 export async function listarTiposPago() {
-  const { data } = await apiClient.get<TipoPagoResponse[]>("/catalogos/tipos-pago");
-  return data;
+  return listarCatalogoCompleto<TipoPagoResponse>("/catalogos/tipos-pago");
 }

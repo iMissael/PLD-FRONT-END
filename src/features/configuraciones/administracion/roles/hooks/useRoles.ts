@@ -33,17 +33,19 @@ export function useCrearRol() {
 export function useEliminarRol() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: eliminarRol,
+    mutationFn: (id: number) => eliminarRol(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: rolesKeys.all });
     },
   });
 }
 
+// rolId llega como string (viene de la URL / de un <Select>); se convierte a
+// number justo antes de golpear la API, que ya espera el id real (Long).
 export function useRolPermisos(rolId: string) {
   return useQuery({
     queryKey: rolesKeys.permisos(rolId),
-    queryFn: () => listarPermisosDeRol(rolId),
+    queryFn: () => listarPermisosDeRol(Number(rolId)),
     enabled: Boolean(rolId),
   });
 }
@@ -51,7 +53,7 @@ export function useRolPermisos(rolId: string) {
 export function useAsignarPermiso(rolId: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (permisoId: string) => asignarPermisoARol(rolId, permisoId),
+    mutationFn: (permisoId: number) => asignarPermisoARol(Number(rolId), permisoId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: rolesKeys.permisos(rolId) });
     },
@@ -61,7 +63,7 @@ export function useAsignarPermiso(rolId: string) {
 export function useRevocarPermiso(rolId: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (permisoId: string) => revocarPermisoDeRol(rolId, permisoId),
+    mutationFn: (permisoId: number) => revocarPermisoDeRol(Number(rolId), permisoId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: rolesKeys.permisos(rolId) });
     },

@@ -11,8 +11,8 @@ const sesion = {
   token: "jwt-de-prueba",
   tokenType: "Bearer",
   expiresInSeconds: 3600,
-  usuario: { id: "u1", username: "admin", nombre: "Admin", correo: null },
-  rol: { id: "r1", nombre: "ROLE_ADMIN" },
+  usuario: { id: 1, username: "admin", nombre: "Admin", correo: null },
+  rol: { id: 1, nombre: "ROLE_ADMIN" },
   permisos: [],
 };
 

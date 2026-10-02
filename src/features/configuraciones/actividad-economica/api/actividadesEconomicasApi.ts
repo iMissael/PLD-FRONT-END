@@ -1,4 +1,5 @@
 import { apiClient } from "@/api/client";
+import { listarCatalogoCompleto } from "@/api/paginacion";
 
 import type {
   ActualizarActividadEconomicaInput,
@@ -9,16 +10,14 @@ import type {
 const BASE_PATH = "/catalogos/actividades-economicas";
 
 /**
- * Devuelve el catálogo completo (~1,261 registros): el backend no acepta
- * parámetros de búsqueda ni de página. La búsqueda y la paginación viven en
- * el cliente; si este catálogo creciera mucho habría que agregar `busqueda`
- * al controller, como ya lo tiene `PaisController`.
+ * Devuelve el catálogo completo (~1,261 registros). El endpoint ahora pagina
+ * (máx. 50 filas por página): se traen todas las páginas en paralelo y se
+ * aplanan, porque esta tabla todavía no tiene controles de paginación propios.
  */
 export async function listarActividadesEconomicas(): Promise<
   ActividadEconomicaResponse[]
 > {
-  const { data } = await apiClient.get<ActividadEconomicaResponse[]>(BASE_PATH);
-  return data;
+  return listarCatalogoCompleto<ActividadEconomicaResponse>(BASE_PATH);
 }
 
 export async function obtenerActividadEconomica(

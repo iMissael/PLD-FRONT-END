@@ -40,12 +40,12 @@ function estatusFormValue(estatus: string | undefined): "A" | "INA" {
 
 function valoresIniciales(base: ConfiguracionMatrizRiesgo): MatrizRiesgoFormValues {
   return {
-    factores: (base.pesosFactores ?? []).map((f) => ({
+    factores: (base.factores ?? []).map((f) => ({
       id: f.id ?? 0,
       descripcion: f.descripcion ?? "",
       peso: String(f.peso ?? 0),
       estatus: estatusFormValue(f.estatus),
-      subfactores: (f.subfactores ?? []).map((s) => ({
+      subfactores: (f.subfactoresRef ?? []).map((s) => ({
         id: s.id ?? 0,
         descripcion: s.descripcion ?? "",
         ponderacion: String(s.ponderacion ?? 0),

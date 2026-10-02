@@ -34,12 +34,14 @@ function nombreEncontrado(coincidencia: CoincidenciaSocio) {
 interface TablaCoincidenciasPendientesProps {
   coincidencias: CoincidenciaSocio[] | undefined;
   isLoading: boolean;
+  socioRefSeleccionado?: string;
   onRevisar: (coincidencia: CoincidenciaSocio) => void;
 }
 
 export function TablaCoincidenciasPendientes({
   coincidencias,
   isLoading,
+  socioRefSeleccionado,
   onRevisar,
 }: TablaCoincidenciasPendientesProps) {
   if (isLoading) {
@@ -72,7 +74,14 @@ export function TablaCoincidenciasPendientes({
       </TableHeader>
       <TableBody>
         {coincidencias.map((coincidencia) => (
-          <TableRow key={coincidencia.socio_ref}>
+          <TableRow
+            key={coincidencia.socio_ref}
+            className={
+              coincidencia.socio_ref === socioRefSeleccionado
+                ? "bg-muted hover:bg-muted"
+                : undefined
+            }
+          >
             <TableCell>
               <div className="font-medium">{coincidencia.socio?.nombre ?? "—"}</div>
               <div className="text-xs text-muted-foreground">
