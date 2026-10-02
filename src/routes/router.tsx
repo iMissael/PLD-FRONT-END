@@ -1,9 +1,11 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import { LoginPage } from "@/features/auth/pages/LoginPage";
+// import { AyudaPage } from "@/features/ayuda/pages/AyudaPage";
 import { BuzonPublicoPage } from "@/features/buzon/pages/BuzonPublicoPage";
 import { GestionAlertasPage } from "@/features/buzon/pages/GestionAlertasPage";
 import { GestionDenunciasPage } from "@/features/buzon/pages/GestionDenunciasPage";
+import { PersonalizarMensajeCabeceraPage } from "@/features/buzon/pages/PersonalizarMensajeCabeceraPage";
 import { CargaMasivaPage } from "@/features/configuracion-alertas/pages/CargaMasivaPage";
 import { ConsultaBloqueadosPage } from "@/features/configuracion-alertas/pages/ConsultaBloqueadosPage";
 import { ActividadesEconomicasPage } from "@/features/configuraciones/actividad-economica/pages/ActividadesEconomicasPage";
@@ -146,15 +148,10 @@ export const router = createBrowserRouter([
                       />
                     ),
                   },
-                  {
-                    path: "ayuda",
-                    element: (
-                      <PlaceholderPage
-                        title="Ayuda"
-                        description="Centro de ayuda del sistema. Pendiente de definir."
-                      />
-                    ),
-                  },
+                  // {
+                  //   path: "ayuda",
+                  //   element: <AyudaPage />,
+                  // },
                   // Pantallas con ancho de lectura acotado.
                   {
                     element: <ContenidoAcotado />,
@@ -174,6 +171,14 @@ export const router = createBrowserRouter([
                             <GestionAlertasPage />
                           </RequierePermiso>
                         ),
+                      },
+                      {
+                        path: "buzon/mensaje-cabecera",
+                        element: <PersonalizarMensajeCabeceraPage />,
+                      },
+                      {
+                        path: "configuraciones/mensaje-denuncia",
+                        element: <PersonalizarMensajeCabeceraPage />,
                       },
                       {
                         path: "configuraciones/oficial-cumplimiento",

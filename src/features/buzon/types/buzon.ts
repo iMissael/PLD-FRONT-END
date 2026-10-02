@@ -104,3 +104,28 @@ export interface PageResponse<T> {
   last: boolean;
   empty: boolean;
 }
+
+export interface MensajeDenunciaResponse {
+  sofomId: string;
+  html?: string;
+  contenidoHtml?: string;
+  contenidoSanitizado?: string;
+  actualizadoPor?: string;
+  actualizadoEn?: string;
+}
+
+export interface ActualizarMensajeDenunciaInput {
+  html: string;
+}
+
+export interface TenantDetalleResponse {
+  id: string;
+  nombre: string;
+  rfc: string;
+  contenidoHtml?: string;
+  contenidoSanitizado?: string;
+  estatus?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+

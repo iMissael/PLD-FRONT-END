@@ -7,11 +7,73 @@ import type {
   Denuncia,
   EditarDenunciaInput,
   EvidenciaDenuncia,
+  ActualizarMensajeDenunciaInput,
   ListarAlertasParams,
   ListarDenunciasParams,
+  MensajeDenunciaResponse,
   ObservacionDenuncia,
   PageResponse,
 } from "../types/buzon";
+
+/** Obtener mensaje HTML sanitizado de cabecera de denuncia (público) */
+export async function obtenerMensajeDenunciaPublico(
+  signal?: AbortSignal,
+): Promise<MensajeDenunciaResponse> {
+  const { data } = await apiClient.get<MensajeDenunciaResponse>(
+    `/publico/mensaje-denuncia`,
+    { signal },
+  );
+  return data;
+}
+
+/** Obtener nombre comercial del tenant (público) */
+export async function obtenerNombreTenantPublico(
+  signal?: AbortSignal,
+): Promise<{ nombreComercial: string }> {
+  const { data } = await apiClient.get<{ nombreComercial: string }>(
+    `/publico/nombre`,
+    { signal },
+  );
+  return data;
+}
+
+/** Consultar mensaje HTML de cabecera de denuncia (Administración) */
+export async function obtenerMensajeDenunciaAdmin(
+  signal?: AbortSignal,
+): Promise<MensajeDenunciaResponse> {
+  const { data } = await apiClient.get<MensajeDenunciaResponse>(
+    `/mensaje-denuncia`,
+    { signal },
+  );
+  return data;
+}
+
+/** Actualizar mensaje HTML de cabecera de denuncia (Administración) */
+export async function actualizarMensajeDenunciaAdmin(
+  input: ActualizarMensajeDenunciaInput,
+  signal?: AbortSignal,
+): Promise<MensajeDenunciaResponse> {
+  const { data } = await apiClient.put<MensajeDenunciaResponse>(
+    `/mensaje-denuncia`,
+    input,
+    { signal },
+  );
+  return data;
+}
+
+/** Re-aprovisionar esquema del tenant (Administración) */
+export async function reAprovisionarEsquemaTenant(
+  signal?: AbortSignal,
+): Promise<{ mensaje: string; tenantId: string; schemaName: string }> {
+  const { data } = await apiClient.post<{
+    mensaje: string;
+    tenantId: string;
+    schemaName: string;
+  }>("/aprovisionar", {}, { signal });
+  return data;
+}
+
+
 
 /** Registrar denuncia anónima (JSON o Multipart según Swagger) */
 export async function crearDenunciaAnonima(

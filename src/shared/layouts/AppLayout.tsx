@@ -55,6 +55,7 @@ const NAV_ITEMS: NavNode[] = [
     children: [
       { label: "Gestión de denuncias", to: "buzon/gestion" },
       { label: "Alertas PLD", to: "buzon/alertas" },
+      { label: "Mensaje de cabecera", to: "buzon/mensaje-cabecera" },
       { label: "Buzón anónimo (público)", to: "buzon/denuncias" },
     ],
   },
