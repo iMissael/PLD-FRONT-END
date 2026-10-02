@@ -158,9 +158,6 @@ export function PersonalizarCabeceraDenuncia() {
               <span className="font-semibold text-foreground">
                 {tenantPublico?.nombreComercial || activeTenantId}
               </span>
-              {tenantPublico?.nombreComercial && activeTenantId && (
-                <span>({activeTenantId})</span>
-              )}
             </div>
           )}
 
