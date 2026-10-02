@@ -282,23 +282,12 @@ export function PersonalizarCabeceraDenuncia() {
           >
             Dividida
           </button>
-          <button
-            type="button"
-            onClick={() => setTabActiva("preview")}
-            className={`flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
-              tabActiva === "preview"
-                ? "bg-card text-foreground shadow-xs"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            <Eye className="h-3.5 w-3.5" />
-            Previsualizar
-          </button>
+   
         </div>
       </div>
 
 
-      {/* Área del Editor y Previsualizador */}
+      {/* Área del Editor */}
       <div
         className={`grid gap-4 ${
           tabActiva === "split" ? "grid-cols-1 lg:grid-cols-2" : "grid-cols-1"
@@ -358,9 +347,6 @@ export function PersonalizarCabeceraDenuncia() {
               <span className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                 <Eye className="h-3.5 w-3.5 text-emerald-500" />
                 Previsualización en vivo (Sanitizada)
-              </span>
-              <span className="text-[11px] text-muted-foreground">
-                Como se visualizará en el Buzón Público
               </span>
             </div>
 
