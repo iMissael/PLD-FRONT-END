@@ -33,6 +33,7 @@ import {
 } from "@/features/operacion/evaluacion-riesgo/utils/detalleSubfactor";
 import {
   nivelDesdePromedio,
+  nivelPorDescripcion,
   nivelPorValorEntero,
   type NivelRiesgoInfo,
 } from "@/features/operacion/evaluacion-riesgo/utils/nivelRiesgo";
@@ -495,11 +496,19 @@ export function MatrizRiesgoDashboard({
   onReevaluar: () => void;
 }) {
   const resultado = evaluacion?.resultado;
+  // "Riesgo determinado" (en la matriz) siempre es el calculado; "Nivel asignado" (encabezado)
+  // es el que de verdad cuenta para el expediente: el manual si el oficial lo modificó.
   const nivelGeneral = nivelPorValorEntero(resultado?.nivel_riesgo?.valor);
   const etiquetaGeneral =
     resultado?.nivel_riesgo?.descripcion?.replaceAll("_", " ") ??
     nivelGeneral?.label ??
     "—";
+  const nivelAsignado = resultado?.nivel_riesgo_manual
+    ? nivelPorDescripcion(resultado.nivel_riesgo_manual)
+    : nivelGeneral;
+  const etiquetaAsignada = resultado?.nivel_riesgo_manual
+    ? resultado.nivel_riesgo_manual.replaceAll("_", " ")
+    : etiquetaGeneral;
   const rfcEncabezado = cliente && cliente.rfc !== "—" ? cliente.rfc : "";
 
   return (
@@ -546,10 +555,10 @@ export function MatrizRiesgoDashboard({
               <span
                 className={cn(
                   "rounded px-2 py-0.5 text-xs font-bold tracking-wide uppercase",
-                  nivelGeneral?.solido ?? "bg-gray-400 text-white",
+                  nivelAsignado?.solido ?? "bg-gray-400 text-white",
                 )}
               >
-                {etiquetaGeneral}
+                {etiquetaAsignada}
               </span>
             </div>
           )}

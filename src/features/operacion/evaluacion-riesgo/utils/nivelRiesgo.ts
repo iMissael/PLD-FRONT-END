@@ -53,3 +53,16 @@ export function nivelPorValorEntero(
   if (valor === undefined) return undefined;
   return NIVELES_RIESGO[Math.min(5, Math.max(1, Math.round(valor))) - 1];
 }
+
+/**
+ * Para el nivel asignado manualmente: el backend solo manda su descripción
+ * ("ALTO", "MEDIO_BAJO", ...), no su valor numérico, así que se empareja por
+ * etiqueta en vez de por rango.
+ */
+export function nivelPorDescripcion(
+  descripcion: string | undefined,
+): NivelRiesgoInfo | undefined {
+  if (!descripcion) return undefined;
+  const normalizada = descripcion.replaceAll("_", " ").trim().toUpperCase();
+  return NIVELES_RIESGO.find((nivel) => nivel.label.toUpperCase() === normalizada);
+}

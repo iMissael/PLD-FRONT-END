@@ -1,8 +1,9 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import {
   evaluarRiesgo,
-  obtenerEvaluacionPorId,
+  modificarNivelRiesgo,
 } from "@/features/operacion/evaluacion-riesgo/api/evaluacionRiesgoApi";
+import type { ModificarNivelRiesgoInput } from "@/features/operacion/evaluacion-riesgo/types/evaluacionRiesgo";
 
 export function useEvaluarRiesgo() {
   return useMutation({
@@ -10,11 +11,14 @@ export function useEvaluarRiesgo() {
   });
 }
 
-export function useEvaluacionPorId(llaveSeguimiento: number | null) {
-  return useQuery({
-    queryKey: ["evaluacion-riesgo", llaveSeguimiento],
-    queryFn: () => obtenerEvaluacionPorId(llaveSeguimiento as number),
-    enabled: llaveSeguimiento !== null,
-    retry: false,
+export function useModificarNivelRiesgo() {
+  return useMutation({
+    mutationFn: ({
+      llaveSeguimiento,
+      input,
+    }: {
+      llaveSeguimiento: number;
+      input: ModificarNivelRiesgoInput;
+    }) => modificarNivelRiesgo(llaveSeguimiento, input),
   });
 }

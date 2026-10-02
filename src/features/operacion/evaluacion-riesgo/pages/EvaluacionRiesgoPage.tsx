@@ -7,10 +7,10 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/shared/components/ui/sheet";
-import { BuscarEvaluacionPorId } from "@/features/operacion/evaluacion-riesgo/components/BuscarEvaluacionPorId";
 import { useEvaluacionAutomatica } from "@/features/operacion/evaluacion-riesgo/hooks/useEvaluacionAutomatica";
 import { EvaluacionRiesgoForm } from "@/features/operacion/evaluacion-riesgo/components/EvaluacionRiesgoForm";
 import { MatrizRiesgoDashboard } from "@/features/operacion/evaluacion-riesgo/components/MatrizRiesgoDashboard";
+import { PanelModificacionRiesgo } from "@/features/operacion/evaluacion-riesgo/components/PanelModificacionRiesgo";
 import type { ClienteMatrizRiesgo } from "@/features/operacion/evaluacion-riesgo/types/evaluacionRiesgo";
 import {
   claveEvaluacion,
@@ -92,10 +92,16 @@ export function EvaluacionRiesgoPage() {
 
       <Card className="shrink-0">
         <CardHeader>
-          <CardTitle>Consultar evaluación previa</CardTitle>
+          <CardTitle>Modificación de riesgo</CardTitle>
         </CardHeader>
         <CardContent>
-          <BuscarEvaluacionPorId />
+          {evaluacionGuardada && cliente ? (
+            <PanelModificacionRiesgo evaluacion={evaluacionGuardada} cliente={cliente} />
+          ) : (
+            <p className="text-muted-foreground text-sm">
+              Elige y evalúa a un socio para poder modificar su nivel de riesgo.
+            </p>
+          )}
         </CardContent>
       </Card>
 

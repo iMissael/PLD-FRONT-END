@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/catalogos/tenants/{id}": {
+    "/catalogos/tenants/{id}/mensaje-denuncia": {
         parameters: {
             query?: never;
             header?: never;
@@ -12,15 +12,15 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Obtener tenant por ID
-         * @description Consulta el detalle de configuración de un tenant por su ID
+         * Consultar mensaje HTML de cabecera de denuncia (Administración)
+         * @description Consulta la configuración actual del mensaje HTML (versión cruda y sanitizada) para el tenant.
          */
-        get: operations["buscarPorId"];
+        get: operations["obtenerMensajeAdmin"];
         /**
-         * Actualizar tenant
-         * @description Actualiza los datos comerciales y de configuración del tenant
+         * Actualizar mensaje HTML de cabecera de denuncia (Administración)
+         * @description Actualiza el mensaje HTML del tenant. Valida límites de tamaño (50 KB), sanitiza la entrada y guarda ambas versiones.
          */
-        put: operations["actualizarTenant"];
+        put: operations["actualizarMensajeAdmin"];
         post?: never;
         delete?: never;
         options?: never;
@@ -155,6 +155,26 @@ export interface paths {
          * @description Elimina un rol por su ID
          */
         delete: operations["eliminar_1"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/pld/evaluaciones/{llaveSeguimiento}/nivel-manual": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Modificar manualmente el nivel de riesgo
+         * @description Permite al oficial de cumplimiento asignar un nivel de riesgo distinto al calculado por la matriz, con una observación que justifique el cambio. El nivel calculado original no se pierde: queda disponible junto con el manual.
+         */
+        put: operations["modificarNivelRiesgo"];
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -471,6 +491,54 @@ export interface paths {
          * @description Elimina un rango de tiempo de constitución por su ID
          */
         delete: operations["eliminar_9"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/tenants/mensaje-denuncia": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Consultar mensaje HTML de cabecera de denuncia (Administración con prefijo)
+         * @description Consulta la configuración actual del mensaje HTML (versión cruda y sanitizada) para el tenant.
+         */
+        get: operations["obtenerMensajeAdminPrefixed"];
+        /**
+         * Actualizar mensaje HTML de cabecera de denuncia (Administración con prefijo)
+         * @description Actualiza el mensaje HTML del tenant. Valida límites de tamaño (50 KB), sanitiza la entrada y guarda ambas versiones.
+         */
+        put: operations["actualizarMensajeAdminPrefixed"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/tenants/{id}/mensaje-denuncia": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Consultar mensaje HTML de cabecera de denuncia (Administración con prefijo)
+         * @description Consulta la configuración actual del mensaje HTML (versión cruda y sanitizada) para el tenant.
+         */
+        get: operations["obtenerMensajeAdminPrefixed_1"];
+        /**
+         * Actualizar mensaje HTML de cabecera de denuncia (Administración con prefijo)
+         * @description Actualiza el mensaje HTML del tenant. Valida límites de tamaño (50 KB), sanitiza la entrada y guarda ambas versiones.
+         */
+        put: operations["actualizarMensajeAdminPrefixed_1"];
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -1055,11 +1123,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /**
-         * Listar tenants
-         * @description Consulta la lista de tenants registrados con filtro opcional por estatus
-         */
-        get: operations["listarTenants"];
+        get?: never;
         put?: never;
         /**
          * Crear nuevo tenant
@@ -2113,26 +2177,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/catalogos/tenants/{id}/estatus": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /**
-         * Cambiar estatus de tenant
-         * @description Modifica el estatus (A / INA) de un tenant
-         */
-        patch: operations["cambiarEstatus"];
-        trace?: never;
-    };
     "/SICANETSC/PLD/{tenantId}/usuarios/{id}/rol": {
         parameters: {
             query?: never;
@@ -2166,7 +2210,7 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        patch: operations["cambiarEstatus_1"];
+        patch: operations["cambiarEstatus"];
         trace?: never;
     };
     "/SICANETSC/PLD/{tenantId}/buzon/denuncias/{id}/estatus": {
@@ -2186,7 +2230,7 @@ export interface paths {
          * Cambiar estatus de denuncia
          * @description Gestiona las transiciones del ciclo de vida (R->V, V->A, V->D) y dispara creación de alerta en A
          */
-        patch: operations["cambiarEstatus_2"];
+        patch: operations["cambiarEstatus_1"];
         trace?: never;
     };
     "/catalogos/tenants/publico/{id}/nombre": {
@@ -2198,6 +2242,26 @@ export interface paths {
         };
         /** Obtener nombre comercial del tenant (público) */
         get: operations["obtenerNombrePublico"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/catalogos/tenants/publico/{id}/mensaje-denuncia": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Obtener mensaje HTML sanitizado de cabecera de denuncia (público)
+         * @description Consulta pública del mensaje sanitizado para el tenant/SOFOM. Devuelve fallback si no existe mensaje personalizado.
+         */
+        get: operations["obtenerMensajePublico"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2269,7 +2333,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["buscarPorId_1"];
+        get: operations["buscarPorId"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2405,7 +2469,7 @@ export interface paths {
          * Obtener empleado por ID
          * @description Consulta un empleado del sistema externo por su identificador
          */
-        get: operations["buscarPorId_2"];
+        get: operations["buscarPorId_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2566,6 +2630,46 @@ export interface paths {
          * @description Obtiene exclusivamente los tipos de alerta configurados con buzon='S'
          */
         get: operations["listarParaBuzon"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/tenants/publico/mensaje-denuncia": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Obtener mensaje HTML sanitizado de cabecera de denuncia (público con prefijo)
+         * @description Consulta pública del mensaje sanitizado para el tenant/SOFOM. Devuelve fallback si no existe mensaje personalizado.
+         */
+        get: operations["obtenerMensajePublicoPrefixed"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/tenants/publico/{id}/mensaje-denuncia": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Obtener mensaje HTML sanitizado de cabecera de denuncia (público con prefijo)
+         * @description Consulta pública del mensaje sanitizado para el tenant/SOFOM. Devuelve fallback si no existe mensaje personalizado.
+         */
+        get: operations["obtenerMensajePublicoPrefixed_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2898,22 +3002,17 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        ActualizarTenantRequest: {
-            nombreComercial?: string;
-            tenantType?: string;
-            estatus?: string;
+        ActualizarMensajeDenunciaRequest: {
+            html: string;
         };
-        TenantResponse: {
-            id?: string;
-            tenantType?: string;
-            nombreComercial?: string;
-            rfc?: string;
-            schemaName?: string;
-            estatus?: string;
+        MensajeDenunciaResponse: {
+            sofomId?: string;
+            html?: string;
+            contenidoHtml?: string;
+            contenidoSanitizado?: string;
+            actualizadoPor?: string;
             /** Format: date-time */
-            createdAt?: string;
-            /** Format: date-time */
-            updatedAt?: string;
+            actualizadoEn?: string;
         };
         ActualizarUsuarioRequest: {
             nombre: string;
@@ -2976,7 +3075,7 @@ export interface components {
             /** Format: date-time */
             rolAsignadoEn?: string;
             /** @enum {string} */
-            estado?: "ACTIVO" | "INACTIVO" | "ELIMINADO";
+            estado?: "A" | "B" | "S" | "E";
             /** Format: int32 */
             intentosFallidos?: number;
             isLocked?: boolean;
@@ -3088,7 +3187,73 @@ export interface components {
             categoria?: string;
             descripcion?: string;
             /** @enum {string} */
-            estado?: "ACTIVO" | "INACTIVO" | "ELIMINADO";
+            estado?: "A" | "B" | "S" | "E";
+        };
+        ModificarNivelRiesgoRequest: {
+            /** Format: int64 */
+            cat_nivel_riesgo_id: number;
+            observaciones?: string;
+        };
+        ProblemDetailsResponse: {
+            type?: string;
+            title?: string;
+            /** Format: int32 */
+            status?: number;
+            detail?: string;
+            instance?: string;
+            /** Format: date-time */
+            timestamp?: string;
+            invalidParams?: {
+                [key: string]: string;
+            };
+            coincidencias?: {
+                [key: string]: string;
+            }[];
+        };
+        DesglosePuntuacion: {
+            factores?: components["schemas"]["PuntajeFactor"][];
+        };
+        EvaluacionRiesgoResponseDto: {
+            /** Format: int64 */
+            id_evaluacion?: number;
+            socio_ref?: string;
+            metadata?: components["schemas"]["MetadataResponseDto"];
+            puntuacion_total?: number;
+            nivel_riesgo?: components["schemas"]["NivelRiesgoDto"];
+            nivel_riesgo_manual?: string;
+            observaciones?: string;
+            motivo?: string;
+            /** Format: int64 */
+            id_configuracion_matriz_riesgo?: number;
+            desglose?: components["schemas"]["DesglosePuntuacion"];
+            /** Format: date-time */
+            fecha_evaluacion?: string;
+        };
+        MetadataResponseDto: {
+            fecha_evaluacion?: string;
+            sucursal_id?: string;
+            verificado_por?: string;
+            tipo_evaluacion?: string;
+        };
+        NivelRiesgoDto: {
+            /** Format: int64 */
+            id?: number;
+            /** Format: int32 */
+            valor?: number;
+            descripcion?: string;
+        };
+        PuntajeFactor: {
+            descripcionFactor?: string;
+            pesoPorcentaje?: number;
+            scorePonderado?: number;
+            puntajeObtenido?: number;
+            subfactores?: components["schemas"]["PuntajeSubfactor"][];
+        };
+        PuntajeSubfactor: {
+            descripcion?: string;
+            valor?: number;
+            ponderacion?: number;
+            puntaje?: number;
         };
         ResolverCoincidenciaRequest: {
             es_la_persona: boolean;
@@ -3195,7 +3360,7 @@ export interface components {
             accion?: string;
             descripcion?: string;
             /** @enum {string} */
-            estado?: "ACTIVO" | "INACTIVO" | "ELIMINADO";
+            estado?: "A" | "B" | "S" | "E";
             /** Format: date-time */
             createdAt?: string;
             /** Format: date-time */
@@ -3539,7 +3704,6 @@ export interface components {
         };
         ActualizarCatPepRequest: {
             nombre?: string;
-            descripcion?: string;
             /** Format: int64 */
             catNivelRiesgoId?: number;
             /** @enum {string} */
@@ -3548,7 +3712,6 @@ export interface components {
         CatPepResponse: {
             id?: string;
             nombre?: string;
-            descripcion?: string;
             /** Format: int64 */
             catNivelRiesgoId?: number;
             /** @enum {string} */
@@ -3670,7 +3833,7 @@ export interface components {
             esNacional?: boolean;
             catNivelRiesgo?: string;
             /** @enum {string} */
-            estatus?: "ACTIVO" | "INACTIVO" | "ELIMINADO";
+            estatus?: "A" | "B" | "S" | "E";
         };
         ListaRestrictivaResponse: {
             id?: string;
@@ -3679,7 +3842,7 @@ export interface components {
             esNacional?: boolean;
             catNivelRiesgo?: string;
             /** @enum {string} */
-            estatus?: "ACTIVO" | "INACTIVO" | "ELIMINADO";
+            estatus?: "A" | "B" | "S" | "E";
         };
         ActualizarCatHistorialCrediticioRequest: {
             nombre?: string;
@@ -3926,6 +4089,18 @@ export interface components {
             rfc: string;
             tenantType: string;
         };
+        TenantResponse: {
+            id?: string;
+            tenantType?: string;
+            nombreComercial?: string;
+            rfc?: string;
+            schemaName?: string;
+            estatus?: string;
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+        };
         CrearUsuarioRequest: {
             username: string;
             password: string;
@@ -4071,67 +4246,6 @@ export interface components {
             antiguedad_giro_anios?: string;
             pep_nacional_id?: string;
             actividad_economica_id: string;
-        };
-        ProblemDetailsResponse: {
-            type?: string;
-            title?: string;
-            /** Format: int32 */
-            status?: number;
-            detail?: string;
-            instance?: string;
-            /** Format: date-time */
-            timestamp?: string;
-            invalidParams?: {
-                [key: string]: string;
-            };
-            coincidencias?: {
-                [key: string]: string;
-            }[];
-        };
-        DesglosePuntuacion: {
-            factores?: components["schemas"]["PuntajeFactor"][];
-        };
-        EvaluacionRiesgoResponseDto: {
-            /** Format: int64 */
-            id_evaluacion?: number;
-            socio_ref?: string;
-            metadata?: components["schemas"]["MetadataResponseDto"];
-            puntuacion_total?: number;
-            nivel_riesgo?: components["schemas"]["NivelRiesgoDto"];
-            nivel_riesgo_manual?: string;
-            observaciones?: string;
-            motivo?: string;
-            /** Format: int64 */
-            id_configuracion_matriz_riesgo?: number;
-            desglose?: components["schemas"]["DesglosePuntuacion"];
-            /** Format: date-time */
-            fecha_evaluacion?: string;
-        };
-        MetadataResponseDto: {
-            fecha_evaluacion?: string;
-            sucursal_id?: string;
-            verificado_por?: string;
-            tipo_evaluacion?: string;
-        };
-        NivelRiesgoDto: {
-            /** Format: int64 */
-            id?: number;
-            /** Format: int32 */
-            valor?: number;
-            descripcion?: string;
-        };
-        PuntajeFactor: {
-            descripcionFactor?: string;
-            pesoPorcentaje?: number;
-            scorePonderado?: number;
-            puntajeObtenido?: number;
-            subfactores?: components["schemas"]["PuntajeSubfactor"][];
-        };
-        PuntajeSubfactor: {
-            descripcion?: string;
-            valor?: number;
-            ponderacion?: number;
-            puntaje?: number;
         };
         CargaMasivaResponse: {
             /** Format: int32 */
@@ -4495,7 +4609,6 @@ export interface components {
         CrearCatPepRequest: {
             id: string;
             nombre: string;
-            descripcion?: string;
             /** Format: int64 */
             catNivelRiesgoId: number;
             /** @enum {string} */
@@ -4722,9 +4835,6 @@ export interface components {
              * @description Fecha y hora en que se ejecutó el desbloqueo
              */
             fechaDesbloqueo?: string;
-        };
-        CambiarEstatusTenantRequest: {
-            estatus: string;
         };
         AsignarRolRequest: {
             /** Format: int64 */
@@ -5162,10 +5272,10 @@ export interface components {
             totalPaginas?: number;
         };
         PageDenunciaResponse: {
-            /** Format: int32 */
-            totalPages?: number;
             /** Format: int64 */
             totalElements?: number;
+            /** Format: int32 */
+            totalPages?: number;
             pageable?: components["schemas"]["PageableObject"];
             /** Format: int32 */
             size?: number;
@@ -5187,8 +5297,8 @@ export interface components {
             /** Format: int64 */
             offset?: number;
             sort?: components["schemas"]["SortObject"];
-            unpaged?: boolean;
             paged?: boolean;
+            unpaged?: boolean;
         };
         SortObject: {
             sorted?: boolean;
@@ -5231,10 +5341,10 @@ export interface components {
             createdAt?: string;
         };
         PageAlertaResponse: {
-            /** Format: int32 */
-            totalPages?: number;
             /** Format: int64 */
             totalElements?: number;
+            /** Format: int32 */
+            totalPages?: number;
             pageable?: components["schemas"]["PageableObject"];
             /** Format: int32 */
             size?: number;
@@ -5278,12 +5388,12 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    buscarPorId: {
+    obtenerMensajeAdmin: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                /** @description ID del tenant */
+                /** @description Identificador único del tenant */
                 id: string;
             };
             cookie?: never;
@@ -5296,24 +5406,24 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["TenantResponse"];
+                    "*/*": components["schemas"]["MensajeDenunciaResponse"];
                 };
             };
         };
     };
-    actualizarTenant: {
+    actualizarMensajeAdmin: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                /** @description ID del tenant */
+                /** @description Identificador único del tenant */
                 id: string;
             };
             cookie?: never;
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["ActualizarTenantRequest"];
+                "application/json": components["schemas"]["ActualizarMensajeDenunciaRequest"];
             };
         };
         responses: {
@@ -5323,7 +5433,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["TenantResponse"];
+                    "*/*": components["schemas"]["MensajeDenunciaResponse"];
                 };
             };
         };
@@ -5661,6 +5771,47 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    modificarNivelRiesgo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Llave de seguimiento de la evaluación
+                 * @example 1052
+                 */
+                llaveSeguimiento: number;
+                /** @description Identificador del Tenant */
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ModificarNivelRiesgoRequest"];
+            };
+        };
+        responses: {
+            /** @description Nivel de riesgo modificado */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EvaluacionRiesgoResponseDto"];
+                };
+            };
+            /** @description Evaluación no encontrada */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetailsResponse"];
+                };
             };
         };
     };
@@ -6625,6 +6776,104 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    obtenerMensajeAdminPrefixed: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MensajeDenunciaResponse"];
+                };
+            };
+        };
+    };
+    actualizarMensajeAdminPrefixed: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ActualizarMensajeDenunciaRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MensajeDenunciaResponse"];
+                };
+            };
+        };
+    };
+    obtenerMensajeAdminPrefixed_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenantId: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MensajeDenunciaResponse"];
+                };
+            };
+        };
+    };
+    actualizarMensajeAdminPrefixed_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenantId: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ActualizarMensajeDenunciaRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MensajeDenunciaResponse"];
+                };
             };
         };
     };
@@ -8251,29 +8500,6 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["DenunciaResponse"];
-                };
-            };
-        };
-    };
-    listarTenants: {
-        parameters: {
-            query?: {
-                /** @description Filtro por estatus (A/INA) */
-                estatus?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["TenantResponse"][];
                 };
             };
         };
@@ -10667,35 +10893,6 @@ export interface operations {
             };
         };
     };
-    cambiarEstatus: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description ID del tenant */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CambiarEstatusTenantRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": {
-                        [key: string]: Record<string, never>;
-                    };
-                };
-            };
-        };
-    };
     asignarRol: {
         parameters: {
             query?: never;
@@ -10724,7 +10921,7 @@ export interface operations {
             };
         };
     };
-    cambiarEstatus_1: {
+    cambiarEstatus: {
         parameters: {
             query: {
                 estatus: string;
@@ -10750,7 +10947,7 @@ export interface operations {
             };
         };
     };
-    cambiarEstatus_2: {
+    cambiarEstatus_1: {
         parameters: {
             query?: {
                 /** @description Nuevo estatus por query param (V: Verificada, A: Alerta, D: Desestimada) */
@@ -10803,6 +11000,29 @@ export interface operations {
                     "*/*": {
                         [key: string]: string;
                     };
+                };
+            };
+        };
+    };
+    obtenerMensajePublico: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Identificador único de la SOFOM/Tenant */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MensajeDenunciaResponse"];
                 };
             };
         };
@@ -10873,7 +11093,7 @@ export interface operations {
             };
         };
     };
-    buscarPorId_1: {
+    buscarPorId: {
         parameters: {
             query?: never;
             header?: never;
@@ -11061,7 +11281,7 @@ export interface operations {
             };
         };
     };
-    buscarPorId_2: {
+    buscarPorId_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -11297,6 +11517,51 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CatTipoAlertaResponse"][];
+                };
+            };
+        };
+    };
+    obtenerMensajePublicoPrefixed: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MensajeDenunciaResponse"];
+                };
+            };
+        };
+    };
+    obtenerMensajePublicoPrefixed_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenantId: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MensajeDenunciaResponse"];
                 };
             };
         };

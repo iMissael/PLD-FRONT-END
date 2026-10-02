@@ -2,6 +2,7 @@ import { apiClient } from "@/api/client";
 import type {
   EvaluacionRiesgoResultado,
   EvaluacionRiesgoSolicitud,
+  ModificarNivelRiesgoInput,
 } from "@/features/operacion/evaluacion-riesgo/types/evaluacionRiesgo";
 
 export async function evaluarRiesgo(payload: EvaluacionRiesgoSolicitud) {
@@ -12,9 +13,18 @@ export async function evaluarRiesgo(payload: EvaluacionRiesgoSolicitud) {
   return data;
 }
 
-export async function obtenerEvaluacionPorId(llaveSeguimiento: number) {
-  const { data } = await apiClient.get<EvaluacionRiesgoResultado>(
-    `/pld/evaluaciones/seguimiento/${llaveSeguimiento}`,
+/**
+ * Asigna manualmente el nivel de riesgo de una evaluación ya calculada (pantalla
+ * "Modificación de riesgo"). El nivel calculado original no se pierde: la respuesta trae
+ * ambos (`nivel_riesgo` y `nivel_riesgo_manual`).
+ */
+export async function modificarNivelRiesgo(
+  llaveSeguimiento: number,
+  input: ModificarNivelRiesgoInput,
+) {
+  const { data } = await apiClient.put<EvaluacionRiesgoResultado>(
+    `/pld/evaluaciones/${llaveSeguimiento}/nivel-manual`,
+    input,
   );
   return data;
 }
