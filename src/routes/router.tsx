@@ -20,6 +20,7 @@ import { HistorialesCrediticiosPage } from "@/features/configuraciones/historial
 import { MatrizRiesgoPage } from "@/features/configuraciones/matriz-riesgo/pages/MatrizRiesgoPage";
 import { PrestamosMontoPage } from "@/features/configuraciones/monto-credito/pages/PrestamosMontoPage";
 import { OficialCumplimientoPage } from "@/features/configuraciones/oficial-cumplimiento/pages/OficialCumplimientoPage";
+import { PepsPage } from "@/features/configuraciones/peps/pages/PepsPage";
 import { TiposPersonaPage } from "@/features/configuraciones/personas/pages/TiposPersonaPage";
 import { DestinosRecursoPage } from "@/features/configuraciones/recursos/destino/pages/DestinosRecursoPage";
 import { OrigenesRecursoPage } from "@/features/configuraciones/recursos/origen/pages/OrigenesRecursoPage";
@@ -256,6 +257,10 @@ export const router = createBrowserRouter([
                   {
                     path: "configuraciones/canales-pago",
                     element: <CanalesPagoPage />,
+                  },
+                  {
+                    path: "configuraciones/peps",
+                    element: <PepsPage />,
                   },
                 ],
               },

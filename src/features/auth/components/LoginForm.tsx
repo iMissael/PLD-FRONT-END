@@ -1,10 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, Lock, User } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { Button } from "@/shared/components/ui/button";
+import { Checkbox } from "@/shared/components/ui/checkbox";
 import { useTenantNombre } from "@/shared/tenant/useTenantNombre";
 import {
   Form,
@@ -57,78 +58,129 @@ export function LoginForm() {
   }
 
   return (
-    <Form {...form}>
-       <h2 className="text-2xl font-bold text-blue-700 uppercase">{nombre}</h2>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-primary">Usuario</FormLabel>
-              <FormControl>
-                <Input
-                  autoComplete="USUARIO"
-                  autoFocus
-                  placeholder="INGRESE SU USUARIO"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-primary">Contraseña</FormLabel>
-              <div className="relative">
-                <FormControl>
-                  <Input
-                    className="pr-9"
-                    type={mostrarPassword ? "text" : "password"}
-                    autoComplete="current-password"
-                    placeholder="INGRESE SU CONTRASEÑA"
-                    {...field}
-                  />
-                </FormControl>
-                <button
-                  type="button"
-                  onClick={() => setMostrarPassword((v) => !v)}
-                  className="absolute inset-y-0 right-0 flex items-center rounded-md px-3 text-slate-500 hover:bg-slate-100"
-                  aria-label={
-                    mostrarPassword ? "Ocultar contraseña" : "Mostrar contraseña"
-                  }
-                >
-                  {mostrarPassword ? (
-                    <EyeOff className="size-4" />
-                  ) : (
-                    <Eye className="size-4" />
-                  )}
-                </button>
-              </div>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="flex items-center justify-between">
-
-          <button
-            type="button"
-            onClick={() =>
-              toast.info("Contacta a un administrador para restablecer tu contraseña.")
-            }
-            className="text-primary text-xs font-semibold hover:underline"
-          >
-            ¿Olvidé mi contraseña?
-          </button>
+    <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center gap-2">
+          <span className="bg-primary-soft text-primary rounded-full px-3 py-1 text-xs font-bold tracking-wide uppercase">
+            Portal Seguro
+          </span>
+          <span className="text-muted-foreground text-xs font-semibold">SICANET PLD</span>
         </div>
-        <Button type="submit" className="mt-2 w-full" disabled={login.isPending}>
-          {login.isPending ? "Iniciando sesión…" : "Acceder"}
-        </Button>
-      </form>
-    </Form>
+        <div>
+          <p className="text-primary text-xs font-semibold tracking-wide uppercase">
+            Inicie sesión en
+          </p>
+          <h2 className="text-foreground text-3xl leading-tight font-extrabold uppercase">
+            {nombre}
+          </h2>
+        </div>
+      </div>
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-5">
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-primary">Usuario</FormLabel>
+                <div className="relative">
+                  <User className="text-muted-foreground pointer-events-none absolute inset-y-0 left-0 my-auto size-4 ml-3" />
+                  <FormControl>
+                    <Input
+                      className="h-11 pl-9"
+                      autoComplete="USUARIO"
+                      autoFocus
+                      placeholder="Ingrese su usuario"
+                      {...field}
+                    />
+                  </FormControl>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-primary">Contraseña</FormLabel>
+                <div className="relative">
+                  <Lock className="text-muted-foreground pointer-events-none absolute inset-y-0 left-0 my-auto size-4 ml-3" />
+                  <FormControl>
+                    <Input
+                      className="h-11 px-9"
+                      type={mostrarPassword ? "text" : "password"}
+                      autoComplete="current-password"
+                      placeholder="Ingrese su contraseña"
+                      {...field}
+                    />
+                  </FormControl>
+                  <button
+                    type="button"
+                    onClick={() => setMostrarPassword((v) => !v)}
+                    className="text-muted-foreground hover:bg-accent absolute inset-y-0 right-0 flex items-center rounded-md px-3"
+                    aria-label={
+                      mostrarPassword ? "Ocultar contraseña" : "Mostrar contraseña"
+                    }
+                  >
+                    {mostrarPassword ? (
+                      <EyeOff className="size-4" />
+                    ) : (
+                      <Eye className="size-4" />
+                    )}
+                  </button>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="flex items-center justify-between">
+            <FormField
+              control={form.control}
+              name="recordarme"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center gap-2 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormLabel className="text-muted-foreground text-xs font-normal">
+                    Recuérdame
+                  </FormLabel>
+                </FormItem>
+              )}
+            />
+            <button
+              type="button"
+              onClick={() =>
+                toast.info("Contacta a un administrador para restablecer tu contraseña.")
+              }
+              className="text-primary text-xs font-semibold hover:underline"
+            >
+              ¿Olvidé mi contraseña?
+            </button>
+          </div>
+          <Button
+            type="submit"
+            size="lg"
+            className="mt-2 w-full gap-2"
+            disabled={login.isPending}
+          >
+            {login.isPending ? (
+              "Iniciando sesión…"
+            ) : (
+              <>
+                Acceder
+                <ArrowRight className="size-4" />
+              </>
+            )}
+          </Button>
+        </form>
+      </Form>
+    </div>
   );
 }

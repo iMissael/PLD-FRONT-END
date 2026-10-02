@@ -134,7 +134,10 @@ const NAV_ITEMS: NavNode[] = [
         label: "Configuración de canales de pago",
         to: "configuraciones/canales-pago",
       },
-      
+      {
+        label: "Configuración de PEPs",
+        to: "configuraciones/peps",
+      },
     ],
   },
   {
