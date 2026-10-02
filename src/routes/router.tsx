@@ -1,9 +1,11 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import { LoginPage } from "@/features/auth/pages/LoginPage";
+// import { AyudaPage } from "@/features/ayuda/pages/AyudaPage";
 import { BuzonPublicoPage } from "@/features/buzon/pages/BuzonPublicoPage";
 import { GestionAlertasPage } from "@/features/buzon/pages/GestionAlertasPage";
 import { GestionDenunciasPage } from "@/features/buzon/pages/GestionDenunciasPage";
+import { PersonalizarMensajeCabeceraPage } from "@/features/buzon/pages/PersonalizarMensajeCabeceraPage";
 import { CargaMasivaPage } from "@/features/configuracion-alertas/pages/CargaMasivaPage";
 import { ConsultaBloqueadosPage } from "@/features/configuracion-alertas/pages/ConsultaBloqueadosPage";
 import { ReglasAlertaPage } from "@/features/configuracion-alertas/reglas/pages/ReglasAlertaPage";
@@ -256,6 +258,107 @@ export const router = createBrowserRouter([
                   {
                     path: "configuraciones/canales-pago",
                     element: <CanalesPagoPage />,
+                  },
+                  {
+                    element: <ContenidoAcotado />,
+                    children: [
+                      {
+                        path: "buzon/gestion",
+                        element: (
+                          <RequierePermiso recurso="denuncias" accion="ver">
+                            <GestionDenunciasPage />
+                          </RequierePermiso>
+                        ),
+                      },
+                      {
+                        path: "buzon/alertas",
+                        element: (
+                          <RequierePermiso recurso="alertas" accion="ver">
+                            <GestionAlertasPage />
+                          </RequierePermiso>
+                        ),
+                      },
+                      {
+                        path: "buzon/mensaje-cabecera",
+                        element: <PersonalizarMensajeCabeceraPage />,
+                      },
+                      {
+                        path: "configuraciones/mensaje-denuncia",
+                        element: <PersonalizarMensajeCabeceraPage />,
+                      },
+                      {
+                        path: "configuraciones/oficial-cumplimiento",
+                        element: <OficialCumplimientoPage />,
+                      },
+                      {
+                        path: "configuraciones/matriz-riesgo",
+                        element: <MatrizRiesgoPage />,
+                      },
+                      {
+                        path: "configuraciones/administracion/roles",
+                        element: <RolesPage />,
+                      },
+                      {
+                        path: "configuraciones/administracion/roles/:rolId/permisos",
+                        element: <RolPermisosPage />,
+                      },
+                      {
+                        path: "configuraciones/administracion/permisos",
+                        element: <PermisosPage />,
+                      },
+                      {
+                        path: "control/quienesquien",
+                        element: <ConsultaListasPage />,
+                      },
+                      {
+                        path: "control/coincidencias",
+                        element: <RevisionCoincidenciasPage />,
+                      },
+                      {
+                        path: "configuraciones/personas",
+                        element: <TiposPersonaPage />,
+                      },
+                      {
+                        path: "configuraciones/edades/rangos-edad",
+                        element: <EdadesPage />,
+                      },
+                      {
+                        path: "configuraciones/edades/tiempo-constitucion",
+                        element: <TiemposConstitucionPage />,
+                      },
+                      {
+                        path: "configuraciones/experiencia-actividad",
+                        element: <ExperienciasActividadPage />,
+                      },
+                      {
+                        path: "configuraciones/actividad-economica",
+                        element: <ActividadesEconomicasPage />,
+                      },
+                      {
+                        path: "configuraciones/historial-crediticio",
+                        element: <HistorialesCrediticiosPage />,
+                      },
+                      {
+                        path: "configuraciones/monto-credito",
+                        element: <PrestamosMontoPage />,
+                      },
+                      {
+                        path: "configuraciones/recursos/origen",
+                        element: <OrigenesRecursoPage />,
+                      },
+                      {
+                        path: "configuraciones/recursos/destino",
+                        element: <DestinosRecursoPage />,
+                      },
+                      {
+                        path: "configuraciones/canales-pago",
+                        element: <CanalesPagoPage />,
+                      },
+                      {
+                        path: "configuraciones/tipos-credito",
+                        element: <TiposCreditoPage />,
+                      },
+                    ],
                   },
                 ],
               },
