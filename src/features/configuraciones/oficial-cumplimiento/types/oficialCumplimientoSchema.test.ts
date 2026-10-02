@@ -143,15 +143,6 @@ describe("oficialCumplimientoSchema", () => {
       expect(errores({ numExterior: "12345678901" }).numExterior).toMatch(/10/);
     });
 
-    it("la latitud y la longitud van juntas y dentro de rango", () => {
-      expect(errores({ latitud: "17.0601", longitud: "-96.6983" })).toEqual({});
-      expect(errores({ latitud: "17.0601" }).longitud).toMatch(/longitud/);
-      expect(errores({ longitud: "-96.6983" }).latitud).toMatch(/latitud/);
-      expect(errores({ latitud: "91", longitud: "10" }).latitud).toMatch(/-90 y 90/);
-      expect(errores({ latitud: "10", longitud: "181" }).longitud).toMatch(/-180 y 180/);
-      expect(errores({ latitud: "abc", longitud: "10" }).latitud).toBeDefined();
-    });
-
     it("la antigüedad en el domicilio no puede ser futura", () => {
       expect(errores({ antiguedadDomicilio: hoyIso() })).toEqual({});
       expect(errores({ antiguedadDomicilio: "2999-01-01" }).antiguedadDomicilio).toMatch(

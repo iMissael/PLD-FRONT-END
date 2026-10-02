@@ -1,6 +1,7 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   evaluarRiesgo,
+  listarHistorialEvaluaciones,
   modificarNivelRiesgo,
 } from "@/features/operacion/evaluacion-riesgo/api/evaluacionRiesgoApi";
 import type { ModificarNivelRiesgoInput } from "@/features/operacion/evaluacion-riesgo/types/evaluacionRiesgo";
@@ -20,5 +21,13 @@ export function useModificarNivelRiesgo() {
       llaveSeguimiento: number;
       input: ModificarNivelRiesgoInput;
     }) => modificarNivelRiesgo(llaveSeguimiento, input),
+  });
+}
+
+export function useHistorialEvaluaciones(socioRef: string | null) {
+  return useQuery({
+    queryKey: ["evaluacion-riesgo-historial", socioRef],
+    queryFn: () => listarHistorialEvaluaciones(socioRef as string),
+    enabled: socioRef !== null && socioRef !== "",
   });
 }

@@ -47,8 +47,6 @@ describe("crearUsuarioSchema", () => {
       folioIdentificacion: "0123456789012",
       codigoPostal: "06600",
       numExterior: "12-A",
-      latitud: "19.4326",
-      longitud: "-99.1332",
     };
     expect(errores(completo)).toEqual({});
   });
@@ -146,16 +144,6 @@ describe("crearUsuarioSchema", () => {
       expect(errores({ numExterior: "S/N" })).toEqual({});
       expect(errores({ numInterior: "12#" })).toHaveProperty("numInterior");
       expect(errores({ numExterior: "1234567890A" })).toHaveProperty("numExterior");
-    });
-
-    it("las coordenadas van dentro de rango y en par", () => {
-      expect(errores({ latitud: "91", longitud: "10" })).toHaveProperty("latitud");
-      expect(errores({ latitud: "19.4" })).toEqual({
-        longitud: "Captura también la longitud",
-      });
-      expect(errores({ longitud: "-99.1" })).toEqual({
-        latitud: "Captura también la latitud",
-      });
     });
 
     it("la antigüedad del domicilio no puede ser futura", () => {

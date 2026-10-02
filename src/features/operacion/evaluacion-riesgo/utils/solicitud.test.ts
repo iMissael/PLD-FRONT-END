@@ -33,8 +33,6 @@ const perfilCompleto: SocioPerfilRiesgo = {
     codigoPostal: "03100",
     tipoAsentamiento: "Colonia",
     nombreAsentamiento: "DEL VALLE CENTRO",
-    latitud: "19.3861",
-    longitud: "-99.1685",
   },
   antiguedadGiroAnios: 6,
   pepNacionalId: undefined,
@@ -192,7 +190,6 @@ describe("construirSolicitud", () => {
       no_interior: 5,
       codigo_postal: "03100",
       asentamiento: { tipo: "Colonia", nombre: "DEL VALLE CENTRO" },
-      geolocalizacion: { latitud: 19.3861, longitud: -99.1685 },
     });
   });
 

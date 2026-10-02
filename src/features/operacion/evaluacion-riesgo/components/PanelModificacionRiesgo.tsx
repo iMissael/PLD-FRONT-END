@@ -26,16 +26,18 @@ export function PanelModificacionRiesgo({
   const [observaciones, setObservaciones] = useState("");
   const modificar = useModificarNivelRiesgo();
 
+  const observacionesLimpias = observaciones.trim();
+
   const handleSubmit = (evento: React.FormEvent) => {
     evento.preventDefault();
-    if (nivelId === "" || resultado.id_evaluacion == null) return;
+    if (nivelId === "" || observacionesLimpias === "" || resultado.id_evaluacion == null) return;
 
     modificar.mutate(
       {
         llaveSeguimiento: resultado.id_evaluacion,
         input: {
           cat_nivel_riesgo_id: nivelId,
-          observaciones: observaciones.trim() === "" ? undefined : observaciones.trim(),
+          observaciones: observacionesLimpias,
         },
       },
       {
@@ -96,14 +98,18 @@ export function PanelModificacionRiesgo({
             id="observaciones-riesgo"
             rows={1}
             maxLength={500}
+            required
             value={observaciones}
             onChange={(evento) => setObservaciones(evento.target.value)}
-            placeholder="Motivo del cambio…"
+            placeholder="Motivo del cambio… (obligatorio)"
             className="border-input bg-card text-foreground shadow-xs focus-visible:border-ring focus-visible:ring-ring/50 min-h-9 w-full resize-y rounded-md border px-3 py-1.5 text-sm outline-none focus-visible:ring-[3px]"
           />
         </div>
 
-        <Button type="submit" disabled={nivelId === "" || modificar.isPending}>
+        <Button
+          type="submit"
+          disabled={nivelId === "" || observacionesLimpias === "" || modificar.isPending}
+        >
           {modificar.isPending ? "Guardando…" : "Modificar"}
         </Button>
       </form>

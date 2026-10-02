@@ -6,7 +6,6 @@ import {
   generoConocido,
   nombreMoneda,
   ultimaActualizacion,
-  urlMapa,
   valoresIniciales,
 } from "@/features/configuraciones/oficial-cumplimiento/utils/oficialCumplimiento";
 
@@ -148,21 +147,5 @@ describe("nombreMoneda", () => {
     expect(nombreMoneda("")).toBeNull();
     expect(nombreMoneda("MX")).toBeNull();
     expect(nombreMoneda("ZZZ")).toBeNull();
-  });
-});
-
-describe("urlMapa", () => {
-  it("arma el enlace con las coordenadas del domicilio", () => {
-    expect(urlMapa("17.0601", "-96.6983")).toBe(
-      "https://www.openstreetmap.org/?mlat=17.0601&mlon=-96.6983#map=17/17.0601/-96.6983",
-    );
-  });
-
-  it("devuelve null si faltan coordenadas o están fuera de rango", () => {
-    expect(urlMapa("", "-96.6983")).toBeNull();
-    expect(urlMapa("17.0601", undefined)).toBeNull();
-    expect(urlMapa("abc", "-96.6983")).toBeNull();
-    expect(urlMapa("91", "10")).toBeNull();
-    expect(urlMapa("10", "181")).toBeNull();
   });
 });

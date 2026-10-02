@@ -28,3 +28,11 @@ export async function modificarNivelRiesgo(
   );
   return data;
 }
+
+/** Todas las evaluaciones de un socio, de la más reciente a la más antigua. */
+export async function listarHistorialEvaluaciones(socioRef: string) {
+  const { data } = await apiClient.get<EvaluacionRiesgoResultado[]>(
+    `/pld/evaluaciones/historial/${socioRef}`,
+  );
+  return data;
+}

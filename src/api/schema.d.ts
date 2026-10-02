@@ -2398,6 +2398,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/SICANETSC/PLD/{tenantId}/pld/evaluaciones/historial/{socioRef}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Historial de evaluaciones de un socio
+         * @description Todas las evaluaciones registradas para ese socio, de la más reciente a la más antigua.
+         */
+        get: operations["historialPorSocio"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/SICANETSC/PLD/{tenantId}/pld/coincidencias/{socioRef}": {
         parameters: {
             query?: never;
@@ -3135,8 +3155,6 @@ export interface components {
             codigoPostal?: string;
             tipoAsentamiento?: string;
             colonia?: string;
-            latitud?: string;
-            longitud?: string;
             paisId: string;
             entidadId: string;
             municipioId: string;
@@ -3164,8 +3182,6 @@ export interface components {
             codigoPostal?: string;
             tipoAsentamiento?: string;
             colonia?: string;
-            latitud?: string;
-            longitud?: string;
             paisId?: string;
             entidadId?: string;
             municipioId?: string;
@@ -3192,23 +3208,7 @@ export interface components {
         ModificarNivelRiesgoRequest: {
             /** Format: int64 */
             cat_nivel_riesgo_id: number;
-            observaciones?: string;
-        };
-        ProblemDetailsResponse: {
-            type?: string;
-            title?: string;
-            /** Format: int32 */
-            status?: number;
-            detail?: string;
-            instance?: string;
-            /** Format: date-time */
-            timestamp?: string;
-            invalidParams?: {
-                [key: string]: string;
-            };
-            coincidencias?: {
-                [key: string]: string;
-            }[];
+            observaciones: string;
         };
         DesglosePuntuacion: {
             factores?: components["schemas"]["PuntajeFactor"][];
@@ -3254,6 +3254,22 @@ export interface components {
             valor?: number;
             ponderacion?: number;
             puntaje?: number;
+        };
+        ProblemDetailsResponse: {
+            type?: string;
+            title?: string;
+            /** Format: int32 */
+            status?: number;
+            detail?: string;
+            instance?: string;
+            /** Format: date-time */
+            timestamp?: string;
+            invalidParams?: {
+                [key: string]: string;
+            };
+            coincidencias?: {
+                [key: string]: string;
+            }[];
         };
         ResolverCoincidenciaRequest: {
             es_la_persona: boolean;
@@ -4198,7 +4214,6 @@ export interface components {
             no_interior?: number;
             codigo_postal?: string;
             asentamiento?: components["schemas"]["AsentamientoDto"];
-            geolocalizacion?: components["schemas"]["GeolocalizacionDto"];
         };
         DomicilioWrapperDto: {
             /** Format: int64 */
@@ -4217,12 +4232,6 @@ export interface components {
             tipo?: number;
             /** Format: int64 */
             canal?: number;
-        };
-        GeolocalizacionDto: {
-            /** Format: double */
-            latitud?: number;
-            /** Format: double */
-            longitud?: number;
         };
         HistorialCrediticioDto: {
             creditos_anteriores?: components["schemas"]["CreditoAnteriorDto"][];
@@ -4885,8 +4894,6 @@ export interface components {
             codigoPostal?: string;
             tipoAsentamiento?: string;
             nombreAsentamiento?: string;
-            latitud?: string;
-            longitud?: string;
         };
         NacionalidadInfo: {
             id?: string;
@@ -5272,10 +5279,10 @@ export interface components {
             totalPaginas?: number;
         };
         PageDenunciaResponse: {
-            /** Format: int64 */
-            totalElements?: number;
             /** Format: int32 */
             totalPages?: number;
+            /** Format: int64 */
+            totalElements?: number;
             pageable?: components["schemas"]["PageableObject"];
             /** Format: int32 */
             size?: number;
@@ -5341,10 +5348,10 @@ export interface components {
             createdAt?: string;
         };
         PageAlertaResponse: {
-            /** Format: int64 */
-            totalElements?: number;
             /** Format: int32 */
             totalPages?: number;
+            /** Format: int64 */
+            totalElements?: number;
             pageable?: components["schemas"]["PageableObject"];
             /** Format: int32 */
             size?: number;
@@ -11199,6 +11206,34 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ProblemDetailsResponse"];
+                };
+            };
+        };
+    };
+    historialPorSocio: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Referencia del socio
+                 * @example CLI-001
+                 */
+                socioRef: string;
+                /** @description Identificador del Tenant */
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EvaluacionRiesgoResponseDto"][];
                 };
             };
         };

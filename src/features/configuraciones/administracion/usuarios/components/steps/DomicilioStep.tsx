@@ -9,12 +9,7 @@ import {
 } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { InputFormateado } from "@/shared/components/InputFormateado";
-import {
-  coordenada,
-  mayusculas,
-  numeroDomicilio,
-  soloDigitos,
-} from "@/shared/utils/entradas";
+import { mayusculas, numeroDomicilio, soloDigitos } from "@/shared/utils/entradas";
 import {
   Select,
   SelectContent,
@@ -188,44 +183,6 @@ export function DomicilioStep({ form }: { form: UseFormReturn<CrearUsuarioFormVa
                     ))}
                   </SelectContent>
                 </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="latitud"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Latitud</FormLabel>
-                <FormControl>
-                  <InputFormateado
-                    placeholder="19.4326"
-                    inputMode="decimal"
-                    {...field}
-                    formato={coordenada}
-                    maxLength={50}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="longitud"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Longitud</FormLabel>
-                <FormControl>
-                  <InputFormateado
-                    placeholder="-99.1332"
-                    inputMode="decimal"
-                    {...field}
-                    formato={coordenada}
-                    maxLength={50}
-                  />
-                </FormControl>
                 <FormMessage />
               </FormItem>
             )}

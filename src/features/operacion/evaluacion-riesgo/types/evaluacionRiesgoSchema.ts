@@ -38,8 +38,6 @@ export const evaluacionRiesgoSchema = z.object({
   codigoPostal: z.string().optional(),
   asentamientoTipo: z.string().optional(),
   asentamientoNombre: z.string().optional(),
-  latitud: z.string().optional(),
-  longitud: z.string().optional(),
 
   // Crédito
   creditoReferencia: z.string().optional(),

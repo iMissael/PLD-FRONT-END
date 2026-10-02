@@ -35,6 +35,7 @@ import { CapturaAlertasPage } from "@/features/operacion/captura-alertas/pages/C
 import { ConsultaListasPage } from "@/features/operacion/consulta-listas/pages/Quienesquien";
 import { RevisionCoincidenciasPage } from "@/features/operacion/revision-coincidencias/pages/RevisionCoincidenciasPage";
 import { EvaluacionRiesgoPage } from "@/features/operacion/evaluacion-riesgo/pages/EvaluacionRiesgoPage";
+import { HistorialEvaluacionesPage } from "@/features/operacion/evaluacion-riesgo/pages/HistorialEvaluacionesPage";
 import { OperacionPage } from "@/features/operacion/pages/OperacionPage";
 import { RevisionAlertasPage } from "@/features/operacion/revision-alertas/pages/RevisionAlertasPage";
 import { RequireAuth } from "@/shared/auth/RequireAuth";
@@ -129,6 +130,11 @@ export const router = createBrowserRouter([
               {
                 path: "operacion/evaluacion-riesgo",
                 element: <EvaluacionRiesgoPage />,
+              },
+              // Mismo motivo: expediente del cliente + tabla de historial lado a lado.
+              {
+                path: "operacion/historial-evaluaciones",
+                element: <HistorialEvaluacionesPage />,
               },
               {
                 path: "configuraciones/administracion/usuarios",

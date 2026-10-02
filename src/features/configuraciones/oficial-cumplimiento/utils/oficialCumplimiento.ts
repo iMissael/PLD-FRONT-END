@@ -63,8 +63,6 @@ export function valoresIniciales(
     codigoPostal: soloDigitos(texto(domicilio?.codigoPostal)),
     tipoAsentamiento: texto(domicilio?.tipoAsentamiento),
     colonia: mayusculas(texto(domicilio?.colonia)),
-    latitud: texto(domicilio?.latitud),
-    longitud: texto(domicilio?.longitud),
     domicilioPaisId: texto(domicilio?.paisId),
     domicilioEntidadId: texto(domicilio?.entidadId),
     municipioId: texto(domicilio?.municipioId),
@@ -134,8 +132,6 @@ export function aDomicilioPayload(
     codigoPostal: textoOIndefinido(values.codigoPostal),
     tipoAsentamiento: textoOIndefinido(values.tipoAsentamiento),
     colonia: textoOIndefinido(values.colonia),
-    latitud: textoOIndefinido(values.latitud),
-    longitud: textoOIndefinido(values.longitud),
     paisId: values.domicilioPaisId,
     entidadId: values.domicilioEntidadId,
     municipioId: values.municipioId,
@@ -191,14 +187,4 @@ export function nombreMoneda(codigo: string | undefined) {
   } catch {
     return null;
   }
-}
-
-/** Enlace al mapa con las coordenadas del domicilio; null si faltan o no son válidas. */
-export function urlMapa(latitud: string | undefined, longitud: string | undefined) {
-  const lat = Number((latitud ?? "").trim());
-  const lon = Number((longitud ?? "").trim());
-  if (!latitud?.trim() || !longitud?.trim()) return null;
-  if (Number.isNaN(lat) || Number.isNaN(lon)) return null;
-  if (Math.abs(lat) > 90 || Math.abs(lon) > 180) return null;
-  return `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=17/${lat}/${lon}`;
 }

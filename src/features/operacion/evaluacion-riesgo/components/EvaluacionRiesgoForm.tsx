@@ -87,8 +87,6 @@ const valoresPorDefecto: EvaluacionRiesgoFormValues = {
   codigoPostal: "",
   asentamientoTipo: "",
   asentamientoNombre: "",
-  latitud: "",
-  longitud: "",
   creditoReferencia: "",
   creditoTipo: "",
   monto: "",

@@ -155,6 +155,7 @@ const NAV_ITEMS: NavNode[] = [
     children: [
       { label: "Resumen", to: "operacion" },
       { label: "Evaluación de riesgo", to: "operacion/evaluacion-riesgo" },
+      { label: "Historial de evaluaciones", to: "operacion/historial-evaluaciones" },
       { label: "Captura de alertas", to: "operacion/captura-alertas" },
       { label: "Revisión de alertas", to: "operacion/revision-alertas" },
     ],

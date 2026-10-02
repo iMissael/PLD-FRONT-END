@@ -38,14 +38,6 @@ export const numeroDomicilio: Formato = (valor) =>
 export const soloLetras: Formato = (valor) =>
   valor.toLocaleUpperCase("es-MX").replace(/[^A-Z]/g, "");
 
-/** Coordenadas: dígitos, un punto decimal y el signo solo al inicio. */
-export const coordenada: Formato = (valor) => {
-  const limpio = valor.replace(/[^0-9.-]/g, "");
-  const signo = limpio.startsWith("-") ? "-" : "";
-  const [entero, ...decimales] = limpio.replace(/-/g, "").split(".");
-  return `${signo}${entero}${decimales.length > 0 ? `.${decimales.join("")}` : ""}`;
-};
-
 /** Los correos se guardan en minúsculas y sin espacios. */
 export const correo: Formato = (valor) => valor.toLowerCase().replace(/\s/g, "");
 

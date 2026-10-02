@@ -71,8 +71,6 @@ export function valoresDesdePerfil(
     codigoPostal: aTexto(domicilio?.codigoPostal),
     asentamientoTipo: aTexto(domicilio?.tipoAsentamiento),
     asentamientoNombre: aTexto(domicilio?.nombreAsentamiento),
-    latitud: aTexto(domicilio?.latitud),
-    longitud: aTexto(domicilio?.longitud),
 
     creditoReferencia: aTexto(credito?.referencia),
     creditoTipo: aTexto(credito?.tipo),
@@ -129,7 +127,6 @@ export function construirSolicitud(
   ahora = new Date(),
 ): EvaluacionRiesgoSolicitud {
   const tieneAsentamiento = Boolean(values.asentamientoTipo || values.asentamientoNombre);
-  const tieneGeolocalizacion = Boolean(values.latitud || values.longitud);
   const tieneHistorial = values.creditosAnteriores.length > 0;
 
   return {
@@ -164,12 +161,6 @@ export function construirSolicitud(
           ? {
               tipo: aTextoOIndefinido(values.asentamientoTipo),
               nombre: aTextoOIndefinido(values.asentamientoNombre),
-            }
-          : undefined,
-        geolocalizacion: tieneGeolocalizacion
-          ? {
-              latitud: aNumeroOIndefinido(values.latitud),
-              longitud: aNumeroOIndefinido(values.longitud),
             }
           : undefined,
       },

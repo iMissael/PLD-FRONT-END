@@ -1,8 +1,6 @@
 import { z } from "zod";
 import {
   conFormato,
-  coordenadaEnRango,
-  coordenadasEnPar,
   fechaNacimiento,
   fechaNoFutura,
   MENSAJE_NOMBRE,
@@ -86,8 +84,6 @@ export const oficialCumplimientoSchema = z
     codigoPostal: conFormato(5, /^\d{5}$/, "El código postal debe tener 5 dígitos"),
     tipoAsentamiento: texto(50),
     colonia: texto(100),
-    latitud: coordenadaEnRango(90, "La latitud debe estar entre -90 y 90"),
-    longitud: coordenadaEnRango(180, "La longitud debe estar entre -180 y 180"),
     domicilioPaisId: z.string().min(1, "El país es obligatorio"),
     domicilioEntidadId: z.string().min(1, "La entidad es obligatoria"),
     municipioId: z.string().min(1, "El municipio es obligatorio"),
@@ -118,7 +114,6 @@ export const oficialCumplimientoSchema = z
       "Usa el código de 3 letras, por ejemplo MXN",
     ),
     actividadEconomicaId: z.string().optional(),
-  })
-  .superRefine(coordenadasEnPar);
+  });
 
 export type OficialCumplimientoFormValues = z.infer<typeof oficialCumplimientoSchema>;

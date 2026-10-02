@@ -3,7 +3,6 @@ import {
   alfanumerico,
   clave,
   clavePermiso,
-  coordenada,
   correo,
   mayusculas,
   nombrePropio,
@@ -65,19 +64,6 @@ describe("campos numéricos y de claves", () => {
 
   it("soloLetras sirve para el código de moneda", () => {
     expect(soloLetras("m1x n")).toBe("MXN");
-  });
-});
-
-describe("coordenada", () => {
-  it("acepta decimales con signo", () => {
-    expect(coordenada("-96.6983")).toBe("-96.6983");
-    expect(coordenada("17.0601")).toBe("17.0601");
-  });
-
-  it("solo permite el signo al inicio y un punto decimal", () => {
-    expect(coordenada("1-7.06.01")).toBe("17.0601");
-    expect(coordenada("--5")).toBe("-5");
-    expect(coordenada("abc12")).toBe("12");
   });
 });
 

@@ -46,8 +46,6 @@ const CAMPOS_DEL_SOCIO = [
   "codigoPostal",
   "asentamientoTipo",
   "asentamientoNombre",
-  "latitud",
-  "longitud",
 ] as const;
 
 // Campos del crédito solicitado: también salen del socio (credito_solicitado).
@@ -202,8 +200,6 @@ export function SocioBuscadorEvaluacion({
         form.setValue("codigoPostal", aTexto(domicilio.codigoPostal));
         form.setValue("asentamientoTipo", aTexto(domicilio.tipoAsentamiento));
         form.setValue("asentamientoNombre", aTexto(domicilio.nombreAsentamiento));
-        form.setValue("latitud", aTexto(domicilio.latitud));
-        form.setValue("longitud", aTexto(domicilio.longitud));
         domicilioPendiente.current = {
           municipioId: domicilio.municipioId,
           localidadId: domicilio.localidadId,

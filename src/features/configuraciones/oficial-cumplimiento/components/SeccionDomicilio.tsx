@@ -1,4 +1,4 @@
-import { MapPin, MapPinHouse } from "lucide-react";
+import { MapPinHouse } from "lucide-react";
 import { useMemo } from "react";
 import { useWatch } from "react-hook-form";
 import {
@@ -21,13 +21,11 @@ import {
   type OpcionCatalogo,
 } from "@/features/configuraciones/oficial-cumplimiento/components/campos";
 import {
-  coordenada,
   mayusculas,
   numeroDomicilio,
   soloDigitos,
 } from "@/shared/utils/entradas";
 import { hoyIso } from "@/shared/utils/fechas";
-import { urlMapa } from "@/features/configuraciones/oficial-cumplimiento/utils/oficialCumplimiento";
 
 function aNumeroOIndefinido(valor: string | undefined) {
   if (!valor) return undefined;
@@ -54,8 +52,6 @@ export function SeccionDomicilio({ form }: { form: FichaForm }) {
   const entidad = useWatch({ control: form.control, name: "domicilioEntidadId" });
   const municipio = useWatch({ control: form.control, name: "municipioId" });
   const asentamiento = useWatch({ control: form.control, name: "tipoAsentamiento" });
-  const latitud = useWatch({ control: form.control, name: "latitud" });
-  const longitud = useWatch({ control: form.control, name: "longitud" });
 
   const { data: municipios, isFetching: cargandoMunicipios } = useMunicipios(
     aNumeroOIndefinido(entidad),
@@ -119,14 +115,11 @@ export function SeccionDomicilio({ form }: { form: FichaForm }) {
   const nombreComprobante = tiposComprobante?.find(
     (item) => item.id === comprobante,
   )?.descripcion;
-  const enlaceMapa = urlMapa(latitud, longitud);
 
   function limpiar(...campos: ("domicilioEntidadId" | "municipioId" | "localidadId")[]) {
     campos.forEach((campo) => form.setValue(campo, "", { shouldDirty: true }));
   }
 
-  const claseBotonMapa =
-    "border-primary/30 bg-primary-soft text-primary hover:bg-primary-soft/70 flex size-10 shrink-0 items-center justify-center rounded-lg border shadow-xs transition";
 
   return (
     <SeccionFicha
@@ -299,51 +292,6 @@ export function SeccionDomicilio({ form }: { form: FichaForm }) {
           requerido
           deshabilitado={!municipio}
           cargando={cargandoLocalidades}
-          accion={
-            enlaceMapa ? (
-              <a
-                href={enlaceMapa}
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Ver localización en el mapa"
-                aria-label="Ver localización en el mapa"
-                className={claseBotonMapa}
-              >
-                <MapPin className="size-5" />
-              </a>
-            ) : (
-              <button
-                type="button"
-                disabled
-                title="Captura latitud y longitud para ver el mapa"
-                aria-label="Ver localización en el mapa"
-                className={`${claseBotonMapa} cursor-not-allowed opacity-50 hover:bg-primary-soft`}
-              >
-                <MapPin className="size-5" />
-              </button>
-            )
-          }
-        />
-      </div>
-
-      <div className="grid grid-cols-1 items-start gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        <CampoTexto
-          form={form}
-          name="latitud"
-          label="Latitud"
-          placeholder="17.0601"
-          inputMode="decimal"
-          formato={coordenada}
-          maxLength={20}
-        />
-        <CampoTexto
-          form={form}
-          name="longitud"
-          label="Longitud"
-          placeholder="-96.6983"
-          inputMode="decimal"
-          formato={coordenada}
-          maxLength={20}
         />
       </div>
     </SeccionFicha>
