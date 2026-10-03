@@ -17,7 +17,7 @@ export function PersonalizarMensajeCabeceraPage() {
               Mensaje de Cabecera del Buzón
             </h1>
             <p className="text-xs text-muted-foreground">
-              Configuración y edición del mensaje institucional con soporte HTML para el portal de denuncias anónimas.
+              Configuración y edición del mensaje institucional para el portal de denuncias anónimas.
             </p>
           </div>
         </div>
