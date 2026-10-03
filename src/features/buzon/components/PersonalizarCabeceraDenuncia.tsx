@@ -142,10 +142,7 @@ export function PersonalizarCabeceraDenuncia() {
               >
                 Personalizar cabecera de denuncia anónima
               </Label>
-              <p className="text-xs text-muted-foreground">
-                Configura el mensaje informativo, avisos de privacidad o instrucciones HTML
-                que se renderizarán en el buzón público.
-              </p>
+              
             </div>
           </div>
         </div>
@@ -257,33 +254,7 @@ export function PersonalizarCabeceraDenuncia() {
  
         </div>
 
-        {/* Botones de alternancia de vista */}
-        <div className="flex items-center rounded-lg border border-border bg-muted/30 p-0.5">
-          <button
-            type="button"
-            onClick={() => setTabActiva("editor")}
-            className={`flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
-              tabActiva === "editor"
-                ? "bg-card text-foreground shadow-xs"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            <Code className="h-3.5 w-3.5" />
-            Editor
-          </button>
-          <button
-            type="button"
-            onClick={() => setTabActiva("split")}
-            className={`hidden sm:flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
-              tabActiva === "split"
-                ? "bg-card text-foreground shadow-xs"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            Dividida
-          </button>
-   
-        </div>
+      
       </div>
 
 
@@ -348,6 +319,7 @@ export function PersonalizarCabeceraDenuncia() {
                 <Eye className="h-3.5 w-3.5 text-emerald-500" />
                 Previsualización en vivo (Sanitizada)
               </span>
+            
             </div>
 
             <div className="min-h-[280px] rounded-xl border border-dashed border-border bg-muted/20 p-5 transition-colors">
