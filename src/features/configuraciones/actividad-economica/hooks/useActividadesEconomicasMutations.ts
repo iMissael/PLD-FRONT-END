@@ -7,13 +7,14 @@ import {
 } from "../api/actividadesEconomicasApi";
 import type {
   ActualizarActividadEconomicaInput,
+  ActividadEconomicaResponse,
   CrearActividadEconomicaInput,
 } from "../types/actividadEconomica";
 import { actividadesEconomicasKeys } from "./actividadesEconomicasKeys";
 
 export function useCrearActividadEconomica() {
   const queryClient = useQueryClient();
-  return useMutation({
+  return useMutation<ActividadEconomicaResponse, Error, CrearActividadEconomicaInput>({
     mutationFn: (input: CrearActividadEconomicaInput) => crearActividadEconomica(input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: actividadesEconomicasKeys.all });
@@ -23,7 +24,14 @@ export function useCrearActividadEconomica() {
 
 export function useActualizarActividadEconomica() {
   const queryClient = useQueryClient();
-  return useMutation({
+  return useMutation<
+    ActividadEconomicaResponse,
+    Error,
+    {
+      id: string;
+      input: ActualizarActividadEconomicaInput;
+    }
+  >({
     mutationFn: ({
       id,
       input,
@@ -40,7 +48,7 @@ export function useActualizarActividadEconomica() {
 /** Baja lógica: el backend marca `estatus = 'E'` y deja de listarla. */
 export function useEliminarActividadEconomica() {
   const queryClient = useQueryClient();
-  return useMutation({
+  return useMutation<void, Error, string>({
     mutationFn: (id: string) => eliminarActividadEconomica(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: actividadesEconomicasKeys.all });

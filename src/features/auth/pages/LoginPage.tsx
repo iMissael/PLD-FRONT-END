@@ -13,11 +13,7 @@ export function LoginPage() {
             <LoginForm />
           </div>
 
-          <div className="from-brand-mint to-brand-teal relative hidden flex-col items-center justify-center gap-4 bg-gradient-to-br p-14 text-center md:flex">
-            <span className="absolute top-4 right-4 flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
-              <span className="size-2 rounded-full bg-white" />
-              Supervisión Regulatoria Activa
-            </span>
+          <div className="from-brand-mint to-brand-teal relative hidden flex-col items-center justify-center gap-4 bg-gradient-to-br p-14 text-center md:flex">        
 
             <span className="flex size-20 items-center justify-center rounded-2xl bg-white/90 shadow-md">
               <ShieldCheck className="text-brand-teal size-10" strokeWidth={1.75} />

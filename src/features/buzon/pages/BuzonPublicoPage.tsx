@@ -8,6 +8,7 @@ import { CheckCircleIcon, PaperclipIcon, UploadIcon } from "@/shared/components/
 import { ThemeToggle } from "@/shared/components/ThemeToggle";
 import { es } from "@/shared/i18n/es";
 
+import { MensajeCabeceraDenuncia } from "../components/MensajeCabeceraDenuncia";
 import { useRazonesAlertaPorTipo, useTiposAlertaBuzon } from "../hooks/useCatalogosBuzon";
 import { useCrearDenuncia } from "../hooks/useDenuncias";
 
@@ -168,6 +169,8 @@ export function BuzonPublicoPage() {
       </header>
 
       <main className="mx-auto max-w-3xl px-4 py-8">
+        <MensajeCabeceraDenuncia />
+
         <div className="mb-6 rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-3.5 text-xs font-medium text-emerald-800 dark:text-emerald-300">
           {es.buzon.anonymousBanner}
         </div>

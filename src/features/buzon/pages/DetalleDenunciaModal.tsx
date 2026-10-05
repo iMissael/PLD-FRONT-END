@@ -426,9 +426,9 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
                     </select>
                   </div>
                 </div>
-
+ 
                 {/* Previsualización de la descripción de la razón */}
-                {selectedRazonDescripcion && (
+                {selectedRazonDescripcion && ( 
                   <div className="rounded-lg border border-border bg-muted/60 p-2.5 text-[11px] text-muted-foreground leading-relaxed">
                     <span className="font-semibold text-foreground block mb-0.5">Descripción de la Razón:</span>
                     {selectedRazonDescripcion}

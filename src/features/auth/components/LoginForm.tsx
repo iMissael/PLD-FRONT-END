@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { Button } from "@/shared/components/ui/button";
-import { Checkbox } from "@/shared/components/ui/checkbox";
 import { useTenantNombre } from "@/shared/tenant/useTenantNombre";
 import {
   Form,
@@ -61,10 +60,7 @@ export function LoginForm() {
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
-          <span className="bg-primary-soft text-primary rounded-full px-3 py-1 text-xs font-bold tracking-wide uppercase">
-            Portal Seguro
-          </span>
-          <span className="text-muted-foreground text-xs font-semibold">SICANET PLD</span>
+          <span className="text-muted-foreground text-xs font-semibold">MÓDULO SICANET PLD</span>
         </div>
         <div>
           <p className="text-primary text-xs font-semibold tracking-wide uppercase">
@@ -137,23 +133,7 @@ export function LoginForm() {
             )}
           />
           <div className="flex items-center justify-between">
-            <FormField
-              control={form.control}
-              name="recordarme"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center gap-2 space-y-0">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormLabel className="text-muted-foreground text-xs font-normal">
-                    Recuérdame
-                  </FormLabel>
-                </FormItem>
-              )}
-            />
+
             <button
               type="button"
               onClick={() =>
