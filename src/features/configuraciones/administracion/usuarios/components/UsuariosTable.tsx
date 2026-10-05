@@ -1,4 +1,5 @@
-import { Search, Trash2, Users } from "lucide-react";
+import { Pencil, Search, Trash2, UserCheck, Users, UserX } from "lucide-react";
+import { toast } from "sonner";
 import { useMemo, useState } from "react";
 import {
   AlertDialog,
@@ -26,9 +27,11 @@ import {
 import { TablePagination } from "@/shared/components/TablePagination";
 import { useRoles } from "@/features/configuraciones/administracion/roles/hooks/useRoles";
 import {
+  useCambiarEstadoUsuario,
   useEliminarUsuario,
   useUsuarios,
 } from "@/features/configuraciones/administracion/usuarios/hooks/useUsuarios";
+import { useAuthStore } from "@/shared/auth/authStore";
 import type { UsuarioResponse } from "@/features/configuraciones/administracion/usuarios/types/usuarios";
 
 function inicialesDe(nombre: string | undefined, username: string | undefined) {
@@ -45,8 +48,8 @@ function AvatarUsuario({ usuario }: { usuario: UsuarioResponse }) {
 }
 
 function BadgeEstado({ estado }: { estado: UsuarioResponse["estado"] }) {
-  if (estado === "ACTIVO") return <Badge>Activo</Badge>;
-  if (estado === "ELIMINADO") return <Badge variant="outline">Eliminado</Badge>;
+  if (estado === "A") return <Badge>Activo</Badge>;
+  if (estado === "E") return <Badge variant="outline">Eliminado</Badge>;
   return <Badge variant="secondary">Inactivo</Badge>;
 }
 
@@ -78,6 +81,94 @@ function FilaEsqueleto() {
   );
 }
 
+function BotonEditar({
+  usuario,
+  onEditar,
+}: {
+  usuario: UsuarioResponse;
+  onEditar: (usuario: UsuarioResponse) => void;
+}) {
+  const nombre = usuario.nombre ?? usuario.username;
+  return (
+    <Button
+      variant="ghost"
+      size="icon-sm"
+      className="text-muted-foreground hover:text-primary hover:bg-primary/10"
+      title="Editar"
+      aria-label={`Editar a ${nombre}`}
+      onClick={() => onEditar(usuario)}
+    >
+      <Pencil />
+    </Button>
+  );
+}
+
+/** Activa directo; desactivar pide confirmación porque el usuario ya no podrá entrar. */
+function BotonEstado({ usuario }: { usuario: UsuarioResponse }) {
+  const cambiarEstado = useCambiarEstadoUsuario();
+  const nombre = usuario.nombre ?? usuario.username;
+  const activo = usuario.estado === "A";
+
+  function cambiar(estado: "A" | "B") {
+    if (!usuario.idUsuario) return;
+    cambiarEstado.mutate(
+      { id: usuario.idUsuario, estado },
+      {
+        onSuccess: () =>
+          toast.success(estado === "A" ? `${nombre} quedó activo` : `${nombre} quedó inactivo`),
+        onError: (error) => toast.error("No se pudo cambiar el estado", { description: error.message }),
+      },
+    );
+  }
+
+  if (!activo) {
+    return (
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        className="text-muted-foreground hover:text-success hover:bg-success/10"
+        title="Activar"
+        aria-label={`Activar a ${nombre}`}
+        disabled={cambiarEstado.isPending}
+        onClick={() => cambiar("A")}
+      >
+        <UserCheck />
+      </Button>
+    );
+  }
+
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          className="text-muted-foreground hover:text-warning hover:bg-warning/10"
+          title="Desactivar"
+          aria-label={`Desactivar a ${nombre}`}
+        >
+          <UserX />
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>¿Desactivar a {nombre}?</AlertDialogTitle>
+          <AlertDialogDescription>
+            No podrá iniciar sesión hasta que lo vuelvas a activar. Sus datos, rol y domicilio
+            se conservan.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+          <AlertDialogAction disabled={cambiarEstado.isPending} onClick={() => cambiar("B")}>
+            {cambiarEstado.isPending ? "Desactivando…" : "Desactivar"}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}
+
 function BotonEliminar({ usuario }: { usuario: UsuarioResponse }) {
   const eliminarUsuario = useEliminarUsuario();
 
@@ -88,6 +179,7 @@ function BotonEliminar({ usuario }: { usuario: UsuarioResponse }) {
           variant="ghost"
           size="icon-sm"
           className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+          title="Eliminar"
           aria-label={`Eliminar a ${usuario.nombre ?? usuario.username}`}
         >
           <Trash2 />
@@ -107,7 +199,11 @@ function BotonEliminar({ usuario }: { usuario: UsuarioResponse }) {
             className="bg-destructive text-white hover:bg-destructive-hover"
             disabled={eliminarUsuario.isPending}
             onClick={() => {
-              if (usuario.idUsuario) eliminarUsuario.mutate(usuario.idUsuario);
+              if (!usuario.idUsuario) return;
+              eliminarUsuario.mutate(usuario.idUsuario, {
+                onError: (error) =>
+                  toast.error("No se pudo eliminar el usuario", { description: error.message }),
+              });
             }}
           >
             {eliminarUsuario.isPending ? "Eliminando…" : "Eliminar"}
@@ -118,7 +214,13 @@ function BotonEliminar({ usuario }: { usuario: UsuarioResponse }) {
   );
 }
 
-export function UsuariosTable() {
+export function UsuariosTable({
+  onEditar,
+}: {
+  onEditar: (usuario: UsuarioResponse) => void;
+}) {
+  // Nadie se desactiva ni se elimina a sí mismo (el backend también lo impide).
+  const idSesion = useAuthStore((estado) => estado.usuario?.id);
   const [busqueda, setBusqueda] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -256,7 +358,15 @@ export function UsuariosTable() {
                     <BadgeEstado estado={usuario.estado} />
                   </TableCell>
                   <TableCell className="text-right">
-                    <BotonEliminar usuario={usuario} />
+                    <div className="flex justify-end gap-1">
+                      <BotonEditar usuario={usuario} onEditar={onEditar} />
+                      {usuario.idUsuario !== idSesion && (
+                        <>
+                          <BotonEstado usuario={usuario} />
+                          <BotonEliminar usuario={usuario} />
+                        </>
+                      )}
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}

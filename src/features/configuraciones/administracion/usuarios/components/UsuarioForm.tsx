@@ -1,22 +1,29 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import { toast } from "sonner";
+import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Button } from "@/shared/components/ui/button";
 import { Form } from "@/shared/components/ui/form";
-import { useCrearUsuarioCompleto } from "@/features/configuraciones/administracion/usuarios/hooks/useUsuarios";
+import {
+  useActualizarUsuarioCompleto,
+  useCrearUsuarioCompleto,
+} from "@/features/configuraciones/administracion/usuarios/hooks/useUsuarios";
 import { useRoles } from "@/features/configuraciones/administracion/roles/hooks/useRoles";
 import { esRolOficial } from "@/features/configuraciones/administracion/usuarios/utils/usuarios";
 import {
   crearUsuarioSchema,
+  editarUsuarioSchema,
   PASO1_CAMPOS,
   PASO2_CAMPOS,
   type CrearUsuarioFormValues,
 } from "@/features/configuraciones/administracion/usuarios/types/usuarioSchema";
 import type {
+  ActualizarUsuarioRequest,
   CrearUsuarioRequest,
   DomicilioUsuarioRequest,
   OficialRequest,
+  UsuarioResponse,
 } from "@/features/configuraciones/administracion/usuarios/types/usuarios";
 import { DatosGeneralesStep } from "@/features/configuraciones/administracion/usuarios/components/steps/DatosGeneralesStep";
 import { DomicilioStep } from "@/features/configuraciones/administracion/usuarios/components/steps/DomicilioStep";
@@ -72,6 +79,13 @@ function aUsuarioPayload(values: CrearUsuarioFormValues): CrearUsuarioRequest {
   };
 }
 
+/** Datos personales para el PUT: sin username, contraseña ni rol (tienen su propia operación). */
+function aActualizarPayload(values: CrearUsuarioFormValues): ActualizarUsuarioRequest {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { username, password, rolId, ...datosPersonales } = aUsuarioPayload(values);
+  return datosPersonales;
+}
+
 function aOficialPayload(values: CrearUsuarioFormValues): OficialRequest {
   return {
     tipoPersona: values.tipoPersona ?? "",
@@ -111,14 +125,26 @@ function aDomicilioPayload(values: CrearUsuarioFormValues): DomicilioUsuarioRequ
   };
 }
 
-export function UsuarioForm({ onCreado }: { onCreado?: () => void }) {
+export function UsuarioForm({
+  onCreado,
+  edicion,
+}: {
+  onCreado?: () => void;
+  /** Usuario a editar con sus valores ya cargados; sin esto el formulario da de alta. */
+  edicion?: { usuario: UsuarioResponse; valores: CrearUsuarioFormValues };
+}) {
   const [paso, setPaso] = useState<1 | 2 | 3>(1);
   const crearUsuarioCompleto = useCrearUsuarioCompleto();
+  const actualizarUsuarioCompleto = useActualizarUsuarioCompleto();
+  const guardando = crearUsuarioCompleto.isPending || actualizarUsuarioCompleto.isPending;
   const { data: roles } = useRoles();
 
   const form = useForm<CrearUsuarioFormValues>({
-    resolver: zodResolver(crearUsuarioSchema),
-    defaultValues: {
+    // En edición la contraseña no se valida: el esquema de edición la deja opcional.
+    resolver: edicion
+      ? (zodResolver(editarUsuarioSchema) as unknown as Resolver<CrearUsuarioFormValues>)
+      : zodResolver(crearUsuarioSchema),
+    defaultValues: edicion?.valores ?? {
       username: "",
       password: "",
       confirmarPassword: "",
@@ -191,6 +217,39 @@ export function UsuarioForm({ onCreado }: { onCreado?: () => void }) {
       }
     }
 
+    const avisarError = (error: Error) => {
+      // AppError trae el detail del backend; en un 400 de validación, los campos rechazados.
+      const campos =
+        isAppError(error) && error.invalidParams
+          ? Object.entries(error.invalidParams).map(([campo, mensaje]) => `${campo}: ${mensaje}`)
+          : [];
+      toast.error(edicion ? "No se pudieron guardar los cambios" : "No se pudo crear el usuario", {
+        description: campos.length > 0 ? campos.join(" · ") : error.message,
+      });
+    };
+
+    if (edicion) {
+      const id = edicion.usuario.idUsuario!;
+      const rolNuevo = Number(values.rolId);
+      actualizarUsuarioCompleto.mutate(
+        {
+          id,
+          usuario: aActualizarPayload(values),
+          rolId: rolNuevo !== edicion.usuario.rolId ? rolNuevo : undefined,
+          domicilio: aDomicilioPayload(values),
+          oficial: esOficial ? aOficialPayload(values) : undefined,
+        },
+        {
+          onSuccess: () => {
+            toast.success("Usuario actualizado correctamente");
+            onCreado?.();
+          },
+          onError: avisarError,
+        },
+      );
+      return;
+    }
+
     crearUsuarioCompleto.mutate(
       {
         usuario: aUsuarioPayload(values),
@@ -204,9 +263,7 @@ export function UsuarioForm({ onCreado }: { onCreado?: () => void }) {
           setPaso(1);
           onCreado?.();
         },
-        onError: () => {
-          toast.error("No se pudo crear el usuario");
-        },
+        onError: avisarError,
       },
     );
   }
@@ -245,7 +302,7 @@ export function UsuarioForm({ onCreado }: { onCreado?: () => void }) {
       </nav>
 
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        {paso === 1 && <DatosGeneralesStep form={form} />}
+        {paso === 1 && <DatosGeneralesStep form={form} edicion={Boolean(edicion)} />}
         {paso === 2 && <DomicilioStep form={form} />}
         {paso === 3 && <TipoUsuarioStep form={form} />}
 
@@ -263,8 +320,8 @@ export function UsuarioForm({ onCreado }: { onCreado?: () => void }) {
               Siguiente
             </Button>
           ) : (
-            <Button type="submit" disabled={crearUsuarioCompleto.isPending}>
-              {crearUsuarioCompleto.isPending ? "Creando…" : "Guardar"}
+            <Button type="submit" disabled={guardando}>
+              {guardando ? "Guardando…" : edicion ? "Guardar cambios" : "Guardar"}
             </Button>
           )}
         </div>

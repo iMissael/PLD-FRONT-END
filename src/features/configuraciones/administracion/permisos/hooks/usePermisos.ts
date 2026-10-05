@@ -3,16 +3,25 @@ import {
   crearPermiso,
   eliminarPermiso,
   listarPermisos,
+  listarRecursosPermiso,
 } from "@/features/configuraciones/administracion/permisos/api/permisosApi";
 
 const permisosKeys = {
   all: ["permisos"] as const,
+  recursos: ["permisos", "recursos"] as const,
 };
 
 export function usePermisos() {
   return useQuery({
     queryKey: permisosKeys.all,
     queryFn: listarPermisos,
+  });
+}
+
+export function useRecursosPermiso() {
+  return useQuery({
+    queryKey: permisosKeys.recursos,
+    queryFn: listarRecursosPermiso,
   });
 }
 

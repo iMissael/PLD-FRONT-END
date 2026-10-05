@@ -3366,14 +3366,16 @@ export interface components {
         };
         ActualizarPermisoRequest: {
             recurso: string;
-            accion: string;
+            /** @enum {string} */
+            accion: "ver" | "crear" | "modificar" | "eliminar" | "ejecutar" | "desbloquear" | "confirmar";
             descripcion?: string;
         };
         PermisoResponse: {
             /** Format: int64 */
             idPermiso?: number;
             recurso?: string;
-            accion?: string;
+            /** @enum {string} */
+            accion?: "ver" | "crear" | "modificar" | "eliminar" | "ejecutar" | "desbloquear" | "confirmar";
             descripcion?: string;
             /** @enum {string} */
             estado?: "A" | "B" | "S" | "E";
@@ -4272,7 +4274,8 @@ export interface components {
         };
         CrearPermisoRequest: {
             recurso: string;
-            accion: string;
+            /** @enum {string} */
+            accion: "ver" | "crear" | "modificar" | "eliminar" | "ejecutar" | "desbloquear" | "confirmar";
             descripcion?: string;
         };
         /** @description Solicitud para emisión de token JWT asimétrico para cliente externo */

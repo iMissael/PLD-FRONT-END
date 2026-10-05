@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useWatch, type UseFormReturn } from "react-hook-form";
 import {
   FormControl,
@@ -16,6 +17,10 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { useActividadesEconomicas } from "@/features/catalogos/hooks/useCatalogos";
+import {
+  CampoCatalogo,
+  type OpcionCatalogo,
+} from "@/features/configuraciones/oficial-cumplimiento/components/campos";
 import { useRoles } from "@/features/configuraciones/administracion/roles/hooks/useRoles";
 import { esRolOficial } from "@/features/configuraciones/administracion/usuarios/utils/usuarios";
 import type { CrearUsuarioFormValues } from "@/features/configuraciones/administracion/usuarios/types/usuarioSchema";
@@ -31,7 +36,23 @@ export function TipoUsuarioStep({
   form: UseFormReturn<CrearUsuarioFormValues>;
 }) {
   const { data: roles } = useRoles();
-  const { data: actividadesEconomicas } = useActividadesEconomicas();
+  const { data: actividadesEconomicas, isPending: cargandoActividades } =
+    useActividadesEconomicas();
+  const actividadActual = useWatch({ control: form.control, name: "actividadEconomicaId" });
+
+  // Igual que en la ficha del oficial: con su clave, y la ya asignada se conserva aunque el
+  // catálogo la marque inactiva.
+  const opcionesActividad = useMemo<OpcionCatalogo[]>(
+    () =>
+      (actividadesEconomicas ?? [])
+        .filter((item) => item.id && (item.estatus === "A" || item.id === actividadActual))
+        .map((item) => ({
+          valor: item.id ?? "",
+          etiqueta: item.descripcion ?? "",
+          codigo: item.id,
+        })),
+    [actividadesEconomicas, actividadActual],
+  );
   const rolSeleccionado = useWatch({ control: form.control, name: "rolId" });
   const esOficial = esRolOficial(roles, rolSeleccionado);
 
@@ -169,29 +190,13 @@ export function TipoUsuarioStep({
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
+            <CampoCatalogo
+              form={form}
               name="actividadEconomicaId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Actividad económica</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Selecciona una actividad" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {actividadesEconomicas?.map((item) => (
-                        <SelectItem key={item.id} value={item.id ?? ""}>
-                          {item.descripcion}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
+              label="Actividad económica"
+              placeholder="Busca una actividad"
+              opciones={opcionesActividad}
+              cargando={cargandoActividades}
             />
           </div>
         </fieldset>

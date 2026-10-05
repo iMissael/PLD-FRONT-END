@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from "vitest";
 
-import { useAuthStore } from "@/shared/auth/authStore";
+import { esRolAdmin, useAuthStore } from "@/shared/auth/authStore";
 
 const sesion = {
   token: "jwt",
@@ -28,5 +28,29 @@ describe("authStore", () => {
 
     expect(useAuthStore.getState().token).toBeNull();
     expect(useAuthStore.getState().isAuthenticated("tenant-a")).toBe(false);
+  });
+
+  it("el rol Administrador sembrado pasa sin permisos asignados", () => {
+    useAuthStore
+      .getState()
+      .setSession("tenant-a", { ...sesion, rol: { id: 1, nombre: "Administrador" }, permisos: [] }, false);
+
+    expect(useAuthStore.getState().hasPermission("permisos", "crear")).toBe(true);
+  });
+
+  it("otro rol necesita el permiso exacto", () => {
+    useAuthStore
+      .getState()
+      .setSession("tenant-a", { ...sesion, rol: { id: 2, nombre: "Analista" } }, false);
+
+    expect(useAuthStore.getState().hasPermission("usuarios", "crear")).toBe(true);
+    expect(useAuthStore.getState().hasPermission("usuarios", "eliminar")).toBe(false);
+  });
+
+  it("reconoce los nombres de administrador sin importar mayúsculas", () => {
+    expect(esRolAdmin("ROLE_ADMIN")).toBe(true);
+    expect(esRolAdmin("administrador")).toBe(true);
+    expect(esRolAdmin("Oficial de Cumplimiento")).toBe(false);
+    expect(esRolAdmin(undefined)).toBe(false);
   });
 });

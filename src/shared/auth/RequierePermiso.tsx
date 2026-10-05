@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 import { useAuthStore } from "@/shared/auth/authStore";
 
-/** Exige un permiso puntual (recurso+acción) para ver el contenido; ROLE_ADMIN siempre pasa. */
+/** Exige un permiso puntual (recurso+acción) para ver el contenido; el administrador siempre pasa. */
 export function RequierePermiso({
   recurso,
   accion,

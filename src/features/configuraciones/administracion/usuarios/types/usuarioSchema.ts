@@ -14,9 +14,12 @@ import {
 
 const EDAD_MINIMA = 18;
 
+// Mismo carácter especial que exige el backend (CrearUsuarioRequest / CambiarPasswordRequest).
+const PATRON_ESPECIAL = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/;
+
 // Los máximos son los de las columnas de las tablas usuario y domicilio_usuario; el backend
 // no los valida y un texto más largo terminaría en un error 500 al guardar.
-export const crearUsuarioSchema = z
+const camposUsuario = z
   .object({
     // Paso 1 — Datos de acceso
     username: z
@@ -25,11 +28,16 @@ export const crearUsuarioSchema = z
       .min(1, "El username es obligatorio")
       .max(50, "Máximo 50 caracteres")
       .regex(/^[a-z0-9._-]+$/, "Solo minúsculas, números, punto, guion o guion bajo"),
-    // bcrypt solo procesa los primeros 72 bytes: una contraseña más larga se rechaza.
+    // Las reglas del backend: 12 caracteres con mayúscula, minúscula, número y carácter
+    // especial. bcrypt solo procesa los primeros 72 bytes: una contraseña más larga se rechaza.
     password: z
       .string()
-      .min(8, "La contraseña debe tener al menos 8 caracteres")
-      .max(72, "Máximo 72 caracteres"),
+      .min(12, "La contraseña debe tener al menos 12 caracteres")
+      .max(72, "Máximo 72 caracteres")
+      .regex(/[a-z]/, "Incluye al menos una minúscula")
+      .regex(/[A-Z]/, "Incluye al menos una mayúscula")
+      .regex(/\d/, "Incluye al menos un número")
+      .regex(PATRON_ESPECIAL, "Incluye al menos un carácter especial (!@#$%…)"),
     confirmarPassword: z.string().min(1, "Confirma la contraseña"),
     correo: z
       .string()
@@ -117,18 +125,28 @@ export const crearUsuarioSchema = z
     claveOrganoSuperior: conFormato(50, PATRON_CLAVE, "Solo letras, números y guion"),
     monedaDeOperacionPrincipal: conFormato(3, /^[A-Z]{3}$/, "Usa el código de 3 letras, por ejemplo MXN"),
     actividadEconomicaId: z.string().optional(),
-  })
-  .superRefine((datos, contexto) => {
-    if (datos.password !== datos.confirmarPassword) {
-      contexto.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["confirmarPassword"],
-        message: "Las contraseñas no coinciden",
-      });
-    }
   });
 
+export const crearUsuarioSchema = camposUsuario.superRefine((datos, contexto) => {
+  if (datos.password !== datos.confirmarPassword) {
+    contexto.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["confirmarPassword"],
+      message: "Las contraseñas no coinciden",
+    });
+  }
+});
+
 export type CrearUsuarioFormValues = z.infer<typeof crearUsuarioSchema>;
+
+/**
+ * Edición: mismos campos, pero sin contraseña (se cambia con su propia operación) y el
+ * username no se modifica. Los campos de contraseña quedan en el formulario vacíos.
+ */
+export const editarUsuarioSchema = camposUsuario.extend({
+  password: z.string().optional(),
+  confirmarPassword: z.string().optional(),
+});
 
 export const PASO1_CAMPOS = [
   "username",

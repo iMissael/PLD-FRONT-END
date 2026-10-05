@@ -38,6 +38,17 @@ export async function eliminarUsuario(id: number) {
   await apiClient.delete(`/usuarios/${id}`);
 }
 
+export async function cambiarRolUsuario(id: number, rolId: number) {
+  const { data } = await apiClient.patch<UsuarioResponse>(`/usuarios/${id}/rol`, { rolId });
+  return data;
+}
+
+/** A = activo, B = inactivo: un usuario inactivo no puede iniciar sesión. */
+export async function cambiarEstadoUsuario(id: number, estado: "A" | "B") {
+  const { data } = await apiClient.patch<UsuarioResponse>(`/usuarios/${id}/estado`, { estado });
+  return data;
+}
+
 export async function crearDomicilioUsuario(
   usuarioId: number,
   payload: DomicilioUsuarioRequest,

@@ -9,6 +9,12 @@ export async function listarPermisos() {
   return data;
 }
 
+/** Recursos que protegen los endpoints del backend: son las opciones para crear un permiso. */
+export async function listarRecursosPermiso() {
+  const { data } = await apiClient.get<string[]>("/permisos/recursos");
+  return data;
+}
+
 export async function crearPermiso(payload: CrearPermisoRequest) {
   const { data } = await apiClient.post<PermisoResponse>("/permisos", payload);
   return data;

@@ -9,11 +9,46 @@ import {
   CardDescription,
   CardAction,
 } from "@/shared/components/ui/card";
+import { Skeleton } from "@/shared/components/ui/skeleton";
 import { UsuarioForm } from "@/features/configuraciones/administracion/usuarios/components/UsuarioForm";
 import { UsuariosTable } from "@/features/configuraciones/administracion/usuarios/components/UsuariosTable";
+import { useDetalleUsuario } from "@/features/configuraciones/administracion/usuarios/hooks/useUsuarios";
+import type { UsuarioResponse } from "@/features/configuraciones/administracion/usuarios/types/usuarios";
+import { valoresDeUsuario } from "@/features/configuraciones/administracion/usuarios/utils/usuarios";
+
+type Formulario = { tipo: "cerrado" } | { tipo: "nuevo" } | { tipo: "editar"; usuario: UsuarioResponse };
+
+/** Carga domicilio y datos de oficial antes de abrir el formulario con todo precargado. */
+function EditarUsuario({ usuario, onGuardado }: { usuario: UsuarioResponse; onGuardado: () => void }) {
+  const { data, isLoading, isError } = useDetalleUsuario(usuario.idUsuario);
+
+  if (isLoading) {
+    return (
+      <div className="space-y-3">
+        <Skeleton className="h-6 w-48" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+      </div>
+    );
+  }
+  if (isError || !data) {
+    return (
+      <p className="text-destructive text-sm">No se pudieron cargar los datos del usuario.</p>
+    );
+  }
+  return (
+    <UsuarioForm
+      key={usuario.idUsuario}
+      onCreado={onGuardado}
+      edicion={{ usuario, valores: valoresDeUsuario(usuario, data.domicilio, data.oficial) }}
+    />
+  );
+}
 
 export function UsuariosPage() {
-  const [formularioAbierto, setFormularioAbierto] = useState(false);
+  const [formulario, setFormulario] = useState<Formulario>({ tipo: "cerrado" });
+  const cerrar = () => setFormulario({ tipo: "cerrado" });
+  const abierto = formulario.tipo !== "cerrado";
 
   return (
     <div className="space-y-6">
@@ -25,39 +60,58 @@ export function UsuariosPage() {
           </p>
         </div>
         <Button
-          variant={formularioAbierto ? "outline" : "default"}
-          onClick={() => setFormularioAbierto((abierto) => !abierto)}
+          variant={abierto ? "outline" : "default"}
+          onClick={() => setFormulario(abierto ? { tipo: "cerrado" } : { tipo: "nuevo" })}
         >
-          {formularioAbierto ? <X /> : <UserPlus />}
-          {formularioAbierto ? "Cancelar" : "Nuevo usuario"}
+          {abierto ? <X /> : <UserPlus />}
+          {abierto ? "Cancelar" : "Nuevo usuario"}
         </Button>
       </div>
 
-      {formularioAbierto && (
+      {abierto && (
         <Card className="animate-in fade-in slide-in-from-top-2 duration-300">
           <CardHeader>
-            <CardTitle>Nuevo usuario</CardTitle>
+            <CardTitle>
+              {formulario.tipo === "editar"
+                ? `Editar a ${formulario.usuario.nombre ?? formulario.usuario.username}`
+                : "Nuevo usuario"}
+            </CardTitle>
             <CardDescription>
-              Completa los 2 pasos para dar de alta un usuario y su acceso al sistema.
+              {formulario.tipo === "editar"
+                ? "Actualiza sus datos, domicilio y rol. La contraseña y el username no se cambian aquí."
+                : "Completa los 3 pasos para dar de alta un usuario y su acceso al sistema."}
             </CardDescription>
             <CardAction>
               <Button
                 variant="ghost"
                 size="icon-sm"
                 aria-label="Cerrar formulario"
-                onClick={() => setFormularioAbierto(false)}
+                onClick={cerrar}
               >
                 <X />
               </Button>
             </CardAction>
           </CardHeader>
           <CardContent>
-            <UsuarioForm onCreado={() => setFormularioAbierto(false)} />
+            {formulario.tipo === "editar" ? (
+              <EditarUsuario
+                key={formulario.usuario.idUsuario}
+                usuario={formulario.usuario}
+                onGuardado={cerrar}
+              />
+            ) : (
+              <UsuarioForm onCreado={cerrar} />
+            )}
           </CardContent>
         </Card>
       )}
 
-      <UsuariosTable />
+      <UsuariosTable
+        onEditar={(usuario) => {
+          setFormulario({ tipo: "editar", usuario });
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
+      />
     </div>
   );
 }

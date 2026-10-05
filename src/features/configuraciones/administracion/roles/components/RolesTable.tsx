@@ -17,6 +17,13 @@ import {
   useRoles,
 } from "@/features/configuraciones/administracion/roles/hooks/useRoles";
 
+const ETIQUETA_ESTADO: Record<string, string> = {
+  A: "Activo",
+  B: "Inactivo",
+  S: "Suspendido",
+  E: "Eliminado",
+};
+
 export function RolesTable() {
   const rutaEnTenant = useRutaTenant();
   const { data: roles, isLoading, isError } = useRoles();
@@ -80,8 +87,8 @@ export function RolesTable() {
               <TableCell>{rol.categoria}</TableCell>
               <TableCell>{rol.descripcion ?? "—"}</TableCell>
               <TableCell>
-                <Badge variant={rol.estado === "ACTIVO" ? "default" : "secondary"}>
-                  {rol.estado}
+                <Badge variant={rol.estado === "A" ? "default" : "secondary"}>
+                  {ETIQUETA_ESTADO[rol.estado ?? ""] ?? rol.estado}
                 </Badge>
               </TableCell>
               <TableCell className="space-x-2 text-right">

@@ -60,8 +60,8 @@ export function PermisosTable() {
             <TableCell>{permiso.accion}</TableCell>
             <TableCell>{permiso.descripcion ?? "—"}</TableCell>
             <TableCell>
-              <Badge variant={permiso.estado === "ACTIVO" ? "default" : "secondary"}>
-                {permiso.estado}
+              <Badge variant={permiso.estado === "A" ? "default" : "secondary"}>
+                {permiso.estado === "A" ? "Activo" : "Inactivo"}
               </Badge>
             </TableCell>
             <TableCell className="text-right">

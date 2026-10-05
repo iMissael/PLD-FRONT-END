@@ -1,24 +1,35 @@
 import { z } from "zod";
 import { texto } from "@/shared/utils/validacion";
 
-const PATRON_CLAVE_PERMISO = /^[A-Z0-9_.:-]+$/;
-const MENSAJE_CLAVE_PERMISO =
-  "Una sola palabra: letras, números, punto, dos puntos, guion o guion bajo";
+/** Mismos valores que el enum AccionPermiso del backend (minúsculas, como en el token). */
+export const ACCIONES_PERMISO = [
+  "ver",
+  "crear",
+  "modificar",
+  "eliminar",
+  "ejecutar",
+  "desbloquear",
+  "confirmar",
+] as const;
 
-// Los máximos son los de las columnas de la tabla permiso; el backend no los valida.
+export type AccionPermiso = (typeof ACCIONES_PERMISO)[number];
+
+export const ETIQUETAS_ACCION: Record<AccionPermiso, string> = {
+  ver: "Ver",
+  crear: "Crear",
+  modificar: "Modificar",
+  eliminar: "Eliminar",
+  ejecutar: "Ejecutar",
+  desbloquear: "Desbloquear",
+  confirmar: "Confirmar",
+};
+
+// El recurso se elige de los que protege el backend; la acción, del enum.
 export const crearPermisoSchema = z.object({
-  recurso: z
-    .string()
-    .trim()
-    .min(1, "El recurso es obligatorio")
-    .max(50, "Máximo 50 caracteres")
-    .regex(PATRON_CLAVE_PERMISO, MENSAJE_CLAVE_PERMISO),
-  accion: z
-    .string()
-    .trim()
-    .min(1, "La acción es obligatoria")
-    .max(50, "Máximo 50 caracteres")
-    .regex(PATRON_CLAVE_PERMISO, MENSAJE_CLAVE_PERMISO),
+  recurso: z.string().trim().min(1, "El recurso es obligatorio"),
+  accion: z.enum(ACCIONES_PERMISO, {
+    errorMap: () => ({ message: "La acción es obligatoria" }),
+  }),
   descripcion: texto(255),
 });
 

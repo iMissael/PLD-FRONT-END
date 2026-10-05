@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import {
   alfanumerico,
   clave,
-  clavePermiso,
   correo,
   mayusculas,
   nombrePropio,
@@ -93,12 +92,3 @@ describe("nombreRol", () => {
   });
 });
 
-describe("clavePermiso", () => {
-  it("es una sola palabra en mayúsculas: sin espacios", () => {
-    expect(clavePermiso("crear usuarios")).toBe("CREARUSUARIOS");
-  });
-
-  it("acepta punto, dos puntos, guion y guion bajo", () => {
-    expect(clavePermiso("reporte:ver_todo-1.a")).toBe("REPORTE:VER_TODO-1.A");
-  });
-});

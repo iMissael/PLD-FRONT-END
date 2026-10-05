@@ -6,6 +6,14 @@ import type { LoginResponse } from "@/features/auth/types/auth";
 const REMEMBER_FLAG_KEY = "auth-remember";
 const STORAGE_KEY = "auth-storage";
 
+// Mismos nombres que AuthenticatedUser.isAdmin() en el backend: el rol sembrado se llama
+// "Administrador" y no tiene permisos asignados, su acceso total depende del nombre.
+const ROLES_ADMIN = ["ROLE_ADMIN", "ADMIN", "ADMINISTRADOR"];
+
+export function esRolAdmin(nombre: string | undefined | null) {
+  return Boolean(nombre) && ROLES_ADMIN.includes(nombre!.trim().toUpperCase());
+}
+
 function getActiveStorage(): Storage {
   return localStorage.getItem(REMEMBER_FLAG_KEY) === "true"
     ? localStorage
@@ -30,7 +38,7 @@ interface AuthState {
   permisos: LoginResponse["permisos"];
   /** ¿Hay una sesión válida para este tenant? */
   isAuthenticated: (tenantId: string) => boolean;
-  /** ROLE_ADMIN pasa siempre; el resto necesita el permiso exacto. */
+  /** El administrador pasa siempre; el resto necesita el permiso exacto. */
   hasPermission: (recurso: string, accion: string) => boolean;
   setSession: (tenantId: string, data: LoginResponse, remember: boolean) => void;
   logout: () => void;
@@ -46,7 +54,7 @@ export const useAuthStore = create<AuthState>()(
       permisos: [],
       isAuthenticated: (tenantId) => get().token !== null && get().tenantId === tenantId,
       hasPermission: (recurso, accion) => {
-        if (get().rol?.nombre === "ROLE_ADMIN") return true;
+        if (esRolAdmin(get().rol?.nombre)) return true;
         return get().permisos.some((p) => p.recurso === recurso && p.accion === accion);
       },
       setSession: (tenantId, data, remember) => {

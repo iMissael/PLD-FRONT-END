@@ -52,6 +52,3 @@ export const nombreUsuario: Formato = (valor) =>
 export const nombreRol: Formato = (valor) =>
   espaciosLimpios(valor.toLocaleUpperCase("es-MX").replace(/[^A-ZÑ0-9 _-]/g, ""));
 
-/** Recurso y acción de un permiso: una sola palabra en mayúsculas ("USUARIOS", "CREAR"). */
-export const clavePermiso: Formato = (valor) =>
-  valor.toLocaleUpperCase("es-MX").replace(/[^A-Z0-9_.:-]/g, "");

@@ -1,7 +1,7 @@
 import { Search, UserRound } from "lucide-react";
 import { useId, useMemo, useRef, useState } from "react";
 import type { ComponentProps, ElementType, KeyboardEvent, ReactNode } from "react";
-import type { UseFormReturn } from "react-hook-form";
+import type { FieldPath, FieldValues, UseFormReturn } from "react-hook-form";
 import { InputFormateado } from "@/shared/components/InputFormateado";
 import { Input } from "@/shared/components/ui/input";
 import {
@@ -186,7 +186,11 @@ export function CampoSelect({
 }
 
 /** Catálogo con clave y lupa: al abrirla se busca por nombre o clave dentro del catálogo. */
-export function CampoCatalogo({
+/**
+ * Selector con búsqueda por nombre o clave para catálogos largos. Es genérico sobre el
+ * formulario: también lo usa el alta de usuarios (actividad económica del oficial).
+ */
+export function CampoCatalogo<T extends FieldValues = OficialCumplimientoFormValues>({
   form,
   name,
   label,
@@ -200,8 +204,8 @@ export function CampoCatalogo({
   ayuda,
   className,
 }: {
-  form: FichaForm;
-  name: CampoNombre;
+  form: UseFormReturn<T>;
+  name: FieldPath<T>;
   label: string;
   placeholder: string;
   opciones: OpcionCatalogo[];
@@ -257,7 +261,8 @@ export function CampoCatalogo({
       control={form.control}
       name={name}
       render={({ field }) => {
-        const actual = opciones.find((opcion) => opcion.valor === field.value);
+        const valorActual = String(field.value ?? "");
+        const actual = opciones.find((opcion) => opcion.valor === valorActual);
 
         function elegir(valor: string) {
           field.onChange(valor);
@@ -293,7 +298,7 @@ export function CampoCatalogo({
                           )}
                         >
                           {actual?.etiqueta ??
-                            (field.value && cargando ? "Cargando…" : placeholder)}
+                            (valorActual && cargando ? "Cargando…" : placeholder)}
                         </span>
                         <Search className="text-muted-foreground size-4 shrink-0" />
                       </button>
@@ -333,11 +338,11 @@ export function CampoCatalogo({
                         key={opcion.valor}
                         type="button"
                         role="option"
-                        aria-selected={opcion.valor === field.value}
+                        aria-selected={opcion.valor === valorActual}
                         onClick={() => elegir(opcion.valor)}
                         className={cn(
                           "flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm outline-none hover:bg-slate-100 focus-visible:bg-slate-100 dark:hover:bg-slate-800 dark:focus-visible:bg-slate-800",
-                          opcion.valor === field.value && "bg-primary-soft dark:bg-slate-800 font-semibold",
+                          opcion.valor === valorActual && "bg-primary-soft dark:bg-slate-800 font-semibold",
                         )}
                       >
                         {opcion.codigo && (

@@ -37,8 +37,11 @@ import type { CrearUsuarioFormValues } from "@/features/configuraciones/administ
 
 export function DatosGeneralesStep({
   form,
+  edicion = false,
 }: {
   form: UseFormReturn<CrearUsuarioFormValues>;
+  /** En edición el username no cambia y la contraseña no se captura aquí. */
+  edicion?: boolean;
 }) {
   const { data: nacionalidades } = useNacionalidades();
   const { data: estadosCiviles } = useEstadosCiviles();
@@ -71,38 +74,43 @@ export function DatosGeneralesStep({
                     {...field}
                     formato={nombreUsuario}
                     maxLength={50}
+                    disabled={edicion}
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Contraseña</FormLabel>
-                <FormControl>
-                  <Input type="password" placeholder="••••••••" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="confirmarPassword"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Confirmar contraseña</FormLabel>
-                <FormControl>
-                  <Input type="password" placeholder="••••••••" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {!edicion && (
+            <>
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Contraseña</FormLabel>
+                  <FormControl>
+                    <Input type="password" placeholder="••••••••" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="confirmarPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirmar contraseña</FormLabel>
+                  <FormControl>
+                    <Input type="password" placeholder="••••••••" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            </>
+          )}
           <FormField
             control={form.control}
             name="correo"

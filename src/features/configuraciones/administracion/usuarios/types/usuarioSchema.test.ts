@@ -6,8 +6,8 @@ import {
 
 const valido: CrearUsuarioFormValues = {
   username: "jdoe",
-  password: "Secreta123!",
-  confirmarPassword: "Secreta123!",
+  password: "Secreta1234!",
+  confirmarPassword: "Secreta1234!",
   nombre: "JUAN",
   rolId: "rol-1",
   domicilioPaisId: "MX",
@@ -62,7 +62,17 @@ describe("crearUsuarioSchema", () => {
       expect(errores({ username: "a".repeat(51) })).toHaveProperty("username");
     });
 
-    it("la contraseña tiene entre 8 y 72 caracteres", () => {
+    it("la contraseña sigue las reglas del backend", () => {
+      const conClave = (password: string) => errores({ password, confirmarPassword: password });
+      expect(conClave("Secreta123!")).toHaveProperty("password"); // 11 caracteres
+      expect(conClave("secreta1234!")).toHaveProperty("password"); // sin mayúscula
+      expect(conClave("SECRETA1234!")).toHaveProperty("password"); // sin minúscula
+      expect(conClave("Secretaaaaa!")).toHaveProperty("password"); // sin número
+      expect(conClave("Secreta12345")).toHaveProperty("password"); // sin especial
+      expect(conClave("Secreta1234!")).toEqual({});
+    });
+
+    it("la contraseña tiene entre 12 y 72 caracteres", () => {
       expect(errores({ password: "corta", confirmarPassword: "corta" })).toHaveProperty(
         "password",
       );

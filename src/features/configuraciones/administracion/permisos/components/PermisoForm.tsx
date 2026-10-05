@@ -11,19 +11,36 @@ import {
   FormMessage,
 } from "@/shared/components/ui/form";
 import { InputFormateado } from "@/shared/components/InputFormateado";
-import { clavePermiso, mayusculas } from "@/shared/utils/entradas";
-import { useCrearPermiso } from "@/features/configuraciones/administracion/permisos/hooks/usePermisos";
+import { mayusculas } from "@/shared/utils/entradas";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/components/ui/select";
+import {
+  useCrearPermiso,
+  useRecursosPermiso,
+} from "@/features/configuraciones/administracion/permisos/hooks/usePermisos";
+import {
+  ACCIONES_PERMISO,
   crearPermisoSchema,
+  ETIQUETAS_ACCION,
   type CrearPermisoFormValues,
 } from "@/features/configuraciones/administracion/permisos/types/permisoSchema";
 
 export function PermisoForm() {
   const crearPermiso = useCrearPermiso();
+  const { data: recursos, isLoading: cargandoRecursos } = useRecursosPermiso();
 
   const form = useForm<CrearPermisoFormValues>({
     resolver: zodResolver(crearPermisoSchema),
-    defaultValues: { recurso: "", accion: "", descripcion: "" },
+    defaultValues: {
+      recurso: "",
+      accion: undefined as unknown as CrearPermisoFormValues["accion"],
+      descripcion: "",
+    },
   });
 
   function onSubmit(values: CrearPermisoFormValues) {
@@ -50,14 +67,22 @@ export function PermisoForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Recurso</FormLabel>
-              <FormControl>
-                <InputFormateado
-                  placeholder="USUARIOS"
-                  {...field}
-                  formato={clavePermiso}
-                  maxLength={50}
-                />
-              </FormControl>
+              <Select onValueChange={field.onChange} value={field.value}>
+                <FormControl>
+                  <SelectTrigger className="w-full">
+                    <SelectValue
+                      placeholder={cargandoRecursos ? "Cargando…" : "Selecciona un recurso"}
+                    />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {recursos?.map((recurso) => (
+                    <SelectItem key={recurso} value={recurso}>
+                      {recurso}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}
@@ -68,14 +93,20 @@ export function PermisoForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Acción</FormLabel>
-              <FormControl>
-                <InputFormateado
-                  placeholder="CREAR"
-                  {...field}
-                  formato={clavePermiso}
-                  maxLength={50}
-                />
-              </FormControl>
+              <Select onValueChange={field.onChange} value={field.value ?? ""}>
+                <FormControl>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Selecciona una acción" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {ACCIONES_PERMISO.map((accion) => (
+                    <SelectItem key={accion} value={accion}>
+                      {ETIQUETAS_ACCION[accion]}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}

@@ -2,12 +2,12 @@ import { describe, expect, it } from "vitest";
 import { crearPermisoSchema } from "@/features/configuraciones/administracion/permisos/types/permisoSchema";
 
 describe("crearPermisoSchema", () => {
-  it("acepta recurso y acción de una sola palabra en mayúsculas", () => {
+  it("acepta un recurso y una acción del enum", () => {
     expect(
-      crearPermisoSchema.safeParse({ recurso: "USUARIOS", accion: "CREAR" }).success,
+      crearPermisoSchema.safeParse({ recurso: "usuarios", accion: "crear" }).success,
     ).toBe(true);
     expect(
-      crearPermisoSchema.safeParse({ recurso: "REPORTE:VER_TODO", accion: "LEER-1.A" })
+      crearPermisoSchema.safeParse({ recurso: "coincidencias", accion: "confirmar" })
         .success,
     ).toBe(true);
   });
@@ -22,28 +22,22 @@ describe("crearPermisoSchema", () => {
     }
   });
 
-  it("rechaza espacios, minúsculas y símbolos", () => {
+  it("rechaza acciones fuera del enum, incluso en mayúsculas", () => {
     expect(
-      crearPermisoSchema.safeParse({ recurso: "MIS USUARIOS", accion: "CREAR" }).success,
+      crearPermisoSchema.safeParse({ recurso: "usuarios", accion: "aprobar" }).success,
     ).toBe(false);
     expect(
       crearPermisoSchema.safeParse({ recurso: "usuarios", accion: "CREAR" }).success,
     ).toBe(false);
-    expect(
-      crearPermisoSchema.safeParse({ recurso: "USUARIOS", accion: "CREAR!" }).success,
-    ).toBe(false);
   });
 
-  it("respeta los máximos de las columnas: 50 y 50 y 255", () => {
-    const base = { recurso: "A", accion: "B" };
+  it("limita la descripción a 255 caracteres", () => {
     expect(
-      crearPermisoSchema.safeParse({ ...base, recurso: "A".repeat(51) }).success,
-    ).toBe(false);
-    expect(
-      crearPermisoSchema.safeParse({ ...base, accion: "B".repeat(51) }).success,
-    ).toBe(false);
-    expect(
-      crearPermisoSchema.safeParse({ ...base, descripcion: "D".repeat(256) }).success,
+      crearPermisoSchema.safeParse({
+        recurso: "usuarios",
+        accion: "ver",
+        descripcion: "D".repeat(256),
+      }).success,
     ).toBe(false);
   });
 });
