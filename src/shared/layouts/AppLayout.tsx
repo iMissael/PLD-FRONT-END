@@ -3,6 +3,8 @@ import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import { useAuthStore } from "@/shared/auth/authStore";
 import { useRutaTenant } from "@/shared/tenant/useRutaTenant";
+import { useNombreTenantPublico } from "@/features/buzon/hooks/useMensajeDenuncia";
+import { getCurrentTenantId } from "@/shared/tenant/tenantStore";
 
 import {
   ActivityIcon,
@@ -19,12 +21,14 @@ import {
   ShieldSearchIcon,
   UserPlusIcon,
 } from "@/shared/components/icons";
+import { ExternalLink } from "lucide-react";
 import { ThemeToggle } from "@/shared/components/ThemeToggle";
 
 interface NavLeaf {
   label: string;
   to: string;
   icon?: typeof HomeIcon;
+  targetBlank?: boolean;
 }
 
 interface NavGroup {
@@ -56,7 +60,7 @@ const NAV_ITEMS: NavNode[] = [
       { label: "Gestión de denuncias", to: "buzon/gestion" },
       { label: "Alertas PLD", to: "buzon/alertas" },
       { label: "Mensaje de cabecera", to: "buzon/mensaje-cabecera" },
-      { label: "Buzón anónimo (público)", to: "buzon/denuncias" },
+      { label: "Buzón anónimo (público)", to: "buzon/denuncias", targetBlank: true },
     ],
   },
   {
@@ -219,6 +223,9 @@ export function AppLayout() {
   const rutaEnTenant = useRutaTenant();
   const usuario = useAuthStore((estado) => estado.usuario);
   const inicial = (usuario?.nombre ?? "U").trim().charAt(0).toUpperCase() || "U";
+  const { data: tenantPublico } = useNombreTenantPublico();
+  const activeTenantId = getCurrentTenantId();
+  const nombreEmpresa = tenantPublico?.nombreComercial || activeTenantId || "";
 
   function cerrarSesion() {
     useAuthStore.getState().logout();
@@ -266,14 +273,22 @@ export function AppLayout() {
           </button>
           <button
             type="button"
-            title="Perfil"
-            className="hover:bg-secondary text-foreground flex items-center gap-2 rounded-md px-2 py-1.5"
+            title={nombreEmpresa ? `Perfil · ${nombreEmpresa}` : "Perfil"}
+            className="hover:bg-secondary text-foreground flex items-center gap-2.5 rounded-md px-2 py-1.5"
           >
-            <span className="from-primary-hover to-primary flex size-9 items-center justify-center rounded-full bg-gradient-to-br text-sm font-bold text-white">
+            <span className="from-primary-hover to-primary flex size-9 items-center justify-center rounded-full bg-gradient-to-br text-sm font-bold text-white shrink-0">
               {inicial}
             </span>
-            <span className="flex flex-col items-start leading-tight">
+            <span className="flex flex-col items-start leading-tight text-left">
               <span className="text-sm font-medium">{usuario?.nombre ?? "Usuario"}</span>
+              {nombreEmpresa && (
+                <span
+                  className="text-[11px] text-muted-foreground font-normal truncate max-w-[140px] sm:max-w-[200px]"
+                  title={nombreEmpresa}
+                >
+                  {nombreEmpresa}
+                </span>
+              )}
             </span>
           </button>
         </div>
@@ -408,12 +423,27 @@ function NavNodeRenderer({
   depth: number;
   collapsed: boolean;
 }) {
+  const rutaTenant = useRutaTenant();
+
   if (collapsed && depth === 0) {
     const Icon = node.icon ?? HomeIcon;
     const hojas = collectLeaves(node);
 
     if (hojas.length === 1 && hojas[0]) {
       const hoja = hojas[0];
+      if (hoja.targetBlank) {
+        return (
+          <a
+            href={rutaTenant(hoja.to)}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={`${node.label} (Abrir en nueva ventana)`}
+            className={navLinkClassName(true)({ isActive: false })}
+          >
+            <Icon className="h-5 w-5 shrink-0" />
+          </a>
+        );
+      }
       return (
         <NavLink to={hoja.to} end title={node.label} className={navLinkClassName(true)}>
           <Icon className="h-5 w-5 shrink-0" />
@@ -423,22 +453,69 @@ function NavNodeRenderer({
 
     return (
       <div className="flex flex-col gap-1">
-        {hojas.map((hoja) => (
-          <NavLink
-            key={hoja.to}
-            to={hoja.to}
-            end
-            title={`${node.label} · ${hoja.label}`}
-            className={navLinkClassName(true)}
-          >
-            <Icon className="h-5 w-5 shrink-0" />
-          </NavLink>
-        ))}
+        {hojas.map((hoja) => {
+          if (hoja.targetBlank) {
+            return (
+              <a
+                key={hoja.to}
+                href={rutaTenant(hoja.to)}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={`${node.label} · ${hoja.label} (Abrir en nueva ventana)`}
+                className={navLinkClassName(true)({ isActive: false })}
+              >
+                <Icon className="h-5 w-5 shrink-0" />
+              </a>
+            );
+          }
+          return (
+            <NavLink
+              key={hoja.to}
+              to={hoja.to}
+              end
+              title={`${node.label} · ${hoja.label}`}
+              className={navLinkClassName(true)}
+            >
+              <Icon className="h-5 w-5 shrink-0" />
+            </NavLink>
+          );
+        })}
       </div>
     );
   }
 
   if (!isGroup(node)) {
+    if (node.targetBlank) {
+      if (depth === 0) {
+        const Icon = node.icon ?? HomeIcon;
+        return (
+          <a
+            href={rutaTenant(node.to)}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={`${node.label} (Abrir en nueva ventana)`}
+            className={navLinkClassName(false)({ isActive: false })}
+          >
+            <Icon className="h-5 w-5 shrink-0" />
+            <span className="truncate">{node.label}</span>
+            <ExternalLink className="ml-auto h-3.5 w-3.5 text-muted-foreground/70 shrink-0" />
+          </a>
+        );
+      }
+      return (
+        <a
+          href={rutaTenant(node.to)}
+          target="_blank"
+          rel="noopener noreferrer"
+          title={`${node.label} (Abrir en nueva ventana)`}
+          className="rounded-md px-3 py-2 text-sm transition-colors text-muted-foreground hover:text-nav-link-hover flex items-center justify-between gap-1.5"
+        >
+          <span className="truncate">{node.label}</span>
+          <ExternalLink className="h-3.5 w-3.5 text-muted-foreground/70 shrink-0" />
+        </a>
+      );
+    }
+
     if (depth === 0) {
       const Icon = node.icon ?? HomeIcon;
       return (

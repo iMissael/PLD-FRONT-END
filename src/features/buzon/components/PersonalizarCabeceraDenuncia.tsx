@@ -3,7 +3,6 @@ import DOMPurify from "dompurify";
 import { toast } from "sonner";
 import {
   Save,
-  Building2,
   Calendar,
   User,
   AlertCircle,
@@ -40,10 +39,8 @@ import {
 import {
   useActualizarMensajeDenunciaAdmin,
   useMensajeDenunciaAdmin,
-  useNombreTenantPublico,
 } from "@/features/buzon/hooks/useMensajeDenuncia";
 import { useRutaTenant } from "@/shared/tenant/useRutaTenant";
-import { getCurrentTenantId } from "@/shared/tenant/tenantStore";
 
 const MAX_BYTES = 50 * 1024; // 50 KB
 
@@ -110,8 +107,7 @@ export function PersonalizarCabeceraDenuncia() {
     isLoading: cargandoMensaje,
     isError: errorMensaje,
   } = useMensajeDenunciaAdmin();
-  const { data: tenantPublico } = useNombreTenantPublico();
-  const activeTenantId = getCurrentTenantId();
+
   const actualizarMutation = useActualizarMensajeDenunciaAdmin();
   const rutaTenant = useRutaTenant();
 
@@ -293,14 +289,7 @@ export function PersonalizarCabeceraDenuncia() {
 
         {/* Metadatos del tenant y enlace directo al buzón público */}
         <div className="flex flex-wrap items-center gap-2">
-          {(activeTenantId || tenantPublico?.nombreComercial) && (
-            <div className="flex items-center gap-1.5 rounded-lg border border-border/80 bg-muted/40 px-3 py-1.5 text-xs text-muted-foreground">
-              <Building2 className="h-3.5 w-3.5 text-primary shrink-0" />
-              <span className="font-semibold text-foreground">
-                {tenantPublico?.nombreComercial || activeTenantId}
-              </span>
-            </div>
-          )}
+        
 
           <a
             href={rutaTenant("buzon/denuncias")}
@@ -313,7 +302,7 @@ export function PersonalizarCabeceraDenuncia() {
             Ver buzón público
             <ExternalLink className="h-3 w-3 text-muted-foreground" />
           </a>
-        </div>
+        </div> 
       </div>
 
       {errorMensaje && (
