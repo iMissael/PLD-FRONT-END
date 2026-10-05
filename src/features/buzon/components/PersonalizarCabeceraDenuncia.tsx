@@ -23,7 +23,6 @@ import {
   AlertTriangle,
   Undo,
   Redo,
-  Layers,
   Trash2,
   Pilcrow,
 } from "lucide-react";
@@ -51,55 +50,6 @@ export interface PlantillaOption {
   html: string;
 }
 
-const PLANTILLAS_PREDEFINIDAS: PlantillaOption[] = [
-  {
-    id: "confidencial-completa",
-    nombre: "Canal Seguro y Confidencial (Recomendada)",
-    descripcion: "Incluye aviso de privacidad, anonimato garantizado y lista de recomendaciones.",
-    html: `<div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 10px; padding: 16px; margin-bottom: 16px;">
-  <strong style="color: #059669; font-size: 1.05rem; display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-    🔒 Canal de Denuncia 100% Anónimo y Seguro
-  </strong>
-  <p style="margin: 0; color: #334155; font-size: 0.92rem; line-height: 1.5;">
-    Este espacio ha sido diseñado para reportar cualquier irregularidad o sospecha de fraude con total confidencialidad y sin temor a represalias.
-  </p>
-</div>
-<h3 style="font-size: 1.05rem; font-weight: 700; color: #1e293b; margin: 16px 0 8px 0;">Recomendaciones para tu reporte:</h3>
-<ul style="margin: 8px 0 16px 0; padding-left: 20px; color: #334155;">
-  <li style="margin-bottom: 6px;">Describe los hechos con la mayor claridad y detalle posible.</li>
-  <li style="margin-bottom: 6px;">Menciona fechas aproximadas, áreas y cargos o personas involucradas.</li>
-  <li style="margin-bottom: 6px;">Guarda tu folio generado al finalizar para dar seguimiento anónimo.</li>
-</ul>
-<div style="background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 10px; padding: 12px 16px;">
-  <strong style="color: #2563eb; font-size: 0.9rem;">ℹ️ Importante:</strong>
-  <p style="margin: 4px 0 0 0; font-size: 0.88rem; color: #475569;">No proporciones contraseñas ni información bancaria personal.</p>
-</div>`,
-  },
-  {
-    id: "guia-paso-a-paso",
-    nombre: "Guía de Denuncia",
-    descripcion: "Estructura ordenada con instrucciones claras.",
-    html: `<h2 style="font-size: 1.2rem; font-weight: 700; color: #0f172a; margin-bottom: 8px;">Instrucciones para presentar tu denuncia</h2>
-<p style="color: #475569; margin-bottom: 12px; line-height: 1.5;">Tu participación es fundamental para mantener un ambiente íntegro y transparente.</p>
-<ul style="margin: 12px 0 16px 0; padding-left: 20px; color: #334155;">
-  <li style="margin-bottom: 8px;"><strong>Selecciona el tipo de denuncia:</strong> Elige la categoría que mejor corresponda al incidente.</li>
-  <li style="margin-bottom: 8px;"><strong>Detalla la situación:</strong> Explica qué ocurrió de forma objetiva y concisa.</li>
-  <li style="margin-bottom: 8px;"><strong>Adjunta evidencia:</strong> Si cuentas con documentos o fotos, puedes incluirlos de forma opcional.</li>
-  <li style="margin-bottom: 8px;"><strong>Conserva tu código de seguimiento:</strong> Te permitirá consultar el avance de tu caso.</li>
-</ul>`,
-  },
-  {
-    id: "institucional-minima",
-    nombre: "Aviso Institucional Breve",
-    descripcion: "Mensaje conciso para cabeceras limpias.",
-    html: `<div style="background: rgba(16, 185, 129, 0.08); border-left: 4px solid #059669; border-radius: 4px 8px 8px 4px; padding: 12px 16px; margin-bottom: 12px;">
-  <strong style="color: #059669; font-size: 0.95rem;">Buzón Ético Institucional</strong>
-  <p style="margin: 4px 0 0 0; font-size: 0.88rem; color: #334155; line-height: 1.5;">
-    Toda información proporcionada es confidencial y atendida de forma imparcial y protegida.
-  </p>
-</div>`,
-  },
-];
 
 export function PersonalizarCabeceraDenuncia() {
   const {
@@ -116,7 +66,6 @@ export function PersonalizarCabeceraDenuncia() {
   const [colorPopoverAbierto, setColorPopoverAbierto] = useState(false);
   const [cuadroPopoverAbierto, setCuadroPopoverAbierto] = useState(false);
   const [encabezadoPopoverAbierto, setEncabezadoPopoverAbierto] = useState(false);
-  const [plantillasPopoverAbierto, setPlantillasPopoverAbierto] = useState(false);
   const [linkPopoverAbierto, setLinkPopoverAbierto] = useState(false);
   const [linkUrl, setLinkUrl] = useState("https://");
   const [linkTexto, setLinkTexto] = useState("");
@@ -221,15 +170,6 @@ export function PersonalizarCabeceraDenuncia() {
     setLinkPopoverAbierto(false);
     setLinkUrl("https://");
     setLinkTexto("");
-  };
-
-  const cargarPlantilla = (plantilla: PlantillaOption) => {
-    setHtmlInput(plantilla.html);
-    if (editorRef.current) {
-      editorRef.current.innerHTML = plantilla.html;
-    }
-    setPlantillasPopoverAbierto(false);
-    toast.success(`Plantilla "${plantilla.nombre}" cargada correctamente.`);
   };
 
   const limpiarTodoElContenido = () => {
@@ -631,40 +571,6 @@ export function PersonalizarCabeceraDenuncia() {
               </PopoverContent>
             </Popover>
 
-            {/* Plantillas Rápidas */}
-            <Popover open={plantillasPopoverAbierto} onOpenChange={setPlantillasPopoverAbierto}>
-              <PopoverTrigger asChild>
-                <button
-                  type="button"
-                  className="flex h-7 items-center gap-1 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-2 text-xs font-semibold text-emerald-700 dark:text-emerald-400 hover:bg-emerald-500/20 transition-colors cursor-pointer"
-                  title="Cargar plantilla prediseñada"
-                >
-                  <Layers className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-                  <span>Plantillas</span>
-                  <ChevronDown className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
-                </button>
-              </PopoverTrigger>
-              <PopoverContent className="w-76 p-2" align="start">
-                <div className="space-y-1.5">
-                  <p className="px-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                    Plantillas Recomendadas
-                  </p>
-                  {PLANTILLAS_PREDEFINIDAS.map((plantilla) => (
-                    <button
-                      key={plantilla.id}
-                      type="button"
-                      onClick={() => cargarPlantilla(plantilla)}
-                      className="flex w-full flex-col gap-0.5 rounded-lg border border-border/80 bg-muted/30 p-2 text-left hover:border-emerald-500/40 hover:bg-emerald-500/5 transition-all cursor-pointer"
-                    >
-                      <div className="text-xs font-bold text-foreground">{plantilla.nombre}</div>
-                      <div className="text-[11px] text-muted-foreground leading-tight">
-                        {plantilla.descripcion}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </PopoverContent>
-            </Popover>
           </div>
 
           {/* Botón de Limpiar */}
