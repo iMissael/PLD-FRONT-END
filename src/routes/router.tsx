@@ -118,6 +118,14 @@ export const router = createBrowserRouter([
                 element: <RevisionAlertasPage />,
               },
               {
+                path: "operacion/revision-alertas-automatizacion",
+                element: <PlaceholderPage title="Revisión de alertas de automatización" />,
+              },
+              {
+                path: "operacion/revision-alertas-seguimiento",
+                element: <PlaceholderPage title="Revisión de alertas de seguimiento en operación" />,
+              },
+              {
                 path: "operacion",
                 element: <OperacionPage />,
               },

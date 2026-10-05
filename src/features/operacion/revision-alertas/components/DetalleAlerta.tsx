@@ -90,6 +90,14 @@ export function DetalleAlerta({ alerta, onDictaminada }: DetalleAlertaProps) {
 
   const reportado = alerta.reportado;
   const esEmpleado = reportado?.tipoReportado === "EMPLEADO";
+  const esManual = alerta.origen === "MANUAL";
+  const esMoralManual =
+    esManual &&
+    Boolean(
+      reportado?.fechaEmisionFuente ||
+        reportado?.fuenteInformacion ||
+        reportado?.estatusReportado,
+    );
   const evaluado = expediente?.evaluado;
   const resumen = expediente?.resumenPeriodo;
 
@@ -190,12 +198,16 @@ export function DetalleAlerta({ alerta, onDictaminada }: DetalleAlertaProps) {
         <div className="flex flex-col gap-5">
           <Seccion titulo="Información de la alerta">
             <dl className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-              <Dato titulo="Folio de alerta">{alerta.folio}</Dato>
-              <Dato titulo="Fecha de la alerta">
-                {formatearFecha(alerta.fechaAlerta)}
-              </Dato>
-              <Dato titulo="Folio de operación">{alerta.folioOperacion}</Dato>
-              {alerta.razonAlertaDescripcion ? (
+              {esManual ? null : (
+                <>
+                  <Dato titulo="Folio de alerta">{alerta.folio}</Dato>
+                  <Dato titulo="Fecha de la alerta">
+                    {formatearFecha(alerta.fechaAlerta)}
+                  </Dato>
+                  <Dato titulo="Folio de operación">{alerta.folioOperacion}</Dato>
+                </>
+              )}
+              {!esManual && alerta.razonAlertaDescripcion ? (
                 <div className="sm:col-span-3">
                   <Dato titulo={`Razón ${alerta.razonAlertaNumero ?? ""}`.trim()}>
                     {alerta.razonAlertaDescripcion}
@@ -211,7 +223,7 @@ export function DetalleAlerta({ alerta, onDictaminada }: DetalleAlertaProps) {
                   ) : null}
                 </Dato>
               </div>
-              {alerta.informacionAdicional ? (
+              {esManual || alerta.informacionAdicional ? (
                 <div className="sm:col-span-3">
                   <Dato titulo="Información adicional">
                     <span className="whitespace-pre-line">
@@ -223,13 +235,43 @@ export function DetalleAlerta({ alerta, onDictaminada }: DetalleAlertaProps) {
             </dl>
           </Seccion>
 
-          <dl className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {ANALISIS_SICANET.map((titulo) => (
-              <div key={titulo} className="border-border rounded-md border p-3">
-                <Dato titulo={titulo}>{SIN_INFORMACION}</Dato>
-              </div>
-            ))}
-          </dl>
+          {esMoralManual ? (
+            <Seccion titulo="Persona moral">
+              <dl className="border-border grid grid-cols-1 gap-3 rounded-md border p-3 sm:grid-cols-2">
+                <div className="sm:col-span-2">
+                  <Dato titulo="Fecha de emisión de la fuente de información">
+                    {reportado?.fechaEmisionFuente
+                      ? formatearFecha(reportado.fechaEmisionFuente)
+                      : null}
+                  </Dato>
+                </div>
+                <Dato titulo="Fuente de información">
+                  {reportado?.fuenteInformacion ? (
+                    <span className="whitespace-pre-line">
+                      {reportado.fuenteInformacion}
+                    </span>
+                  ) : null}
+                </Dato>
+                <Dato titulo="Estatus del reportado">
+                  {reportado?.estatusReportado ? (
+                    <span className="whitespace-pre-line">
+                      {reportado.estatusReportado}
+                    </span>
+                  ) : null}
+                </Dato>
+              </dl>
+            </Seccion>
+          ) : null}
+
+          {esManual ? null : (
+            <dl className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {ANALISIS_SICANET.map((titulo) => (
+                <div key={titulo} className="border-border rounded-md border p-3">
+                  <Dato titulo={titulo}>{SIN_INFORMACION}</Dato>
+                </div>
+              ))}
+            </dl>
+          )}
         </div>
       </div>
 

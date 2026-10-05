@@ -159,6 +159,14 @@ const NAV_ITEMS: NavNode[] = [
       { label: "Evaluación de riesgo", to: "operacion/evaluacion-riesgo" },
       { label: "Captura de alertas", to: "operacion/captura-alertas" },
       { label: "Revisión de alertas", to: "operacion/revision-alertas" },
+      {
+        label: "Revisión de alertas de automatización",
+        to: "operacion/revision-alertas-automatizacion",
+      },
+      {
+        label: "Revisión de alertas de seguimiento en operación",
+        to: "operacion/revision-alertas-seguimiento",
+      },
     ],
   },
   {

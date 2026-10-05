@@ -1,3 +1,7 @@
+import { RefreshCw } from "lucide-react";
+
+import { isAppError } from "@/api/interceptors/errorInterceptor";
+import { Button } from "@/shared/components/ui/button";
 import { Badge } from "@/shared/components/ui/CatalogoBadge";
 import { TablePagination } from "@/shared/components/ui/TablePagination";
 import { card, emptyState, table } from "@/shared/components/ui/styles";
@@ -7,6 +11,9 @@ import type { ReglaAlerta } from "../types/reglaAlerta";
 interface ReglasTableProps {
   reglas: ReglaAlerta[] | undefined;
   isLoading: boolean;
+  isError: boolean;
+  error: unknown;
+  onReintentar: () => void;
   seleccionadaId: string | null;
   onSeleccionar: (regla: ReglaAlerta) => void;
   pagina: number;
@@ -28,6 +35,9 @@ const encabezado = `${table.headCell} sticky top-0 bg-muted py-1.5`;
 export function ReglasTable({
   reglas,
   isLoading,
+  isError,
+  error,
+  onReintentar,
   seleccionadaId,
   onSeleccionar,
   pagina,
@@ -37,6 +47,20 @@ export function ReglasTable({
   onCambiarTamanio,
 }: ReglasTableProps) {
   if (isLoading) return <p className={emptyState}>Cargando reglas de alerta...</p>;
+  if (isError) {
+    const mensaje = isAppError(error)
+      ? error.message
+      : "No se pudieron cargar las reglas de alerta.";
+    return (
+      <div className="border-destructive-soft bg-destructive-soft text-destructive flex flex-col items-center gap-3 rounded-lg border p-6 text-center text-sm">
+        <p>{mensaje}</p>
+        <Button variant="outline" onClick={onReintentar}>
+          <RefreshCw />
+          Reintentar
+        </Button>
+      </div>
+    );
+  }
   if (!reglas || reglas.length === 0)
     return <p className={emptyState}>No hay reglas con estos filtros.</p>;
 
