@@ -15,13 +15,17 @@ import type {
   PageResponse,
 } from "../types/buzon";
 
+// TenantController no vive bajo /SICANETSC/PLD/:tenantId (ver TenantPathPrefixConfig, en el
+// backend), así que estas 4 llamadas van con tenantHeaderOnly: mandan el tenant de la sesión
+// activa por header (X-Tenant-Id) en vez de como prefijo en la URL.
+
 /** Obtener mensaje HTML sanitizado de cabecera de denuncia (público) */
 export async function obtenerMensajeDenunciaPublico(
   signal?: AbortSignal,
 ): Promise<MensajeDenunciaResponse> {
   const { data } = await apiClient.get<MensajeDenunciaResponse>(
     `/publico/mensaje-denuncia`,
-    { signal },
+    { signal, tenantHeaderOnly: true },
   );
   return data;
 }
@@ -32,7 +36,7 @@ export async function obtenerNombreTenantPublico(
 ): Promise<{ nombreComercial: string }> {
   const { data } = await apiClient.get<{ nombreComercial: string }>(
     `/publico/nombre`,
-    { signal },
+    { signal, tenantHeaderOnly: true },
   );
   return data;
 }
@@ -43,7 +47,7 @@ export async function obtenerMensajeDenunciaAdmin(
 ): Promise<MensajeDenunciaResponse> {
   const { data } = await apiClient.get<MensajeDenunciaResponse>(
     `/mensaje-denuncia`,
-    { signal },
+    { signal, tenantHeaderOnly: true },
   );
   return data;
 }
@@ -56,7 +60,7 @@ export async function actualizarMensajeDenunciaAdmin(
   const { data } = await apiClient.put<MensajeDenunciaResponse>(
     `/mensaje-denuncia`,
     input,
-    { signal },
+    { signal, tenantHeaderOnly: true },
   );
   return data;
 }

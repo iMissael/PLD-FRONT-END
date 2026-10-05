@@ -7,6 +7,12 @@ declare module "axios" {
   export interface AxiosRequestConfig {
     /** Rutas públicas (p. ej. el nombre del tenant en login) sin prefijo ni header de tenant. */
     skipTenantInterceptor?: boolean;
+    /**
+     * Rutas que no viven bajo /SICANETSC/PLD/:tenantId (TenantController: nombre público,
+     * mensaje-denuncia) pero sí necesitan el tenant de la sesión activa: solo header, sin
+     * reescribir la URL con el prefijo.
+     */
+    tenantHeaderOnly?: boolean;
   }
 }
 
@@ -28,6 +34,8 @@ export function tenantInterceptor(
   }
 
   config.headers.set("X-Tenant-Id", tenantId);
-  config.url = `${rutaTenant(tenantId)}${config.url ?? ""}`;
+  if (!config.tenantHeaderOnly) {
+    config.url = `${rutaTenant(tenantId)}${config.url ?? ""}`;
+  }
   return config;
 }
