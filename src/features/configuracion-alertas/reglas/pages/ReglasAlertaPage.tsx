@@ -21,7 +21,11 @@ export function ReglasAlertaPage() {
   const [filtro, setFiltroState] = useState<FiltroReglas>({});
   const [pagina, setPagina] = useState(0);
   const [tamanio, setTamanio] = useState(20);
-  const { data, isLoading } = useReglasAlerta(filtro, pagina, tamanio);
+  const { data, isLoading, isError, error, refetch } = useReglasAlerta(
+    filtro,
+    pagina,
+    tamanio,
+  );
 
   const setFiltro = (actualizar: (prev: FiltroReglas) => FiltroReglas) => {
     setFiltroState(actualizar);
@@ -91,6 +95,9 @@ export function ReglasAlertaPage() {
       <ReglasTable
         reglas={data?.contenido}
         isLoading={isLoading}
+        isError={isError}
+        error={error}
+        onReintentar={() => void refetch()}
         seleccionadaId={seleccionada?.idConfiguracionAlerta ?? null}
         onSeleccionar={setSeleccionada}
         pagina={pagina}

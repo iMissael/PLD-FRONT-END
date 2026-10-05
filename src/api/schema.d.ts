@@ -4933,6 +4933,11 @@ export interface components {
             nombre?: string;
             status?: string;
             rfc?: string;
+            curp?: string;
+            domicilio?: string;
+            tipoPersona?: string;
+            /** Format: date */
+            fechaNacimiento?: string;
         };
         ResultadoBusquedaResponse: {
             personaPrincipal?: components["schemas"]["PersonaBloqueadaResponse"];
