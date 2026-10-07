@@ -73,7 +73,7 @@ export function ZonasTable({
         cell: (zona) => (
           <Button
             variante={verId === zona.id ? "primario" : "secundario"}
-            tamanio="pequeno"
+            size="sm"
             onClick={(e) => {
               e.stopPropagation();
               onVer(zona);
@@ -110,7 +110,7 @@ export function ZonasTable({
       pagination={{
         mode: "client",
         defaultRowsPerPage: 10,
-        rowsPerPageOptions: [5, 10, 25, 50],
+        rowsPerPageOptions: [10, 25, 30],
       }}
     />
   );

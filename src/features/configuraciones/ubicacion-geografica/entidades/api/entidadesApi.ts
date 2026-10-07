@@ -48,6 +48,20 @@ export async function asignarZonaAEntidad(
   return data;
 }
 
+/** Obtiene los IDs de zonas asignadas a una entidad. */
+export async function obtenerZonasDeEntidad(id: string): Promise<string[]> {
+  const { data } = await apiClient.get<string[]>(`${BASE_PATH}/${id}/zonas`);
+  return data;
+}
+
+/** Reemplaza todas las zonas asignadas a una entidad. */
+export async function asignarZonasAEntidad(
+  id: string,
+  zonaIds: string[],
+): Promise<void> {
+  await apiClient.put(`${BASE_PATH}/${id}/zonas`, { zonaIds });
+}
+
 export async function eliminarEntidad(id: string): Promise<void> {
   await apiClient.delete(`${BASE_PATH}/${id}`);
 }

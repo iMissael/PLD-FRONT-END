@@ -2,12 +2,18 @@ import { useMemo } from "react";
 import { DataTable, type ColumnDef } from "@/shared/components/DataTable";
 import type { PaisResponse } from "../types/pais";
 
+export interface InfoListaPais {
+  nombre: string;
+  nivelRiesgoDescripcion: string;
+  nivelRiesgoValor: number;
+}
+
 interface PaisesTableProps {
   paises: PaisResponse[] | undefined;
   isLoading: boolean;
   seleccionadoId: string | null;
-  /** Mapa idZona -> nombreZona, para mostrar el nombre en vez del id crudo. */
-  nombresDeZona: Record<string, string>;
+  /** Mapa idLista -> información de la lista de país (nombre, nivel de riesgo). */
+  mapaListas: Record<string, InfoListaPais>;
   onSeleccionar: (pais: PaisResponse) => void;
   onDoubleClick?: (pais: PaisResponse) => void;
 }
@@ -16,7 +22,7 @@ export function PaisesTable({
   paises,
   isLoading,
   seleccionadoId,
-  nombresDeZona,
+  mapaListas,
   onSeleccionar,
   onDoubleClick,
 }: PaisesTableProps) {
@@ -34,16 +40,32 @@ export function PaisesTable({
         className: "font-medium text-foreground",
       },
       {
-        header: "PLD Zona Geográfica",
+        header: "Listas de riesgo",
         cell: (pais) => {
-          const nombresZonas = pais.zonasAsignadas
-            .map((id) => nombresDeZona[id])
+          const asignadas = Array.isArray(pais.zonasAsignadas) ? pais.zonasAsignadas : [];
+          const nombresListas = asignadas
+            .map((id) => mapaListas[id]?.nombre)
             .filter((nombre): nombre is string => Boolean(nombre));
-          return nombresZonas.length > 0 ? nombresZonas.join(", ") : "—";
+          return nombresListas.length > 0 ? nombresListas.join(", ") : "—";
+        },
+      },
+      {
+        header: "Nivel de riesgo",
+        cell: (pais) => {
+          const asignadas = Array.isArray(pais.zonasAsignadas) ? pais.zonasAsignadas : [];
+          const niveles = asignadas
+            .map((id) => {
+              const info = mapaListas[id];
+              return info
+                ? `${info.nivelRiesgoDescripcion} (${info.nivelRiesgoValor})`
+                : null;
+            })
+            .filter((n): n is string => Boolean(n));
+          return niveles.length > 0 ? niveles.join(", ") : "—";
         },
       },
     ],
-    [nombresDeZona],
+    [mapaListas],
   );
 
   return (
@@ -59,11 +81,22 @@ export function PaisesTable({
       onRowDoubleClick={onDoubleClick}
       doubleClickTitle="Doble clic para modificar este registro"
       search={{
-        placeholder: "Buscar país por nombre, clave o zona...",
+        placeholder: "Buscar país por nombre, clave, lista o nivel...",
         filterFn: (pais, term) => {
           const t = term.toLowerCase().trim();
-          const nombresZonas = pais.zonasAsignadas
-            .map((id) => nombresDeZona[id])
+          const asignadas = Array.isArray(pais.zonasAsignadas) ? pais.zonasAsignadas : [];
+          const nombresListas = asignadas
+            .map((id) => mapaListas[id]?.nombre)
+            .filter(Boolean)
+            .join(" ")
+            .toLowerCase();
+          const nivelesRiesgo = asignadas
+            .map((id) => {
+              const info = mapaListas[id];
+              return info
+                ? `${info.nivelRiesgoDescripcion} ${info.nivelRiesgoValor}`
+                : "";
+            })
             .filter(Boolean)
             .join(" ")
             .toLowerCase();
@@ -71,14 +104,15 @@ export function PaisesTable({
             pais.nombre.toLowerCase().includes(t) ||
             pais.idPais.toLowerCase().includes(t) ||
             (pais.codigoIso?.toLowerCase().includes(t) ?? false) ||
-            nombresZonas.includes(t)
+            nombresListas.includes(t) ||
+            nivelesRiesgo.includes(t)
           );
         },
       }}
       pagination={{
         mode: "client",
         defaultRowsPerPage: 10,
-        rowsPerPageOptions: [5, 10, 25, 50],
+        rowsPerPageOptions: [10, 25, 30],
       }}
     />
   );

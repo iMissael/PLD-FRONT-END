@@ -105,7 +105,7 @@ export function DataTable<T>({
     return {
       mode: "client",
       defaultRowsPerPage: 10,
-      rowsPerPageOptions: [5, 10, 25, 50],
+      rowsPerPageOptions: [ 10, 25, 30],
     };
   }, [pagination]);
 
@@ -119,7 +119,7 @@ export function DataTable<T>({
   const currentRowsPerPage = isServerPagination
     ? paginationConfig.rowsPerPage
     : localRowsPerPage;
-  const rowsPerPageOptions = paginationConfig.rowsPerPageOptions ?? [5, 10, 25, 50];
+  const rowsPerPageOptions = paginationConfig.rowsPerPageOptions ?? [ 10, 25, 30];
 
   // 1. Filtrado de búsqueda
   const dataFiltrada = useMemo(() => {

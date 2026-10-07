@@ -371,7 +371,7 @@ export function CapturaAlertasPage() {
                     reportado: {
                       referencia: s.id ?? "",
                       nombre: s.nombre ?? "",
-                      esMoral: s.tipoPersona === "MORAL",
+                      esMoral: (s as { tipoPersona?: string }).tipoPersona === "MORAL" || (s.rfc ? s.rfc.trim().length === 12 : false),
                     },
                     fuente: FUENTE_VACIA,
                   }))

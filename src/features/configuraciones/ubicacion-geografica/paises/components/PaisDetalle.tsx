@@ -1,47 +1,81 @@
+import { Button } from "@/shared/components/ui/CatalogoButton";
+import { card } from "@/shared/components/ui/styles";
 import type { PaisResponse } from "../types/pais";
+
+export interface ItemListaDetalle {
+  nombre: string;
+  nivelRiesgoDescripcion?: string;
+  nivelRiesgoValor?: number;
+}
 
 interface PaisDetalleProps {
   pais: PaisResponse;
-  nombresListas: string[];
+  listas: ItemListaDetalle[];
   onEditar: () => void;
 }
 
 /**
- * Panel de detalle de un país seleccionado (Clave / País / Listas asignadas + botón de edición).
+ * Panel de detalle estandarizado de un país seleccionado con sus listas y niveles de riesgo.
  */
-export function PaisDetalle({ pais, nombresListas, onEditar }: PaisDetalleProps) {
-  const etiqueta = "w-20 shrink-0 text-sm font-medium text-warning";
-  const valor =
-    "flex-1 rounded-md border border-warning/40 bg-card px-3 py-1.5 text-sm text-foreground";
-
+export function PaisDetalle({ pais, listas, onEditar }: PaisDetalleProps) {
   return (
-    <div className="flex flex-col gap-3 rounded-lg border border-warning/40 bg-warning-soft p-4">
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <div className="flex items-center gap-2">
-          <span className={etiqueta}>Clave</span>
-          <span className={valor}>{pais.idPais}</span>
+    <div className={`flex flex-col gap-4 p-4 ${card}`}>
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-semibold text-foreground">
+          Detalle del país: {pais.nombre}
+        </h3>
+        <Button onClick={onEditar}>Editar país</Button>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
+        <div className="flex flex-col gap-0.5">
+          <span className="text-xs font-medium text-muted-foreground">Clave</span>
+          <span className="font-mono text-sm font-semibold text-foreground">
+            {pais.idPais}
+          </span>
         </div>
-        <div className="flex items-center gap-2">
-          <span className={etiqueta}>País</span>
-          <span className={valor}>{pais.nombre}</span>
+
+        <div className="flex flex-col gap-0.5">
+          <span className="text-xs font-medium text-muted-foreground">Nombre</span>
+          <span className="text-sm font-medium text-foreground">{pais.nombre}</span>
+        </div>
+
+        <div className="flex flex-col gap-0.5">
+          <span className="text-xs font-medium text-muted-foreground">Nacionalidad</span>
+          <span className="text-sm text-foreground">{pais.nacionalidad || "—"}</span>
+        </div>
+
+        <div className="flex flex-col gap-0.5">
+          <span className="text-xs font-medium text-muted-foreground">Código ISO</span>
+          <span className="font-mono text-sm uppercase text-foreground">
+            {pais.codigoIso || "—"}
+          </span>
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
-        <span className={etiqueta}>Listas</span>
-        <span className={valor}>
-          {nombresListas.length > 0 ? nombresListas.join(", ") : "Sin lista asignada"}
+      <div className="flex flex-col gap-1.5 border-t border-border pt-3">
+        <span className="text-xs font-medium text-muted-foreground">
+          Listas de riesgo asignadas
         </span>
-      </div>
-
-      <div className="flex justify-end">
-        <button
-          type="button"
-          onClick={onEditar}
-          className="rounded-md bg-warning px-3 py-1.5 text-xs font-semibold text-warning-foreground hover:bg-warning/90 transition-colors"
-        >
-          Editar país
-        </button>
+        {listas.length > 0 ? (
+          <div className="flex flex-wrap gap-2">
+            {listas.map((item) => (
+              <span
+                key={item.nombre}
+                className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2.5 py-1 text-xs font-medium text-secondary-foreground"
+              >
+                <span className="font-semibold">{item.nombre}</span>
+                {item.nivelRiesgoDescripcion ? (
+                  <span className="text-muted-foreground">
+                    — {item.nivelRiesgoDescripcion} ({item.nivelRiesgoValor ?? 0})
+                  </span>
+                ) : null}
+              </span>
+            ))}
+          </div>
+        ) : (
+          <span className="text-sm text-muted-foreground">Sin listas asignadas</span>
+        )}
       </div>
     </div>
   );

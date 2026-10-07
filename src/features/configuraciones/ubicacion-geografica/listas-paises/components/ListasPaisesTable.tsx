@@ -65,7 +65,7 @@ export function ListasPaisesTable({
         cell: (lista) => (
           <Button
             variante={verId === lista.id ? "primario" : "secundario"}
-            tamanio="pequeno"
+            size="sm"
             onClick={(e) => {
               e.stopPropagation();
               onVer(lista); 
@@ -102,7 +102,7 @@ export function ListasPaisesTable({
       pagination={{
         mode: "client",
         defaultRowsPerPage: 10,
-        rowsPerPageOptions: [5, 10, 25, 50],
+        rowsPerPageOptions: [10, 25, 30],
       }}
     />
   );

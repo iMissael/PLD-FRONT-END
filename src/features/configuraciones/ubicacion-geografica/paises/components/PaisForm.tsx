@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { Button } from "@/shared/components/ui/CatalogoButton";
 import { card, field, label } from "@/shared/components/ui/styles";
 
-import { useZonaIdsDePais } from "../hooks/usePaises";
+import { useListasDePais } from "../../listas-paises/hooks/useListasPaises";
 import type { ActualizarPaisInput, PaisResponse } from "../types/pais";
-import { ZonasMultiSelect } from "./ZonasMultiSelect";
+import { ListasMultiSelect } from "./ListasMultiSelect";
 
 interface PaisFormProps {
   /** El catálogo de países es de solo edición: siempre se edita uno existente. */
@@ -24,31 +24,32 @@ interface FormState {
 }
 
 function aFormState(pais: PaisResponse): FormState {
+  const asignadas = Array.isArray(pais.zonasAsignadas) ? pais.zonasAsignadas : [];
   return {
     tipo: pais.tipo ?? "",
     codigoIso: pais.codigoIso ?? "",
-    nombre: pais.nombre,
+    nombre: pais.nombre ?? "",
     nacionalidad: pais.nacionalidad ?? "",
-    zonaIds: pais.zonasAsignadas,
+    zonaIds: asignadas,
   };
 }
 
 export function PaisForm({ pais, onGuardar, onCancelar, isPending }: PaisFormProps) {
   const [form, setForm] = useState<FormState>(() => aFormState(pais));
-  const { data: zonaIdsReales } = useZonaIdsDePais(pais.idPais);
+  const { data: listasAsignadas } = useListasDePais(pais.idPais);
 
   useEffect(() => {
     setForm(aFormState(pais));
   }, [pais]);
 
-  // En cuanto llegan los IDs reales de zona (endpoint dedicado), reemplazan
-  // el valor inicial tomado de `zonasAsignadas`, que puede no ser confiable
-  // como identificador según cómo lo arme el backend.
   useEffect(() => {
-    if (zonaIdsReales) {
-      setForm((prev) => ({ ...prev, zonaIds: zonaIdsReales }));
+    if (listasAsignadas && Array.isArray(listasAsignadas)) {
+      setForm((prev) => ({
+        ...prev,
+        zonaIds: listasAsignadas.map((l) => l.id),
+      }));
     }
-  }, [zonaIdsReales]);
+  }, [listasAsignadas]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -134,8 +135,8 @@ export function PaisForm({ pais, onGuardar, onCancelar, isPending }: PaisFormPro
         </div>
 
         <div className="flex flex-col gap-1 sm:col-span-2">
-          <span className={label}>Zonas asignadas</span>
-          <ZonasMultiSelect
+          <span className={label}>Listas de riesgo asignadas</span>
+          <ListasMultiSelect
             value={form.zonaIds}
             onChange={(zonaIds) => setForm((prev) => ({ ...prev, zonaIds }))}
           />

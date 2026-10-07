@@ -22,6 +22,7 @@ export interface CrearEntidadInput {
   esEntidad?: EsEntidad;
   paisId: string;
   zonaId: string;
+  zonaIds?: string[];
 }
 
 /** Igual a `ActualizarCatEntidadGeograficaRequest` (mismo shape que Crear). */
@@ -40,9 +41,10 @@ export interface EntidadResponse {
   esEntidad: EsEntidad;
   idPais: string;
   nombrePais: string;
-  idZona: string;
-  nombreZona: string;
-  claveZona: string;
-  nivelRiesgoValor: number;
-  nivelRiesgoDescripcion: string;
+  idZona?: string;
+  nombreZona?: string;
+  claveZona?: string;
+  nivelRiesgoValor?: number;
+  nivelRiesgoDescripcion?: string;
+  zonasAsignadas?: string[];
 }

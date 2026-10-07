@@ -123,7 +123,6 @@ export function ZonasGeograficasPage({ tipo }: ZonasGeograficasPageProps) {
         isLoading={isLoading}
         seleccionadaId={seleccionada?.id ?? null}
         verId={verZona?.id ?? null}
-        tipoFiltro={tipo}
         onSeleccionar={(zona) => {
           setSeleccionada(zona);
           setCreandoNueva(false);

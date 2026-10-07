@@ -115,7 +115,7 @@ export function LocalidadesPage() {
             setTamanio(parseInt(e.target.value, 10));
             setPagina(0);
           },
-          rowsPerPageOptions: [10, 15, 25, 50],
+          rowsPerPageOptions: [10, 15, 25, 30],
         }}
       />
 

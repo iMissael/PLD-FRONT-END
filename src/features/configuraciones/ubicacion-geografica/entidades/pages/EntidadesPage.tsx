@@ -5,6 +5,7 @@ import { Alert } from "@/shared/components/ui/Alert";
 import { Button } from "@/shared/components/ui/CatalogoButton";
 import { DataTable, type ColumnDef } from "@/shared/components/DataTable";
 
+import { useZonasGeograficasSelect } from "../../zonas-geograficas/hooks/useZonasGeograficas";
 import { EntidadForm } from "../components/EntidadForm";
 import { useEntidades } from "../hooks/useEntidades";
 import {
@@ -15,16 +16,35 @@ import {
 import type { CrearEntidadInput, EntidadResponse } from "../types/entidad";
 
 /**
- * Normaliza texto para comparar en la búsqueda: mayúsculas y sin acentos,
- * así "mexico" encuentra "MÉXICO" sin que el usuario tenga que escribir el
- * acento.
+ * Normaliza texto para comparar en la búsqueda: mayúsculas y sin acentos.
  */
 function normalizar(texto: string): string {
-  return texto.normalize("NFD").replace(/[̀-ͯ]/g, "").toUpperCase();
+  return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
 }
 
 export function EntidadesPage() {
   const { data: entidades, isLoading } = useEntidades();
+  const { data: zonas } = useZonasGeograficasSelect();
+
+  const mapaZonas = useMemo(() => {
+    const mapa: Record<
+      string,
+      { nombre: string; nivelRiesgoDescripcion: string; nivelRiesgoValor: number }
+    > = {};
+    const listaZonas = Array.isArray(zonas)
+      ? zonas
+      : Array.isArray((zonas as unknown as { contenido?: typeof zonas })?.contenido)
+      ? ((zonas as unknown as { contenido: typeof zonas }).contenido ?? [])
+      : [];
+    listaZonas.forEach((z) => {
+      mapa[z.id] = {
+        nombre: z.nombre,
+        nivelRiesgoDescripcion: z.nivelRiesgoDescripcion,
+        nivelRiesgoValor: z.nivelRiesgoValor,
+      };
+    });
+    return mapa;
+  }, [zonas]);
 
   const [seleccionada, setSeleccionada] = useState<EntidadResponse | null>(null);
   const [creandoNueva, setCreandoNueva] = useState(false);
@@ -102,25 +122,54 @@ export function EntidadesPage() {
         className: "text-muted-foreground",
       },
       {
-        header: "Zona",
-        accessorKey: "nombreZona",
-        className: "text-muted-foreground",
+        header: "Zona de riesgo",
+        cell: (item: EntidadResponse) => {
+          const zonaIds: string[] =
+            Array.isArray(item.zonasAsignadas) && item.zonasAsignadas.length > 0
+              ? item.zonasAsignadas
+              : item.idZona
+              ? [item.idZona]
+              : [];
+          const nombres = zonaIds
+            .map((id: string) => mapaZonas[id]?.nombre ?? id)
+            .filter((nombre): nombre is string => Boolean(nombre));
+          if (nombres.length > 0) return nombres.join(", ");
+          if (item.nombreZona) return item.nombreZona;
+          return "—";
+        },
       },
       {
         header: "Nivel de riesgo",
-        cell: (item) =>
-          item.nivelRiesgoDescripcion
-            ? `${item.nivelRiesgoDescripcion} (${item.nivelRiesgoValor})`
-            : "—",
+        cell: (item: EntidadResponse) => {
+          const zonaIds: string[] =
+            Array.isArray(item.zonasAsignadas) && item.zonasAsignadas.length > 0
+              ? item.zonasAsignadas
+              : item.idZona
+              ? [item.idZona]
+              : [];
+          const niveles = zonaIds
+            .map((id: string) => {
+              const info = mapaZonas[id];
+              return info
+                ? `${info.nivelRiesgoDescripcion} (${info.nivelRiesgoValor})`
+                : null;
+            })
+            .filter((n): n is string => Boolean(n));
+          if (niveles.length > 0) return niveles.join(", ");
+          if (item.nivelRiesgoDescripcion) {
+            return `${item.nivelRiesgoDescripcion} (${item.nivelRiesgoValor ?? 0})`;
+          }
+          return "—";
+        },
       },
     ],
-    [],
+    [mapaZonas],
   );
 
   const listaEntidades = useMemo(() => {
     if (Array.isArray(entidades)) return entidades;
     if (Array.isArray((entidades as unknown as { contenido?: EntidadResponse[] })?.contenido)) {
-      return (entidades as unknown as { contenido: EntidadResponse[] }).contenido;
+      return (entidades as unknown as { contenido: EntidadResponse[] }).contenido ?? [];
     }
     return [];
   }, [entidades]);
@@ -167,11 +216,21 @@ export function EntidadesPage() {
         doubleClickTitle="Doble clic para modificar este registro"
         search={{
           placeholder: "Buscar entidad por nombre, clave CURP o zona...",
-          filterFn: (entidad, query) => {
+          filterFn: (entidad: EntidadResponse, query: string) => {
             const q = normalizar(query);
+            const zonaIds: string[] =
+              Array.isArray(entidad.zonasAsignadas) && entidad.zonasAsignadas.length > 0
+                ? entidad.zonasAsignadas
+                : entidad.idZona
+                ? [entidad.idZona]
+                : [];
+            const nombresZonas = zonaIds
+              .map((id: string) => mapaZonas[id]?.nombre ?? id)
+              .join(" ");
             return (
-              normalizar(entidad.nombre).includes(q) ||
+              normalizar(entidad.nombre ?? "").includes(q) ||
               normalizar(entidad.claveCurp ?? "").includes(q) ||
+              normalizar(nombresZonas).includes(q) ||
               normalizar(entidad.nombreZona ?? "").includes(q) ||
               normalizar(entidad.nombrePais ?? "").includes(q)
             );
@@ -180,7 +239,7 @@ export function EntidadesPage() {
         pagination={{
           mode: "client",
           defaultRowsPerPage: 10,
-          rowsPerPageOptions: [5, 10, 15, 25, 50],
+          rowsPerPageOptions: [10, 15, 25, 30],
         }}
       />
 

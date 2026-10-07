@@ -6,9 +6,9 @@ interface PaginaGenerica<T> {
   totalPaginas?: number;
 }
 
-// Tope que se pide por página: el backend lo recorta a su propio máximo (50 o 200
+// Tope que se pide por página: el backend lo recorta a su propio máximo (30
 // según el catálogo), así que esto solo busca minimizar el número de páginas.
-const TAMANIO_SOLICITADO = 200;
+const TAMANIO_SOLICITADO = 30;
 
 /**
  * Trae todas las páginas de un catálogo paginado (`GET` que responde `PaginaResponse<T>`)
