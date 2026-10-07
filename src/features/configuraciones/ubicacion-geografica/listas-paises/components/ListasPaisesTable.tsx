@@ -37,8 +37,20 @@ export function ListasPaisesTable({
     return [
       {
         header: "Nombre",
-        accessorKey: "nombre",
         className: table.cellStrong,
+        cell: (lista) => (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onSeleccionar(lista);
+            }}
+            className="font-semibold text-foreground hover:text-primary hover:underline text-left cursor-pointer"
+            title="Seleccionar y editar lista"
+          >
+            {lista.nombre}
+          </button>
+        ),
       },
       {
         header: "Nivel de riesgo",
@@ -50,7 +62,10 @@ export function ListasPaisesTable({
       },
       {
         header: "Países asignados",
-        accessorKey: "totalPaisesAsignados",
+        align: "right",
+        headerClassName: "text-right",
+        className: "text-right font-mono",
+        cell: (lista) => Number(lista.totalPaisesAsignados ?? 0).toLocaleString("es-MX"),
       },
       {
         header: "Estatus",
@@ -61,7 +76,10 @@ export function ListasPaisesTable({
         ),
       },
       {
-        header: "Doble click para ver",
+        header: "Acciones",
+        align: "right",
+        headerClassName: "text-right",
+        width: "130px",
         cell: (lista) => (
           <Button
             variante={verId === lista.id ? "primario" : "secundario"}
@@ -76,7 +94,7 @@ export function ListasPaisesTable({
         ),
       },
     ];
-  }, [verId, onVer]);
+  }, [verId, onVer, onSeleccionar]);
 
   return (
     <DataTable

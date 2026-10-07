@@ -376,6 +376,34 @@ export const router = createBrowserRouter([
                         path: "configuraciones/canales-pago",
                         element: <CanalesPagoPage />,
                       },
+                      {
+                        path: "configuraciones",
+                        element: <Navigate to="configuraciones/oficial-cumplimiento" replace />,
+                      },
+                      {
+                        path: "configuraciones/ubicacion-geografica",
+                        element: <Navigate to="configuraciones/ubicacion-geografica/listas-paises" replace />,
+                      },
+                      {
+                        path: "configuraciones/edades",
+                        element: <Navigate to="configuraciones/edades/rangos-edad" replace />,
+                      },
+                      {
+                        path: "configuraciones/recursos",
+                        element: <Navigate to="configuraciones/recursos/origen" replace />,
+                      },
+                      {
+                        path: "configuraciones/administracion",
+                        element: <Navigate to="configuraciones/administracion/usuarios" replace />,
+                      },
+                      {
+                        path: "buzon",
+                        element: <Navigate to="buzon/gestion" replace />,
+                      },
+                      {
+                        path: "*",
+                        element: <Navigate to="configuracion-alertas" replace />,
+                      },
                     ],
                   },
                 ],

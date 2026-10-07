@@ -37,8 +37,20 @@ export function ZonasTable({
     return [
       {
         header: "Nombre",
-        accessorKey: "nombre",
         className: table.cellStrong,
+        cell: (zona) => (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onSeleccionar(zona);
+            }}
+            className="font-semibold text-foreground hover:text-primary hover:underline text-left cursor-pointer"
+            title="Seleccionar y editar zona"
+          >
+            {zona.nombre}
+          </button>
+        ),
       },
       {
         header: "Nivel de riesgo",
@@ -58,7 +70,10 @@ export function ZonasTable({
       },
       {
         header: "Entidades asignadas",
-        accessorKey: "totalEntidadesAsignadas",
+        align: "right",
+        headerClassName: "text-right",
+        className: "text-right font-mono",
+        cell: (zona) => Number(zona.totalEntidadesAsignadas ?? 0).toLocaleString("es-MX"),
       },
       {
         header: "Estatus",
@@ -69,7 +84,10 @@ export function ZonasTable({
         ),
       },
       {
-        header: "Doble click para ver",
+        header: "Acciones",
+        align: "right",
+        headerClassName: "text-right",
+        width: "130px",
         cell: (zona) => (
           <Button
             variante={verId === zona.id ? "primario" : "secundario"}
@@ -84,7 +102,7 @@ export function ZonasTable({
         ),
       },
     ];
-  }, [verId, onVer]);
+  }, [verId, onVer, onSeleccionar]);
 
   return (
     <DataTable

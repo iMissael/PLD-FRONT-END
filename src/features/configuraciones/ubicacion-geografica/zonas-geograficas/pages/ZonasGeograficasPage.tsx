@@ -149,18 +149,10 @@ export function ZonasGeograficasPage({ tipo }: ZonasGeograficasPageProps) {
               setSeleccionada(null);
               setMensajeError(null);
             }}
+            onEliminar={seleccionada ? handleEliminar : undefined}
             isPending={crear.isPending || actualizar.isPending}
+            isDeleting={eliminar.isPending}
           />
-          {seleccionada ? (
-            <Button
-              variante="peligro"
-              className="self-start"
-              onClick={handleEliminar}
-              disabled={eliminar.isPending}
-            >
-              {eliminar.isPending ? "Eliminando..." : "Eliminar zona"}
-            </Button>
-          ) : null}
         </div>
       ) : null}
     </div>

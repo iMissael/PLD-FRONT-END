@@ -590,6 +590,8 @@ export function PersonalizarCabeceraDenuncia() {
           <div
             ref={editorRef}
             contentEditable
+            role="textbox"
+            aria-label="Editor de cabecera de denuncia"
             suppressContentEditableWarning
             onInput={syncEditorToState}
             onBlur={syncEditorToState}

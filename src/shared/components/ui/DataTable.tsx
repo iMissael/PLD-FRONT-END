@@ -286,11 +286,21 @@ export function DataTable<T>({
                             key={colIdx}
                             className={`${table.cell} ${getAlignClass(col.align)} ${col.className ?? ""}`}
                           >
-                            {col.cell
-                              ? col.cell(item, rowIndex, globalIdx)
-                              : col.accessorKey
-                              ? String(item[col.accessorKey] ?? "—")
-                              : null}
+                            {col.cell ? (
+                              col.cell(item, rowIndex, globalIdx)
+                            ) : col.accessorKey ? (
+                              <span
+                                title={
+                                  item[col.accessorKey] !== undefined &&
+                                  item[col.accessorKey] !== null
+                                    ? String(item[col.accessorKey])
+                                    : undefined
+                                }
+                                className="truncate block"
+                              >
+                                {String(item[col.accessorKey] ?? "—")}
+                              </span>
+                            ) : null}
                           </td>
                         ))}
                       </tr>
