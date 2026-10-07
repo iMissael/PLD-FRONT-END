@@ -5,6 +5,7 @@ import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
 import { Button } from "@/shared/components/ui/CatalogoButton";
 
+import { TipoCreditoDetalle } from "../components/TipoCreditoDetalle";
 import { TipoCreditoForm } from "../components/TipoCreditoForm";
 import { TiposCreditoTable } from "../components/TiposCreditoTable";
 import { useTiposCredito } from "../hooks/useTiposCredito";
@@ -20,6 +21,8 @@ export function TiposCreditoPage() {
 
   const [seleccionado, setSeleccionado] = useState<TipoCreditoResponse | null>(null);
   const [creandoNuevo, setCreandoNuevo] = useState(false);
+  /** Un clic solo selecciona y muestra el detalle; editar es un paso aparte. */
+  const [editando, setEditando] = useState(false);
   const [mensajeError, setMensajeError] = useState<string | null>(null);
 
   const crear = useCrearTipoCredito();
@@ -27,7 +30,8 @@ export function TiposCreditoPage() {
   const eliminar = useEliminarTipoCredito();
 
   const tipoEnEdicion = creandoNuevo ? null : seleccionado;
-  const mostrarFormulario = creandoNuevo || seleccionado !== null;
+  const mostrarFormulario = creandoNuevo || (seleccionado !== null && editando);
+  const mostrarDetalle = !creandoNuevo && seleccionado !== null && !editando;
 
   const handleGuardar = (input: Parameters<typeof crear.mutate>[0]) => {
     setMensajeError(null);
@@ -82,8 +86,8 @@ export function TiposCreditoPage() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-fg">Tipos de crédito</h2>
-          <p className="text-sm text-muted">
+          <h2 className="text-xl font-semibold text-foreground">Tipos de crédito</h2>
+          <p className="text-sm text-muted-foreground">
             Productos de crédito, el tipo de préstamo que los respalda y su nivel de
             riesgo PLD.
           </p>
@@ -92,6 +96,7 @@ export function TiposCreditoPage() {
           onClick={() => {
             setCreandoNuevo(true);
             setSeleccionado(null);
+            setEditando(false);
             setMensajeError(null);
           }}
         >
@@ -108,14 +113,26 @@ export function TiposCreditoPage() {
         onSeleccionar={(tipo) => {
           setSeleccionado(tipo);
           setCreandoNuevo(false);
+          setEditando(false);
           setMensajeError(null);
         }}
         onDoubleClick={(tipo) => {
           setSeleccionado(tipo);
           setCreandoNuevo(false);
+          setEditando(true);
           setMensajeError(null);
         }}
       />
+
+      {mostrarDetalle && seleccionado ? (
+        <TipoCreditoDetalle
+          tipo={seleccionado}
+          onEditar={() => {
+            setEditando(true);
+            setMensajeError(null);
+          }}
+        />
+      ) : null}
 
       {mostrarFormulario ? (
         <div className="flex flex-col gap-3">
@@ -124,7 +141,7 @@ export function TiposCreditoPage() {
             onGuardar={handleGuardar}
             onCancelar={() => {
               setCreandoNuevo(false);
-              setSeleccionado(null);
+              setEditando(false);
               setMensajeError(null);
             }}
             isPending={crear.isPending || actualizar.isPending}

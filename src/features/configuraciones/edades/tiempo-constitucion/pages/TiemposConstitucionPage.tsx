@@ -5,6 +5,7 @@ import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
 import { Button } from "@/shared/components/ui/CatalogoButton";
 
+import { TiempoConstitucionDetalle } from "../components/TiempoConstitucionDetalle";
 import { TiempoConstitucionForm } from "../components/TiempoConstitucionForm";
 import { TiemposConstitucionTable } from "../components/TiemposConstitucionTable";
 import { useTiemposConstitucion } from "../hooks/useTiemposConstitucion";
@@ -22,6 +23,8 @@ export function TiemposConstitucionPage() {
     null,
   );
   const [creandoNuevo, setCreandoNuevo] = useState(false);
+  /** Un clic solo selecciona y muestra el detalle; editar es un paso aparte. */
+  const [editando, setEditando] = useState(false);
   const [mensajeError, setMensajeError] = useState<string | null>(null);
 
   const crear = useCrearTiempoConstitucion();
@@ -29,7 +32,8 @@ export function TiemposConstitucionPage() {
   const eliminar = useEliminarTiempoConstitucion();
 
   const tiempoEnEdicion = creandoNuevo ? null : seleccionado;
-  const mostrarFormulario = creandoNuevo || seleccionado !== null;
+  const mostrarFormulario = creandoNuevo || (seleccionado !== null && editando);
+  const mostrarDetalle = !creandoNuevo && seleccionado !== null && !editando;
 
   const handleGuardar = (input: Parameters<typeof crear.mutate>[0]) => {
     setMensajeError(null);
@@ -96,6 +100,7 @@ export function TiemposConstitucionPage() {
           onClick={() => {
             setCreandoNuevo(true);
             setSeleccionado(null);
+            setEditando(false);
             setMensajeError(null);
           }}
         >
@@ -112,14 +117,26 @@ export function TiemposConstitucionPage() {
         onSeleccionar={(tiempo) => {
           setSeleccionado(tiempo);
           setCreandoNuevo(false);
+          setEditando(false);
           setMensajeError(null);
         }}
         onDoubleClick={(tiempo) => {
           setSeleccionado(tiempo);
           setCreandoNuevo(false);
+          setEditando(true);
           setMensajeError(null);
         }}
       />
+
+      {mostrarDetalle && seleccionado ? (
+        <TiempoConstitucionDetalle
+          tiempo={seleccionado}
+          onEditar={() => {
+            setEditando(true);
+            setMensajeError(null);
+          }}
+        />
+      ) : null}
 
       {mostrarFormulario ? (
         <div className="flex flex-col gap-3">
@@ -128,7 +145,7 @@ export function TiemposConstitucionPage() {
             onGuardar={handleGuardar}
             onCancelar={() => {
               setCreandoNuevo(false);
-              setSeleccionado(null);
+              setEditando(false);
               setMensajeError(null);
             }}
             isPending={crear.isPending || actualizar.isPending}

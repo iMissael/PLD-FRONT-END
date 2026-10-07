@@ -6,6 +6,7 @@ import { Alert } from "@/shared/components/ui/Alert";
 import { Button } from "@/shared/components/ui/CatalogoButton";
 
 import { ListaPaisAsignaciones } from "../components/ListaPaisAsignaciones";
+import { ListaPaisDetalle } from "../components/ListaPaisDetalle";
 import { ListaPaisForm } from "../components/ListaPaisForm";
 import { ListasPaisesTable } from "../components/ListasPaisesTable";
 import { useListasPaises } from "../hooks/useListasPaises";
@@ -22,6 +23,8 @@ export function ListasPaisesPage() {
   const [seleccionada, setSeleccionada] = useState<ListaPaisResponse | null>(null);
   const [verLista, setVerLista] = useState<ListaPaisResponse | null>(null);
   const [creandoNueva, setCreandoNueva] = useState(false);
+  /** Un clic solo selecciona y muestra el detalle; editar es un paso aparte. */
+  const [editando, setEditando] = useState(false);
   const [mensajeError, setMensajeError] = useState<string | null>(null);
 
   const verListaRef = useRef<HTMLDivElement | null>(null);
@@ -36,7 +39,8 @@ export function ListasPaisesPage() {
   const eliminar = useEliminarListaPais();
 
   const listaEnEdicion = creandoNueva ? null : seleccionada;
-  const mostrarFormulario = creandoNueva || seleccionada !== null;
+  const mostrarFormulario = creandoNueva || (seleccionada !== null && editando);
+  const mostrarDetalle = !creandoNueva && seleccionada !== null && !editando;
 
   const handleGuardar = (input: Parameters<typeof crear.mutate>[0]) => {
     setMensajeError(null);
@@ -110,6 +114,7 @@ export function ListasPaisesPage() {
           onClick={() => {
             setCreandoNueva(true);
             setSeleccionada(null);
+            setEditando(false);
             setVerLista(null);
             setMensajeError(null);
             setTimeout(() => {
@@ -131,6 +136,7 @@ export function ListasPaisesPage() {
         onSeleccionar={(lista) => {
           setSeleccionada(lista);
           setCreandoNueva(false);
+          setEditando(false);
           setMensajeError(null);
         }}
         onDoubleClick={handleVerLista}
@@ -143,6 +149,19 @@ export function ListasPaisesPage() {
         </div>
       ) : null}
 
+      {mostrarDetalle && seleccionada ? (
+        <ListaPaisDetalle
+          lista={seleccionada}
+          onEditar={() => {
+            setEditando(true);
+            setMensajeError(null);
+            setTimeout(() => {
+              formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+            }, 50);
+          }}
+        />
+      ) : null}
+
       {mostrarFormulario ? (
         <div ref={formRef} className="flex flex-col gap-3 scroll-mt-4">
           <ListaPaisForm
@@ -150,7 +169,7 @@ export function ListasPaisesPage() {
             onGuardar={handleGuardar}
             onCancelar={() => {
               setCreandoNueva(false);
-              setSeleccionada(null);
+              setEditando(false);
               setMensajeError(null);
             }}
             isPending={crear.isPending || actualizar.isPending}

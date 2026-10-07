@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Trash2 } from "lucide-react";
 
 import { Button } from "@/shared/components/ui/CatalogoButton";
-import { card, field, label } from "@/shared/components/ui/styles";
+import { card, field, hint, label } from "@/shared/components/ui/styles";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,14 +18,12 @@ import {
 import { NivelRiesgoSelect } from "../../niveles-riesgo/components/NivelRiesgoSelect";
 import type {
   CrearZonaGeograficaInput,
-  EntidadPais,
   EstatusZona,
   ZonaGeograficaResponse,
 } from "../types/zonaGeografica";
 
 interface ZonaFormProps {
   zona: ZonaGeograficaResponse | null;
-  defaultTipo?: EntidadPais;
   onGuardar: (input: CrearZonaGeograficaInput) => void;
   onCancelar: () => void;
   onEliminar?: () => void;
@@ -36,26 +34,23 @@ interface ZonaFormProps {
 interface FormState {
   nombre: string;
   nivelRiesgoId: number | "";
-  entidadPais: EntidadPais;
+  esEntidadEspecial: boolean;
   estatus: EstatusZona;
 }
 
-function aFormState(
-  zona: ZonaGeograficaResponse | null,
-  defaultTipo: EntidadPais = "P",
-): FormState {
+function aFormState(zona: ZonaGeograficaResponse | null): FormState {
   if (!zona) {
     return {
       nombre: "",
       nivelRiesgoId: "",
-      entidadPais: defaultTipo,
+      esEntidadEspecial: false,
       estatus: "A",
     };
   }
   return {
     nombre: zona.nombre,
     nivelRiesgoId: zona.nivelRiesgoId,
-    entidadPais: zona.entidadPais ?? defaultTipo,
+    esEntidadEspecial: zona.esEntidadEspecial ?? false,
     estatus: zona.estatus,
   };
 }
@@ -67,20 +62,24 @@ function aFormState(
  */
 export function ZonaForm({
   zona,
-  defaultTipo = "P",
   onGuardar,
   onCancelar,
   onEliminar,
   isPending,
   isDeleting,
 }: ZonaFormProps) {
-  const [form, setForm] = useState<FormState>(() => aFormState(zona, defaultTipo));
+  const [form, setForm] = useState<FormState>(() => aFormState(zona));
 
   useEffect(() => {
-    setForm(aFormState(zona, defaultTipo));
-  }, [zona, defaultTipo]);
+    setForm(aFormState(zona));
+  }, [zona]);
 
   const esNueva = zona === null;
+
+  /**
+   * Las zonas que no son de entidades especiales son catalogo fijo
+   */
+  const soloNivelRiesgo = !esNueva && !form.esEntidadEspecial;
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -88,7 +87,7 @@ export function ZonaForm({
     onGuardar({
       nombre: form.nombre.trim(),
       idNivelRiesgo: form.nivelRiesgoId,
-      entidadPais: form.entidadPais,
+      esEntidadEspecial: form.esEntidadEspecial,
       estatus: form.estatus,
     });
   };
@@ -100,6 +99,7 @@ export function ZonaForm({
           {esNueva ? "Nueva zona geográfica" : `Editar zona: ${zona.nombre}`}
         </h3>
 
+        {/* Las zonas que no son de entidades especiales son catalogo fijo: no se dan de baja. */}
         {!esNueva && onEliminar && (
           <AlertDialog>
             <AlertDialogTrigger asChild>
@@ -107,7 +107,12 @@ export function ZonaForm({
                 type="button"
                 variante="peligro"
                 size="sm"
-                disabled={isDeleting || isPending}
+                disabled={isDeleting || isPending || soloNivelRiesgo}
+                title={
+                  soloNivelRiesgo
+                    ? "Solo las zonas de entidades especiales se pueden dar de baja"
+                    : undefined
+                }
                 className="flex items-center gap-1.5"
               >
                 <Trash2 className="size-3.5" />
@@ -136,6 +141,13 @@ export function ZonaForm({
         )}
       </div>
 
+      {soloNivelRiesgo && (
+        <p className={hint}>
+          Esta zona no es de entidades especiales: sus datos son de catalogo y
+          solo puede ajustarse su nivel de riesgo.
+        </p>
+      )}
+
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-1">
           <label htmlFor="nombre" className={label}>
@@ -146,6 +158,7 @@ export function ZonaForm({
             type="text"
             required
             value={form.nombre}
+            disabled={soloNivelRiesgo}
             onChange={(event) =>
               setForm((prev) => ({ ...prev, nombre: event.target.value }))
             }
@@ -166,12 +179,32 @@ export function ZonaForm({
         </div>
 
         <div className="flex flex-col gap-1">
+          <label htmlFor="esEntidadEspecial" className={label}>
+            Tipo de zona
+          </label>
+          <label className="flex items-center gap-2 py-2 text-sm text-foreground">
+            <input
+              id="esEntidadEspecial"
+              type="checkbox"
+              checked={form.esEntidadEspecial}
+              disabled={soloNivelRiesgo}
+              onChange={(event) =>
+                setForm((prev) => ({ ...prev, esEntidadEspecial: event.target.checked }))
+              }
+              className="size-4 rounded border-border accent-accent"
+            />
+            Zona de entidades especiales
+          </label>
+        </div>
+
+        <div className="flex flex-col gap-1">
           <label htmlFor="estatus" className={label}>
             Estatus
           </label>
           <select
             id="estatus"
             value={form.estatus}
+            disabled={soloNivelRiesgo}
             onChange={(event) =>
               setForm((prev) => ({ ...prev, estatus: event.target.value as EstatusZona }))
             }

@@ -11,7 +11,8 @@ interface EdadesTableProps {
   onDoubleClick?: (edad: EdadResponse) => void;
 }
 
-function formatearRango(edadInicial: number, edadFinal: number | null): string {
+/** Compartido con `EdadDetalle`: el rango se etiqueta igual en los dos lados. */
+export function formatearRango(edadInicial: number, edadFinal: number | null): string {
   if (edadFinal === null) return `${edadInicial} años o más`;
   return `${edadInicial} – ${edadFinal} años`;
 }
