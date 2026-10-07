@@ -275,6 +275,10 @@ export const router = createBrowserRouter([
                     element: <CanalesPagoPage />,
                   },
                   {
+                    path: "configuraciones/peps",
+                    element: <PepsPage />,
+                  },
+                  {
                     element: <ContenidoAcotado />,
                     children: [
                       {
