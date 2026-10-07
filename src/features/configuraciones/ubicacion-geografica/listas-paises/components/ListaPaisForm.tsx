@@ -5,16 +5,14 @@ import { card, field, label } from "@/shared/components/ui/styles";
 
 import { NivelRiesgoSelect } from "../../niveles-riesgo/components/NivelRiesgoSelect";
 import type {
-  CrearZonaGeograficaInput,
-  EntidadPais,
-  EstatusZona,
-  ZonaGeograficaResponse,
-} from "../types/zonaGeografica";
+  CrearListaPaisInput,
+  EstatusListaPais,
+  ListaPaisResponse,
+} from "../types/listaPais";
 
-interface ZonaFormProps {
-  zona: ZonaGeograficaResponse | null;
-  defaultTipo?: EntidadPais;
-  onGuardar: (input: CrearZonaGeograficaInput) => void;
+interface ListaPaisFormProps {
+  lista: ListaPaisResponse | null;
+  onGuardar: (input: CrearListaPaisInput) => void;
   onCancelar: () => void;
   isPending?: boolean;
 }
@@ -22,49 +20,37 @@ interface ZonaFormProps {
 interface FormState {
   nombre: string;
   nivelRiesgoId: number | "";
-  entidadPais: EntidadPais;
-  estatus: EstatusZona;
+  estatus: EstatusListaPais;
 }
 
-function aFormState(
-  zona: ZonaGeograficaResponse | null,
-  defaultTipo: EntidadPais = "P",
-): FormState {
-  if (!zona) {
+function aFormState(lista: ListaPaisResponse | null): FormState {
+  if (!lista) {
     return {
       nombre: "",
       nivelRiesgoId: "",
-      entidadPais: defaultTipo,
       estatus: "A",
     };
   }
   return {
-    nombre: zona.nombre,
-    nivelRiesgoId: zona.nivelRiesgoId,
-    entidadPais: zona.entidadPais ?? defaultTipo,
-    estatus: zona.estatus,
+    nombre: lista.nombre,
+    nivelRiesgoId: lista.nivelRiesgoId,
+    estatus: lista.estatus,
   };
 }
 
-/**
- * Formulario de alta/edición de una zona geográfica. La asignación de
- * entidades/países vive aparte (ZonaAsignaciones), porque el backend la
- * expone como sub-recursos independientes (`PUT /{id}/entidades|paises`).
- */
-export function ZonaForm({
-  zona,
-  defaultTipo = "P",
+export function ListaPaisForm({
+  lista,
   onGuardar,
   onCancelar,
   isPending,
-}: ZonaFormProps) {
-  const [form, setForm] = useState<FormState>(() => aFormState(zona, defaultTipo));
+}: ListaPaisFormProps) {
+  const [form, setForm] = useState<FormState>(() => aFormState(lista));
 
   useEffect(() => {
-    setForm(aFormState(zona, defaultTipo));
-  }, [zona, defaultTipo]);
+    setForm(aFormState(lista));
+  }, [lista]);
 
-  const esNueva = zona === null;
+  const esNueva = lista === null;
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -72,7 +58,6 @@ export function ZonaForm({
     onGuardar({
       nombre: form.nombre.trim(),
       idNivelRiesgo: form.nivelRiesgoId,
-      entidadPais: form.entidadPais,
       estatus: form.estatus,
     });
   };
@@ -80,16 +65,16 @@ export function ZonaForm({
   return (
     <form onSubmit={handleSubmit} className={`flex flex-col gap-4 p-4 ${card}`}>
       <h3 className="text-sm font-semibold text-foreground">
-        {esNueva ? "Nueva zona geográfica" : `Editar zona: ${zona.nombre}`}
+        {esNueva ? "Nueva lista de países" : `Editar lista: ${lista.nombre}`}
       </h3>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-1">
-          <label htmlFor="nombre" className={label}>
+          <label htmlFor="nombreLista" className={label}>
             Nombre
           </label>
           <input
-            id="nombre"
+            id="nombreLista"
             type="text"
             required
             value={form.nombre}
@@ -101,28 +86,29 @@ export function ZonaForm({
         </div>
 
         <div className="flex flex-col gap-1">
-          <label htmlFor="nivelRiesgo" className={label}>
+          <label htmlFor="nivelRiesgoLista" className={label}>
             Nivel de riesgo
           </label>
           <NivelRiesgoSelect
-            id="nivelRiesgo"
+            id="nivelRiesgoLista"
             required
             value={form.nivelRiesgoId}
             onChange={(id) => setForm((prev) => ({ ...prev, nivelRiesgoId: id }))}
           />
         </div>
 
-   
-
         <div className="flex flex-col gap-1">
-          <label htmlFor="estatus" className={label}>
+          <label htmlFor="estatusLista" className={label}>
             Estatus
           </label>
           <select
-            id="estatus"
+            id="estatusLista"
             value={form.estatus}
             onChange={(event) =>
-              setForm((prev) => ({ ...prev, estatus: event.target.value as EstatusZona }))
+              setForm((prev) => ({
+                ...prev,
+                estatus: event.target.value as EstatusListaPais,
+              }))
             }
             className={field}
           >

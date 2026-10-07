@@ -5,7 +5,6 @@ import { LoginPage } from "@/features/auth/pages/LoginPage";
 import { BuzonPublicoPage } from "@/features/buzon/pages/BuzonPublicoPage";
 import { GestionAlertasPage } from "@/features/buzon/pages/GestionAlertasPage";
 import { GestionDenunciasPage } from "@/features/buzon/pages/GestionDenunciasPage";
-import { PersonalizarMensajeCabeceraPage } from "@/features/buzon/pages/PersonalizarMensajeCabeceraPage";
 import { CargaMasivaPage } from "@/features/configuracion-alertas/pages/CargaMasivaPage";
 import { ConsultaBloqueadosPage } from "@/features/configuracion-alertas/pages/ConsultaBloqueadosPage";
 import { ReglasAlertaPage } from "@/features/configuracion-alertas/reglas/pages/ReglasAlertaPage";
@@ -27,6 +26,7 @@ import { DestinosRecursoPage } from "@/features/configuraciones/recursos/destino
 import { OrigenesRecursoPage } from "@/features/configuraciones/recursos/origen/pages/OrigenesRecursoPage";
 import { TiposCreditoPage } from "@/features/configuraciones/tipos-credito/pages/TiposCreditoPage";
 import { EntidadesPage } from "@/features/configuraciones/ubicacion-geografica/entidades/pages/EntidadesPage";
+import { ListasPaisesPage } from "@/features/configuraciones/ubicacion-geografica/listas-paises/pages/ListasPaisesPage";
 import { LocalidadesPage } from "@/features/configuraciones/ubicacion-geografica/localidades/pages/LocalidadesPage";
 import { PaisesPage } from "@/features/configuraciones/ubicacion-geografica/paises/pages/PaisesPage";
 import { ZonasGeograficasPage } from "@/features/configuraciones/ubicacion-geografica/zonas-geograficas/pages/ZonasGeograficasPage";
@@ -68,24 +68,16 @@ export const router = createBrowserRouter([
                 element: <Navigate to="configuracion-alertas" replace />,
               },
               {
+                path: "configuraciones/ubicacion-geografica/listas-paises",
+                element: <ListasPaisesPage />,
+              },
+              {
                 path: "configuraciones/ubicacion-geografica/zonas-geograficas",
                 element: <ZonasGeograficasPage />,
               },
               {
-                path: "configuraciones/ubicacion-geografica/zonas-geograficas/paises",
-                element: <ZonasGeograficasPage tipo="P" />,
-              },
-              {
-                path: "configuraciones/ubicacion-geografica/zonas-geograficas/entidades",
-                element: <ZonasGeograficasPage tipo="E" />,
-              },
-              {
-                path: "configuraciones/ubicacion-geografica/zonas-paises",
-                element: <ZonasGeograficasPage tipo="P" />,
-              },
-              {
-                path: "configuraciones/ubicacion-geografica/zonas-entidades",
-                element: <ZonasGeograficasPage tipo="E" />,
+                path: "configuraciones/ubicacion-geografica/zonas-riesgo",
+                element: <ZonasGeograficasPage />,
               },
               {
                 path: "configuraciones/ubicacion-geografica/entidades",
@@ -258,107 +250,6 @@ export const router = createBrowserRouter([
                   {
                     path: "configuraciones/canales-pago",
                     element: <CanalesPagoPage />,
-                  },
-                  {
-                    element: <ContenidoAcotado />,
-                    children: [
-                      {
-                        path: "buzon/gestion",
-                        element: (
-                          <RequierePermiso recurso="denuncias" accion="ver">
-                            <GestionDenunciasPage />
-                          </RequierePermiso>
-                        ),
-                      },
-                      {
-                        path: "buzon/alertas",
-                        element: (
-                          <RequierePermiso recurso="alertas" accion="ver">
-                            <GestionAlertasPage />
-                          </RequierePermiso>
-                        ),
-                      },
-                      {
-                        path: "buzon/mensaje-cabecera",
-                        element: <PersonalizarMensajeCabeceraPage />,
-                      },
-                      {
-                        path: "configuraciones/mensaje-denuncia",
-                        element: <PersonalizarMensajeCabeceraPage />,
-                      },
-                      {
-                        path: "configuraciones/oficial-cumplimiento",
-                        element: <OficialCumplimientoPage />,
-                      },
-                      {
-                        path: "configuraciones/matriz-riesgo",
-                        element: <MatrizRiesgoPage />,
-                      },
-                      {
-                        path: "configuraciones/administracion/roles",
-                        element: <RolesPage />,
-                      },
-                      {
-                        path: "configuraciones/administracion/roles/:rolId/permisos",
-                        element: <RolPermisosPage />,
-                      },
-                      {
-                        path: "configuraciones/administracion/permisos",
-                        element: <PermisosPage />,
-                      },
-                      {
-                        path: "control/quienesquien",
-                        element: <ConsultaListasPage />,
-                      },
-                      {
-                        path: "control/coincidencias",
-                        element: <RevisionCoincidenciasPage />,
-                      },
-                      {
-                        path: "configuraciones/personas",
-                        element: <TiposPersonaPage />,
-                      },
-                      {
-                        path: "configuraciones/edades/rangos-edad",
-                        element: <EdadesPage />,
-                      },
-                      {
-                        path: "configuraciones/edades/tiempo-constitucion",
-                        element: <TiemposConstitucionPage />,
-                      },
-                      {
-                        path: "configuraciones/experiencia-actividad",
-                        element: <ExperienciasActividadPage />,
-                      },
-                      {
-                        path: "configuraciones/actividad-economica",
-                        element: <ActividadesEconomicasPage />,
-                      },
-                      {
-                        path: "configuraciones/historial-crediticio",
-                        element: <HistorialesCrediticiosPage />,
-                      },
-                      {
-                        path: "configuraciones/monto-credito",
-                        element: <PrestamosMontoPage />,
-                      },
-                      {
-                        path: "configuraciones/recursos/origen",
-                        element: <OrigenesRecursoPage />,
-                      },
-                      {
-                        path: "configuraciones/recursos/destino",
-                        element: <DestinosRecursoPage />,
-                      },
-                      {
-                        path: "configuraciones/canales-pago",
-                        element: <CanalesPagoPage />,
-                      },
-                      {
-                        path: "configuraciones/tipos-credito",
-                        element: <TiposCreditoPage />,
-                      },
-                    ],
                   },
                 ],
               },

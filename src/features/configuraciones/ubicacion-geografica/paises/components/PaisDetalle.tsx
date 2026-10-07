@@ -2,22 +2,15 @@ import type { PaisResponse } from "../types/pais";
 
 interface PaisDetalleProps {
   pais: PaisResponse;
-  nombresZonas: string[];
+  nombresListas: string[];
   onEditar: () => void;
 }
 
 /**
- * Panel de detalle de un país seleccionado, replicando el bloque inferior
- * de la pantalla legacy "Configuración de Países" (Clave / País / Zona +
- * botón de edición). Es de solo lectura; la edición completa (incluyendo
- * tipo, nacionalidad, código ISO y las zonas) se hace en `PaisForm`, que se
- * abre con el botón de lápiz.
- *
- * Usa el ámbar de la guía (`warning`) porque es un panel de atención: marca
- * el registro sobre el que se va a actuar, no un estado normal de lectura.
+ * Panel de detalle de un país seleccionado (Clave / País / Listas asignadas + botón de edición).
  */
-export function PaisDetalle({ pais, nombresZonas, onEditar }: PaisDetalleProps) {
-  const etiqueta = "w-16 shrink-0 text-sm font-medium text-warning";
+export function PaisDetalle({ pais, nombresListas, onEditar }: PaisDetalleProps) {
+  const etiqueta = "w-20 shrink-0 text-sm font-medium text-warning";
   const valor =
     "flex-1 rounded-md border border-warning/40 bg-card px-3 py-1.5 text-sm text-foreground";
 
@@ -35,28 +28,21 @@ export function PaisDetalle({ pais, nombresZonas, onEditar }: PaisDetalleProps) 
       </div>
 
       <div className="flex items-center gap-2">
-        <span className={etiqueta}>Zona</span>
+        <span className={etiqueta}>Listas</span>
         <span className={valor}>
-          {nombresZonas.length > 0 ? nombresZonas.join(", ") : "Sin zona asignada"}
+          {nombresListas.length > 0 ? nombresListas.join(", ") : "Sin lista asignada"}
         </span>
       </div>
 
-      <button
-        type="button"
-        onClick={onEditar}
-        title="Editar país"
-        aria-label="Editar país"
-        className="self-center rounded-full border border-border bg-card p-2 text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          className="h-5 w-5"
+      <div className="flex justify-end">
+        <button
+          type="button"
+          onClick={onEditar}
+          className="rounded-md bg-warning px-3 py-1.5 text-xs font-semibold text-warning-foreground hover:bg-warning/90 transition-colors"
         >
-          <path d="M13.586 3.586a2 2 0 1 1 2.828 2.828l-8.5 8.5a2 2 0 0 1-.878.506l-3 .857a.5.5 0 0 1-.618-.618l.857-3a2 2 0 0 1 .506-.878l8.5-8.5Z" />
-        </svg>
-      </button>
+          Editar país
+        </button>
+      </div>
     </div>
   );
 }

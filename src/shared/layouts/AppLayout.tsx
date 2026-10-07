@@ -8,7 +8,6 @@ import { getCurrentTenantId } from "@/shared/tenant/tenantStore";
 
 import {
   ActivityIcon,
-  BellIcon,
   ChevronDownIcon,
   ClipboardCheckIcon,
   HelpCircleIcon,
@@ -76,12 +75,12 @@ const NAV_ITEMS: NavNode[] = [
         label: "Ubicación geográfica",
         children: [
           {
-            label: "Zonas geográficas (Países)",
-            to: "configuraciones/ubicacion-geografica/zonas-geograficas/paises",
+            label: "Listas de países",
+            to: "configuraciones/ubicacion-geografica/listas-paises",
           },
           {
-            label: "Zonas geográficas (Entidades)",
-            to: "configuraciones/ubicacion-geografica/zonas-geograficas/entidades",
+            label: "Zonas de riesgo",
+            to: "configuraciones/ubicacion-geografica/zonas-geograficas",
           },
           {
             label: "Entidades",
@@ -264,13 +263,7 @@ export function AppLayout() {
 
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <button
-            type="button"
-            title="Notificaciones"
-            className="hover:bg-secondary text-foreground rounded-full p-2"
-          >
-            <BellIcon className="h-5 w-5" />
-          </button>
+
           <button
             type="button"
             title={nombreEmpresa ? `Perfil · ${nombreEmpresa}` : "Perfil"}
