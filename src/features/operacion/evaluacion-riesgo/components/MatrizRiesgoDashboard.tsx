@@ -36,10 +36,9 @@ import {
 import type { SocioExterno } from "@/features/socios/types/socios";
 
 /**
- * Tablero "Matriz de Riesgo Integral" (formato de la captura de referencia): encabezado azul
- * marino con búsqueda de socios, expediente del cliente a la izquierda y matriz de factores
- * a la derecha. La lupa lista los socios del sistema; la matriz se muestra cuando el socio
- * elegido tiene una evaluación en esta sesión.
+ * Tablero "Matriz de Riesgo Integral": encabezado con búsqueda de socios, expediente
+ * del cliente a la izquierda y matriz de factores a la derecha. Adaptado con tokens semánticos
+ * para soporte completo de modo claro y oscuro.
  */
 
 export interface EvaluacionMostrada {
@@ -64,7 +63,7 @@ function NivelBadge({
   nivel: NivelRiesgoInfo | undefined;
   tamano?: "fila" | "factor";
 }) {
-  if (!nivel) return <span className="text-muted-foreground text-xs">—</span>;
+  if (!nivel) return <span className="text-xs text-muted-foreground">—</span>;
   return (
     <span
       className={cn(
@@ -78,6 +77,54 @@ function NivelBadge({
   );
 }
 
+<<<<<<< HEAD
+=======
+function CampoCopiable({
+  etiqueta,
+  valor,
+  mono = false,
+  icono: Icono = Copy,
+}: {
+  etiqueta: string;
+  valor: string;
+  mono?: boolean;
+  icono?: typeof Copy;
+}) {
+  return (
+    <div className="space-y-1">
+      <p
+        className={cn(
+          "text-muted-foreground",
+          mono
+            ? "text-[11px] font-semibold tracking-wider uppercase"
+            : "text-[11px] font-medium",
+        )}
+      >
+        {etiqueta}
+      </p>
+      <div className="flex items-center justify-between gap-2 rounded-lg border border-border bg-muted/40 px-3 py-2">
+        <span
+          className={cn(
+            "truncate text-foreground",
+            mono ? "font-mono font-bold tracking-wider" : "font-bold",
+          )}
+        >
+          {valor}
+        </span>
+        <button
+          type="button"
+          onClick={() => copiar(valor)}
+          className="shrink-0 text-muted-foreground transition hover:text-primary"
+          aria-label={`Copiar ${etiqueta}`}
+        >
+          <Icono className="size-3.5" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+>>>>>>> origin/develop
 function FilaSubfactor({
   descripcion,
   valor,
@@ -94,31 +141,31 @@ function FilaSubfactor({
   return (
     <div
       className={cn(
-        "grid grid-cols-1 gap-1 px-4 py-2.5 hover:bg-slate-50/80 dark:hover:bg-slate-800/60 md:items-center",
+        "grid grid-cols-1 gap-1 px-4 py-2.5 transition hover:bg-muted/50 md:items-center",
         COLUMNAS,
       )}
     >
       <div className="min-w-0">
-        <span className="block truncate text-sm font-medium text-gray-900 dark:text-foreground">
+        <span className="block truncate text-sm font-medium text-foreground">
           {etiquetaSubfactor(descripcion)}
         </span>
         <span
           className={cn(
             "block truncate text-[11px]",
-            detalle ? "text-slate-500 dark:text-muted-foreground" : "font-medium text-amber-600 dark:text-amber-400",
+            detalle ? "text-muted-foreground" : "font-medium text-amber-600 dark:text-amber-400",
           )}
         >
           {detalle ?? "Dato no capturado / encontrado"}
         </span>
       </div>
-      <div className="font-semibold text-gray-700 dark:text-foreground md:text-center">{numero(valor, 1)}</div>
-      <div className="font-mono text-gray-600 dark:text-muted-foreground md:text-center">
+      <div className="font-semibold text-foreground md:text-center">{numero(valor, 1)}</div>
+      <div className="font-mono text-muted-foreground md:text-center">
         {numero(ponderacion, 2)}%
       </div>
       <div className="md:text-center">
         <NivelBadge nivel={nivelPorValorEntero(valor)} />
       </div>
-      <div className="font-mono font-bold text-gray-900 dark:text-foreground md:text-right">
+      <div className="font-mono font-bold text-foreground md:text-right">
         {numero(puntaje, 2)}
       </div>
     </div>
@@ -137,18 +184,14 @@ function TarjetaFactor({
   const esEnfoque = claveSubfactor(factor.descripcionFactor).includes("enfoque");
   const [abierto, setAbierto] = useState(!esEnfoque);
   const nivel = nivelDesdePromedio(factor.puntajeObtenido);
-  // El punto de color de la categoría es su propio nivel de riesgo (verde/ámbar/rojo),
-  // igual que en la matriz de referencia — no un color decorativo rotando por índice.
-  const colorPunto = nivel?.solido.split(" ")[0] ?? "bg-gray-300";
+  const colorPunto = nivel?.solido.split(" ")[0] ?? "bg-muted-foreground/40";
   const ChevronFactor = abierto ? ChevronUp : ChevronDown;
 
   return (
     <div
       className={cn(
-        "overflow-hidden rounded-xl border shadow-sm",
-        esEnfoque
-          ? "border-indigo-800 bg-indigo-900 text-white"
-          : "border-gray-200 bg-white dark:border-border dark:bg-card dark:text-card-foreground",
+        "overflow-hidden rounded-xl border border-border bg-card text-card-foreground shadow-xs",
+        esEnfoque && "border-primary/40 bg-primary/5",
       )}
     >
       <button
@@ -156,55 +199,40 @@ function TarjetaFactor({
         onClick={() => setAbierto((v) => !v)}
         aria-expanded={abierto}
         className={cn(
-          "flex w-full flex-wrap items-center justify-between gap-3 px-4 py-3 text-left",
-          !esEnfoque && "border-b border-gray-200 bg-slate-50/80 hover:bg-slate-50 dark:border-border dark:bg-slate-800/60 dark:hover:bg-slate-800",
+          "flex w-full flex-wrap items-center justify-between gap-3 px-4 py-3 text-left transition hover:bg-muted/50",
+          abierto && "border-b border-border bg-muted/30",
         )}
       >
         <span className="flex min-w-0 items-center gap-2.5">
-          <ChevronFactor
-            className={cn(
-              "size-4 shrink-0",
-              esEnfoque ? "text-indigo-300" : "text-gray-400",
-            )}
-          />
+          <ChevronFactor className="size-4 shrink-0 text-muted-foreground" />
           <span
             className={cn(
               "size-2 shrink-0 rounded-full",
-              esEnfoque ? "bg-indigo-400" : colorPunto,
+              colorPunto,
             )}
           />
-          <span className="truncate text-sm font-bold">
+          <span className="truncate text-sm font-bold text-foreground">
             {indice + 1}. {etiquetaFactor(factor.descripcionFactor)}
           </span>
         </span>
         <span className="flex items-center gap-5 text-xs">
-          <span className={esEnfoque ? "text-indigo-200" : "text-gray-500"}>
-            <b className={esEnfoque ? "" : "text-gray-700"}>Valor:</b>{" "}
+          <span className="text-muted-foreground">
+            <b className="font-semibold text-foreground">Valor:</b>{" "}
             {numero(factor.puntajeObtenido, 2)}
           </span>
-          <span className={esEnfoque ? "text-indigo-200" : "text-gray-500"}>
-            <b className={esEnfoque ? "" : "text-gray-700"}>Pond:</b>{" "}
+          <span className="text-muted-foreground">
+            <b className="font-semibold text-foreground">Pond:</b>{" "}
             {numero(factor.pesoPorcentaje, 2)}%
           </span>
           <NivelBadge nivel={nivel} tamano="factor" />
-          <span
-            className={cn(
-              "rounded px-2 py-1 font-mono font-bold",
-              esEnfoque ? "bg-indigo-950/60 text-white" : "bg-muted text-foreground",
-            )}
-          >
+          <span className="rounded bg-muted px-2 py-1 font-mono font-bold text-foreground">
             {numero(factor.scorePonderado ?? factor.puntajeObtenido, 2)}
           </span>
         </span>
       </button>
 
       {abierto && (
-        <div
-          className={cn(
-            "divide-y text-xs",
-            esEnfoque ? "bg-card text-foreground" : "divide-border",
-          )}
-        >
+        <div className="divide-y divide-border bg-card text-xs">
           {factor.subfactores?.map((sub, i) => (
             <FilaSubfactor
               key={`${sub.descripcion}-${i}`}
@@ -242,7 +270,9 @@ function TarjetaEstado({
       <span
         className={cn(
           "flex size-12 items-center justify-center rounded-full",
-          tono === "error" ? "bg-red-50 text-red-700 dark:bg-red-950/40 dark:text-red-400" : "bg-indigo-50 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-400",
+          tono === "error"
+            ? "bg-destructive/10 text-destructive"
+            : "bg-primary/10 text-primary",
         )}
       >
         <Icono
@@ -252,7 +282,7 @@ function TarjetaEstado({
       </span>
       <div className="max-w-md space-y-1">
         <p className="font-semibold text-foreground">{titulo}</p>
-        <p className="text-muted-foreground text-sm">{descripcion}</p>
+        <p className="text-sm text-muted-foreground">{descripcion}</p>
       </div>
       {children}
     </div>
@@ -302,7 +332,7 @@ function EstadoSinEvaluacion({
       >
         <div className="flex flex-wrap justify-center gap-2">
           <Button onClick={onReintentar}>
-            <RefreshCw />
+            <RefreshCw className="size-4" />
             Reintentar
           </Button>
           <Button variant="outline" onClick={onEvaluar}>
@@ -374,21 +404,21 @@ export function MatrizRiesgoDashboard({
 
   return (
     <div className="flex h-full flex-col rounded-lg border border-border bg-card shadow-sm">
-      <header className="flex flex-wrap items-center justify-between gap-4 rounded-t-lg bg-slate-900 px-5 py-3 text-white">
+      <header className="flex flex-wrap items-center justify-between gap-4 rounded-t-lg border-b border-border bg-card px-5 py-3 text-foreground">
         <div className="flex items-center gap-3">
-          <div className="flex size-9 items-center justify-center rounded-lg border border-indigo-400/30 bg-indigo-500/20 text-indigo-300">
+          <div className="flex size-9 items-center justify-center rounded-lg border border-primary/20 bg-primary/10 text-primary">
             <ShieldCheck className="size-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-base font-bold tracking-tight">
+              <h2 className="text-base font-bold tracking-tight text-foreground">
                 Matriz de Riesgo Integral
               </h2>
-              <span className="rounded-full border border-indigo-400/30 bg-indigo-500/20 px-2 py-0.5 text-[10px] font-semibold tracking-wider text-indigo-300">
+              <span className="rounded-full border border-primary/20 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold tracking-wider text-primary">
                 PLD / FT
               </span>
             </div>
-            <p className="hidden text-xs text-slate-400 sm:block">
+            <p className="hidden text-xs text-muted-foreground sm:block">
               Módulo de Prevención y Cumplimiento Regulatorio
             </p>
           </div>
@@ -404,19 +434,23 @@ export function MatrizRiesgoDashboard({
 
         <div className="flex items-center gap-3">
           {evaluacion && (
-            <div className="flex items-center rounded-lg border border-white/20 bg-white/5 px-3 py-1">
+            <div className="flex items-center rounded-lg border border-border bg-muted/40 px-3 py-1">
               <div className="mr-2">
-                <span className="block text-[10px] font-bold tracking-wider text-indigo-200 uppercase">
+                <span className="block text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
                   Nivel asignado
                 </span>
-                <span className="text-xs font-semibold">
+                <span className="text-xs font-semibold text-foreground">
                   Score: {numero(resultado?.puntuacion_total)}
                 </span>
               </div>
               <span
                 className={cn(
                   "rounded px-2 py-0.5 text-xs font-bold tracking-wide uppercase",
+<<<<<<< HEAD
                   nivelAsignado?.solido ?? "bg-gray-400 text-white",
+=======
+                  nivelGeneral?.solido ?? "bg-muted text-foreground",
+>>>>>>> origin/develop
                 )}
               >
                 {etiquetaAsignada}
@@ -424,36 +458,39 @@ export function MatrizRiesgoDashboard({
             </div>
           )}
           {evaluacion && cliente && (
-            <button
-              type="button"
+            <Button
+              variant="outline"
+              size="sm"
               onClick={onReevaluar}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800/80 px-3 py-1.5 text-xs font-medium text-slate-200 transition hover:bg-slate-700"
+              className="h-8 gap-1.5 text-xs"
             >
-              <RefreshCw className="size-3.5 text-slate-400" />
+              <RefreshCw className="size-3.5 text-muted-foreground" />
               Volver a evaluar
-            </button>
+            </Button>
           )}
-          <button
-            type="button"
+          <Button
+            variant="outline"
+            size="sm"
             onClick={() => window.print()}
             disabled={!evaluacion}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800/80 px-3 py-1.5 text-xs font-medium text-slate-200 transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-40"
+            className="h-8 gap-1.5 text-xs"
           >
-            <Download className="size-3.5 text-slate-400" />
+            <Download className="size-3.5 text-muted-foreground" />
             Exportar
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
+            size="sm"
             onClick={onEvaluar}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-indigo-500"
+            className="h-8 gap-1.5 text-xs"
           >
             <Plus className="size-3.5" />
             Nueva evaluación
-          </button>
+          </Button>
         </div>
       </header>
 
       <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
+<<<<<<< HEAD
         <ExpedienteClienteAside
           cliente={cliente}
           cargando={cargandoSocio}
@@ -461,31 +498,83 @@ export function MatrizRiesgoDashboard({
           valorBuscador={cliente?.referencia ?? ""}
           onSeleccionarSocio={onSeleccionarSocio}
         />
+=======
+        <aside className="w-full shrink-0 overflow-y-auto border-b border-border bg-card lg:w-[300px] lg:rounded-bl-lg lg:border-r lg:border-b-0">
+          <div className="flex items-center justify-between border-b border-border bg-muted/40 px-4 py-3 text-foreground">
+            <span className="flex items-center gap-2 text-sm font-semibold tracking-wide">
+              <span className="rounded bg-primary/10 p-1 text-primary">
+                <User className="size-4" />
+              </span>
+              Expediente del Cliente
+            </span>
+            {cliente && (
+              <span className="rounded border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-[11px] font-semibold text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300">
+                Activo
+              </span>
+            )}
+          </div>
 
-        <section className="flex min-h-0 min-w-0 flex-1 flex-col bg-slate-50 dark:bg-background lg:rounded-br-lg">
-          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-gray-200 bg-white px-6 py-4 dark:border-border dark:bg-card">
+          <div className="space-y-4 p-4 text-xs">
+            <div className="space-y-2 rounded-xl border border-border bg-muted/30 p-3">
+              <p className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
+                Referencia / No. Cliente / Nombre
+              </p>
+              <BuscadorSocios
+                variante="panel"
+                valor={cliente?.referencia ?? ""}
+                placeholder="Elige un socio…"
+                onSeleccionar={onSeleccionarSocio}
+              />
+            </div>
+
+            {cargandoSocio && (
+              <div className="space-y-3" aria-label="Cargando expediente">
+                <Skeleton className="h-12 w-full" />
+                <Skeleton className="h-12 w-full" />
+                <Skeleton className="h-12 w-full" />
+              </div>
+            )}
+            {!cargandoSocio && errorSocio && (
+              <p className="text-sm text-destructive">
+                No se encontraron datos de este socio.
+              </p>
+            )}
+            {!cargandoSocio && !errorSocio && cliente && (
+              <ExpedienteDelCliente cliente={cliente} />
+            )}
+            {!cargandoSocio && !errorSocio && !cliente && (
+              <p className="text-sm text-muted-foreground">
+                Usa la lupa para ver los socios del sistema.
+              </p>
+            )}
+          </div>
+        </aside>
+>>>>>>> origin/develop
+
+        <section className="flex min-h-0 min-w-0 flex-1 flex-col bg-muted/10 lg:rounded-br-lg">
+          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border bg-card px-6 py-4">
             <div className="min-w-[260px] flex-1">
-              <h3 className="flex flex-wrap items-baseline gap-2 text-base font-bold tracking-tight text-gray-900 dark:text-foreground">
+              <h3 className="flex flex-wrap items-baseline gap-2 text-base font-bold tracking-tight text-foreground">
                 Matriz de Factores y Ponderación de Riesgo
-                <span className="text-xs font-normal text-gray-500 dark:text-muted-foreground">
+                <span className="text-xs font-normal text-muted-foreground">
                   (Metodología EBR / CNBV)
                 </span>
               </h3>
-              <p className="text-xs text-gray-500 dark:text-muted-foreground">
+              <p className="text-xs text-muted-foreground">
                 Evaluación cuantitativa y cualitativa de mitigantes y riesgos inherentes.
               </p>
             </div>
-            <div className="flex shrink-0 items-center gap-6 divide-x divide-gray-200 dark:divide-border text-xs">
+            <div className="flex shrink-0 items-center gap-6 divide-x divide-border text-xs">
               <div className="text-right">
-                <span className="block text-[11px] font-semibold text-gray-500 dark:text-muted-foreground uppercase">
-                  Valor total calculated
+                <span className="block text-[11px] font-semibold text-muted-foreground uppercase">
+                  Valor total calculado
                 </span>
-                <span className="text-xl font-extrabold text-gray-900 dark:text-foreground">
+                <span className="text-xl font-extrabold text-foreground">
                   {numero(resultado?.puntuacion_total)}
                 </span>
               </div>
               <div className="pl-6 text-right">
-                <span className="block text-[11px] font-semibold text-gray-500 dark:text-muted-foreground uppercase">
+                <span className="block text-[11px] font-semibold text-muted-foreground uppercase">
                   Riesgo determinado
                 </span>
                 {nivelGeneral ? (
@@ -504,7 +593,7 @@ export function MatrizRiesgoDashboard({
                     {etiquetaGeneral}
                   </span>
                 ) : (
-                  <span className="text-xl font-extrabold text-gray-300 dark:text-gray-600">—</span>
+                  <span className="text-xl font-extrabold text-muted-foreground/40">—</span>
                 )}
               </div>
             </div>
@@ -515,7 +604,7 @@ export function MatrizRiesgoDashboard({
               <>
                 <div
                   className={cn(
-                    "hidden gap-2 rounded-lg bg-slate-200/60 dark:bg-slate-800/80 px-4 py-2 text-[11px] font-bold tracking-wider text-gray-500 dark:text-muted-foreground uppercase md:grid",
+                    "hidden gap-2 rounded-lg border border-border bg-muted/60 px-4 py-2 text-[11px] font-bold tracking-wider text-muted-foreground uppercase md:grid",
                     COLUMNAS,
                   )}
                 >

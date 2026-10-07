@@ -15,7 +15,7 @@ export const card = "rounded-xl border border-border bg-card shadow-xs";
 export const field =
   "rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground " +
   "focus:border-primary focus:ring-2 focus:ring-ring/50 focus:outline-none " +
-  "disabled:bg-muted disabled:text-muted-foreground";
+  "disabled:bg-muted/80 disabled:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-70";
 
 /** Etiqueta de un campo. */
 export const label = "text-sm font-medium text-foreground";
@@ -27,8 +27,8 @@ export const table = {
   /** Contenedor con el borde redondeado; la tabla va dentro. */
   wrapper: `overflow-hidden ${card}`,
   root: "w-full min-w-full text-left text-xs sm:text-sm",
-  head: "border-b border-border bg-muted/50 text-muted-foreground",
-  headCell: "px-4 py-3 text-left font-semibold text-muted-foreground whitespace-nowrap",
+  head: "border-b border-border bg-slate-100 dark:bg-muted/70 text-foreground font-semibold",
+  headCell: "px-4 py-3 text-left font-semibold text-foreground/85 whitespace-nowrap",
   body: "divide-y divide-border",
   /** Fila clicable. `seleccionada` la resalta con un tinte del acento. */
   row: (seleccionada: boolean) =>

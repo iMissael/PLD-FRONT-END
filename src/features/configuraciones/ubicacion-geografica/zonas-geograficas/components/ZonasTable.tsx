@@ -24,6 +24,7 @@ export function ZonasTable({
   onVer,
   onDoubleClick,
 }: ZonasTableProps) {
+<<<<<<< HEAD
   const listaZonas = useMemo(
     () =>
       Array.isArray(zonas)
@@ -34,16 +35,42 @@ export function ZonasTable({
 
   const columns = useMemo<ColumnDef<ZonaGeograficaResponse>[]>(
     () => [
+=======
+  const listaZonas = useMemo(() => {
+    if (!zonas) return [];
+    if (Array.isArray(zonas)) return zonas;
+    if (Array.isArray((zonas as unknown as { contenido?: typeof zonas })?.contenido)) {
+      return (zonas as unknown as { contenido: typeof zonas }).contenido ?? [];
+    }
+    return [];
+  }, [zonas]);
+
+  const columns = useMemo<ColumnDef<ZonaGeograficaResponse>[]>(() => {
+    return [
+>>>>>>> origin/develop
       {
         header: "Nombre",
-        accessorKey: "nombre",
         className: table.cellStrong,
+        cell: (zona) => (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onSeleccionar(zona);
+            }}
+            className="font-semibold text-foreground hover:text-primary hover:underline text-left cursor-pointer"
+            title="Seleccionar y editar zona"
+          >
+            {zona.nombre}
+          </button>
+        ),
       },
       {
         header: "Tipo",
         cell: (zona) => <span>{zona.esEntidadEspecial ? "Especial" : "Principal"}</span>,
       },
       {
+<<<<<<< HEAD
         header: "Nivel de riesgo",
         cell: (zona) =>
           zona.esEntidadEspecial ? (
@@ -58,6 +85,21 @@ export function ZonasTable({
       {
         header: "Entidades",
         accessorKey: "totalEntidadesAsignadas",
+=======
+        header: "Entidad especial",
+        cell: (zona) => (
+          <span className="text-xs text-muted-foreground">
+            {zona.esEntidadEspecial ? "Sí" : "No"}
+          </span>
+        ),
+      },
+      {
+        header: "Entidades asignadas",
+        align: "right",
+        headerClassName: "text-right",
+        className: "text-right font-mono",
+        cell: (zona) => Number(zona.totalEntidadesAsignadas ?? 0).toLocaleString("es-MX"),
+>>>>>>> origin/develop
       },
       {
         header: "Estatus",
@@ -68,54 +110,69 @@ export function ZonasTable({
         ),
       },
       {
-        header: "Doble click para ver",
+        header: "Acciones",
+        align: "right",
+        headerClassName: "text-right",
+        width: "130px",
         cell: (zona) => (
           <Button
-            variante="secundario"
-            className={`px-3 py-1 text-xs ${zona.id === verId ? "border-fg text-foreground" : ""}`}
-            onClick={(event) => {
-              event.stopPropagation();
+            variante={verId === zona.id ? "primario" : "secundario"}
+            size="sm"
+            onClick={(e) => {
+              e.stopPropagation();
               onVer(zona);
             }}
           >
-            Ver
+            {verId === zona.id ? "Ocultar" : "Ver entidades"}
           </Button>
         ),
       },
+<<<<<<< HEAD
     ],
     [verId, onVer],
   );
 
   return (
     <DataTable<ZonaGeograficaResponse>
+=======
+    ];
+  }, [verId, onVer, onSeleccionar]);
+
+  return (
+    <DataTable
+>>>>>>> origin/develop
       data={listaZonas}
       columns={columns}
       isLoading={isLoading}
-      getRowId={(zona) => zona.id}
-      selectedRowId={seleccionadaId}
+      loadingMessage="Cargando zonas de riesgo..."
+      emptyMessage="No hay zonas de riesgo registradas."
+      seleccionadoId={seleccionadaId}
       onRowClick={onSeleccionar}
-      onRowDoubleClick={(zona) => {
-        if (onDoubleClick) {
-          onDoubleClick(zona);
-        } else {
-          onVer(zona);
-          onSeleccionar(zona);
-        }
-      }}
-      doubleClickTitle="Doble clic para ver asignaciones de este registro"
-      emptyMessage="No hay zonas registradas."
+      onRowDoubleClick={onDoubleClick}
+      doubleClickTitle="Doble clic para ver las entidades de esta zona"
       search={{
+<<<<<<< HEAD
         placeholder: "Buscar zona por nombre, tipo, nivel o estatus...",
         filterFn: (zona, term) =>
           zona.nombre.toLowerCase().includes(term) ||
           (zona.esEntidadEspecial ? "especial" : "principal").includes(term) ||
           (zona.nivelRiesgoDescripcion?.toLowerCase().includes(term) ?? false) ||
           (zona.estatus === "A" ? "activa" : "inactiva").includes(term),
+=======
+        placeholder: "Buscar zona de riesgo...",
+        filterFn: (zona, term) => {
+          const t = term.toLowerCase();
+          return (
+            zona.nombre.toLowerCase().includes(t) ||
+            zona.nivelRiesgoDescripcion.toLowerCase().includes(t)
+          );
+        },
+>>>>>>> origin/develop
       }}
       pagination={{
         mode: "client",
         defaultRowsPerPage: 10,
-        rowsPerPageOptions: [5, 10, 25, 50],
+        rowsPerPageOptions: [10, 25, 30],
       }}
     />
   );

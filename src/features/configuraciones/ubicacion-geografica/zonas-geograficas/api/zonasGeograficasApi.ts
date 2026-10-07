@@ -6,7 +6,12 @@ import type {
   CrearZonaGeograficaInput,
   EntidadAsignadaResponse,
   EstatusZona,
+<<<<<<< HEAD
   ZonaGeograficaResponse,
+=======
+  PaisAsignadoResponse,
+  ZonaGeograficaResponse, 
+>>>>>>> origin/develop
 } from "../types/zonaGeografica";
 
 const BASE_PATH = "/catalogos/zonas-geograficas";

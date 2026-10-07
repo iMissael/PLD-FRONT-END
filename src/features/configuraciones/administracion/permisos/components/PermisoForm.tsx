@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Button } from "@/shared/components/ui/button";
 import {
   Form,
@@ -49,8 +50,10 @@ export function PermisoForm() {
         toast.success("Permiso creado correctamente");
         form.reset();
       },
-      onError: () => {
-        toast.error("No se pudo crear el permiso");
+      onError: (error) => {
+        toast.error(
+          isAppError(error) ? error.message : "No se pudo crear el permiso",
+        );
       },
     });
   }

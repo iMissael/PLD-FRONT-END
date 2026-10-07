@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
@@ -65,13 +66,19 @@ export function ControlDolarPage() {
   const handleSincronizar = () => {
     limpiarMensajes();
     sincronizar.mutate(rango, {
-      onSuccess: (r) =>
-        setAviso(
+      onSuccess: (r) => {
+        const mensaje =
           r.diasGuardados === 0
             ? "Banxico no tenía datos nuevos para ese rango."
-            : `Se guardaron ${r.diasGuardados} días desde Banxico.`,
-        ),
-      onError: (e) => setMensajeError(mensajeDe(e)),
+            : `Se guardaron ${r.diasGuardados} días desde Banxico.`;
+        setAviso(mensaje);
+        toast.success(mensaje);
+      },
+      onError: (e) => {
+        const errorMsg = mensajeDe(e);
+        setMensajeError(errorMsg);
+        toast.error(errorMsg);
+      },
     });
   };
 
@@ -79,18 +86,26 @@ export function ControlDolarPage() {
     event.preventDefault();
     limpiarMensajes();
     const importe = Number(manual.importe);
-    if (!importe || importe <= 0)
-      return setMensajeError("El tipo de cambio debe ser mayor a cero.");
+    if (!importe || importe <= 0) {
+      const errorMsg = "El tipo de cambio debe ser mayor a cero.";
+      setMensajeError(errorMsg);
+      toast.error(errorMsg);
+      return;
+    }
     registrar.mutate(
       { fecha: manual.fecha, importe },
       {
         onSuccess: (tc) => {
-          setAviso(
-            `Tipo de cambio del ${formatearFecha(tc.fecha)} guardado: ${TIPO_CAMBIO.format(tc.importe)}.`,
-          );
+          const mensaje = `Tipo de cambio del ${formatearFecha(tc.fecha)} guardado: ${TIPO_CAMBIO.format(tc.importe)}.`;
+          setAviso(mensaje);
+          toast.success(mensaje);
           setManual({ fecha: hoyIso(), importe: "" });
         },
-        onError: (e) => setMensajeError(mensajeDe(e)),
+        onError: (e) => {
+          const errorMsg = mensajeDe(e);
+          setMensajeError(errorMsg);
+          toast.error(errorMsg);
+        },
       },
     );
   };

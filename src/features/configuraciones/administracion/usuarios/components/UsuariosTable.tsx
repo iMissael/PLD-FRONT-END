@@ -1,6 +1,8 @@
 import { Pencil, Search, Trash2, UserCheck, Users, UserX } from "lucide-react";
 import { toast } from "sonner";
 import { useMemo, useState } from "react";
+import { toast } from "sonner";
+import { isAppError } from "@/api/interceptors/errorInterceptor";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -199,11 +201,26 @@ function BotonEliminar({ usuario }: { usuario: UsuarioResponse }) {
             className="bg-destructive text-white hover:bg-destructive-hover"
             disabled={eliminarUsuario.isPending}
             onClick={() => {
+<<<<<<< HEAD
               if (!usuario.idUsuario) return;
               eliminarUsuario.mutate(usuario.idUsuario, {
                 onError: (error) =>
                   toast.error("No se pudo eliminar el usuario", { description: error.message }),
               });
+=======
+              if (usuario.idUsuario) {
+                eliminarUsuario.mutate(usuario.idUsuario, {
+                  onSuccess: () => {
+                    toast.success("Usuario eliminado correctamente.");
+                  },
+                  onError: (error) => {
+                    toast.error(
+                      isAppError(error) ? error.message : "No se pudo eliminar el usuario.",
+                    );
+                  },
+                });
+              }
+>>>>>>> origin/develop
             }}
           >
             {eliminarUsuario.isPending ? "Eliminando…" : "Eliminar"}
@@ -380,7 +397,7 @@ export function UsuariosTable({
           onPageChange={handleChangePage}
           rowsPerPage={rowsPerPage}
           onRowsPerPageChange={handleChangeRowsPerPage}
-          rowsPerPageOptions={[5, 10, 25, 50]}
+          rowsPerPageOptions={[10, 25, 30]}
         />
       </div>
     </div>

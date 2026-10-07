@@ -70,7 +70,7 @@ export function ActividadesEconomicasTable({
       pagination={{
         mode: "client",
         defaultRowsPerPage: 10,
-        rowsPerPageOptions: [5, 10, 25, 50],
+        rowsPerPageOptions: [10, 25, 30],
       }}
     />
   );

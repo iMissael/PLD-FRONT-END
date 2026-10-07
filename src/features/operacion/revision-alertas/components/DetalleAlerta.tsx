@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import {
@@ -115,11 +116,17 @@ export function DetalleAlerta({ alerta, onDictaminada }: DetalleAlertaProps) {
         },
       },
       {
-        onSuccess: onDictaminada,
-        onError: (error) =>
-          setMensajeError(
-            isAppError(error) ? error.message : "Ocurrió un error inesperado.",
-          ),
+        onSuccess: (res) => {
+          toast.success(
+            `Alerta ${alerta.folio} dictaminada como ${ETIQUETA_ESTATUS[dictamen]}.`,
+          );
+          onDictaminada(res);
+        },
+        onError: (error) => {
+          const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
+          setMensajeError(msg);
+          toast.error(msg);
+        },
       },
     );
   };

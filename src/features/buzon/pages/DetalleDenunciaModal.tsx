@@ -19,6 +19,8 @@ import {
   TableRow,
 } from "@/shared/components/ui/table";
 import { es } from "@/shared/i18n/es";
+import { toast } from "sonner";
+import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { buscarPersonasDenunciadas, obtenerPersonaPorRef, type PersonaItem } from "../api/busquedaPersonasApi";
 import { useRazonesAlertaPorTipo, useTiposAlertaBuzon } from "../hooks/useCatalogosBuzon";
 import {
@@ -164,6 +166,7 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
   const handleGuardarEdicion = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editRazonAlertaId || editRazonAlertaId <= 0) {
+      toast.warning("Debes seleccionar una razón de alerta válida.");
       setFeedback({
         msg: "Debes seleccionar una razón de alerta válida.",
         type: "warning",
@@ -179,12 +182,14 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
         observaciones: editObservaciones.trim() || undefined,
       });
       setIsEditing(false);
+      toast.success("Denuncia actualizada en revisión exitosamente.");
       setFeedback({
         msg: "Denuncia actualizada en revisión exitosamente.",
         type: "success",
       });
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Error al guardar los cambios de la denuncia.";
+      const msg = isAppError(err) ? err.message : err instanceof Error ? err.message : "Error al guardar los cambios de la denuncia.";
+      toast.error(msg);
       setFeedback({ msg, type: "error" });
     }
   };
@@ -202,27 +207,39 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
             verificoRef: user?.username ?? "Oficial PLD",
           });
           setNuevaObservacion("");
-        } catch {
+        } catch (obsErr: unknown) {
+          const msg = isAppError(obsErr) ? obsErr.message : "Ocurrió un error al guardar la observación requerida.";
+          toast.error(msg);
           setFeedback({
-            msg: "Ocurrió un error al guardar la observación requerida.",
+            msg,
             type: "error",
           });
           return;
         }
       } else {
+        const msg = "Regla de Negocio: Debe agregar al menos una observación de revisión antes de Aceptar o Denegar la denuncia.";
+        toast.warning(msg);
         setFeedback({
-          msg: "Regla de Negocio: Debe agregar al menos una observación de revisión antes de Aceptar o Denegar la denuncia.",
+          msg,
           type: "warning",
         });
         return;
       }
     }
 
+    const statusLabel = es.buzon.statusLabels[nuevoEstatus] || nuevoEstatus;
+    if (!window.confirm(`¿Está seguro de cambiar el estatus de la denuncia a "${statusLabel}"?`)) {
+      return;
+    }
+
     try {
       await cambiarEstatus.mutateAsync({ nuevoEstatus });
-      setFeedback({ msg: `Estatus actualizado a ${es.buzon.statusLabels[nuevoEstatus]} exitosamente.`, type: "success" });
+      const msg = `Estatus actualizado a ${statusLabel} exitosamente.`;
+      toast.success(msg);
+      setFeedback({ msg, type: "success" });
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "No se pudo actualizar el estatus.";
+      const msg = isAppError(err) ? err.message : err instanceof Error ? err.message : "No se pudo actualizar el estatus.";
+      toast.error(msg);
       setFeedback({ msg, type: "error" });
     }
   };
@@ -238,9 +255,11 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
         verificoRef: user?.username ?? "Oficial PLD",
       });
       setNuevaObservacion("");
+      toast.success("Observación de seguimiento agregada exitosamente.");
       setFeedback({ msg: "Observación de seguimiento agregada exitosamente.", type: "success" });
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Error al registrar observación.";
+      const msg = isAppError(err) ? err.message : err instanceof Error ? err.message : "Error al registrar observación.";
+      toast.error(msg);
       setFeedback({ msg, type: "error" });
     }
   };

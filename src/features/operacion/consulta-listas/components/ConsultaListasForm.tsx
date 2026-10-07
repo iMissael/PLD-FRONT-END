@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { isAppError } from "@/api/interceptors/errorInterceptor";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -54,7 +55,7 @@ export function ConsultaListasForm({
   onResultados: (resultados: ConsultaLista[], proveedorExternoNoDisponible: boolean) => void;
 }) {
   const [enviando, setEnviando] = useState(false);
-  const [errorServicio, setErrorServicio] = useState(false);
+  const [errorServicio, setErrorServicio] = useState<string | null>(null);
   const consultarListas = useConsultarListas();
 
   const form = useForm<ConsultaListasFormValues>({
@@ -123,8 +124,12 @@ export function ConsultaListasForm({
             toast.success("Consulta realizada correctamente");
           }
         },
-        onError: () => {
-          setErrorServicio(true);
+        onError: (error) => {
+          const msg = isAppError(error)
+            ? error.message
+            : "El servicio de consulta de listas no está disponible.";
+          setErrorServicio(msg);
+          toast.error(msg);
         },
         onSettled: () => setEnviando(false),
       },
@@ -268,14 +273,21 @@ export function ConsultaListasForm({
         </Button>
       </form>
 
-      <AlertDialog open={errorServicio} onOpenChange={setErrorServicio}>
+      <AlertDialog
+        open={Boolean(errorServicio)}
+        onOpenChange={(abierto) => !abierto && setErrorServicio(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>No se pudo completar la consulta</AlertDialogTitle>
-            <AlertDialogDescription>El servicio de API no funciona</AlertDialogDescription>
+            <AlertDialogDescription>
+              {errorServicio || "El servicio de API no funciona"}
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogAction>Aceptar</AlertDialogAction>
+            <AlertDialogAction onClick={() => setErrorServicio(null)}>
+              Aceptar
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

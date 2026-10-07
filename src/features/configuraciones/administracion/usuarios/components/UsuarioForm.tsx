@@ -263,7 +263,15 @@ export function UsuarioForm({
           setPaso(1);
           onCreado?.();
         },
+<<<<<<< HEAD
         onError: avisarError,
+=======
+        onError: (error) => {
+          toast.error(
+            isAppError(error) ? error.message : "No se pudo crear el usuario",
+          );
+        },
+>>>>>>> origin/develop
       },
     );
   }

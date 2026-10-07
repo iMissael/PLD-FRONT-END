@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
@@ -55,11 +56,14 @@ export function LocalidadesPage() {
     cambiarRiesgo.mutate(
       { id: seleccionada.idLocalidad, input: { nivelRiesgoId } },
       {
-        onSuccess: (localidadActualizada) => setSeleccionada(localidadActualizada),
+        onSuccess: (localidadActualizada) => {
+          setSeleccionada(localidadActualizada);
+          toast.success("Nivel de riesgo de la localidad actualizado correctamente");
+        },
         onError: (error) => {
-          setMensajeError(
-            isAppError(error) ? error.message : "Ocurrió un error inesperado.",
-          );
+          const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
+          setMensajeError(msg);
+          toast.error(msg);
         },
       },
     );
@@ -115,7 +119,7 @@ export function LocalidadesPage() {
             setTamanio(parseInt(e.target.value, 10));
             setPagina(0);
           },
-          rowsPerPageOptions: [10, 15, 25, 50],
+          rowsPerPageOptions: [10, 15, 25, 30],
         }}
       />
 

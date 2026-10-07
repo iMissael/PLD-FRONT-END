@@ -1,8 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
+import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { CaptchaChallenge } from "@/shared/components/CaptchaChallenge";
 import { CheckCircleIcon, PaperclipIcon, UploadIcon } from "@/shared/components/icons";
 import { ThemeToggle } from "@/shared/components/ThemeToggle";
@@ -120,6 +122,7 @@ export function BuzonPublicoPage() {
   const onSubmitFinal = async (values: DenunciaFormValues) => {
     if (!captchaValid) {
       setSubmitError(es.captcha.invalid);
+      toast.error(es.captcha.invalid);
       return;
     }
     setSubmitError(null);
@@ -133,8 +136,13 @@ export function BuzonPublicoPage() {
         evidencias: files,
       });
       setSubmitted(true);
-    } catch {
-      setSubmitError("No se pudo enviar la denuncia. Por favor reintenta.");
+      toast.success(es.buzon.successTitle);
+    } catch (error: unknown) {
+      const msg = isAppError(error)
+        ? error.message
+        : "No se pudo enviar la denuncia. Por favor reintenta.";
+      setSubmitError(msg);
+      toast.error(msg);
     }
   };
 

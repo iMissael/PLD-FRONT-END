@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Calendar, Filter, X } from "lucide-react";
+import { Calendar, Eye, Filter, X } from "lucide-react";
 import { es } from "@/shared/i18n/es";
 import { DataTable, type ColumnDef } from "@/shared/components/DataTable";
 import { useListarDenuncias } from "../hooks/useDenuncias";
@@ -44,7 +44,19 @@ export function GestionDenunciasPage() {
         header: "ID",
         width: "80px",
         className: "font-mono font-bold text-foreground",
-        cell: (item) => `#${item.id}`,
+        cell: (item) => (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedId(item.id);
+            }}
+            className="font-mono font-bold text-primary hover:underline cursor-pointer"
+            title="Ver o editar denuncia"
+          >
+            #{item.id}
+          </button>
+        ),
       },
       {
         header: "Fecha Incidente",
@@ -59,8 +71,12 @@ export function GestionDenunciasPage() {
       },
       {
         header: "Descripción",
-        className: "max-w-xs truncate text-muted-foreground",
-        accessorKey: "descripcion",
+        className: "max-w-xs text-muted-foreground",
+        cell: (item) => (
+          <span title={item.descripcion} className="block max-w-xs truncate">
+            {item.descripcion}
+          </span>
+        ),
       },
       {
         header: "Estatus",
@@ -74,10 +90,10 @@ export function GestionDenunciasPage() {
         ),
       },
       {
-        header: "Doble clic para editar",
+        header: "Acciones",
         headerClassName: "text-right",
         align: "right",
-        width: "160px",
+        width: "130px",
         cell: (item) => (
           <button
             type="button"
@@ -85,9 +101,11 @@ export function GestionDenunciasPage() {
               e.stopPropagation();
               setSelectedId(item.id);
             }}
-            className="rounded-md bg-muted px-2.5 py-1 text-xs font-semibold text-foreground hover:bg-muted/80 transition-colors"
+            className="inline-flex items-center gap-1.5 rounded-md bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary hover:bg-primary hover:text-white transition-colors cursor-pointer"
+            title="Ver detalle o modificar"
           >
-            Ver Detalle / Editar
+            <Eye className="size-3.5" />
+            Ver / Editar
           </button>
         ),
       },

@@ -105,7 +105,7 @@ export function DataTable<T>({
     return {
       mode: "client",
       defaultRowsPerPage: 10,
-      rowsPerPageOptions: [5, 10, 25, 50],
+      rowsPerPageOptions: [ 10, 25, 30],
     };
   }, [pagination]);
 
@@ -119,7 +119,7 @@ export function DataTable<T>({
   const currentRowsPerPage = isServerPagination
     ? paginationConfig.rowsPerPage
     : localRowsPerPage;
-  const rowsPerPageOptions = paginationConfig.rowsPerPageOptions ?? [5, 10, 25, 50];
+  const rowsPerPageOptions = paginationConfig.rowsPerPageOptions ?? [ 10, 25, 30];
 
   // 1. Filtrado de búsqueda
   const dataFiltrada = useMemo(() => {
@@ -286,11 +286,21 @@ export function DataTable<T>({
                             key={colIdx}
                             className={`${table.cell} ${getAlignClass(col.align)} ${col.className ?? ""}`}
                           >
-                            {col.cell
-                              ? col.cell(item, rowIndex, globalIdx)
-                              : col.accessorKey
-                              ? String(item[col.accessorKey] ?? "—")
-                              : null}
+                            {col.cell ? (
+                              col.cell(item, rowIndex, globalIdx)
+                            ) : col.accessorKey ? (
+                              <span
+                                title={
+                                  item[col.accessorKey] !== undefined &&
+                                  item[col.accessorKey] !== null
+                                    ? String(item[col.accessorKey])
+                                    : undefined
+                                }
+                                className="truncate block"
+                              >
+                                {String(item[col.accessorKey] ?? "—")}
+                              </span>
+                            ) : null}
                           </td>
                         ))}
                       </tr>

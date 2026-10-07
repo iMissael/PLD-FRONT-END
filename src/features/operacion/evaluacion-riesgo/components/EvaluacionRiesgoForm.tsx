@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMemo, useState } from "react";
 import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
+import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Button } from "@/shared/components/ui/button";
 import {
   Form,
@@ -193,7 +194,12 @@ export function EvaluacionRiesgoForm({
         onResultado(resultado, cliente, detalles);
         toast.success("Evaluación de riesgo generada correctamente");
       },
-      onError: () => toast.error("No se pudo completar la evaluación de riesgo"),
+      onError: (error) =>
+        toast.error(
+          isAppError(error)
+            ? error.message
+            : "No se pudo completar la evaluación de riesgo",
+        ),
       onSettled: () => setEnviando(false),
     });
   }

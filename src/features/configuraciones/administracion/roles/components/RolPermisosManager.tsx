@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
+import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -34,10 +35,13 @@ export function RolPermisosManager({ rolId }: { rolId: string }) {
     if (!permisoSeleccionado) return;
     asignarPermiso.mutate(Number(permisoSeleccionado), {
       onSuccess: () => {
-        toast.success("Permiso asignado");
+        toast.success("Permiso asignado correctamente");
         setPermisoSeleccionado("");
       },
-      onError: () => toast.error("No se pudo asignar el permiso"),
+      onError: (error) =>
+        toast.error(
+          isAppError(error) ? error.message : "No se pudo asignar el permiso",
+        ),
     });
   }
 
@@ -86,12 +90,23 @@ export function RolPermisosManager({ rolId }: { rolId: string }) {
               <Button
                 variant="ghost"
                 size="sm"
+                className="text-destructive hover:bg-destructive/10"
                 disabled={revocarPermiso.isPending}
                 onClick={() => {
                   if (permiso.idPermiso) {
+                    if (
+                      !window.confirm(
+                        `¿Está seguro de revocar el permiso ${permiso.recurso}:${permiso.accion}?`,
+                      )
+                    ) {
+                      return;
+                    }
                     revocarPermiso.mutate(permiso.idPermiso, {
-                      onSuccess: () => toast.success("Permiso revocado"),
-                      onError: () => toast.error("No se pudo revocar el permiso"),
+                      onSuccess: () => toast.success("Permiso revocado correctamente"),
+                      onError: (error) =>
+                        toast.error(
+                          isAppError(error) ? error.message : "No se pudo revocar el permiso",
+                        ),
                     });
                   }
                 }}

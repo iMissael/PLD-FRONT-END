@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
@@ -31,19 +32,27 @@ export function EdadesPage() {
   const handleGuardar = (input: Parameters<typeof crear.mutate>[0]) => {
     setMensajeError(null);
     const onError = (error: unknown) => {
-      setMensajeError(isAppError(error) ? error.message : "Ocurrió un error inesperado.");
+      const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
+      setMensajeError(msg);
+      toast.error(msg);
     };
 
     if (creandoNueva) {
       crear.mutate(input, {
-        onSuccess: () => setCreandoNueva(false),
+        onSuccess: () => {
+          setCreandoNueva(false);
+          toast.success("Rango de edad creado correctamente");
+        },
         onError,
       });
     } else if (seleccionada) {
       actualizar.mutate(
         { id: seleccionada.id, input },
         {
-          onSuccess: (edadActualizada) => setSeleccionada(edadActualizada),
+          onSuccess: (edadActualizada) => {
+            setSeleccionada(edadActualizada);
+            toast.success("Rango de edad actualizado correctamente");
+          },
           onError,
         },
       );
@@ -52,13 +61,19 @@ export function EdadesPage() {
 
   const handleEliminar = () => {
     if (!seleccionada) return;
+    if (!window.confirm(`¿Estás seguro de que deseas dar de baja el rango de edad "${seleccionada.edadInicial} - ${seleccionada.edadFinal} años"?`)) {
+      return;
+    }
     setMensajeError(null);
     eliminar.mutate(seleccionada.id, {
-      onSuccess: () => setSeleccionada(null),
+      onSuccess: () => {
+        setSeleccionada(null);
+        toast.success("Rango de edad dado de baja correctamente");
+      },
       onError: (error) => {
-        setMensajeError(
-          isAppError(error) ? error.message : "Ocurrió un error inesperado.",
-        );
+        const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
+        setMensajeError(msg);
+        toast.error(msg);
       },
     });
   };

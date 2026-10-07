@@ -21,8 +21,13 @@ export interface CrearEntidadInput {
   preBuro?: string;
   esEntidad?: EsEntidad;
   paisId: string;
+<<<<<<< HEAD
   /** Una zona principal y, opcionalmente, zonas especiales (p. ej. fronteriza). */
   zonaIds: string[];
+=======
+  zonaId: string;
+  zonaIds?: string[];
+>>>>>>> origin/develop
 }
 
 /** Igual a `ActualizarCatEntidadGeograficaRequest` (mismo shape que Crear). */
@@ -41,9 +46,18 @@ export interface EntidadResponse {
   esEntidad: EsEntidad;
   idPais: string;
   nombrePais: string;
+<<<<<<< HEAD
   zonasAsignadas: string[];
   idZona: string | null;
   nombreZona: string | null;
   nivelRiesgoValor: number | null;
   nivelRiesgoDescripcion: string | null;
+=======
+  idZona?: string;
+  nombreZona?: string;
+  claveZona?: string;
+  nivelRiesgoValor?: number;
+  nivelRiesgoDescripcion?: string;
+  zonasAsignadas?: string[];
+>>>>>>> origin/develop
 }
