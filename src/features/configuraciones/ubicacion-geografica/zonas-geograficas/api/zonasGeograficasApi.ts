@@ -7,7 +7,7 @@ import type {
   EntidadAsignadaResponse,
   EstatusZona,
   PaisAsignadoResponse,
-  ZonaGeograficaResponse,
+  ZonaGeograficaResponse, 
 } from "../types/zonaGeografica";
 
 const BASE_PATH = "/catalogos/zonas-geograficas";

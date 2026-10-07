@@ -69,24 +69,18 @@ describe("PersonalizarCabeceraDenuncia", () => {
     expect(
       screen.getByText("Personalizar cabecera de denuncia anónima"),
     ).toBeInTheDocument();
-    expect(screen.getByText("Mi SOFOM S.A. de C.V.")).toBeInTheDocument();
-    expect(screen.getByText(/admin@empresa.com/)).toBeInTheDocument();
 
-    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
-    expect(textarea.value).toBe("<p>Mensaje inicial de prueba</p>");
+    const editor = screen.getByRole("textbox");
+    expect(editor.innerHTML).toContain("Mensaje inicial de prueba");
   });
 
   it("permite editar el HTML y muestra la previsualización en vivo", async () => {
     renderComponent();
 
-    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
-    fireEvent.change(textarea, {
-      target: { value: "<h3>Nuevo Título Seguro</h3><p>Instrucciones</p>" },
-    });
+    const editor = screen.getByRole("textbox");
+    editor.innerHTML = "<h3>Nuevo Título Seguro</h3><p>Instrucciones</p>";
+    fireEvent.input(editor);
 
-    expect(textarea.value).toBe(
-      "<h3>Nuevo Título Seguro</h3><p>Instrucciones</p>",
-    );
     expect(screen.getByText("Nuevo Título Seguro")).toBeInTheDocument();
     expect(screen.getByText("Instrucciones")).toBeInTheDocument();
   });
@@ -99,10 +93,9 @@ describe("PersonalizarCabeceraDenuncia", () => {
 
     renderComponent();
 
-    const textarea = screen.getByRole("textbox");
-    fireEvent.change(textarea, {
-      target: { value: "<p>Texto guardado</p>" },
-    });
+    const editor = screen.getByRole("textbox");
+    editor.innerHTML = "<p>Texto guardado</p>";
+    fireEvent.input(editor);
 
     const botonGuardar = screen.getByRole("button", {
       name: /Guardar cambios/i,

@@ -1,7 +1,19 @@
 import { useEffect, useState } from "react";
+import { Trash2 } from "lucide-react";
 
 import { Button } from "@/shared/components/ui/CatalogoButton";
 import { card, field, label } from "@/shared/components/ui/styles";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/shared/components/ui/alert-dialog";
 
 import { NivelRiesgoSelect } from "../../niveles-riesgo/components/NivelRiesgoSelect";
 import type {
@@ -16,7 +28,9 @@ interface ZonaFormProps {
   defaultTipo?: EntidadPais;
   onGuardar: (input: CrearZonaGeograficaInput) => void;
   onCancelar: () => void;
+  onEliminar?: () => void;
   isPending?: boolean;
+  isDeleting?: boolean;
 }
 
 interface FormState {
@@ -56,7 +70,9 @@ export function ZonaForm({
   defaultTipo = "P",
   onGuardar,
   onCancelar,
+  onEliminar,
   isPending,
+  isDeleting,
 }: ZonaFormProps) {
   const [form, setForm] = useState<FormState>(() => aFormState(zona, defaultTipo));
 
@@ -79,9 +95,46 @@ export function ZonaForm({
 
   return (
     <form onSubmit={handleSubmit} className={`flex flex-col gap-4 p-4 ${card}`}>
-      <h3 className="text-sm font-semibold text-foreground">
-        {esNueva ? "Nueva zona geográfica" : `Editar zona: ${zona.nombre}`}
-      </h3>
+      <div className="flex items-center justify-between border-b border-border/60 pb-3">
+        <h3 className="text-sm font-semibold text-foreground">
+          {esNueva ? "Nueva zona geográfica" : `Editar zona: ${zona.nombre}`}
+        </h3>
+
+        {!esNueva && onEliminar && (
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                type="button"
+                variante="peligro"
+                size="sm"
+                disabled={isDeleting || isPending}
+                className="flex items-center gap-1.5"
+              >
+                <Trash2 className="size-3.5" />
+                {isDeleting ? "Eliminando..." : "Eliminar zona"}
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>¿Eliminar zona geográfica?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Esta acción no se puede deshacer. Se eliminará la zona{" "}
+                  <strong>{zona?.nombre}</strong> del catálogo de riesgos.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={onEliminar}
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                >
+                  Confirmar eliminación
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        )}
+      </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-1">
@@ -113,26 +166,6 @@ export function ZonaForm({
         </div>
 
         <div className="flex flex-col gap-1">
-          <label htmlFor="entidadPais" className={label}>
-            Tipo de zona
-          </label>
-          <select
-            id="entidadPais"
-            value={form.entidadPais}
-            onChange={(event) =>
-              setForm((prev) => ({
-                ...prev,
-                entidadPais: event.target.value as EntidadPais,
-              }))
-            }
-            className={field}
-          >
-            <option value="P">Países</option>
-            <option value="E">Entidades</option>
-          </select>
-        </div>
-
-        <div className="flex flex-col gap-1">
           <label htmlFor="estatus" className={label}>
             Estatus
           </label>
@@ -150,11 +183,11 @@ export function ZonaForm({
         </div>
       </div>
 
-      <div className="flex justify-end gap-2">
+      <div className="flex justify-end gap-2 border-t border-border/40 pt-3">
         <Button variante="secundario" onClick={onCancelar}>
           Cancelar
         </Button>
-        <Button type="submit" disabled={isPending}>
+        <Button type="submit" disabled={isPending || isDeleting}>
           {isPending ? "Guardando..." : "Guardar"}
         </Button>
       </div>

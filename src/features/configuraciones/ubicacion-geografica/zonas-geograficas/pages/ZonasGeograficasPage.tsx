@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
@@ -45,19 +46,27 @@ export function ZonasGeograficasPage({ tipo }: ZonasGeograficasPageProps) {
   const handleGuardar = (input: Parameters<typeof crear.mutate>[0]) => {
     setMensajeError(null);
     const onError = (error: unknown) => {
-      setMensajeError(isAppError(error) ? error.message : "Ocurrió un error inesperado.");
+      const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
+      setMensajeError(msg);
+      toast.error(msg);
     };
 
     if (creandoNueva) {
       crear.mutate(input, {
-        onSuccess: () => setCreandoNueva(false),
+        onSuccess: () => {
+          setCreandoNueva(false);
+          toast.success("Zona geográfica creada correctamente");
+        },
         onError,
       });
     } else if (seleccionada) {
       actualizar.mutate(
         { id: seleccionada.id, input },
         {
-          onSuccess: (zonaActualizada) => setSeleccionada(zonaActualizada),
+          onSuccess: (zonaActualizada) => {
+            setSeleccionada(zonaActualizada);
+            toast.success("Zona geográfica actualizada correctamente");
+          },
           onError,
         },
       );
@@ -66,13 +75,19 @@ export function ZonasGeograficasPage({ tipo }: ZonasGeograficasPageProps) {
 
   const handleEliminar = () => {
     if (!seleccionada) return;
+    if (!window.confirm(`¿Estás seguro de que deseas eliminar la zona "${seleccionada.nombre}"?`)) {
+      return;
+    }
     setMensajeError(null);
     eliminar.mutate(seleccionada.id, {
-      onSuccess: () => setSeleccionada(null),
+      onSuccess: () => {
+        setSeleccionada(null);
+        toast.success("Zona geográfica eliminada correctamente");
+      },
       onError: (error) => {
-        setMensajeError(
-          isAppError(error) ? error.message : "Ocurrió un error inesperado.",
-        );
+        const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
+        setMensajeError(msg);
+        toast.error(msg);
       },
     });
   };
@@ -123,7 +138,6 @@ export function ZonasGeograficasPage({ tipo }: ZonasGeograficasPageProps) {
         isLoading={isLoading}
         seleccionadaId={seleccionada?.id ?? null}
         verId={verZona?.id ?? null}
-        tipoFiltro={tipo}
         onSeleccionar={(zona) => {
           setSeleccionada(zona);
           setCreandoNueva(false);
@@ -150,18 +164,10 @@ export function ZonasGeograficasPage({ tipo }: ZonasGeograficasPageProps) {
               setSeleccionada(null);
               setMensajeError(null);
             }}
+            onEliminar={seleccionada ? handleEliminar : undefined}
             isPending={crear.isPending || actualizar.isPending}
+            isDeleting={eliminar.isPending}
           />
-          {seleccionada ? (
-            <Button
-              variante="peligro"
-              className="self-start"
-              onClick={handleEliminar}
-              disabled={eliminar.isPending}
-            >
-              {eliminar.isPending ? "Eliminando..." : "Eliminar zona"}
-            </Button>
-          ) : null}
         </div>
       ) : null}
     </div>

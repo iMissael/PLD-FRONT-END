@@ -1,4 +1,6 @@
 import { useMemo } from "react";
+import { toast } from "sonner";
+import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -68,10 +70,27 @@ export function PermisosTable() {
               <Button
                 variant="ghost"
                 size="sm"
+                className="text-destructive hover:bg-destructive/10"
                 disabled={eliminarPermiso.isPending}
                 onClick={() => {
                   if (permiso.idPermiso) {
-                    eliminarPermiso.mutate(permiso.idPermiso);
+                    if (
+                      !window.confirm(
+                        `¿Está seguro de eliminar el permiso ${permiso.recurso}:${permiso.accion}?`,
+                      )
+                    ) {
+                      return;
+                    }
+                    eliminarPermiso.mutate(permiso.idPermiso, {
+                      onSuccess: () => {
+                        toast.success("Permiso eliminado correctamente");
+                      },
+                      onError: (error) => {
+                        toast.error(
+                          isAppError(error) ? error.message : "No se pudo eliminar el permiso",
+                        );
+                      },
+                    });
                   }
                 }}
               >

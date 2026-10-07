@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
@@ -31,19 +32,27 @@ export function DestinosRecursoPage() {
   const handleGuardar = (input: Parameters<typeof crear.mutate>[0]) => {
     setMensajeError(null);
     const onError = (error: unknown) => {
-      setMensajeError(isAppError(error) ? error.message : "Ocurrió un error inesperado.");
+      const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
+      setMensajeError(msg);
+      toast.error(msg);
     };
 
     if (creandoNuevo) {
       crear.mutate(input, {
-        onSuccess: () => setCreandoNuevo(false),
+        onSuccess: () => {
+          setCreandoNuevo(false);
+          toast.success("Destino de recurso creado correctamente");
+        },
         onError,
       });
     } else if (seleccionado) {
       actualizar.mutate(
         { id: seleccionado.id, input },
         {
-          onSuccess: (destinoActualizado) => setSeleccionado(destinoActualizado),
+          onSuccess: (destinoActualizado) => {
+            setSeleccionado(destinoActualizado);
+            toast.success("Destino de recurso actualizado correctamente");
+          },
           onError,
         },
       );
@@ -52,13 +61,19 @@ export function DestinosRecursoPage() {
 
   const handleEliminar = () => {
     if (!seleccionado) return;
+    if (!window.confirm(`¿Estás seguro de que deseas dar de baja el destino "${seleccionado.nombre}"?`)) {
+      return;
+    }
     setMensajeError(null);
     eliminar.mutate(seleccionado.id, {
-      onSuccess: () => setSeleccionado(null),
+      onSuccess: () => {
+        setSeleccionado(null);
+        toast.success("Destino de recurso dado de baja correctamente");
+      },
       onError: (error) => {
-        setMensajeError(
-          isAppError(error) ? error.message : "Ocurrió un error inesperado.",
-        );
+        const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
+        setMensajeError(msg);
+        toast.error(msg);
       },
     });
   };

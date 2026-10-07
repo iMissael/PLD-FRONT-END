@@ -1,5 +1,7 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
+import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { useRutaTenant } from "@/shared/tenant/useRutaTenant";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
@@ -97,10 +99,27 @@ export function RolesTable() {
                 <Button
                   variant="ghost"
                   size="sm"
+                  className="text-destructive hover:bg-destructive/10"
                   disabled={eliminarRol.isPending}
                   onClick={() => {
                     if (rol.idRol) {
-                      eliminarRol.mutate(rol.idRol);
+                      if (
+                        !window.confirm(
+                          `¿Está seguro de eliminar el rol "${rol.nombre}"?`,
+                        )
+                      ) {
+                        return;
+                      }
+                      eliminarRol.mutate(rol.idRol, {
+                        onSuccess: () => {
+                          toast.success("Rol eliminado correctamente");
+                        },
+                        onError: (error) => {
+                          toast.error(
+                            isAppError(error) ? error.message : "No se pudo eliminar el rol",
+                          );
+                        },
+                      });
                     }
                   }}
                 >
@@ -119,7 +138,7 @@ export function RolesTable() {
         onPageChange={handleChangePage}
         rowsPerPage={rowsPerPage}
         onRowsPerPageChange={handleChangeRowsPerPage}
-        rowsPerPageOptions={[5, 10, 25, 50]}
+        rowsPerPageOptions={[10, 25, 30]}
       />
     </div>
   );
