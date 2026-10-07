@@ -3,5 +3,5 @@ export const paisesKeys = {
   listas: () => [...paisesKeys.all, "lista"] as const,
   lista: (params?: { busqueda?: string; filtrarPor?: string }) =>
     [...paisesKeys.listas(), params ?? null] as const,
-  zonasDePais: (id: string) => [...paisesKeys.all, "zonas", id] as const,
+  listasDePais: (id: string) => [...paisesKeys.all, "listas", id] as const,
 };

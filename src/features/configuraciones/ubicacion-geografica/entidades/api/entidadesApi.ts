@@ -48,6 +48,12 @@ export async function asignarZonaAEntidad(
   return data;
 }
 
+/** Ids de todas las zonas de la entidad (la principal y las especiales). */
+export async function obtenerZonaIdsDeEntidad(id: string): Promise<string[]> {
+  const { data } = await apiClient.get<string[]>(`${BASE_PATH}/${id}/zonas`);
+  return data;
+}
+
 export async function eliminarEntidad(id: string): Promise<void> {
   await apiClient.delete(`${BASE_PATH}/${id}`);
 }

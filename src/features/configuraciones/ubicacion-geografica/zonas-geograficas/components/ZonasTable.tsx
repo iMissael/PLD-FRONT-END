@@ -3,14 +3,13 @@ import { Badge } from "@/shared/components/ui/CatalogoBadge";
 import { Button } from "@/shared/components/ui/CatalogoButton";
 import { DataTable, type ColumnDef } from "@/shared/components/ui/DataTable";
 import { table } from "@/shared/components/ui/styles";
-import type { EntidadPais, ZonaGeograficaResponse } from "../types/zonaGeografica";
+import type { ZonaGeograficaResponse } from "../types/zonaGeografica";
 
 interface ZonasTableProps {
   zonas: ZonaGeograficaResponse[] | undefined;
   isLoading: boolean;
   seleccionadaId: string | null;
   verId: string | null;
-  tipoFiltro?: EntidadPais;
   onSeleccionar: (zona: ZonaGeograficaResponse) => void;
   onVer: (zona: ZonaGeograficaResponse) => void;
   onDoubleClick?: (zona: ZonaGeograficaResponse) => void;
@@ -21,72 +20,45 @@ export function ZonasTable({
   isLoading,
   seleccionadaId,
   verId,
-  tipoFiltro,
   onSeleccionar,
   onVer,
   onDoubleClick,
 }: ZonasTableProps) {
-  const zonasSegunTipo = useMemo(() => {
-    const listaZonas = Array.isArray(zonas)
-      ? zonas
-      : Array.isArray((zonas as unknown as { contenido?: typeof zonas })?.contenido)
-      ? ((zonas as unknown as { contenido: typeof zonas }).contenido ?? [])
-      : [];
-    if (!listaZonas || listaZonas.length === 0) return [];
-    if (!tipoFiltro) return listaZonas;
+  const listaZonas = useMemo(
+    () =>
+      Array.isArray(zonas)
+        ? zonas
+        : ((zonas as unknown as { contenido?: ZonaGeograficaResponse[] })?.contenido ?? []),
+    [zonas],
+  );
 
-    if (tipoFiltro === "P") {
-      return listaZonas.filter(
-        (z) =>
-          z.entidadPais === "P" ||
-          (z.entidadPais === null && z.totalPaisesAsignados > 0) ||
-          (z.entidadPais === null && z.totalEntidadesAsignadas === 0),
-      );
-    }
-
-    if (tipoFiltro === "E") {
-      return listaZonas.filter(
-        (z) =>
-          z.entidadPais === "E" ||
-          (z.entidadPais === null && z.totalEntidadesAsignadas > 0),
-      );
-    }
-
-    return listaZonas;
-  }, [zonas, tipoFiltro]);
-
-  const columns = useMemo<ColumnDef<ZonaGeograficaResponse>[]>(() => {
-    const cols: ColumnDef<ZonaGeograficaResponse>[] = [
+  const columns = useMemo<ColumnDef<ZonaGeograficaResponse>[]>(
+    () => [
       {
         header: "Nombre",
         accessorKey: "nombre",
         className: table.cellStrong,
       },
       {
-        header: "Nivel de riesgo",
-        cell: (zona) => (
-          <span>
-            {zona.nivelRiesgoDescripcion} ({zona.nivelRiesgoValor})
-          </span>
-        ),
+        header: "Tipo",
+        cell: (zona) => <span>{zona.esEntidadEspecial ? "Especial" : "Principal"}</span>,
       },
-    ];
-
-    if (!tipoFiltro || tipoFiltro === "E") {
-      cols.push({
+      {
+        header: "Nivel de riesgo",
+        cell: (zona) =>
+          zona.esEntidadEspecial ? (
+            <span className="text-muted-foreground">El de la zona principal de cada entidad</span>
+          ) : (
+            <span>
+              {zona.nivelRiesgoDescripcion ?? "—"}
+              {zona.nivelRiesgoValor != null ? ` (${zona.nivelRiesgoValor})` : ""}
+            </span>
+          ),
+      },
+      {
         header: "Entidades",
         accessorKey: "totalEntidadesAsignadas",
-      });
-    }
-
-    if (!tipoFiltro || tipoFiltro === "P") {
-      cols.push({
-        header: "Países",
-        accessorKey: "totalPaisesAsignados",
-      });
-    }
-
-    cols.push(
+      },
       {
         header: "Estatus",
         cell: (zona) => (
@@ -110,14 +82,13 @@ export function ZonasTable({
           </Button>
         ),
       },
-    );
-
-    return cols;
-  }, [tipoFiltro, verId, onVer]);
+    ],
+    [verId, onVer],
+  );
 
   return (
     <DataTable<ZonaGeograficaResponse>
-      data={zonasSegunTipo}
+      data={listaZonas}
       columns={columns}
       isLoading={isLoading}
       getRowId={(zona) => zona.id}
@@ -134,9 +105,10 @@ export function ZonasTable({
       doubleClickTitle="Doble clic para ver asignaciones de este registro"
       emptyMessage="No hay zonas registradas."
       search={{
-        placeholder: "Buscar zona por nombre, nivel de riesgo o estatus...",
+        placeholder: "Buscar zona por nombre, tipo, nivel o estatus...",
         filterFn: (zona, term) =>
           zona.nombre.toLowerCase().includes(term) ||
+          (zona.esEntidadEspecial ? "especial" : "principal").includes(term) ||
           (zona.nivelRiesgoDescripcion?.toLowerCase().includes(term) ?? false) ||
           (zona.estatus === "A" ? "activa" : "inactiva").includes(term),
       }}

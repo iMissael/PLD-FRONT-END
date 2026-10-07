@@ -1,25 +1,23 @@
 /**
- * Tipos del feature `zonas-geograficas`, a partir de los DTOs reales de
- * `ZonaRiesgoGeograficoController` (`denuncias-app`).
+ * Tipos del feature `zonas-geograficas` (zonas de riesgo de entidades), igual a
+ * los DTOs de `ZonaRiesgoGeograficoController`. Los países no van aquí: se
+ * clasifican en listas de riesgo (feature `listas-paises`).
+ *
+ * Las tres zonas principales (ZONA 1, 2 y 3 - NACIONAL) son fijas: solo se
+ * cambia su nivel. Cada entidad está en una sola. Las zonas especiales (p. ej.
+ * ZONA FRONTERIZA) agrupan entidades de distintas zonas principales y no tienen
+ * nivel: cada entidad conserva el de su zona principal.
  */
 
-/**
- * OJO: el enum `Estatus` del dominio nunca se compartió con su código
- * fuente. "A"/"INA" se infieren únicamente de la descripción Swagger del
- * parámetro `estatus` en `listarZonas` ("Filtro por estatus (A/INA)") —
- * es una suposición razonable, no un valor confirmado. El tipo acepta
- * cualquier string para no romper si el backend usa otro valor.
- */
-export type EstatusZona = "A" | "INA" | (string & {});
-
-/** 'E' = zona de entidades (estados/regiones de México), 'P' = zona de países. */
-export type EntidadPais = "E" | "P";
+/** A = activa, B = baja. */
+export type EstatusZona = "A" | "B" | (string & {});
 
 /** Igual a `CrearCatZonaRiesgoRequest`. */
 export interface CrearZonaGeograficaInput {
   nombre: string;
-  idNivelRiesgo: number;
-  entidadPais: EntidadPais;
+  /** Solo en zonas principales; una especial no tiene nivel. */
+  idNivelRiesgo: number | null;
+  esEntidadEspecial: boolean;
   estatus: EstatusZona;
 }
 
@@ -30,14 +28,13 @@ export type ActualizarZonaGeograficaInput = CrearZonaGeograficaInput;
 export interface ZonaGeograficaResponse {
   id: string;
   nombre: string;
-  nivelRiesgoId: number;
-  /** Puede venir null en zonas antiguas creadas antes de este campo. */
-  entidadPais: EntidadPais | null;
+  /** null en una zona especial. */
+  nivelRiesgoId: number | null;
+  esEntidadEspecial: boolean;
   estatus: EstatusZona;
-  nivelRiesgoValor: number;
-  nivelRiesgoDescripcion: string;
+  nivelRiesgoValor: number | null;
+  nivelRiesgoDescripcion: string | null;
   totalEntidadesAsignadas: number;
-  totalPaisesAsignados: number;
 }
 
 /** Igual a `EntidadCatAsignadaResponse` (resumen de entidad asignada a una zona). */
@@ -45,16 +42,4 @@ export interface EntidadAsignadaResponse {
   id: string;
   claveCurp: string;
   nombre: string;
-}
-
-/** Igual a `PaisAsignadoResponse` (resumen de país asignado a una zona). */
-export interface PaisAsignadoResponse {
-  id: string;
-  codigoIso: string;
-  nombre: string;
-  zonaId: string;
-  claveZona: string;
-  nombreZona: string;
-  nivelRiesgoValor: number;
-  nivelRiesgoDescripcion: string;
 }

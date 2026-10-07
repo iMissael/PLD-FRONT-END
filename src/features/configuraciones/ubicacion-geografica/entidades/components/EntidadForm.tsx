@@ -4,9 +4,12 @@ import { Alert } from "@/shared/components/ui/Alert";
 import { Button } from "@/shared/components/ui/CatalogoButton";
 import { card, field, label } from "@/shared/components/ui/styles";
 
+import { useZonasGeograficasSelect } from "../../zonas-geograficas/hooks/useZonasGeograficas";
+import { useZonaIdsDeEntidad } from "../hooks/useEntidades";
 import { useMexicoPaisId } from "../hooks/useMexicoPaisId";
 import type { CrearEntidadInput, EsEntidad, EntidadResponse } from "../types/entidad";
 import { ZonaSelect } from "./ZonaSelect";
+import { ZonasEspecialesSelect } from "./ZonasEspecialesSelect";
 
 interface EntidadFormProps {
   entidad: EntidadResponse | null;
@@ -20,7 +23,9 @@ interface FormState {
   nombre: string;
   preBuro: string;
   esEntidad: EsEntidad;
+  /** Zona principal. */
   zonaId: string;
+  zonasEspeciales: string[];
 }
 
 const VACIO: FormState = {
@@ -29,6 +34,7 @@ const VACIO: FormState = {
   preBuro: "",
   esEntidad: "N",
   zonaId: "",
+  zonasEspeciales: [],
 };
 
 /**
@@ -44,6 +50,8 @@ export function EntidadForm({
 }: EntidadFormProps) {
   const [form, setForm] = useState<FormState>(VACIO);
   const { paisId: mexicoPaisId, isLoading: cargandoPais } = useMexicoPaisId();
+  const { data: zonas } = useZonasGeograficasSelect();
+  const { data: zonaIdsActuales } = useZonaIdsDeEntidad(entidad?.idEntidad ?? null);
 
   useEffect(() => {
     setForm(
@@ -53,11 +61,25 @@ export function EntidadForm({
             nombre: entidad.nombre,
             preBuro: entidad.preBuro ?? "",
             esEntidad: entidad.esEntidad ?? "N",
-            zonaId: entidad.idZona,
+            zonaId: entidad.idZona ?? "",
+            zonasEspeciales: [],
           }
         : VACIO,
     );
   }, [entidad]);
+
+  // Las zonas reales de la entidad separan la principal de las especiales. Sin esto, guardar
+  // la entidad mandaba una sola zona y se perdian sus zonas especiales.
+  useEffect(() => {
+    if (!entidad || !zonaIdsActuales || !zonas) return;
+    const especiales = new Set(zonas.filter((z) => z.esEntidadEspecial).map((z) => z.id));
+    const principal = zonaIdsActuales.find((id) => !especiales.has(id)) ?? "";
+    setForm((prev) => ({
+      ...prev,
+      zonaId: principal,
+      zonasEspeciales: zonaIdsActuales.filter((id) => especiales.has(id)),
+    }));
+  }, [entidad, zonaIdsActuales, zonas]);
 
   const esNueva = entidad === null;
 
@@ -70,7 +92,7 @@ export function EntidadForm({
       preBuro: form.preBuro.trim(),
       esEntidad: form.esEntidad,
       paisId: mexicoPaisId,
-      zonaId: form.zonaId,
+      zonaIds: [form.zonaId, ...form.zonasEspeciales],
     });
   };
 
@@ -156,13 +178,23 @@ export function EntidadForm({
 
         <div className="flex flex-col gap-1 sm:col-span-2">
           <label htmlFor="zonaEntidad" className={label}>
-            Zona geográfica
+            Zona principal
           </label>
           <ZonaSelect
             id="zonaEntidad"
             required
             value={form.zonaId}
             onChange={(zonaId) => setForm((prev) => ({ ...prev, zonaId }))}
+          />
+        </div>
+
+        <div className="flex flex-col gap-1 sm:col-span-2">
+          <span className={label}>
+            Zonas especiales <span className="font-normal text-muted-foreground">(opcional)</span>
+          </span>
+          <ZonasEspecialesSelect
+            value={form.zonasEspeciales}
+            onChange={(zonasEspeciales) => setForm((prev) => ({ ...prev, zonasEspeciales }))}
           />
         </div>
       </div>

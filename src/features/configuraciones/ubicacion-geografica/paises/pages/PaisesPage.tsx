@@ -4,7 +4,7 @@ import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
 import { Button } from "@/shared/components/ui/CatalogoButton";
 
-import { useZonasGeograficasSelect } from "../../zonas-geograficas/hooks/useZonasGeograficas";
+import { useListasPaisesSelect } from "../../listas-paises/hooks/useListasPaises";
 import { PaisDetalle } from "../components/PaisDetalle";
 import { PaisForm } from "../components/PaisForm";
 import { PaisesTable } from "../components/PaisesTable";
@@ -14,20 +14,20 @@ import type { ActualizarPaisInput, PaisResponse } from "../types/pais";
 
 export function PaisesPage() {
   const { data: paisesBackend, isLoading } = usePaises();
-  const { data: zonas } = useZonasGeograficasSelect();
+  const { data: listas } = useListasPaisesSelect();
 
-  const nombresDeZona = useMemo(() => {
+  const nombresDeLista = useMemo(() => {
     const mapa: Record<string, string> = {};
-    const listaZonas = Array.isArray(zonas)
-      ? zonas
-      : Array.isArray((zonas as unknown as { contenido?: typeof zonas })?.contenido)
-      ? ((zonas as unknown as { contenido: typeof zonas }).contenido ?? [])
+    const listasRiesgo = Array.isArray(listas)
+      ? listas
+      : Array.isArray((listas as unknown as { contenido?: typeof listas })?.contenido)
+      ? ((listas as unknown as { contenido: typeof listas }).contenido ?? [])
       : [];
-    listaZonas.forEach((zona) => {
-      mapa[zona.id] = zona.nombre;
+    listasRiesgo.forEach((lista) => {
+      mapa[lista.id] = lista.nombre;
     });
     return mapa;
-  }, [zonas]);
+  }, [listas]);
 
   const [seleccionado, setSeleccionado] = useState<PaisResponse | null>(null);
   const [editando, setEditando] = useState(false);
@@ -73,9 +73,9 @@ export function PaisesPage() {
     });
   };
 
-  const nombresZonasSeleccionado = seleccionado
-    ? seleccionado.zonasAsignadas
-        .map((id) => nombresDeZona[id])
+  const nombresListasSeleccionado = seleccionado
+    ? seleccionado.listasAsignadas
+        .map((id) => nombresDeLista[id])
         .filter((nombre): nombre is string => Boolean(nombre))
     : [];
 
@@ -85,7 +85,7 @@ export function PaisesPage() {
         <h2 className="text-xl font-semibold text-foreground">Configuración de países</h2>
         <p className="text-sm text-muted-foreground">
           Consulta el catálogo de países y edita la nacionalidad, el código ISO y las
-          zonas de riesgo asignadas.
+          listas de riesgo en que está.
         </p>
       </div>
 
@@ -95,7 +95,7 @@ export function PaisesPage() {
         paises={paisesBackend}
         isLoading={isLoading}
         seleccionadoId={seleccionado?.idPais ?? null}
-        nombresDeZona={nombresDeZona}
+        nombresDeLista={nombresDeLista}
         onSeleccionar={(pais) => {
           setSeleccionado(pais);
           setEditando(false);
@@ -111,7 +111,7 @@ export function PaisesPage() {
       {seleccionado && !editando ? (
         <PaisDetalle
           pais={seleccionado}
-          nombresZonas={nombresZonasSeleccionado}
+          nombresListas={nombresListasSeleccionado}
           onEditar={() => setEditando(true)}
         />
       ) : null}

@@ -3,7 +3,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   actualizarZona,
   asignarEntidades,
-  asignarPaises,
   cambiarEstatusZona,
   crearZona,
   eliminarZona,
@@ -70,19 +69,6 @@ export function useAsignarEntidadesAZona() {
       queryClient.invalidateQueries({
         queryKey: zonasGeograficasKeys.todasLasEntidades(),
       });
-    },
-  });
-}
-
-export function useAsignarPaisesAZona() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({ id, paisIds }: { id: string; paisIds: string[] }) =>
-      asignarPaises(id, paisIds),
-    onSuccess: (_data, { id }) => {
-      queryClient.invalidateQueries({ queryKey: zonasGeograficasKeys.paisesDeZona(id) });
-      queryClient.invalidateQueries({ queryKey: zonasGeograficasKeys.listas() });
-      queryClient.invalidateQueries({ queryKey: zonasGeograficasKeys.todosLosPaises() });
     },
   });
 }

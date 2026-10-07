@@ -6,8 +6,8 @@ interface PaisesTableProps {
   paises: PaisResponse[] | undefined;
   isLoading: boolean;
   seleccionadoId: string | null;
-  /** Mapa idZona -> nombreZona, para mostrar el nombre en vez del id crudo. */
-  nombresDeZona: Record<string, string>;
+  /** Mapa idLista -> nombre de la lista, para mostrar el nombre en vez del id crudo. */
+  nombresDeLista: Record<string, string>;
   onSeleccionar: (pais: PaisResponse) => void;
   onDoubleClick?: (pais: PaisResponse) => void;
 }
@@ -16,7 +16,7 @@ export function PaisesTable({
   paises,
   isLoading,
   seleccionadoId,
-  nombresDeZona,
+  nombresDeLista,
   onSeleccionar,
   onDoubleClick,
 }: PaisesTableProps) {
@@ -34,16 +34,16 @@ export function PaisesTable({
         className: "font-medium text-foreground",
       },
       {
-        header: "PLD Zona Geográfica",
+        header: "Listas de riesgo PLD",
         cell: (pais) => {
-          const nombresZonas = pais.zonasAsignadas
-            .map((id) => nombresDeZona[id])
+          const nombresListas = pais.listasAsignadas
+            .map((id) => nombresDeLista[id])
             .filter((nombre): nombre is string => Boolean(nombre));
-          return nombresZonas.length > 0 ? nombresZonas.join(", ") : "—";
+          return nombresListas.length > 0 ? nombresListas.join(", ") : "—";
         },
       },
     ],
-    [nombresDeZona],
+    [nombresDeLista],
   );
 
   return (
@@ -59,11 +59,11 @@ export function PaisesTable({
       onRowDoubleClick={onDoubleClick}
       doubleClickTitle="Doble clic para modificar este registro"
       search={{
-        placeholder: "Buscar país por nombre, clave o zona...",
+        placeholder: "Buscar país por nombre, clave o lista de riesgo...",
         filterFn: (pais, term) => {
           const t = term.toLowerCase().trim();
-          const nombresZonas = pais.zonasAsignadas
-            .map((id) => nombresDeZona[id])
+          const nombresListas = pais.listasAsignadas
+            .map((id) => nombresDeLista[id])
             .filter(Boolean)
             .join(" ")
             .toLowerCase();
@@ -71,7 +71,7 @@ export function PaisesTable({
             pais.nombre.toLowerCase().includes(t) ||
             pais.idPais.toLowerCase().includes(t) ||
             (pais.codigoIso?.toLowerCase().includes(t) ?? false) ||
-            nombresZonas.includes(t)
+            nombresListas.includes(t)
           );
         },
       }}

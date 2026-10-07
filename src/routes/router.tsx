@@ -30,6 +30,7 @@ import { TiposCreditoPage } from "@/features/configuraciones/tipos-credito/pages
 import { EntidadesPage } from "@/features/configuraciones/ubicacion-geografica/entidades/pages/EntidadesPage";
 import { LocalidadesPage } from "@/features/configuraciones/ubicacion-geografica/localidades/pages/LocalidadesPage";
 import { PaisesPage } from "@/features/configuraciones/ubicacion-geografica/paises/pages/PaisesPage";
+import { ListasPaisesPage } from "@/features/configuraciones/ubicacion-geografica/listas-paises/pages/ListasPaisesPage";
 import { ZonasGeograficasPage } from "@/features/configuraciones/ubicacion-geografica/zonas-geograficas/pages/ZonasGeograficasPage";
 import { ControlDolarPage } from "@/features/control-dolar/pages/ControlDolarPage";
 import { ControlPage } from "@/features/control/pages/ControlPage";
@@ -74,20 +75,25 @@ export const router = createBrowserRouter([
                 element: <ZonasGeograficasPage />,
               },
               {
-                path: "configuraciones/ubicacion-geografica/zonas-geograficas/paises",
-                element: <ZonasGeograficasPage tipo="P" />,
+                path: "configuraciones/ubicacion-geografica/zonas-geograficas/entidades",
+                element: <ZonasGeograficasPage />,
               },
               {
-                path: "configuraciones/ubicacion-geografica/zonas-geograficas/entidades",
-                element: <ZonasGeograficasPage tipo="E" />,
+                path: "configuraciones/ubicacion-geografica/listas-paises",
+                element: <ListasPaisesPage />,
+              },
+              // Rutas anteriores: los paises ya no tienen zonas, sino listas de riesgo.
+              {
+                path: "configuraciones/ubicacion-geografica/zonas-geograficas/paises",
+                element: <Navigate to="../../listas-paises" relative="path" replace />,
               },
               {
                 path: "configuraciones/ubicacion-geografica/zonas-paises",
-                element: <ZonasGeograficasPage tipo="P" />,
+                element: <Navigate to="../listas-paises" relative="path" replace />,
               },
               {
                 path: "configuraciones/ubicacion-geografica/zonas-entidades",
-                element: <ZonasGeograficasPage tipo="E" />,
+                element: <ZonasGeograficasPage />,
               },
               {
                 path: "configuraciones/ubicacion-geografica/entidades",

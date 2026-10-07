@@ -21,7 +21,7 @@ export function useActualizarPais() {
       actualizarPais(id, input),
     onSuccess: (_data, { id }) => {
       queryClient.invalidateQueries({ queryKey: paisesKeys.all });
-      queryClient.invalidateQueries({ queryKey: paisesKeys.zonasDePais(id) });
+      queryClient.invalidateQueries({ queryKey: paisesKeys.listasDePais(id) });
     },
   });
 }

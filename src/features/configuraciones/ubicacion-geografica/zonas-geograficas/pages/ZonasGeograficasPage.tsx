@@ -13,13 +13,10 @@ import {
   useEliminarZona,
   useActualizarZona,
 } from "../hooks/useZonasGeograficasMutations";
-import type { EntidadPais, ZonaGeograficaResponse } from "../types/zonaGeografica";
+import type { ZonaGeograficaResponse } from "../types/zonaGeografica";
 
-interface ZonasGeograficasPageProps {
-  tipo?: EntidadPais;
-}
-
-export function ZonasGeograficasPage({ tipo }: ZonasGeograficasPageProps) {
+/** Zonas de riesgo de entidades: principales y especiales (p. ej. ZONA FRONTERIZA). */
+export function ZonasGeograficasPage() {
   const { data: zonas, isLoading } = useZonasGeograficas();
 
   const [seleccionada, setSeleccionada] = useState<ZonaGeograficaResponse | null>(null);
@@ -88,11 +85,8 @@ export function ZonasGeograficasPage({ tipo }: ZonasGeograficasPageProps) {
   };
 
   const subtitulo =
-    tipo === "P"
-      ? "Administra las zonas de riesgo PLD y los países asignados a cada una."
-      : tipo === "E"
-      ? "Administra las zonas de riesgo PLD y las entidades asignadas a cada una."
-      : "Administra las zonas de riesgo PLD y las entidades/países asignados a cada una.";
+    "Zonas de riesgo PLD de las entidades. Las tres zonas principales son fijas; en una zona " +
+    "especial (por ejemplo, fronteriza) cada entidad conserva el nivel de su zona principal.";
 
   return (
     <div className="flex flex-col gap-6">
@@ -112,7 +106,7 @@ export function ZonasGeograficasPage({ tipo }: ZonasGeograficasPageProps) {
             }, 50);
           }}
         >
-          Nueva zona
+          Nueva zona especial
         </Button>
       </div>
 
@@ -123,7 +117,6 @@ export function ZonasGeograficasPage({ tipo }: ZonasGeograficasPageProps) {
         isLoading={isLoading}
         seleccionadaId={seleccionada?.id ?? null}
         verId={verZona?.id ?? null}
-        tipoFiltro={tipo}
         onSeleccionar={(zona) => {
           setSeleccionada(zona);
           setCreandoNueva(false);
@@ -143,7 +136,6 @@ export function ZonasGeograficasPage({ tipo }: ZonasGeograficasPageProps) {
         <div ref={formRef} className="flex flex-col gap-3 scroll-mt-4">
           <ZonaForm
             zona={zonaEnEdicion}
-            defaultTipo={tipo ?? "P"}
             onGuardar={handleGuardar}
             onCancelar={() => {
               setCreandoNueva(false);
@@ -152,7 +144,7 @@ export function ZonasGeograficasPage({ tipo }: ZonasGeograficasPageProps) {
             }}
             isPending={crear.isPending || actualizar.isPending}
           />
-          {seleccionada ? (
+          {seleccionada?.esEntidadEspecial ? (
             <Button
               variante="peligro"
               className="self-start"

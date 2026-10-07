@@ -21,16 +21,17 @@ export interface CrearEntidadInput {
   preBuro?: string;
   esEntidad?: EsEntidad;
   paisId: string;
-  zonaId: string;
+  /** Una zona principal y, opcionalmente, zonas especiales (p. ej. fronteriza). */
+  zonaIds: string[];
 }
 
 /** Igual a `ActualizarCatEntidadGeograficaRequest` (mismo shape que Crear). */
 export type ActualizarEntidadInput = CrearEntidadInput;
 
 /**
- * Igual a `EntidadCatGeograficaResponse`. OJO: `claveZona` está hardcoded a
- * `""` en el mapper actual del backend (comentario fuente: "claveZona not
- * found") — nunca confiar en que traiga un valor real.
+ * Igual a `EntidadCatGeograficaResponse`. `idZona`/`nombreZona`/`nivelRiesgo*` son
+ * los de la zona principal, la que da el nivel; `zonasAsignadas` trae también las
+ * especiales.
  */
 export interface EntidadResponse {
   idEntidad: string;
@@ -40,9 +41,9 @@ export interface EntidadResponse {
   esEntidad: EsEntidad;
   idPais: string;
   nombrePais: string;
-  idZona: string;
-  nombreZona: string;
-  claveZona: string;
-  nivelRiesgoValor: number;
-  nivelRiesgoDescripcion: string;
+  zonasAsignadas: string[];
+  idZona: string | null;
+  nombreZona: string | null;
+  nivelRiesgoValor: number | null;
+  nivelRiesgoDescripcion: string | null;
 }

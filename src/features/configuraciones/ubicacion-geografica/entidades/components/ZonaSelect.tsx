@@ -10,9 +10,10 @@ interface ZonaSelectProps {
   required?: boolean;
 }
 
-/** `<select>` de una sola zona, usado por Entidades (`AsignarCatZonaEntidadRequest.zonaId`). */
+/** Zona principal de la entidad: solo zonas principales activas (una por entidad). */
 export function ZonaSelect({ id, value, onChange, disabled, required }: ZonaSelectProps) {
   const { data: zonas, isLoading } = useZonasGeograficasSelect();
+  const principales = (zonas ?? []).filter((z) => !z.esEntidadEspecial && z.estatus === "A");
 
   return (
     <select
@@ -23,10 +24,10 @@ export function ZonaSelect({ id, value, onChange, disabled, required }: ZonaSele
       onChange={(event) => onChange(event.target.value)}
       className={field}
     >
-      <option value="">{isLoading ? "Cargando..." : "Selecciona una zona"}</option>
-      {zonas?.map((zona) => (
+      <option value="">{isLoading ? "Cargando..." : "Selecciona la zona principal"}</option>
+      {principales.map((zona) => (
         <option key={zona.id} value={zona.id}>
-          {zona.nombre}
+          {zona.nombre} — {zona.nivelRiesgoDescripcion}
         </option>
       ))}
     </select>

@@ -76,8 +76,8 @@ const NAV_ITEMS: NavNode[] = [
         label: "Ubicación geográfica",
         children: [
           {
-            label: "Zonas geográficas (Países)",
-            to: "configuraciones/ubicacion-geografica/zonas-geograficas/paises",
+            label: "Listas de países",
+            to: "configuraciones/ubicacion-geografica/listas-paises",
           },
           {
             label: "Zonas geográficas (Entidades)",

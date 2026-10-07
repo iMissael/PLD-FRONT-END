@@ -2,7 +2,7 @@ import type { PaisResponse } from "../types/pais";
 
 interface PaisDetalleProps {
   pais: PaisResponse;
-  nombresZonas: string[];
+  nombresListas: string[];
   onEditar: () => void;
 }
 
@@ -10,13 +10,13 @@ interface PaisDetalleProps {
  * Panel de detalle de un país seleccionado, replicando el bloque inferior
  * de la pantalla legacy "Configuración de Países" (Clave / País / Zona +
  * botón de edición). Es de solo lectura; la edición completa (incluyendo
- * tipo, nacionalidad, código ISO y las zonas) se hace en `PaisForm`, que se
+ * tipo, nacionalidad, código ISO y las listas de riesgo) se hace en `PaisForm`, que se
  * abre con el botón de lápiz.
  *
  * Usa el ámbar de la guía (`warning`) porque es un panel de atención: marca
  * el registro sobre el que se va a actuar, no un estado normal de lectura.
  */
-export function PaisDetalle({ pais, nombresZonas, onEditar }: PaisDetalleProps) {
+export function PaisDetalle({ pais, nombresListas, onEditar }: PaisDetalleProps) {
   const etiqueta = "w-16 shrink-0 text-sm font-medium text-warning";
   const valor =
     "flex-1 rounded-md border border-warning/40 bg-card px-3 py-1.5 text-sm text-foreground";
@@ -35,9 +35,9 @@ export function PaisDetalle({ pais, nombresZonas, onEditar }: PaisDetalleProps) 
       </div>
 
       <div className="flex items-center gap-2">
-        <span className={etiqueta}>Zona</span>
+        <span className={etiqueta}>Listas de riesgo</span>
         <span className={valor}>
-          {nombresZonas.length > 0 ? nombresZonas.join(", ") : "Sin zona asignada"}
+          {nombresListas.length > 0 ? nombresListas.join(", ") : "En ninguna lista"}
         </span>
       </div>
 

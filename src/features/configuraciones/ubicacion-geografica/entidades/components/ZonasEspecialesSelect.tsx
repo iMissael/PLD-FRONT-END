@@ -1,38 +1,31 @@
 import { useZonasGeograficasSelect } from "../../zonas-geograficas/hooks/useZonasGeograficas";
 
-interface ZonasMultiSelectProps {
+interface ZonasEspecialesSelectProps {
   value: string[];
   onChange: (zonaIds: string[]) => void;
   disabled?: boolean;
 }
 
 /**
- * Multi-select de zonas geográficas para el formulario de Países. La
- * pantalla legacy de escritorio usa un combo de una sola zona, pero el DTO
- * real (`zonaIds: List<String>`) permite varias — así que aquí se replica
- * el comportamiento real del backend en vez del combo simple del sistema
- * anterior.
+ * Zonas especiales de la entidad (p. ej. ZONA FRONTERIZA). Una entidad puede estar en
+ * varias; en todas conserva el nivel de su zona principal.
  */
-export function ZonasMultiSelect({ value, onChange, disabled }: ZonasMultiSelectProps) {
+export function ZonasEspecialesSelect({ value, onChange, disabled }: ZonasEspecialesSelectProps) {
   const { data: zonas, isLoading } = useZonasGeograficasSelect();
+  const especiales = (zonas ?? []).filter((z) => z.esEntidadEspecial && z.estatus === "A");
 
-  const listaZonas = Array.isArray(zonas)
-    ? zonas
-    : Array.isArray((zonas as unknown as { contenido?: typeof zonas })?.contenido)
-    ? ((zonas as unknown as { contenido: typeof zonas }).contenido ?? [])
-    : [];
-
-  const toggle = (id: string) => {
+  const toggle = (id: string) =>
     onChange(value.includes(id) ? value.filter((x) => x !== id) : [...value, id]);
-  };
 
   if (isLoading) {
     return <p className="text-sm text-muted-foreground">Cargando zonas...</p>;
   }
-
+  if (especiales.length === 0) {
+    return <p className="text-sm text-muted-foreground">No hay zonas especiales registradas.</p>;
+  }
   return (
     <div className="max-h-40 overflow-y-auto rounded-md border border-border p-2">
-      {listaZonas.map((zona) => (
+      {especiales.map((zona) => (
         <label
           key={zona.id}
           className="flex items-center gap-2 rounded px-2 py-1 text-sm text-foreground hover:bg-muted"
@@ -47,11 +40,6 @@ export function ZonasMultiSelect({ value, onChange, disabled }: ZonasMultiSelect
           {zona.nombre}
         </label>
       ))}
-      {listaZonas.length === 0 ? (
-        <p className="px-2 py-1 text-sm text-muted-foreground">
-          No hay zonas registradas.
-        </p>
-      ) : null}
     </div>
   );
 }
