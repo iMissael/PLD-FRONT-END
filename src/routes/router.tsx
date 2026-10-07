@@ -14,6 +14,7 @@ import { PermisosPage } from "@/features/configuraciones/administracion/permisos
 import { RolesPage } from "@/features/configuraciones/administracion/roles/pages/RolesPage";
 import { RolPermisosPage } from "@/features/configuraciones/administracion/roles/pages/RolPermisosPage";
 import { UsuariosPage } from "@/features/configuraciones/administracion/usuarios/pages/UsuariosPage";
+import { SistemasIntegracionPage } from "@/features/configuraciones/administracion/integraciones/pages/SistemasIntegracionPage";
 import { CanalesPagoPage } from "@/features/configuraciones/canales-pago/pages/CanalesPagoPage";
 import { EdadesPage } from "@/features/configuraciones/edades/rangos-edad/pages/EdadesPage";
 import { TiemposConstitucionPage } from "@/features/configuraciones/edades/tiempo-constitucion/pages/TiemposConstitucionPage";
@@ -215,6 +216,14 @@ export const router = createBrowserRouter([
                     element: <PermisosPage />,
                   },
                   {
+                    path: "configuraciones/administracion/integraciones",
+                    element: (
+                      <RequierePermiso recurso="integraciones" accion="ver">
+                        <SistemasIntegracionPage />
+                      </RequierePermiso>
+                    ),
+                  },
+                  {
                     path: "operacion/captura-alertas",
                     element: <CapturaAlertasPage />,
                   },
@@ -330,6 +339,14 @@ export const router = createBrowserRouter([
                       {
                         path: "configuraciones/administracion/permisos",
                         element: <PermisosPage />,
+                      },
+                      {
+                        path: "configuraciones/administracion/integraciones",
+                        element: (
+                          <RequierePermiso recurso="integraciones" accion="ver">
+                            <SistemasIntegracionPage />
+                          </RequierePermiso>
+                        ),
                       },
                       {
                         path: "control/quienesquien",

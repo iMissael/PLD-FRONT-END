@@ -191,6 +191,7 @@ const NAV_ITEMS: NavNode[] = [
       { label: "Usuarios", to: "configuraciones/administracion/usuarios" },
       { label: "Roles", to: "configuraciones/administracion/roles" },
       { label: "Permisos", to: "configuraciones/administracion/permisos" },
+      { label: "Sistemas de integración", to: "configuraciones/administracion/integraciones" },
     ],
   },
   { label: "Acerca de", to: "acerca-de", icon: InfoIcon },
