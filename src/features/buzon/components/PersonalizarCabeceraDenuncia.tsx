@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import DOMPurify from "dompurify";
 import { toast } from "sonner";
+import { isAppError } from "@/api/interceptors/errorInterceptor";
 import {
   Save,
   Calendar,
@@ -198,8 +199,11 @@ export function PersonalizarCabeceraDenuncia() {
         input: { html: limpio },
       });
       toast.success("Cabecera de denuncia anónima actualizada correctamente.");
-    } catch {
-      toast.error("No se pudo guardar la cabecera. Intente nuevamente.");
+    } catch (error: unknown) {
+      const msg = isAppError(error)
+        ? error.message
+        : "No se pudo guardar la cabecera. Intente nuevamente.";
+      toast.error(msg);
     }
   };
 

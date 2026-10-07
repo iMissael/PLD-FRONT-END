@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
@@ -32,11 +33,14 @@ export function HistorialesCrediticiosPage() {
     cambiarRiesgo.mutate(
       { id: seleccionado.id, input: { catNivelRiesgoId } },
       {
-        onSuccess: (historialActualizado) => setSeleccionado(historialActualizado),
+        onSuccess: (historialActualizado) => {
+          setSeleccionado(historialActualizado);
+          toast.success("Nivel de riesgo del historial crediticio actualizado correctamente");
+        },
         onError: (error) => {
-          setMensajeError(
-            isAppError(error) ? error.message : "Ocurrió un error inesperado.",
-          );
+          const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
+          setMensajeError(msg);
+          toast.error(msg);
         },
       },
     );

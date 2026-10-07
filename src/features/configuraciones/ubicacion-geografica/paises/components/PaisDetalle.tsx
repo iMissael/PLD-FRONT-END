@@ -11,13 +11,14 @@ export interface ItemListaDetalle {
 interface PaisDetalleProps {
   pais: PaisResponse;
   listas: ItemListaDetalle[];
+  nivelRiesgo?: { nivelRiesgoDescripcion: string; nivelRiesgoValor: number } | null;
   onEditar: () => void;
 }
 
 /**
- * Panel de detalle estandarizado de un país seleccionado con sus listas y niveles de riesgo.
+ * Panel de detalle estandarizado de un país seleccionado con su nivel de riesgo único y sus listas asignadas.
  */
-export function PaisDetalle({ pais, listas, onEditar }: PaisDetalleProps) {
+export function PaisDetalle({ pais, listas, nivelRiesgo, onEditar }: PaisDetalleProps) {
   return (
     <div className={`flex flex-col gap-4 p-4 ${card}`}>
       <div className="flex items-center justify-between">
@@ -27,7 +28,7 @@ export function PaisDetalle({ pais, listas, onEditar }: PaisDetalleProps) {
         <Button onClick={onEditar}>Editar país</Button>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-5">
         <div className="flex flex-col gap-0.5">
           <span className="text-xs font-medium text-muted-foreground">Clave</span>
           <span className="font-mono text-sm font-semibold text-foreground">
@@ -51,6 +52,15 @@ export function PaisDetalle({ pais, listas, onEditar }: PaisDetalleProps) {
             {pais.codigoIso || "—"}
           </span>
         </div>
+
+        <div className="flex flex-col gap-0.5">
+          <span className="text-xs font-medium text-muted-foreground">Nivel de riesgo</span>
+          <span className="text-sm font-semibold text-foreground">
+            {nivelRiesgo
+              ? `${nivelRiesgo.nivelRiesgoDescripcion} (${nivelRiesgo.nivelRiesgoValor})`
+              : "—"}
+          </span>
+        </div>
       </div>
 
       <div className="flex flex-col gap-1.5 border-t border-border pt-3">
@@ -67,7 +77,7 @@ export function PaisDetalle({ pais, listas, onEditar }: PaisDetalleProps) {
                 <span className="font-semibold">{item.nombre}</span>
                 {item.nivelRiesgoDescripcion ? (
                   <span className="text-muted-foreground">
-                    — {item.nivelRiesgoDescripcion} ({item.nivelRiesgoValor ?? 0})
+                    ({item.nivelRiesgoDescripcion})
                   </span>
                 ) : null}
               </span>

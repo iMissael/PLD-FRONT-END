@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from "react";
+import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
@@ -62,19 +63,27 @@ export function EntidadesPage() {
   const handleGuardar = (input: CrearEntidadInput) => {
     setMensajeError(null);
     const onError = (error: unknown) => {
-      setMensajeError(isAppError(error) ? error.message : "Ocurrió un error inesperado.");
+      const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
+      setMensajeError(msg);
+      toast.error(msg);
     };
 
     if (creandoNueva) {
       crear.mutate(input, {
-        onSuccess: () => setCreandoNueva(false),
+        onSuccess: () => {
+          setCreandoNueva(false);
+          toast.success("Entidad creada correctamente");
+        },
         onError,
       });
     } else if (seleccionada) {
       actualizar.mutate(
         { id: seleccionada.idEntidad, input },
         {
-          onSuccess: (entidadActualizada) => setSeleccionada(entidadActualizada),
+          onSuccess: (entidadActualizada) => {
+            setSeleccionada(entidadActualizada);
+            toast.success("Entidad actualizada correctamente");
+          },
           onError,
         },
       );
@@ -83,13 +92,19 @@ export function EntidadesPage() {
 
   const handleEliminar = () => {
     if (!seleccionada) return;
+    if (!window.confirm(`¿Estás seguro de que deseas eliminar la entidad "${seleccionada.nombre}"?`)) {
+      return;
+    }
     setMensajeError(null);
     eliminar.mutate(seleccionada.idEntidad, {
-      onSuccess: () => setSeleccionada(null),
+      onSuccess: () => {
+        setSeleccionada(null);
+        toast.success("Entidad eliminada correctamente");
+      },
       onError: (error) => {
-        setMensajeError(
-          isAppError(error) ? error.message : "Ocurrió un error inesperado.",
-        );
+        const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
+        setMensajeError(msg);
+        toast.error(msg);
       },
     });
   };

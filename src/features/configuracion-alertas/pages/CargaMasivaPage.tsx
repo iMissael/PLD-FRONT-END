@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { UploadIcon } from "@/shared/components/icons";
@@ -52,7 +53,18 @@ export function CargaMasivaPage() {
 
   const handleSubir = () => {
     if (!archivo) return;
-    mutation.mutate(archivo);
+    mutation.mutate(archivo, {
+      onSuccess: (res) => {
+        toast.success(
+          `Archivo procesado: ${res.exitosos} exitosos, ${res.fallidos} fallidos de ${res.totalFilas} total.`,
+        );
+      },
+      onError: (err) => {
+        toast.error(
+          isAppError(err) ? err.message : "Ocurrió un error inesperado al subir el archivo.",
+        );
+      },
+    });
   };
 
   const resultado = mutation.data;

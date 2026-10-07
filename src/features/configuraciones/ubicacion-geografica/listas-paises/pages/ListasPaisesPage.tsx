@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
@@ -40,19 +41,27 @@ export function ListasPaisesPage() {
   const handleGuardar = (input: Parameters<typeof crear.mutate>[0]) => {
     setMensajeError(null);
     const onError = (error: unknown) => {
-      setMensajeError(isAppError(error) ? error.message : "Ocurrió un error inesperado.");
+      const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
+      setMensajeError(msg);
+      toast.error(msg);
     };
- 
+
     if (creandoNueva) {
       crear.mutate(input, {
-        onSuccess: () => setCreandoNueva(false),
+        onSuccess: () => {
+          setCreandoNueva(false);
+          toast.success("Lista de países creada correctamente");
+        },
         onError,
       });
     } else if (seleccionada) {
       actualizar.mutate(
         { id: seleccionada.id, input },
         {
-          onSuccess: (listaActualizada) => setSeleccionada(listaActualizada),
+          onSuccess: (listaActualizada) => {
+            setSeleccionada(listaActualizada);
+            toast.success("Lista de países actualizada correctamente");
+          },
           onError,
         },
       );
@@ -61,13 +70,19 @@ export function ListasPaisesPage() {
 
   const handleEliminar = () => {
     if (!seleccionada) return;
+    if (!window.confirm(`¿Estás seguro de que deseas eliminar la lista "${seleccionada.nombre}"?`)) {
+      return;
+    }
     setMensajeError(null);
     eliminar.mutate(seleccionada.id, {
-      onSuccess: () => setSeleccionada(null),
+      onSuccess: () => {
+        setSeleccionada(null);
+        toast.success("Lista de países eliminada correctamente");
+      },
       onError: (error) => {
-        setMensajeError(
-          isAppError(error) ? error.message : "Ocurrió un error inesperado.",
-        );
+        const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
+        setMensajeError(msg);
+        toast.error(msg);
       },
     });
   };

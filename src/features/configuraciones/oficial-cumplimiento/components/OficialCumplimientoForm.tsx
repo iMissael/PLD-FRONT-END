@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AlertCircle,
@@ -11,17 +11,14 @@ import {
   ShieldCheck,
   UserRound,
 } from "lucide-react";
-import type { ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Button } from "@/shared/components/ui/button";
 import { Form } from "@/shared/components/ui/form";
 import { useGuardarOficialCumplimiento } from "@/features/configuraciones/oficial-cumplimiento/hooks/useOficialCumplimiento";
 import {
   AvisoCumplimiento,
-  EncabezadoOficial,
-  EstadoOficial,
-  type TonoEstado,
 } from "@/features/configuraciones/oficial-cumplimiento/components/EncabezadoOficial";
 import { SeccionDatosGenerales } from "@/features/configuraciones/oficial-cumplimiento/components/SeccionDatosGenerales";
 import { SeccionDomicilio } from "@/features/configuraciones/oficial-cumplimiento/components/SeccionDomicilio";
@@ -46,14 +43,7 @@ import type {
 // El pie con "Guardar" queda abajo a la derecha, donde Sonner muestra los toasts por defecto.
 const OPCIONES_TOAST = { position: "top-center" } as const;
 
-const ESTADO_OFICIAL: Record<
-  NonNullable<OficialResponse["estatus"]>,
-  { etiqueta: string; tono: TonoEstado }
-> = {
-  ACTIVO: { etiqueta: "Vigente", tono: "ok" },
-  INACTIVO: { etiqueta: "Inactivo", tono: "neutro" },
-  BLOQUEADO: { etiqueta: "Bloqueado", tono: "error" },
-};
+
 
 type PestanaId = "generales" | "domicilio" | "pld";
 
@@ -117,9 +107,6 @@ export function OficialCumplimientoForm({
     domicilio?.updatedAt,
     oficial?.updatedAt,
   ]);
-  const estado = oficial?.estatus
-    ? ESTADO_OFICIAL[oficial.estatus]
-    : { etiqueta: "Sin parámetros PLD", tono: "aviso" as const };
 
   const tieneErrorGenerales = Object.keys(errors).some((campo) =>
     CAMPOS_GENERALES.includes(campo),
@@ -143,8 +130,13 @@ export function OficialCumplimientoForm({
           toast.success("Datos del oficial guardados correctamente", OPCIONES_TOAST);
           form.reset(values);
         },
-        onError: () => {
-          toast.error("No se pudieron guardar los datos del oficial", OPCIONES_TOAST);
+        onError: (error) => {
+          toast.error(
+            isAppError(error)
+              ? error.message
+              : "No se pudieron guardar los datos del oficial",
+            OPCIONES_TOAST,
+          );
         },
       },
     );
@@ -152,14 +144,7 @@ export function OficialCumplimientoForm({
 
   return (
     <div className="space-y-6">
-      <EncabezadoOficial
-        estado={
-          <EstadoOficial
-            etiqueta={isDirty ? `${estado.etiqueta} / En edición` : estado.etiqueta}
-            tono={estado.tono}
-          />
-        }
-      />
+    
       {selector}
       <AvisoCumplimiento />
 

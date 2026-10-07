@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
@@ -33,19 +34,27 @@ export function TiemposConstitucionPage() {
   const handleGuardar = (input: Parameters<typeof crear.mutate>[0]) => {
     setMensajeError(null);
     const onError = (error: unknown) => {
-      setMensajeError(isAppError(error) ? error.message : "Ocurrió un error inesperado.");
+      const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
+      setMensajeError(msg);
+      toast.error(msg);
     };
 
     if (creandoNuevo) {
       crear.mutate(input, {
-        onSuccess: () => setCreandoNuevo(false),
+        onSuccess: () => {
+          setCreandoNuevo(false);
+          toast.success("Tiempo de constitución creado correctamente");
+        },
         onError,
       });
     } else if (seleccionado) {
       actualizar.mutate(
         { id: seleccionado.id, input },
         {
-          onSuccess: (tiempoActualizado) => setSeleccionado(tiempoActualizado),
+          onSuccess: (tiempoActualizado) => {
+            setSeleccionado(tiempoActualizado);
+            toast.success("Tiempo de constitución actualizado correctamente");
+          },
           onError,
         },
       );
@@ -54,13 +63,19 @@ export function TiemposConstitucionPage() {
 
   const handleEliminar = () => {
     if (!seleccionado) return;
+    if (!window.confirm(`¿Estás seguro de que deseas dar de baja el rango "${seleccionado.nombre}"?`)) {
+      return;
+    }
     setMensajeError(null);
     eliminar.mutate(seleccionado.id, {
-      onSuccess: () => setSeleccionado(null),
+      onSuccess: () => {
+        setSeleccionado(null);
+        toast.success("Tiempo de constitución dado de baja correctamente");
+      },
       onError: (error) => {
-        setMensajeError(
-          isAppError(error) ? error.message : "Ocurrió un error inesperado.",
-        );
+        const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
+        setMensajeError(msg);
+        toast.error(msg);
       },
     });
   };

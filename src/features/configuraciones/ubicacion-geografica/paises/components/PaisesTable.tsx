@@ -8,14 +8,45 @@ export interface InfoListaPais {
   nivelRiesgoValor: number;
 }
 
+export interface InfoRiesgoPais {
+  nivelRiesgoDescripcion: string;
+  nivelRiesgoValor: number;
+}
+
 interface PaisesTableProps {
   paises: PaisResponse[] | undefined;
   isLoading: boolean;
   seleccionadoId: string | null;
   /** Mapa idLista -> información de la lista de país (nombre, nivel de riesgo). */
   mapaListas: Record<string, InfoListaPais>;
+  /** Mapa idPais -> nivel de riesgo único del país calculado a partir de las listas. */
+  mapaRiesgoPais?: Record<string, InfoRiesgoPais>;
   onSeleccionar: (pais: PaisResponse) => void;
   onDoubleClick?: (pais: PaisResponse) => void;
+}
+
+function obtenerRiesgoPais(
+  pais: PaisResponse,
+  mapaRiesgoPais: Record<string, InfoRiesgoPais> | undefined,
+  mapaListas: Record<string, InfoListaPais>,
+): InfoRiesgoPais | null {
+  if (mapaRiesgoPais && mapaRiesgoPais[pais.idPais]) {
+    return mapaRiesgoPais[pais.idPais] ?? null;
+  }
+  const asignadas = Array.isArray(pais.zonasAsignadas) ? pais.zonasAsignadas : [];
+  let maxRiesgo: InfoRiesgoPais | null = null;
+  for (const id of asignadas) {
+    const info = mapaListas[id];
+    if (info) {
+      if (!maxRiesgo || info.nivelRiesgoValor > maxRiesgo.nivelRiesgoValor) {
+        maxRiesgo = {
+          nivelRiesgoDescripcion: info.nivelRiesgoDescripcion,
+          nivelRiesgoValor: info.nivelRiesgoValor,
+        };
+      }
+    }
+  }
+  return maxRiesgo;
 }
 
 export function PaisesTable({
@@ -23,6 +54,7 @@ export function PaisesTable({
   isLoading,
   seleccionadoId,
   mapaListas,
+  mapaRiesgoPais,
   onSeleccionar,
   onDoubleClick,
 }: PaisesTableProps) {
@@ -52,20 +84,17 @@ export function PaisesTable({
       {
         header: "Nivel de riesgo",
         cell: (pais) => {
-          const asignadas = Array.isArray(pais.zonasAsignadas) ? pais.zonasAsignadas : [];
-          const niveles = asignadas
-            .map((id) => {
-              const info = mapaListas[id];
-              return info
-                ? `${info.nivelRiesgoDescripcion} (${info.nivelRiesgoValor})`
-                : null;
-            })
-            .filter((n): n is string => Boolean(n));
-          return niveles.length > 0 ? niveles.join(", ") : "—";
+          const riesgo = obtenerRiesgoPais(pais, mapaRiesgoPais, mapaListas);
+          if (!riesgo) return <span className="text-muted-foreground">—</span>;
+          return (
+            <span>
+              {riesgo.nivelRiesgoDescripcion} ({riesgo.nivelRiesgoValor})
+            </span>
+          );
         },
       },
     ],
-    [mapaListas],
+    [mapaListas, mapaRiesgoPais],
   );
 
   return (
@@ -90,22 +119,16 @@ export function PaisesTable({
             .filter(Boolean)
             .join(" ")
             .toLowerCase();
-          const nivelesRiesgo = asignadas
-            .map((id) => {
-              const info = mapaListas[id];
-              return info
-                ? `${info.nivelRiesgoDescripcion} ${info.nivelRiesgoValor}`
-                : "";
-            })
-            .filter(Boolean)
-            .join(" ")
-            .toLowerCase();
+          const riesgo = obtenerRiesgoPais(pais, mapaRiesgoPais, mapaListas);
+          const riesgoTexto = riesgo
+            ? `${riesgo.nivelRiesgoDescripcion} ${riesgo.nivelRiesgoValor}`.toLowerCase()
+            : "";
           return (
             pais.nombre.toLowerCase().includes(t) ||
             pais.idPais.toLowerCase().includes(t) ||
             (pais.codigoIso?.toLowerCase().includes(t) ?? false) ||
             nombresListas.includes(t) ||
-            nivelesRiesgo.includes(t)
+            riesgoTexto.includes(t)
           );
         },
       }}

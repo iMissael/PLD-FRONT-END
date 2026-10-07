@@ -1,5 +1,7 @@
 import { Search, Trash2, Users } from "lucide-react";
 import { useMemo, useState } from "react";
+import { toast } from "sonner";
+import { isAppError } from "@/api/interceptors/errorInterceptor";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -107,7 +109,18 @@ function BotonEliminar({ usuario }: { usuario: UsuarioResponse }) {
             className="bg-destructive text-white hover:bg-destructive-hover"
             disabled={eliminarUsuario.isPending}
             onClick={() => {
-              if (usuario.idUsuario) eliminarUsuario.mutate(usuario.idUsuario);
+              if (usuario.idUsuario) {
+                eliminarUsuario.mutate(usuario.idUsuario, {
+                  onSuccess: () => {
+                    toast.success("Usuario eliminado correctamente.");
+                  },
+                  onError: (error) => {
+                    toast.error(
+                      isAppError(error) ? error.message : "No se pudo eliminar el usuario.",
+                    );
+                  },
+                });
+              }
             }}
           >
             {eliminarUsuario.isPending ? "Eliminando…" : "Eliminar"}

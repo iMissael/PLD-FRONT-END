@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
@@ -31,19 +32,27 @@ export function CanalesPagoPage() {
   const handleGuardar = (input: Parameters<typeof crear.mutate>[0]) => {
     setMensajeError(null);
     const onError = (error: unknown) => {
-      setMensajeError(isAppError(error) ? error.message : "Ocurrió un error inesperado.");
+      const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
+      setMensajeError(msg);
+      toast.error(msg);
     };
 
     if (creandoNuevo) {
       crear.mutate(input, {
-        onSuccess: () => setCreandoNuevo(false),
+        onSuccess: () => {
+          setCreandoNuevo(false);
+          toast.success("Canal de pago creado correctamente");
+        },
         onError,
       });
     } else if (seleccionado) {
       actualizar.mutate(
         { id: seleccionado.id, input },
         {
-          onSuccess: (canalActualizado) => setSeleccionado(canalActualizado),
+          onSuccess: (canalActualizado) => {
+            setSeleccionado(canalActualizado);
+            toast.success("Canal de pago actualizado correctamente");
+          },
           onError,
         },
       );
@@ -51,17 +60,27 @@ export function CanalesPagoPage() {
   };
 
   const handleEliminar = () => {
-    if (!seleccionado) return;
+    if (!seleccionadaOpcion(seleccionado)) return;
+    if (!window.confirm(`¿Estás seguro de que deseas dar de baja el canal "${seleccionado?.nombre}"?`)) {
+      return;
+    }
     setMensajeError(null);
-    eliminar.mutate(seleccionado.id, {
-      onSuccess: () => setSeleccionado(null),
+    eliminar.mutate(seleccionado!.id, {
+      onSuccess: () => {
+        setSeleccionado(null);
+        toast.success("Canal de pago dado de baja correctamente");
+      },
       onError: (error) => {
-        setMensajeError(
-          isAppError(error) ? error.message : "Ocurrió un error inesperado.",
-        );
+        const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
+        setMensajeError(msg);
+        toast.error(msg);
       },
     });
   };
+
+  function seleccionadaOpcion(item: CanalPagoResponse | null): item is CanalPagoResponse {
+    return item !== null;
+  }
 
   return (
     <div className="flex flex-col gap-6">

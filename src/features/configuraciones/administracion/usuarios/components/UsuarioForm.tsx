@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Button } from "@/shared/components/ui/button";
 import { Form } from "@/shared/components/ui/form";
 import { useCrearUsuarioCompleto } from "@/features/configuraciones/administracion/usuarios/hooks/useUsuarios";
@@ -208,8 +209,10 @@ export function UsuarioForm({ onCreado }: { onCreado?: () => void }) {
           setPaso(1);
           onCreado?.();
         },
-        onError: () => {
-          toast.error("No se pudo crear el usuario");
+        onError: (error) => {
+          toast.error(
+            isAppError(error) ? error.message : "No se pudo crear el usuario",
+          );
         },
       },
     );
