@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import { useAuthStore } from "@/shared/auth/authStore";
@@ -356,7 +356,18 @@ export function AppLayout() {
         </aside>
 
         <main className="flex-1 overflow-y-auto px-6 py-6">
-          <Outlet />
+          <Suspense
+            fallback={
+              <div className="flex items-center justify-center py-20">
+                <div className="flex flex-col items-center gap-3 text-muted-foreground">
+                  <div className="h-8 w-8 animate-spin rounded-full border-4 border-border border-t-primary" />
+                  <span className="text-sm">Cargando…</span>
+                </div>
+              </div>
+            }
+          >
+            <Outlet />
+          </Suspense>
         </main>
       </div>
     </div>

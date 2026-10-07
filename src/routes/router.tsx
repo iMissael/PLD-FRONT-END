@@ -1,43 +1,6 @@
+import { lazy } from "react";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
-import { LoginPage } from "@/features/auth/pages/LoginPage";
-// import { AyudaPage } from "@/features/ayuda/pages/AyudaPage";
-import { BuzonPublicoPage } from "@/features/buzon/pages/BuzonPublicoPage";
-import { GestionAlertasPage } from "@/features/buzon/pages/GestionAlertasPage";
-import { GestionDenunciasPage } from "@/features/buzon/pages/GestionDenunciasPage";
-import { CargaMasivaPage } from "@/features/configuracion-alertas/pages/CargaMasivaPage";
-import { ConsultaBloqueadosPage } from "@/features/configuracion-alertas/pages/ConsultaBloqueadosPage";
-import { ReglasAlertaPage } from "@/features/configuracion-alertas/reglas/pages/ReglasAlertaPage";
-import { ActividadesEconomicasPage } from "@/features/configuraciones/actividad-economica/pages/ActividadesEconomicasPage";
-import { PermisosPage } from "@/features/configuraciones/administracion/permisos/pages/PermisosPage";
-import { RolesPage } from "@/features/configuraciones/administracion/roles/pages/RolesPage";
-import { RolPermisosPage } from "@/features/configuraciones/administracion/roles/pages/RolPermisosPage";
-import { UsuariosPage } from "@/features/configuraciones/administracion/usuarios/pages/UsuariosPage";
-import { CanalesPagoPage } from "@/features/configuraciones/canales-pago/pages/CanalesPagoPage";
-import { EdadesPage } from "@/features/configuraciones/edades/rangos-edad/pages/EdadesPage";
-import { TiemposConstitucionPage } from "@/features/configuraciones/edades/tiempo-constitucion/pages/TiemposConstitucionPage";
-import { ExperienciasActividadPage } from "@/features/configuraciones/experiencia-actividad/pages/ExperienciasActividadPage";
-import { HistorialesCrediticiosPage } from "@/features/configuraciones/historial-crediticio/pages/HistorialesCrediticiosPage";
-import { MatrizRiesgoPage } from "@/features/configuraciones/matriz-riesgo/pages/MatrizRiesgoPage";
-import { PrestamosMontoPage } from "@/features/configuraciones/monto-credito/pages/PrestamosMontoPage";
-import { OficialCumplimientoPage } from "@/features/configuraciones/oficial-cumplimiento/pages/OficialCumplimientoPage";
-import { TiposPersonaPage } from "@/features/configuraciones/personas/pages/TiposPersonaPage";
-import { DestinosRecursoPage } from "@/features/configuraciones/recursos/destino/pages/DestinosRecursoPage";
-import { OrigenesRecursoPage } from "@/features/configuraciones/recursos/origen/pages/OrigenesRecursoPage";
-import { TiposCreditoPage } from "@/features/configuraciones/tipos-credito/pages/TiposCreditoPage";
-import { EntidadesPage } from "@/features/configuraciones/ubicacion-geografica/entidades/pages/EntidadesPage";
-import { ListasPaisesPage } from "@/features/configuraciones/ubicacion-geografica/listas-paises/pages/ListasPaisesPage";
-import { LocalidadesPage } from "@/features/configuraciones/ubicacion-geografica/localidades/pages/LocalidadesPage";
-import { PaisesPage } from "@/features/configuraciones/ubicacion-geografica/paises/pages/PaisesPage";
-import { ZonasGeograficasPage } from "@/features/configuraciones/ubicacion-geografica/zonas-geograficas/pages/ZonasGeograficasPage";
-import { ControlDolarPage } from "@/features/control-dolar/pages/ControlDolarPage";
-import { ControlPage } from "@/features/control/pages/ControlPage";
-import { CapturaAlertasPage } from "@/features/operacion/captura-alertas/pages/CapturaAlertasPage";
-import { ConsultaListasPage } from "@/features/operacion/consulta-listas/pages/Quienesquien";
-import { RevisionCoincidenciasPage } from "@/features/operacion/revision-coincidencias/pages/RevisionCoincidenciasPage";
-import { EvaluacionRiesgoPage } from "@/features/operacion/evaluacion-riesgo/pages/EvaluacionRiesgoPage";
-import { OperacionPage } from "@/features/operacion/pages/OperacionPage";
-import { RevisionAlertasPage } from "@/features/operacion/revision-alertas/pages/RevisionAlertasPage";
 import { RequireAuth } from "@/shared/auth/RequireAuth";
 import { RequierePermiso } from "@/shared/auth/RequierePermiso";
 import { PlaceholderPage } from "@/shared/components/PlaceholderPage";
@@ -46,6 +9,134 @@ import { ContenidoAcotado } from "@/shared/layouts/ContenidoAcotado";
 import { TenantRequeridoPage } from "@/shared/layouts/TenantRequeridoPage";
 import { TenantRouteLayout } from "@/shared/layouts/TenantRouteLayout";
 
+// ─── Lazy page imports ────────────────────────────────────────────────────────
+// Cada página se descarga solo cuando el usuario navega a esa ruta.
+// Los layouts, guards y utilitarios se mantienen estáticos porque siempre
+// se necesitan.
+
+const LoginPage = lazy(() =>
+  import("@/features/auth/pages/LoginPage").then((m) => ({ default: m.LoginPage })),
+);
+
+// Buzón
+const BuzonPublicoPage = lazy(() =>
+  import("@/features/buzon/pages/BuzonPublicoPage").then((m) => ({ default: m.BuzonPublicoPage })),
+);
+const GestionAlertasPage = lazy(() =>
+  import("@/features/buzon/pages/GestionAlertasPage").then((m) => ({ default: m.GestionAlertasPage })),
+);
+const GestionDenunciasPage = lazy(() =>
+  import("@/features/buzon/pages/GestionDenunciasPage").then((m) => ({ default: m.GestionDenunciasPage })),
+);
+
+// Configuración de alertas
+const CargaMasivaPage = lazy(() =>
+  import("@/features/configuracion-alertas/pages/CargaMasivaPage").then((m) => ({ default: m.CargaMasivaPage })),
+);
+const ConsultaBloqueadosPage = lazy(() =>
+  import("@/features/configuracion-alertas/pages/ConsultaBloqueadosPage").then((m) => ({ default: m.ConsultaBloqueadosPage })),
+);
+const ReglasAlertaPage = lazy(() =>
+  import("@/features/configuracion-alertas/reglas/pages/ReglasAlertaPage").then((m) => ({ default: m.ReglasAlertaPage })),
+);
+
+// Configuraciones generales
+const ActividadesEconomicasPage = lazy(() =>
+  import("@/features/configuraciones/actividad-economica/pages/ActividadesEconomicasPage").then((m) => ({ default: m.ActividadesEconomicasPage })),
+);
+const PermisosPage = lazy(() =>
+  import("@/features/configuraciones/administracion/permisos/pages/PermisosPage").then((m) => ({ default: m.PermisosPage })),
+);
+const RolesPage = lazy(() =>
+  import("@/features/configuraciones/administracion/roles/pages/RolesPage").then((m) => ({ default: m.RolesPage })),
+);
+const RolPermisosPage = lazy(() =>
+  import("@/features/configuraciones/administracion/roles/pages/RolPermisosPage").then((m) => ({ default: m.RolPermisosPage })),
+);
+const UsuariosPage = lazy(() =>
+  import("@/features/configuraciones/administracion/usuarios/pages/UsuariosPage").then((m) => ({ default: m.UsuariosPage })),
+);
+const CanalesPagoPage = lazy(() =>
+  import("@/features/configuraciones/canales-pago/pages/CanalesPagoPage").then((m) => ({ default: m.CanalesPagoPage })),
+);
+const EdadesPage = lazy(() =>
+  import("@/features/configuraciones/edades/rangos-edad/pages/EdadesPage").then((m) => ({ default: m.EdadesPage })),
+);
+const TiemposConstitucionPage = lazy(() =>
+  import("@/features/configuraciones/edades/tiempo-constitucion/pages/TiemposConstitucionPage").then((m) => ({ default: m.TiemposConstitucionPage })),
+);
+const ExperienciasActividadPage = lazy(() =>
+  import("@/features/configuraciones/experiencia-actividad/pages/ExperienciasActividadPage").then((m) => ({ default: m.ExperienciasActividadPage })),
+);
+const HistorialesCrediticiosPage = lazy(() =>
+  import("@/features/configuraciones/historial-crediticio/pages/HistorialesCrediticiosPage").then((m) => ({ default: m.HistorialesCrediticiosPage })),
+);
+const MatrizRiesgoPage = lazy(() =>
+  import("@/features/configuraciones/matriz-riesgo/pages/MatrizRiesgoPage").then((m) => ({ default: m.MatrizRiesgoPage })),
+);
+const PrestamosMontoPage = lazy(() =>
+  import("@/features/configuraciones/monto-credito/pages/PrestamosMontoPage").then((m) => ({ default: m.PrestamosMontoPage })),
+);
+const OficialCumplimientoPage = lazy(() =>
+  import("@/features/configuraciones/oficial-cumplimiento/pages/OficialCumplimientoPage").then((m) => ({ default: m.OficialCumplimientoPage })),
+);
+const TiposPersonaPage = lazy(() =>
+  import("@/features/configuraciones/personas/pages/TiposPersonaPage").then((m) => ({ default: m.TiposPersonaPage })),
+);
+const DestinosRecursoPage = lazy(() =>
+  import("@/features/configuraciones/recursos/destino/pages/DestinosRecursoPage").then((m) => ({ default: m.DestinosRecursoPage })),
+);
+const OrigenesRecursoPage = lazy(() =>
+  import("@/features/configuraciones/recursos/origen/pages/OrigenesRecursoPage").then((m) => ({ default: m.OrigenesRecursoPage })),
+);
+const TiposCreditoPage = lazy(() =>
+  import("@/features/configuraciones/tipos-credito/pages/TiposCreditoPage").then((m) => ({ default: m.TiposCreditoPage })),
+);
+
+// Ubicación geográfica
+const EntidadesPage = lazy(() =>
+  import("@/features/configuraciones/ubicacion-geografica/entidades/pages/EntidadesPage").then((m) => ({ default: m.EntidadesPage })),
+);
+const ListasPaisesPage = lazy(() =>
+  import("@/features/configuraciones/ubicacion-geografica/listas-paises/pages/ListasPaisesPage").then((m) => ({ default: m.ListasPaisesPage })),
+);
+const LocalidadesPage = lazy(() =>
+  import("@/features/configuraciones/ubicacion-geografica/localidades/pages/LocalidadesPage").then((m) => ({ default: m.LocalidadesPage })),
+);
+const PaisesPage = lazy(() =>
+  import("@/features/configuraciones/ubicacion-geografica/paises/pages/PaisesPage").then((m) => ({ default: m.PaisesPage })),
+);
+const ZonasGeograficasPage = lazy(() =>
+  import("@/features/configuraciones/ubicacion-geografica/zonas-geograficas/pages/ZonasGeograficasPage").then((m) => ({ default: m.ZonasGeograficasPage })),
+);
+
+// Control / operación
+const ControlDolarPage = lazy(() =>
+  import("@/features/control-dolar/pages/ControlDolarPage").then((m) => ({ default: m.ControlDolarPage })),
+);
+const ControlPage = lazy(() =>
+  import("@/features/control/pages/ControlPage").then((m) => ({ default: m.ControlPage })),
+);
+const CapturaAlertasPage = lazy(() =>
+  import("@/features/operacion/captura-alertas/pages/CapturaAlertasPage").then((m) => ({ default: m.CapturaAlertasPage })),
+);
+const ConsultaListasPage = lazy(() =>
+  import("@/features/operacion/consulta-listas/pages/Quienesquien").then((m) => ({ default: m.ConsultaListasPage })),
+);
+const RevisionCoincidenciasPage = lazy(() =>
+  import("@/features/operacion/revision-coincidencias/pages/RevisionCoincidenciasPage").then((m) => ({ default: m.RevisionCoincidenciasPage })),
+);
+const EvaluacionRiesgoPage = lazy(() =>
+  import("@/features/operacion/evaluacion-riesgo/pages/EvaluacionRiesgoPage").then((m) => ({ default: m.EvaluacionRiesgoPage })),
+);
+const OperacionPage = lazy(() =>
+  import("@/features/operacion/pages/OperacionPage").then((m) => ({ default: m.OperacionPage })),
+);
+const RevisionAlertasPage = lazy(() =>
+  import("@/features/operacion/revision-alertas/pages/RevisionAlertasPage").then((m) => ({ default: m.RevisionAlertasPage })),
+);
+
+// ─── Router ───────────────────────────────────────────────────────────────────
 
 export const router = createBrowserRouter([
   {
