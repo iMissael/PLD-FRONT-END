@@ -38,6 +38,7 @@ import { RevisionCoincidenciasPage } from "@/features/operacion/revision-coincid
 import { EvaluacionRiesgoPage } from "@/features/operacion/evaluacion-riesgo/pages/EvaluacionRiesgoPage";
 import { OperacionPage } from "@/features/operacion/pages/OperacionPage";
 import { RevisionAlertasPage } from "@/features/operacion/revision-alertas/pages/RevisionAlertasPage";
+import { RevisionAutorizacionesPage } from "@/features/operacion/revision-autorizaciones/pages/RevisionAutorizacionesPage";
 import { RequireAuth } from "@/shared/auth/RequireAuth";
 import { RequierePermiso } from "@/shared/auth/RequierePermiso";
 import { PlaceholderPage } from "@/shared/components/PlaceholderPage";
@@ -118,8 +119,8 @@ export const router = createBrowserRouter([
                 element: <RevisionAlertasPage />,
               },
               {
-                path: "operacion/revision-alertas-automatizacion",
-                element: <PlaceholderPage title="Revisión de alertas de automatización" />,
+                path: "operacion/revision-alertas-autorizacion",
+                element: <RevisionAutorizacionesPage />,
               },
               {
                 path: "operacion/revision-alertas-seguimiento",

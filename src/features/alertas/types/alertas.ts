@@ -90,12 +90,36 @@ export interface ExpedienteAlerta {
     domicilio: string | null;
     puesto: string | null;
   } | null;
+  perfilTransaccional: PerfilTransaccional | null;
   /** Mes de la fecha de la alerta. */
   resumenPeriodo: {
     desde: string;
     hasta: string;
     alertasEmitidas: number;
+    operacionesRealizadas: number;
+    importeAcumuladoMxn: number;
+    importeAcumuladoUsd: number;
   };
+}
+
+export interface PerfilTransaccional {
+  id: number;
+  socioReferencia: string;
+  fechaRegistro: string;
+  disponibilidad: number;
+  moneda: string;
+  numeroOperacionesMes: number;
+  periodicidad: string | null;
+  formasPago: string[];
+  naturalezaCredito: string | null;
+  tipoCredito: string | null;
+  actividadEconomica: string | null;
+  destinoRecursos: string | null;
+  observacionesEjecutivo: string | null;
+  terceroBeneficiario: boolean;
+  tercerosBeneficiarios: string | null;
+  terceroAportaRecursos: boolean;
+  tercerosAportanRecursos: string | null;
 }
 
 /** `CrearAlertaManualRequest`. */
@@ -122,6 +146,14 @@ export interface FiltroAlertas {
   persona?: string;
   desde?: string;
   hasta?: string;
+}
+
+export interface PaginaAlertas {
+  contenido: Alerta[];
+  pagina: number;
+  tamanio: number;
+  totalElementos: number;
+  totalPaginas: number;
 }
 
 /** `AlertaController.DictamenRequest`. */

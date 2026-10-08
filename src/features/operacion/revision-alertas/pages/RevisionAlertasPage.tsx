@@ -19,7 +19,9 @@ export function RevisionAlertasPage() {
   const [filtro, setFiltro] = useState<FiltroAlertas>(rangoPorDefecto);
   const [seleccionada, setSeleccionada] = useState<Alerta | null>(null);
   const [aviso, setAviso] = useState<string | null>(null);
-  const { data: alertas, isLoading } = useListaAlertas(filtro);
+  const [pagina, setPagina] = useState(0);
+  const [tamanio, setTamanio] = useState(20);
+  const { data, isLoading } = useListaAlertas(filtro, pagina, tamanio);
 
   return (
     <div className="flex flex-col gap-6">
@@ -35,6 +37,7 @@ export function RevisionAlertasPage() {
         inicial={filtro}
         onAplicar={(nuevo) => {
           setFiltro(nuevo);
+          setPagina(0);
           setSeleccionada(null);
           setAviso(null);
         }}
@@ -44,12 +47,20 @@ export function RevisionAlertasPage() {
 
       <div className="flex flex-col gap-6">
         <AlertasTable
-          alertas={alertas}
+          alertas={data?.contenido}
           isLoading={isLoading}
           seleccionadaId={seleccionada?.id ?? null}
           onSeleccionar={(alerta) => {
             setSeleccionada(alerta);
             setAviso(null);
+          }}
+          pagina={pagina}
+          tamanio={tamanio}
+          totalElementos={data?.totalElementos ?? 0}
+          onCambiarPagina={setPagina}
+          onCambiarTamanio={(nuevo) => {
+            setTamanio(nuevo);
+            setPagina(0);
           }}
         />
         {seleccionada ? (

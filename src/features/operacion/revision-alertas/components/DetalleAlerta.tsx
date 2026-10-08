@@ -14,7 +14,7 @@ import { Alert } from "@/shared/components/ui/Alert";
 import { Button } from "@/shared/components/ui/CatalogoButton";
 import { card, field, hint, label } from "@/shared/components/ui/styles";
 
-import { formatearFecha } from "../utils/formato";
+import { formatearFecha, formatearMoneda } from "../utils/formato";
 
 /** Campos de Sicanet que todavía no tienen fuente de datos en el sistema. */
 const SIN_INFORMACION = (
@@ -100,6 +100,7 @@ export function DetalleAlerta({ alerta, onDictaminada }: DetalleAlertaProps) {
     );
   const evaluado = expediente?.evaluado;
   const resumen = expediente?.resumenPeriodo;
+  const perfil = expediente?.perfilTransaccional ?? null;
 
   const handleDictaminar = (event: React.FormEvent) => {
     event.preventDefault();
@@ -169,13 +170,37 @@ export function DetalleAlerta({ alerta, onDictaminada }: DetalleAlertaProps) {
             </dl>
           </Seccion>
 
-          <Seccion titulo="Perfil transaccional declarado">
-            <dl className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-              <Dato titulo="Disponibilidad mensual">{SIN_INFORMACION}</Dato>
-              <Dato titulo="Número de pagos">{SIN_INFORMACION}</Dato>
-              <Dato titulo="Frecuencia de pago">{SIN_INFORMACION}</Dato>
-            </dl>
-          </Seccion>
+          {esEmpleado ? null : (
+            <Seccion
+              titulo="Perfil transaccional declarado"
+              extra={
+                perfil ? `Registrado el ${formatearFecha(perfil.fechaRegistro)}` : undefined
+              }
+            >
+              {!cargandoExpediente && !perfil ? (
+                <p className="text-muted-foreground text-sm italic">
+                  El socio no tiene perfil transaccional declarado.
+                </p>
+              ) : (
+                <dl className="grid grid-cols-1 gap-3 sm:grid-cols-4">
+                  <Dato titulo="Disponibilidad mensual">
+                    {cargandoExpediente
+                      ? "…"
+                      : perfil && formatearMoneda(perfil.disponibilidad, perfil.moneda)}
+                  </Dato>
+                  <Dato titulo="Número de pagos">
+                    {cargandoExpediente ? "…" : perfil?.numeroOperacionesMes}
+                  </Dato>
+                  <Dato titulo="Frecuencia de pago">
+                    {cargandoExpediente ? "…" : perfil?.periodicidad}
+                  </Dato>
+                  <Dato titulo="Formas de pago">
+                    {cargandoExpediente ? "…" : perfil?.formasPago.join(", ")}
+                  </Dato>
+                </dl>
+              )}
+            </Seccion>
+          )}
 
           <Seccion
             titulo="Resumen del periodo"
@@ -186,8 +211,14 @@ export function DetalleAlerta({ alerta, onDictaminada }: DetalleAlertaProps) {
             }
           >
             <dl className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-              <Dato titulo="Importe acumulado">{SIN_INFORMACION}</Dato>
-              <Dato titulo="Pagos realizados">{SIN_INFORMACION}</Dato>
+              <Dato titulo="Importe acumulado">
+                {cargandoExpediente
+                  ? "…"
+                  : resumen && formatearMoneda(resumen.importeAcumuladoMxn, "MXN")}
+              </Dato>
+              <Dato titulo="Pagos realizados">
+                {cargandoExpediente ? "…" : resumen?.operacionesRealizadas}
+              </Dato>
               <Dato titulo="Alertas emitidas">
                 {cargandoExpediente ? "…" : resumen?.alertasEmitidas}
               </Dato>

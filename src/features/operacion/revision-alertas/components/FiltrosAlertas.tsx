@@ -69,11 +69,13 @@ export function FiltrosAlertas({ inicial, onAplicar }: FiltrosAlertasProps) {
           className={field}
         >
           <option value="">Todos</option>
-          {(tipos ?? []).map((t) => (
-            <option key={t.alertaAcronimo} value={t.alertaAcronimo}>
-              {t.descripcion}
-            </option>
-          ))}
+          {(tipos ?? [])
+            .filter((t) => t.alertaAcronimo !== "A")
+            .map((t) => (
+              <option key={t.alertaAcronimo} value={t.alertaAcronimo}>
+                {t.descripcion}
+              </option>
+            ))}
         </select>
       </div>
       <div className="flex flex-col gap-1">
