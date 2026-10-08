@@ -1,11 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
-import { CaptchaChallenge } from "@/shared/components/CaptchaChallenge";
+import { TurnstileWidget, type TurnstileWidgetRef } from "@/shared/components/TurnstileWidget";
 import { CheckCircleIcon, PaperclipIcon, UploadIcon } from "@/shared/components/icons";
 import { ThemeToggle } from "@/shared/components/ThemeToggle";
 import { es } from "@/shared/i18n/es";
@@ -26,7 +26,8 @@ type DenunciaFormValues = z.infer<typeof denunciaFormSchema>;
 
 export function BuzonPublicoPage() {
   const [files, setFiles] = useState<File[]>([]);
-  const [captchaValid, setCaptchaValid] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const turnstileRef = useRef<TurnstileWidgetRef | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
@@ -120,9 +121,9 @@ export function BuzonPublicoPage() {
   };
 
   const onSubmitFinal = async (values: DenunciaFormValues) => {
-    if (!captchaValid) {
-      setSubmitError(es.captcha.invalid);
-      toast.error(es.captcha.invalid);
+    if (!turnstileToken) {
+      setSubmitError("Por favor completa la verificación de seguridad antes de continuar.");
+      toast.error("Por favor completa la verificación de seguridad antes de continuar.");
       return;
     }
     setSubmitError(null);
@@ -132,6 +133,7 @@ export function BuzonPublicoPage() {
         input: {
           ...values,
           fechaIncidente: new Date(values.fechaIncidente).toISOString(),
+          turnstileToken,
         },
         evidencias: files,
       });
@@ -143,13 +145,17 @@ export function BuzonPublicoPage() {
         : "No se pudo enviar la denuncia. Por favor reintenta.";
       setSubmitError(msg);
       toast.error(msg);
+      // El token es de un solo uso; resetear widget para permitir un nuevo intento
+      setTurnstileToken(null);
+      turnstileRef.current?.reset();
     }
   };
 
   const handleReset = () => {
     reset();
     setFiles([]);
-    setCaptchaValid(false);
+    setTurnstileToken(null);
+    turnstileRef.current?.reset();
     setSubmitted(false);
     setSubmitError(null);
   };
@@ -358,7 +364,30 @@ export function BuzonPublicoPage() {
               </div>
 
               <div className="space-y-4">
-                <CaptchaChallenge onVerify={setCaptchaValid} />
+                <div className="rounded-xl border border-border bg-muted/20 p-4">
+                  <div className="mb-2 flex items-center justify-between text-xs">
+                    <span className="font-semibold text-foreground">
+                      Verificación de Seguridad
+                    </span>
+                    <span className="text-[11px] text-muted-foreground">
+                      Protegido con Cloudflare Turnstile
+                    </span>
+                  </div>
+                  <TurnstileWidget
+                    ref={turnstileRef}
+                    action="denuncia_anonima"
+                    onSuccess={(token) => {
+                      setTurnstileToken(token);
+                      setSubmitError(null);
+                    }}
+                    onExpire={() => {
+                      setTurnstileToken(null);
+                    }}
+                    onError={() => {
+                      setTurnstileToken(null);
+                    }}
+                  />
+                </div>
 
                 {submitError && (
                   <p className="text-xs font-medium text-red-600">{submitError}</p>
@@ -366,8 +395,8 @@ export function BuzonPublicoPage() {
 
                 <button
                   type="submit"
-                  disabled={!captchaValid || crearDenuncia.isPending}
-                  className="w-full rounded-lg bg-emerald-600 py-3 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
+                  disabled={!turnstileToken || crearDenuncia.isPending}
+                  className="w-full rounded-lg bg-emerald-600 py-3 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50 transition-colors"
                 >
                   {crearDenuncia.isPending ? es.buzon.submitting : es.buzon.submitButton}
                 </button>
