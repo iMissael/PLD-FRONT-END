@@ -36,7 +36,7 @@ export function CambiarRiesgoHistorialForm({
 
   return (
     <div className={`flex flex-col gap-4 p-4 ${card}`}>
-      <h3 className="text-sm font-semibold text-fg">
+      <h3 className="text-sm font-semibold text-foreground">
         Cambiar nivel de riesgo: {historial.nombre}
       </h3>
 

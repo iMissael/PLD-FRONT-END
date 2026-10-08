@@ -5,6 +5,7 @@ import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
 import { Button } from "@/shared/components/ui/CatalogoButton";
 
+import { EdadDetalle } from "../components/EdadDetalle";
 import { EdadForm } from "../components/EdadForm";
 import { EdadesTable } from "../components/EdadesTable";
 import { useEdades } from "../hooks/useEdades";
@@ -20,6 +21,8 @@ export function EdadesPage() {
 
   const [seleccionada, setSeleccionada] = useState<EdadResponse | null>(null);
   const [creandoNueva, setCreandoNueva] = useState(false);
+  /** Un clic solo selecciona y muestra el detalle; editar es un paso aparte. */
+  const [editando, setEditando] = useState(false);
   const [mensajeError, setMensajeError] = useState<string | null>(null);
 
   const crear = useCrearEdad();
@@ -27,7 +30,8 @@ export function EdadesPage() {
   const eliminar = useEliminarEdad();
 
   const edadEnEdicion = creandoNueva ? null : seleccionada;
-  const mostrarFormulario = creandoNueva || seleccionada !== null;
+  const mostrarFormulario = creandoNueva || (seleccionada !== null && editando);
+  const mostrarDetalle = !creandoNueva && seleccionada !== null && !editando;
 
   const handleGuardar = (input: Parameters<typeof crear.mutate>[0]) => {
     setMensajeError(null);
@@ -91,6 +95,7 @@ export function EdadesPage() {
           onClick={() => {
             setCreandoNueva(true);
             setSeleccionada(null);
+            setEditando(false);
             setMensajeError(null);
           }}
         >
@@ -107,14 +112,26 @@ export function EdadesPage() {
         onSeleccionar={(edad) => {
           setSeleccionada(edad);
           setCreandoNueva(false);
+          setEditando(false);
           setMensajeError(null);
         }}
         onDoubleClick={(edad) => {
           setSeleccionada(edad);
           setCreandoNueva(false);
+          setEditando(true);
           setMensajeError(null);
         }}
       />
+
+      {mostrarDetalle && seleccionada ? (
+        <EdadDetalle
+          edad={seleccionada}
+          onEditar={() => {
+            setEditando(true);
+            setMensajeError(null);
+          }}
+        />
+      ) : null}
 
       {mostrarFormulario ? (
         <div className="flex flex-col gap-3">
@@ -123,7 +140,7 @@ export function EdadesPage() {
             onGuardar={handleGuardar}
             onCancelar={() => {
               setCreandoNueva(false);
-              setSeleccionada(null);
+              setEditando(false);
               setMensajeError(null);
             }}
             isPending={crear.isPending || actualizar.isPending}

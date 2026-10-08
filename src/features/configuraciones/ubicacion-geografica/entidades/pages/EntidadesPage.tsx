@@ -7,6 +7,7 @@ import { Button } from "@/shared/components/ui/CatalogoButton";
 import { DataTable, type ColumnDef } from "@/shared/components/DataTable";
 
 import { useZonasGeograficasSelect } from "../../zonas-geograficas/hooks/useZonasGeograficas";
+import { EntidadDetalle, type ZonaConNivel } from "../components/EntidadDetalle";
 import { EntidadForm } from "../components/EntidadForm";
 import { useEntidades } from "../hooks/useEntidades";
 import {
@@ -21,6 +22,14 @@ import type { CrearEntidadInput, EntidadResponse } from "../types/entidad";
  */
 function normalizar(texto: string): string {
   return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+}
+
+/** Ids de las zonas de la entidad: la relacion es muchos a muchos, con `idZona` como respaldo. */
+function idsDeZona(entidad: EntidadResponse): string[] {
+  if (Array.isArray(entidad.zonasAsignadas) && entidad.zonasAsignadas.length > 0) {
+    return entidad.zonasAsignadas;
+  }
+  return entidad.idZona ? [entidad.idZona] : [];
 }
 
 export function EntidadesPage() {
@@ -49,6 +58,8 @@ export function EntidadesPage() {
 
   const [seleccionada, setSeleccionada] = useState<EntidadResponse | null>(null);
   const [creandoNueva, setCreandoNueva] = useState(false);
+  /** Un clic solo selecciona y muestra el detalle; editar es un paso aparte. */
+  const [editando, setEditando] = useState(false);
   const [mensajeError, setMensajeError] = useState<string | null>(null);
 
   const formRef = useRef<HTMLDivElement | null>(null);
@@ -58,7 +69,8 @@ export function EntidadesPage() {
   const eliminar = useEliminarEntidad();
 
   const entidadEnEdicion = creandoNueva ? null : seleccionada;
-  const mostrarFormulario = creandoNueva || seleccionada !== null;
+  const mostrarFormulario = creandoNueva || (seleccionada !== null && editando);
+  const mostrarDetalle = !creandoNueva && seleccionada !== null && !editando;
 
   const handleGuardar = (input: CrearEntidadInput) => {
     setMensajeError(null);
@@ -112,6 +124,7 @@ export function EntidadesPage() {
   const handleEditar = (entidad: EntidadResponse) => {
     setSeleccionada(entidad);
     setCreandoNueva(false);
+    setEditando(true);
     setMensajeError(null);
     setTimeout(() => {
       formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -139,12 +152,7 @@ export function EntidadesPage() {
       {
         header: "Zona de riesgo",
         cell: (item: EntidadResponse) => {
-          const zonaIds: string[] =
-            Array.isArray(item.zonasAsignadas) && item.zonasAsignadas.length > 0
-              ? item.zonasAsignadas
-              : item.idZona
-              ? [item.idZona]
-              : [];
+          const zonaIds = idsDeZona(item);
           const nombres = zonaIds
             .map((id: string) => mapaZonas[id]?.nombre ?? id)
             .filter((nombre): nombre is string => Boolean(nombre));
@@ -156,12 +164,7 @@ export function EntidadesPage() {
       {
         header: "Nivel de riesgo",
         cell: (item: EntidadResponse) => {
-          const zonaIds: string[] =
-            Array.isArray(item.zonasAsignadas) && item.zonasAsignadas.length > 0
-              ? item.zonasAsignadas
-              : item.idZona
-              ? [item.idZona]
-              : [];
+          const zonaIds = idsDeZona(item);
           const niveles = zonaIds
             .map((id: string) => {
               const info = mapaZonas[id];
@@ -189,6 +192,45 @@ export function EntidadesPage() {
     return [];
   }, [entidades]);
 
+  /**
+   * Cada zona con su nivel emparejado, para la lista del panel de detalle. El
+   * catalogo de zonas es la fuente preferida; si no resuelve, se cae a lo que
+   * el propio registro trae, que el backend solo manda de la primera zona.
+   */
+  const detalleZonas = useMemo<ZonaConNivel[]>(() => {
+    if (!seleccionada) return [];
+    const nivelDelRegistro = seleccionada.nivelRiesgoDescripcion
+      ? `${seleccionada.nivelRiesgoDescripcion} (${seleccionada.nivelRiesgoValor ?? 0})`
+      : null;
+    const ids = idsDeZona(seleccionada);
+    if (ids.length === 0) {
+      if (!seleccionada.nombreZona) return [];
+      return [
+        {
+          id: seleccionada.idZona ?? seleccionada.nombreZona,
+          nombre: seleccionada.nombreZona,
+          nivelRiesgo: nivelDelRegistro,
+        },
+      ];
+    }
+    return ids.map((id) => {
+      const info = mapaZonas[id];
+      if (info) {
+        return {
+          id,
+          nombre: info.nombre,
+          nivelRiesgo: `${info.nivelRiesgoDescripcion} (${info.nivelRiesgoValor})`,
+        };
+      }
+      const esLaDelRegistro = seleccionada.idZona === id;
+      return {
+        id,
+        nombre: esLaDelRegistro && seleccionada.nombreZona ? seleccionada.nombreZona : id,
+        nivelRiesgo: esLaDelRegistro ? nivelDelRegistro : null,
+      };
+    });
+  }, [seleccionada, mapaZonas]);
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
@@ -202,6 +244,7 @@ export function EntidadesPage() {
           onClick={() => {
             setCreandoNueva(true);
             setSeleccionada(null);
+            setEditando(false);
             setMensajeError(null);
             setTimeout(() => {
               formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -225,6 +268,7 @@ export function EntidadesPage() {
         onRowClick={(entidad) => {
           setSeleccionada(entidad);
           setCreandoNueva(false);
+          setEditando(false);
           setMensajeError(null);
         }}
         onRowDoubleClick={handleEditar}
@@ -233,12 +277,7 @@ export function EntidadesPage() {
           placeholder: "Buscar entidad por nombre, clave CURP o zona...",
           filterFn: (entidad: EntidadResponse, query: string) => {
             const q = normalizar(query);
-            const zonaIds: string[] =
-              Array.isArray(entidad.zonasAsignadas) && entidad.zonasAsignadas.length > 0
-                ? entidad.zonasAsignadas
-                : entidad.idZona
-                ? [entidad.idZona]
-                : [];
+            const zonaIds = idsDeZona(entidad);
             const nombresZonas = zonaIds
               .map((id: string) => mapaZonas[id]?.nombre ?? id)
               .join(" ");
@@ -258,6 +297,14 @@ export function EntidadesPage() {
         }}
       />
 
+      {mostrarDetalle && seleccionada ? (
+        <EntidadDetalle
+          entidad={seleccionada}
+          zonas={detalleZonas}
+          onEditar={() => handleEditar(seleccionada)}
+        />
+      ) : null}
+
       {mostrarFormulario ? (
         <div ref={formRef} className="flex flex-col gap-3 scroll-mt-4">
           <EntidadForm
@@ -265,7 +312,7 @@ export function EntidadesPage() {
             onGuardar={handleGuardar}
             onCancelar={() => {
               setCreandoNueva(false);
-              setSeleccionada(null);
+              setEditando(false);
               setMensajeError(null);
             }}
             isPending={crear.isPending || actualizar.isPending}

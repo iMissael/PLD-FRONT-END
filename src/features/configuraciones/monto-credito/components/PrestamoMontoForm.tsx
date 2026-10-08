@@ -99,7 +99,7 @@ export function PrestamoMontoForm({
 
   return (
     <form onSubmit={handleSubmit} className={`flex flex-col gap-4 p-4 ${card}`}>
-      <h3 className="text-sm font-semibold text-fg">
+      <h3 className="text-sm font-semibold text-foreground">
         {esNuevo
           ? "Nuevo rango de monto"
           : `Editar rango: ${formatearRangoMonto(rango.montoMin, rango.montoMax)}`}
@@ -150,7 +150,7 @@ export function PrestamoMontoForm({
               onChange={(event) =>
                 setForm((prev) => ({ ...prev, sinLimiteSuperior: event.target.checked }))
               }
-              className="rounded border-line accent-accent"
+              className="rounded border-border accent-accent"
             />
             Sin límite superior
           </label>
@@ -189,9 +189,9 @@ export function PrestamoMontoForm({
         </div>
       </div>
 
-      <p className="rounded-md bg-hover px-3 py-2 text-sm text-muted">
+      <p className="rounded-md bg-muted px-3 py-2 text-sm text-muted-foreground">
         Nombre que se guardará:{" "}
-        <span className="font-medium text-fg">
+        <span className="font-medium text-foreground">
           {nombrePrevio ?? "— captura el rango —"}
         </span>
       </p>

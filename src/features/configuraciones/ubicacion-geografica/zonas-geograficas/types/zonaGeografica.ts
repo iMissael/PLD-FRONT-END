@@ -13,13 +13,12 @@
 export type EstatusZona = "A" | "INA" | (string & {});
 
 /** 'E' = zona de entidades (estados/regiones de México), 'P' = zona de países. */
-export type EntidadPais = "E" | "P";
-
 /** Igual a `CrearCatZonaRiesgoRequest`. */
 export interface CrearZonaGeograficaInput {
   nombre: string;
   idNivelRiesgo: number;
-  entidadPais: EntidadPais;
+  /** Agrupa entidades especiales en vez de paises. Columna NOT NULL en la base. */
+  esEntidadEspecial: boolean;
   estatus: EstatusZona;
 }
 
@@ -31,12 +30,10 @@ export interface ZonaGeograficaResponse {
   id: string;
   nombre: string;
   nivelRiesgoId: number;
-  /** Puede venir null en zonas antiguas creadas antes de este campo. */
-  entidadPais: EntidadPais | null;
   estatus: EstatusZona;
   nivelRiesgoValor: number;
   nivelRiesgoDescripcion: string;
-  esEntidadEspecial?: boolean;
+  esEntidadEspecial: boolean;
   totalEntidadesAsignadas: number;
   totalPaisesAsignados: number;
 }

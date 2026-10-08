@@ -5,6 +5,7 @@ import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
 import { Button } from "@/shared/components/ui/CatalogoButton";
 
+import { ExperienciaActividadDetalle } from "../components/ExperienciaActividadDetalle";
 import { ExperienciaActividadForm } from "../components/ExperienciaActividadForm";
 import { ExperienciasActividadTable } from "../components/ExperienciasActividadTable";
 import { useExperienciasActividad } from "../hooks/useExperienciasActividad";
@@ -22,6 +23,8 @@ export function ExperienciasActividadPage() {
     null,
   );
   const [creandoNueva, setCreandoNueva] = useState(false);
+  /** Un clic solo selecciona y muestra el detalle; editar es un paso aparte. */
+  const [editando, setEditando] = useState(false);
   const [mensajeError, setMensajeError] = useState<string | null>(null);
 
   const crear = useCrearExperienciaActividad();
@@ -29,7 +32,8 @@ export function ExperienciasActividadPage() {
   const eliminar = useEliminarExperienciaActividad();
 
   const experienciaEnEdicion = creandoNueva ? null : seleccionada;
-  const mostrarFormulario = creandoNueva || seleccionada !== null;
+  const mostrarFormulario = creandoNueva || (seleccionada !== null && editando);
+  const mostrarDetalle = !creandoNueva && seleccionada !== null && !editando;
 
   const handleGuardar = (input: Parameters<typeof crear.mutate>[0]) => {
     setMensajeError(null);
@@ -96,6 +100,7 @@ export function ExperienciasActividadPage() {
           onClick={() => {
             setCreandoNueva(true);
             setSeleccionada(null);
+            setEditando(false);
             setMensajeError(null);
           }}
         >
@@ -112,14 +117,26 @@ export function ExperienciasActividadPage() {
         onSeleccionar={(experiencia) => {
           setSeleccionada(experiencia);
           setCreandoNueva(false);
+          setEditando(false);
           setMensajeError(null);
         }}
         onDoubleClick={(experiencia) => {
           setSeleccionada(experiencia);
           setCreandoNueva(false);
+          setEditando(true);
           setMensajeError(null);
         }}
       />
+
+      {mostrarDetalle && seleccionada ? (
+        <ExperienciaActividadDetalle
+          experiencia={seleccionada}
+          onEditar={() => {
+            setEditando(true);
+            setMensajeError(null);
+          }}
+        />
+      ) : null}
 
       {mostrarFormulario ? (
         <div className="flex flex-col gap-3">
@@ -128,7 +145,7 @@ export function ExperienciasActividadPage() {
             onGuardar={handleGuardar}
             onCancelar={() => {
               setCreandoNueva(false);
-              setSeleccionada(null);
+              setEditando(false);
               setMensajeError(null);
             }}
             isPending={crear.isPending || actualizar.isPending}

@@ -68,7 +68,7 @@ export function OrigenRecursoForm({
 
   return (
     <form onSubmit={handleSubmit} className={`flex flex-col gap-4 p-4 ${card}`}>
-      <h3 className="text-sm font-semibold text-fg">
+      <h3 className="text-sm font-semibold text-foreground">
         {esNuevo ? "Nuevo origen de recurso" : `Editar origen: ${origen.nombre}`}
       </h3>
 

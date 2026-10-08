@@ -82,8 +82,8 @@ export function OrigenesRecursoPage() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-fg">Origen de recursos</h2>
-          <p className="text-sm text-muted">
+          <h2 className="text-xl font-semibold text-foreground">Origen de recursos</h2>
+          <p className="text-sm text-muted-foreground">
             Procedencia de los recursos del socio y el nivel de riesgo PLD asociado.
           </p>
         </div>
