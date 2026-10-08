@@ -32,18 +32,18 @@ export async function actualizarPais(
   return data;
 }
 
-export async function asignarListasAPais(id: string, listaIds: string[]): Promise<void> {
-  await apiClient.put(`${BASE_PATH}/${id}/listas`, { listaIds });
+export async function asignarZonasAPais(id: string, zonaIds: string[]): Promise<void> {
+  await apiClient.put(`${BASE_PATH}/${id}/zonas`, { zonaIds });
 }
 
 /**
- * IDs reales de las listas de riesgo de un país. `PaisResponse.listasAsignadas` puede
+ * IDs reales de las zonas de un país. `PaisResponse.zonasAsignadas` puede
  * traer solo etiquetas para mostrar en la tabla; para precargar el
  * multi-select de edición se usa este endpoint dedicado, que el backend
  * documenta explícitamente como una lista de IDs.
  */
-export async function obtenerListaIdsDePais(id: string): Promise<string[]> {
-  const { data } = await apiClient.get<string[]>(`${BASE_PATH}/${id}/listas`);
+export async function obtenerZonaIdsDePais(id: string): Promise<string[]> {
+  const { data } = await apiClient.get<string[]>(`${BASE_PATH}/${id}/zonas`);
   return data;
 }
 

@@ -1,8 +1,8 @@
 /**
  * Tipos del feature `paises`, a partir de `PaisController` / sus DTOs en
  * `denuncias-app`. A diferencia de la pantalla legacy (que usa un solo
- * combo de "Zona"), el backend modela `listaIds` como una lista — un país
- * puede estar en varias listas de riesgo — así que el front usa un
+ * combo de "Zona"), el backend modela `zonaIds` como una lista — un país
+ * puede pertenecer a varias zonas de riesgo — así que el front usa un
  * multi-select en vez del combo simple del sistema de escritorio.
  */
 
@@ -12,7 +12,7 @@ export interface CrearPaisInput {
   codigoIso: string;
   nombre: string;
   nacionalidad: string;
-  listaIds: string[];
+  zonaIds: string[];
 }
 
 /** Igual a `ActualizarCatPaisRequest`. */
@@ -21,7 +21,7 @@ export interface ActualizarPaisInput {
   codigoIso: string;
   nombre: string;
   nacionalidad: string;
-  listaIds: string[];
+  zonaIds: string[];
 }
 
 /** Igual a `CatPaisResponse`. */
@@ -31,7 +31,7 @@ export interface PaisResponse {
   codigoIso: string;
   nombre: string;
   nacionalidad: string;
-  listasAsignadas: string[];
+  zonasAsignadas: string[];
   createdAt: string;
   updatedAt: string;
 }

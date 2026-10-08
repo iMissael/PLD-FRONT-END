@@ -23,12 +23,8 @@ export function useActualizarPais() {
       actualizarPais(id, input),
     onSuccess: (_data, { id }) => {
       queryClient.invalidateQueries({ queryKey: paisesKeys.all });
-<<<<<<< HEAD
-      queryClient.invalidateQueries({ queryKey: paisesKeys.listasDePais(id) });
-=======
       queryClient.invalidateQueries({ queryKey: listasPaisesKeys.all });
       queryClient.invalidateQueries({ queryKey: listasPaisesKeys.listasDePais(id) });
->>>>>>> origin/develop
     },
   });
 }

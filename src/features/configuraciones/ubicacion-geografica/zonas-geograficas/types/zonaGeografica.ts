@@ -32,14 +32,8 @@ export interface ZonaGeograficaResponse {
   nivelRiesgoId: number | null;
   esEntidadEspecial: boolean;
   estatus: EstatusZona;
-<<<<<<< HEAD
   nivelRiesgoValor: number | null;
   nivelRiesgoDescripcion: string | null;
-=======
-  nivelRiesgoValor: number;
-  nivelRiesgoDescripcion: string;
-  esEntidadEspecial?: boolean;
->>>>>>> origin/develop
   totalEntidadesAsignadas: number;
 }
 

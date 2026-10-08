@@ -18,13 +18,14 @@ import {
 import { NivelRiesgoSelect } from "../../niveles-riesgo/components/NivelRiesgoSelect";
 import type {
   CrearZonaGeograficaInput,
+  EntidadPais,
   EstatusZona,
   ZonaGeograficaResponse,
 } from "../types/zonaGeografica";
 
 interface ZonaFormProps {
-  /** null = nueva zona especial. */
   zona: ZonaGeograficaResponse | null;
+  defaultTipo?: EntidadPais;
   onGuardar: (input: CrearZonaGeograficaInput) => void;
   onCancelar: () => void;
   onEliminar?: () => void;
@@ -35,25 +36,35 @@ interface ZonaFormProps {
 interface FormState {
   nombre: string;
   nivelRiesgoId: number | "";
+  entidadPais: EntidadPais;
   estatus: EstatusZona;
 }
 
-function aFormState(zona: ZonaGeograficaResponse | null): FormState {
-  return zona
-    ? { nombre: zona.nombre, nivelRiesgoId: zona.nivelRiesgoId ?? "", estatus: zona.estatus }
-    : { nombre: "", nivelRiesgoId: "", estatus: "A" };
+function aFormState(
+  zona: ZonaGeograficaResponse | null,
+  defaultTipo: EntidadPais = "P",
+): FormState {
+  if (!zona) {
+    return {
+      nombre: "",
+      nivelRiesgoId: "",
+      entidadPais: defaultTipo,
+      estatus: "A",
+    };
+  }
+  return {
+    nombre: zona.nombre,
+    nivelRiesgoId: zona.nivelRiesgoId,
+    entidadPais: zona.entidadPais ?? defaultTipo,
+    estatus: zona.estatus,
+  };
 }
 
 /**
- * Las zonas principales (ZONA 1, 2 y 3 - NACIONAL) son fijas: solo se edita su
- * nivel de riesgo. Lo que se crea son zonas especiales (p. ej. ZONA
- * FRONTERIZA), que no tienen nivel: cada entidad conserva el de su zona
- * principal. Las entidades se asignan desde la pantalla de Entidades.
+ * Formulario de alta/edición de una zona geográfica. La asignación de
+ * entidades/países vive aparte (ZonaAsignaciones), porque el backend la
+ * expone como sub-recursos independientes (`PUT /{id}/entidades|paises`).
  */
-<<<<<<< HEAD
-export function ZonaForm({ zona, onGuardar, onCancelar, isPending }: ZonaFormProps) {
-  const [form, setForm] = useState<FormState>(() => aFormState(zona));
-=======
 export function ZonaForm({
   zona,
   defaultTipo = "P",
@@ -64,42 +75,26 @@ export function ZonaForm({
   isDeleting,
 }: ZonaFormProps) {
   const [form, setForm] = useState<FormState>(() => aFormState(zona, defaultTipo));
->>>>>>> origin/develop
 
   useEffect(() => {
-    setForm(aFormState(zona));
-  }, [zona]);
+    setForm(aFormState(zona, defaultTipo));
+  }, [zona, defaultTipo]);
 
-  const esPrincipal = zona !== null && !zona.esEntidadEspecial;
+  const esNueva = zona === null;
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    if (esPrincipal && form.nivelRiesgoId === "") return;
+    if (form.nivelRiesgoId === "") return;
     onGuardar({
       nombre: form.nombre.trim(),
-      esEntidadEspecial: !esPrincipal,
-      idNivelRiesgo: esPrincipal && form.nivelRiesgoId !== "" ? form.nivelRiesgoId : null,
-      estatus: esPrincipal ? "A" : form.estatus,
+      idNivelRiesgo: form.nivelRiesgoId,
+      entidadPais: form.entidadPais,
+      estatus: form.estatus,
     });
   };
 
   return (
     <form onSubmit={handleSubmit} className={`flex flex-col gap-4 p-4 ${card}`}>
-<<<<<<< HEAD
-      <div>
-        <h3 className="text-sm font-semibold text-foreground">
-          {zona === null
-            ? "Nueva zona especial"
-            : esPrincipal
-              ? `Zona principal: ${zona.nombre}`
-              : `Editar zona especial: ${zona.nombre}`}
-        </h3>
-        <p className="text-xs text-muted-foreground">
-          {esPrincipal
-            ? "Las zonas principales son fijas: solo se puede cambiar su nivel de riesgo."
-            : "Una zona especial no tiene nivel: cada entidad conserva el de su zona principal."}
-        </p>
-=======
       <div className="flex items-center justify-between border-b border-border/60 pb-3">
         <h3 className="text-sm font-semibold text-foreground">
           {esNueva ? "Nueva zona geográfica" : `Editar zona: ${zona.nombre}`}
@@ -139,58 +134,25 @@ export function ZonaForm({
             </AlertDialogContent>
           </AlertDialog>
         )}
->>>>>>> origin/develop
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        {esPrincipal ? (
-          <div className="flex flex-col gap-1">
-            <label htmlFor="nivelRiesgo" className={label}>
-              Nivel de riesgo
-            </label>
-            <NivelRiesgoSelect
-              id="nivelRiesgo"
-              required
-              value={form.nivelRiesgoId}
-              onChange={(id) => setForm((prev) => ({ ...prev, nivelRiesgoId: id }))}
-            />
-          </div>
-        ) : (
-          <>
-            <div className="flex flex-col gap-1">
-              <label htmlFor="nombre" className={label}>
-                Nombre
-              </label>
-              <input
-                id="nombre"
-                type="text"
-                required
-                value={form.nombre}
-                onChange={(event) => setForm((prev) => ({ ...prev, nombre: event.target.value }))}
-                className={field}
-              />
-            </div>
+        <div className="flex flex-col gap-1">
+          <label htmlFor="nombre" className={label}>
+            Nombre
+          </label>
+          <input
+            id="nombre"
+            type="text"
+            required
+            value={form.nombre}
+            onChange={(event) =>
+              setForm((prev) => ({ ...prev, nombre: event.target.value }))
+            }
+            className={field}
+          />
+        </div>
 
-<<<<<<< HEAD
-            <div className="flex flex-col gap-1">
-              <label htmlFor="estatus" className={label}>
-                Estatus
-              </label>
-              <select
-                id="estatus"
-                value={form.estatus}
-                onChange={(event) =>
-                  setForm((prev) => ({ ...prev, estatus: event.target.value as EstatusZona }))
-                }
-                className={field}
-              >
-                <option value="A">Activa</option>
-                <option value="B">Inactiva</option>
-              </select>
-            </div>
-          </>
-        )}
-=======
         <div className="flex flex-col gap-1">
           <label htmlFor="nivelRiesgo" className={label}>
             Nivel de riesgo
@@ -219,7 +181,6 @@ export function ZonaForm({
             <option value="INA">Inactiva</option>
           </select>
         </div>
->>>>>>> origin/develop
       </div>
 
       <div className="flex justify-end gap-2 border-t border-border/40 pt-3">

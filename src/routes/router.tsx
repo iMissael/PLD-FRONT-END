@@ -180,21 +180,25 @@ export const router = createBrowserRouter([
                     path: "configuraciones/ubicacion-geografica/zonas-geograficas",
                     element: <ZonasGeograficasPage />,
                   },
-                  {
-                    path: "configuraciones/ubicacion-geografica/zonas-geograficas/entidades",
-                    element: <ZonasGeograficasPage />,
-                  },
-                  // Rutas anteriores: los paises ya no tienen zonas, sino listas de riesgo.
+                  // Alias con prop `tipo` (compatibilidad con enlaces antiguos).
                   {
                     path: "configuraciones/ubicacion-geografica/zonas-geograficas/paises",
-                    element: <Navigate to="../../listas-paises" relative="path" replace />,
+                    element: <ZonasGeograficasPage tipo="P" />,
+                  },
+                  {
+                    path: "configuraciones/ubicacion-geografica/zonas-geograficas/entidades",
+                    element: <ZonasGeograficasPage tipo="E" />,
                   },
                   {
                     path: "configuraciones/ubicacion-geografica/zonas-paises",
-                    element: <Navigate to="../listas-paises" relative="path" replace />,
+                    element: <ZonasGeograficasPage tipo="P" />,
                   },
                   {
                     path: "configuraciones/ubicacion-geografica/zonas-entidades",
+                    element: <ZonasGeograficasPage tipo="E" />,
+                  },
+                  {
+                    path: "configuraciones/ubicacion-geografica/zonas-riesgo",
                     element: <ZonasGeograficasPage />,
                   },
                   {

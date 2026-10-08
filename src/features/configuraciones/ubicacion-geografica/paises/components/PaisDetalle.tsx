@@ -10,36 +10,15 @@ export interface ItemListaDetalle {
 
 interface PaisDetalleProps {
   pais: PaisResponse;
-<<<<<<< HEAD
-  nombresListas: string[];
-=======
   listas: ItemListaDetalle[];
   nivelRiesgo?: { nivelRiesgoDescripcion: string; nivelRiesgoValor: number } | null;
->>>>>>> origin/develop
   onEditar: () => void;
 }
 
 /**
-<<<<<<< HEAD
- * Panel de detalle de un país seleccionado, replicando el bloque inferior
- * de la pantalla legacy "Configuración de Países" (Clave / País / Zona +
- * botón de edición). Es de solo lectura; la edición completa (incluyendo
- * tipo, nacionalidad, código ISO y las listas de riesgo) se hace en `PaisForm`, que se
- * abre con el botón de lápiz.
- *
- * Usa el ámbar de la guía (`warning`) porque es un panel de atención: marca
- * el registro sobre el que se va a actuar, no un estado normal de lectura.
- */
-export function PaisDetalle({ pais, nombresListas, onEditar }: PaisDetalleProps) {
-  const etiqueta = "w-16 shrink-0 text-sm font-medium text-warning";
-  const valor =
-    "flex-1 rounded-md border border-warning/40 bg-card px-3 py-1.5 text-sm text-foreground";
-
-=======
  * Panel de detalle estandarizado de un país seleccionado con su nivel de riesgo único y sus listas asignadas.
  */
 export function PaisDetalle({ pais, listas, nivelRiesgo, onEditar }: PaisDetalleProps) {
->>>>>>> origin/develop
   return (
     <div className={`flex flex-col gap-4 p-4 ${card}`}>
       <div className="flex items-center justify-between">
@@ -84,16 +63,9 @@ export function PaisDetalle({ pais, listas, nivelRiesgo, onEditar }: PaisDetalle
         </div>
       </div>
 
-<<<<<<< HEAD
-      <div className="flex items-center gap-2">
-        <span className={etiqueta}>Listas de riesgo</span>
-        <span className={valor}>
-          {nombresListas.length > 0 ? nombresListas.join(", ") : "En ninguna lista"}
-=======
       <div className="flex flex-col gap-1.5 border-t border-border pt-3">
         <span className="text-xs font-medium text-muted-foreground">
           Listas de riesgo asignadas
->>>>>>> origin/develop
         </span>
         {listas.length > 0 ? (
           <div className="flex flex-wrap gap-2">

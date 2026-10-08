@@ -3,11 +3,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/shared/components/ui/CatalogoButton";
 import { card, field, label } from "@/shared/components/ui/styles";
 
-<<<<<<< HEAD
-import { useListaIdsDePais } from "../hooks/usePaises";
-=======
 import { useListasDePais } from "../../listas-paises/hooks/useListasPaises";
->>>>>>> origin/develop
 import type { ActualizarPaisInput, PaisResponse } from "../types/pais";
 import { ListasMultiSelect } from "./ListasMultiSelect";
 
@@ -24,7 +20,7 @@ interface FormState {
   codigoIso: string;
   nombre: string;
   nacionalidad: string;
-  listaIds: string[];
+  zonaIds: string[];
 }
 
 function aFormState(pais: PaisResponse): FormState {
@@ -34,36 +30,18 @@ function aFormState(pais: PaisResponse): FormState {
     codigoIso: pais.codigoIso ?? "",
     nombre: pais.nombre ?? "",
     nacionalidad: pais.nacionalidad ?? "",
-<<<<<<< HEAD
-    listaIds: pais.listasAsignadas,
-=======
     zonaIds: asignadas,
->>>>>>> origin/develop
   };
 }
 
 export function PaisForm({ pais, onGuardar, onCancelar, isPending }: PaisFormProps) {
   const [form, setForm] = useState<FormState>(() => aFormState(pais));
-<<<<<<< HEAD
-  const { data: listaIdsReales } = useListaIdsDePais(pais.idPais);
-=======
   const { data: listasAsignadas } = useListasDePais(pais.idPais);
->>>>>>> origin/develop
 
   useEffect(() => {
     setForm(aFormState(pais));
   }, [pais]);
 
-<<<<<<< HEAD
-  // En cuanto llegan los IDs reales de lista (endpoint dedicado), reemplazan
-  // el valor inicial tomado de `listasAsignadas`, que puede no ser confiable
-  // como identificador según cómo lo arme el backend.
-  useEffect(() => {
-    if (listaIdsReales) {
-      setForm((prev) => ({ ...prev, listaIds: listaIdsReales }));
-    }
-  }, [listaIdsReales]);
-=======
   useEffect(() => {
     if (listasAsignadas && Array.isArray(listasAsignadas)) {
       setForm((prev) => ({
@@ -72,7 +50,6 @@ export function PaisForm({ pais, onGuardar, onCancelar, isPending }: PaisFormPro
       }));
     }
   }, [listasAsignadas]);
->>>>>>> origin/develop
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -81,7 +58,7 @@ export function PaisForm({ pais, onGuardar, onCancelar, isPending }: PaisFormPro
       codigoIso: form.codigoIso.trim().toUpperCase(),
       nombre: form.nombre.trim(),
       nacionalidad: form.nacionalidad.trim(),
-      listaIds: form.listaIds,
+      zonaIds: form.zonaIds,
     });
   };
 
@@ -158,17 +135,10 @@ export function PaisForm({ pais, onGuardar, onCancelar, isPending }: PaisFormPro
         </div>
 
         <div className="flex flex-col gap-1 sm:col-span-2">
-<<<<<<< HEAD
-          <span className={label}>Listas de riesgo</span>
-          <ListasMultiSelect
-            value={form.listaIds}
-            onChange={(listaIds) => setForm((prev) => ({ ...prev, listaIds }))}
-=======
           <span className={label}>Listas de riesgo asignadas</span>
           <ListasMultiSelect
             value={form.zonaIds}
             onChange={(zonaIds) => setForm((prev) => ({ ...prev, zonaIds }))}
->>>>>>> origin/develop
           />
         </div>
       </div>

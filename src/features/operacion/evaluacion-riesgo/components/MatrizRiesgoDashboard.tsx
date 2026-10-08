@@ -77,54 +77,6 @@ function NivelBadge({
   );
 }
 
-<<<<<<< HEAD
-=======
-function CampoCopiable({
-  etiqueta,
-  valor,
-  mono = false,
-  icono: Icono = Copy,
-}: {
-  etiqueta: string;
-  valor: string;
-  mono?: boolean;
-  icono?: typeof Copy;
-}) {
-  return (
-    <div className="space-y-1">
-      <p
-        className={cn(
-          "text-muted-foreground",
-          mono
-            ? "text-[11px] font-semibold tracking-wider uppercase"
-            : "text-[11px] font-medium",
-        )}
-      >
-        {etiqueta}
-      </p>
-      <div className="flex items-center justify-between gap-2 rounded-lg border border-border bg-muted/40 px-3 py-2">
-        <span
-          className={cn(
-            "truncate text-foreground",
-            mono ? "font-mono font-bold tracking-wider" : "font-bold",
-          )}
-        >
-          {valor}
-        </span>
-        <button
-          type="button"
-          onClick={() => copiar(valor)}
-          className="shrink-0 text-muted-foreground transition hover:text-primary"
-          aria-label={`Copiar ${etiqueta}`}
-        >
-          <Icono className="size-3.5" />
-        </button>
-      </div>
-    </div>
-  );
-}
-
->>>>>>> origin/develop
 function FilaSubfactor({
   descripcion,
   valor,
@@ -446,11 +398,7 @@ export function MatrizRiesgoDashboard({
               <span
                 className={cn(
                   "rounded px-2 py-0.5 text-xs font-bold tracking-wide uppercase",
-<<<<<<< HEAD
                   nivelAsignado?.solido ?? "bg-gray-400 text-white",
-=======
-                  nivelGeneral?.solido ?? "bg-muted text-foreground",
->>>>>>> origin/develop
                 )}
               >
                 {etiquetaAsignada}
@@ -490,7 +438,6 @@ export function MatrizRiesgoDashboard({
       </header>
 
       <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
-<<<<<<< HEAD
         <ExpedienteClienteAside
           cliente={cliente}
           cargando={cargandoSocio}
@@ -498,58 +445,6 @@ export function MatrizRiesgoDashboard({
           valorBuscador={cliente?.referencia ?? ""}
           onSeleccionarSocio={onSeleccionarSocio}
         />
-=======
-        <aside className="w-full shrink-0 overflow-y-auto border-b border-border bg-card lg:w-[300px] lg:rounded-bl-lg lg:border-r lg:border-b-0">
-          <div className="flex items-center justify-between border-b border-border bg-muted/40 px-4 py-3 text-foreground">
-            <span className="flex items-center gap-2 text-sm font-semibold tracking-wide">
-              <span className="rounded bg-primary/10 p-1 text-primary">
-                <User className="size-4" />
-              </span>
-              Expediente del Cliente
-            </span>
-            {cliente && (
-              <span className="rounded border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-[11px] font-semibold text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300">
-                Activo
-              </span>
-            )}
-          </div>
-
-          <div className="space-y-4 p-4 text-xs">
-            <div className="space-y-2 rounded-xl border border-border bg-muted/30 p-3">
-              <p className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
-                Referencia / No. Cliente / Nombre
-              </p>
-              <BuscadorSocios
-                variante="panel"
-                valor={cliente?.referencia ?? ""}
-                placeholder="Elige un socio…"
-                onSeleccionar={onSeleccionarSocio}
-              />
-            </div>
-
-            {cargandoSocio && (
-              <div className="space-y-3" aria-label="Cargando expediente">
-                <Skeleton className="h-12 w-full" />
-                <Skeleton className="h-12 w-full" />
-                <Skeleton className="h-12 w-full" />
-              </div>
-            )}
-            {!cargandoSocio && errorSocio && (
-              <p className="text-sm text-destructive">
-                No se encontraron datos de este socio.
-              </p>
-            )}
-            {!cargandoSocio && !errorSocio && cliente && (
-              <ExpedienteDelCliente cliente={cliente} />
-            )}
-            {!cargandoSocio && !errorSocio && !cliente && (
-              <p className="text-sm text-muted-foreground">
-                Usa la lupa para ver los socios del sistema.
-              </p>
-            )}
-          </div>
-        </aside>
->>>>>>> origin/develop
 
         <section className="flex min-h-0 min-w-0 flex-1 flex-col bg-muted/10 lg:rounded-br-lg">
           <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border bg-card px-6 py-4">

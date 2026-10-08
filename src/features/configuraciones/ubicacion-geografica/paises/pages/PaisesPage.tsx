@@ -5,10 +5,6 @@ import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
 import { Button } from "@/shared/components/ui/CatalogoButton";
 
-<<<<<<< HEAD
-import { useListasPaisesSelect } from "../../listas-paises/hooks/useListasPaises";
-import { PaisDetalle } from "../components/PaisDetalle";
-=======
 import {
   useListasDePais,
   useListasPaisesSelect,
@@ -16,7 +12,6 @@ import {
 } from "../../listas-paises/hooks/useListasPaises";
 import type { PaisAsignadoResponse } from "../../listas-paises/types/listaPais";
 import { PaisDetalle, type ItemListaDetalle } from "../components/PaisDetalle";
->>>>>>> origin/develop
 import { PaisForm } from "../components/PaisForm";
 import { PaisesTable, type InfoListaPais, type InfoRiesgoPais } from "../components/PaisesTable";
 import { usePaises } from "../hooks/usePaises";
@@ -26,29 +21,15 @@ import type { ActualizarPaisInput, PaisResponse } from "../types/pais";
 export function PaisesPage() {
   const { data: paisesBackend, isLoading } = usePaises();
   const { data: listas } = useListasPaisesSelect();
-<<<<<<< HEAD
-
-  const nombresDeLista = useMemo(() => {
-    const mapa: Record<string, string> = {};
-    const listasRiesgo = Array.isArray(listas)
-=======
   const { data: paisesConListas } = useTodosLosPaisesConListas();
 
   const mapaListas = useMemo(() => {
     const mapa: Record<string, InfoListaPais> = {};
     const listaItems = Array.isArray(listas)
->>>>>>> origin/develop
       ? listas
       : Array.isArray((listas as unknown as { contenido?: typeof listas })?.contenido)
       ? ((listas as unknown as { contenido: typeof listas }).contenido ?? [])
       : [];
-<<<<<<< HEAD
-    listasRiesgo.forEach((lista) => {
-      mapa[lista.id] = lista.nombre;
-    });
-    return mapa;
-  }, [listas]);
-=======
     listaItems.forEach((lista) => {
       mapa[lista.id] = {
         nombre: lista.nombre,
@@ -83,7 +64,6 @@ export function PaisesPage() {
     });
     return mapa;
   }, [paisesConListas]);
->>>>>>> origin/develop
 
   const [seleccionado, setSeleccionado] = useState<PaisResponse | null>(null);
   const [editando, setEditando] = useState(false);
@@ -138,13 +118,6 @@ export function PaisesPage() {
     });
   };
 
-<<<<<<< HEAD
-  const nombresListasSeleccionado = seleccionado
-    ? seleccionado.listasAsignadas
-        .map((id) => nombresDeLista[id])
-        .filter((nombre): nombre is string => Boolean(nombre))
-    : [];
-=======
   const handleEditar = (pais: PaisResponse) => {
     setSeleccionado(pais);
     setEditando(true);
@@ -201,7 +174,6 @@ export function PaisesPage() {
     }
     return null;
   }, [seleccionado, mapaRiesgoPais, listasDetalleSeleccionado]);
->>>>>>> origin/develop
 
   return (
     <div className="flex flex-col gap-6">
@@ -209,11 +181,7 @@ export function PaisesPage() {
         <h2 className="text-xl font-semibold text-foreground">Configuración de países</h2>
         <p className="text-sm text-muted-foreground">
           Consulta el catálogo de países y edita la nacionalidad, el código ISO y las
-<<<<<<< HEAD
-          listas de riesgo en que está.
-=======
           listas de riesgo asociadas.
->>>>>>> origin/develop
         </p>
       </div>
 
@@ -223,12 +191,8 @@ export function PaisesPage() {
         paises={paisesBackend}
         isLoading={isLoading}
         seleccionadoId={seleccionado?.idPais ?? null}
-<<<<<<< HEAD
-        nombresDeLista={nombresDeLista}
-=======
         mapaListas={mapaListas}
         mapaRiesgoPais={mapaRiesgoPais}
->>>>>>> origin/develop
         onSeleccionar={(pais) => {
           setSeleccionado(pais);
           setEditando(false);
@@ -240,14 +204,9 @@ export function PaisesPage() {
       {seleccionado && !editando ? (
         <PaisDetalle
           pais={seleccionado}
-<<<<<<< HEAD
-          nombresListas={nombresListasSeleccionado}
-          onEditar={() => setEditando(true)}
-=======
           listas={listasDetalleSeleccionado}
           nivelRiesgo={riesgoSeleccionado}
           onEditar={() => handleEditar(seleccionado)}
->>>>>>> origin/develop
         />
       ) : null}
 

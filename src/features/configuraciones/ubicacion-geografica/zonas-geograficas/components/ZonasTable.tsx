@@ -24,18 +24,6 @@ export function ZonasTable({
   onVer,
   onDoubleClick,
 }: ZonasTableProps) {
-<<<<<<< HEAD
-  const listaZonas = useMemo(
-    () =>
-      Array.isArray(zonas)
-        ? zonas
-        : ((zonas as unknown as { contenido?: ZonaGeograficaResponse[] })?.contenido ?? []),
-    [zonas],
-  );
-
-  const columns = useMemo<ColumnDef<ZonaGeograficaResponse>[]>(
-    () => [
-=======
   const listaZonas = useMemo(() => {
     if (!zonas) return [];
     if (Array.isArray(zonas)) return zonas;
@@ -47,7 +35,6 @@ export function ZonasTable({
 
   const columns = useMemo<ColumnDef<ZonaGeograficaResponse>[]>(() => {
     return [
->>>>>>> origin/develop
       {
         header: "Nombre",
         className: table.cellStrong,
@@ -66,26 +53,14 @@ export function ZonasTable({
         ),
       },
       {
-        header: "Tipo",
-        cell: (zona) => <span>{zona.esEntidadEspecial ? "Especial" : "Principal"}</span>,
-      },
-      {
-<<<<<<< HEAD
         header: "Nivel de riesgo",
-        cell: (zona) =>
-          zona.esEntidadEspecial ? (
-            <span className="text-muted-foreground">El de la zona principal de cada entidad</span>
-          ) : (
-            <span>
-              {zona.nivelRiesgoDescripcion ?? "—"}
-              {zona.nivelRiesgoValor != null ? ` (${zona.nivelRiesgoValor})` : ""}
-            </span>
-          ),
+        cell: (zona) => (
+          <span>
+            {zona.nivelRiesgoDescripcion} ({zona.nivelRiesgoValor})
+          </span>
+        ),
       },
       {
-        header: "Entidades",
-        accessorKey: "totalEntidadesAsignadas",
-=======
         header: "Entidad especial",
         cell: (zona) => (
           <span className="text-xs text-muted-foreground">
@@ -99,7 +74,6 @@ export function ZonasTable({
         headerClassName: "text-right",
         className: "text-right font-mono",
         cell: (zona) => Number(zona.totalEntidadesAsignadas ?? 0).toLocaleString("es-MX"),
->>>>>>> origin/develop
       },
       {
         header: "Estatus",
@@ -127,20 +101,11 @@ export function ZonasTable({
           </Button>
         ),
       },
-<<<<<<< HEAD
-    ],
-    [verId, onVer],
-  );
-
-  return (
-    <DataTable<ZonaGeograficaResponse>
-=======
     ];
   }, [verId, onVer, onSeleccionar]);
 
   return (
     <DataTable
->>>>>>> origin/develop
       data={listaZonas}
       columns={columns}
       isLoading={isLoading}
@@ -151,14 +116,6 @@ export function ZonasTable({
       onRowDoubleClick={onDoubleClick}
       doubleClickTitle="Doble clic para ver las entidades de esta zona"
       search={{
-<<<<<<< HEAD
-        placeholder: "Buscar zona por nombre, tipo, nivel o estatus...",
-        filterFn: (zona, term) =>
-          zona.nombre.toLowerCase().includes(term) ||
-          (zona.esEntidadEspecial ? "especial" : "principal").includes(term) ||
-          (zona.nivelRiesgoDescripcion?.toLowerCase().includes(term) ?? false) ||
-          (zona.estatus === "A" ? "activa" : "inactiva").includes(term),
-=======
         placeholder: "Buscar zona de riesgo...",
         filterFn: (zona, term) => {
           const t = term.toLowerCase();
@@ -167,7 +124,6 @@ export function ZonasTable({
             zona.nivelRiesgoDescripcion.toLowerCase().includes(t)
           );
         },
->>>>>>> origin/develop
       }}
       pagination={{
         mode: "client",

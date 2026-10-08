@@ -7,24 +7,12 @@ interface ListasMultiSelectProps {
 }
 
 /**
-<<<<<<< HEAD
- * Multi-select de listas de riesgo (cooperante, GAFI, paraísos fiscales...) para el formulario de Países. La
- * pantalla legacy de escritorio usa un combo de una sola zona, pero el DTO
- * real (`listaIds: List<String>`) permite varias — así que aquí se replica
- * el comportamiento real del backend en vez del combo simple del sistema
- * anterior.
-=======
  * Multi-select de listas de países para el formulario de Países.
->>>>>>> origin/develop
  */
 export function ListasMultiSelect({ value, onChange, disabled }: ListasMultiSelectProps) {
   const { data: listas, isLoading } = useListasPaisesSelect();
 
-<<<<<<< HEAD
-  const listasRiesgo = Array.isArray(listas)
-=======
   const listaItems = Array.isArray(listas)
->>>>>>> origin/develop
     ? listas
     : Array.isArray((listas as unknown as { contenido?: typeof listas })?.contenido)
     ? ((listas as unknown as { contenido: typeof listas }).contenido ?? [])
@@ -35,20 +23,12 @@ export function ListasMultiSelect({ value, onChange, disabled }: ListasMultiSele
   };
 
   if (isLoading) {
-<<<<<<< HEAD
-    return <p className="text-sm text-muted-foreground">Cargando listas...</p>;
-=======
     return <p className="text-sm text-muted-foreground">Cargando listas de países...</p>;
->>>>>>> origin/develop
   }
 
   return (
     <div className="max-h-40 overflow-y-auto rounded-md border border-border p-2">
-<<<<<<< HEAD
-      {listasRiesgo.map((lista) => (
-=======
       {listaItems.map((lista) => (
->>>>>>> origin/develop
         <label
           key={lista.id}
           className="flex items-center gap-2 rounded px-2 py-1 text-sm text-foreground hover:bg-muted"
@@ -60,14 +40,6 @@ export function ListasMultiSelect({ value, onChange, disabled }: ListasMultiSele
             onChange={() => toggle(lista.id)}
             className="rounded border-border accent-accent"
           />
-<<<<<<< HEAD
-          {lista.nombre}
-        </label>
-      ))}
-      {listasRiesgo.length === 0 ? (
-        <p className="px-2 py-1 text-sm text-muted-foreground">
-          No hay listas registradas.
-=======
           <span>{lista.nombre}</span>
           <span className="text-xs text-muted-foreground">({lista.nivelRiesgoDescripcion})</span>
         </label>
@@ -75,7 +47,6 @@ export function ListasMultiSelect({ value, onChange, disabled }: ListasMultiSele
       {listaItems.length === 0 ? (
         <p className="px-2 py-1 text-sm text-muted-foreground">
           No hay listas de países registradas.
->>>>>>> origin/develop
         </p>
       ) : null}
     </div>
