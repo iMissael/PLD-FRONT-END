@@ -67,6 +67,13 @@ export const TurnstileWidget = forwardRef<
     );
   });
 
+  const onSuccessRef = useRef(onSuccess);
+  onSuccessRef.current = onSuccess;
+  const onErrorRef = useRef(onError);
+  onErrorRef.current = onError;
+  const onExpireRef = useRef(onExpire);
+  onExpireRef.current = onExpire;
+
   useImperativeHandle(ref, () => ({
     reset: () => {
       if (window.turnstile && widgetIdRef.current) {
@@ -99,13 +106,13 @@ export const TurnstileWidget = forwardRef<
       };
       script.onerror = (e) => {
         console.error("Error al cargar Cloudflare Turnstile script", e);
-        onError?.(e);
+        onErrorRef.current?.(e);
       };
       document.head.appendChild(script);
     } else {
       script.addEventListener("load", () => setScriptLoaded(true));
     }
-  }, [onError]);
+  }, []);
 
   // Renderizado del widget Turnstile
   useEffect(() => {
@@ -127,22 +134,22 @@ export const TurnstileWidget = forwardRef<
         action,
         theme,
         callback: (token: string) => {
-          onSuccess(token);
+          onSuccessRef.current?.(token);
         },
         "error-callback": (err) => {
-          onError?.(err);
+          onErrorRef.current?.(err);
         },
         "expired-callback": () => {
-          onExpire?.();
+          onExpireRef.current?.();
         },
         "timeout-callback": () => {
-          onExpire?.();
+          onExpireRef.current?.();
         },
       });
       widgetIdRef.current = id;
     } catch (e) {
       console.error("Error al renderizar Turnstile widget", e);
-      onError?.(e);
+      onErrorRef.current?.(e);
     }
 
     return () => {
@@ -155,7 +162,7 @@ export const TurnstileWidget = forwardRef<
         widgetIdRef.current = null;
       }
     };
-  }, [scriptLoaded, siteKey, action, theme, onSuccess, onError, onExpire]);
+  }, [scriptLoaded, siteKey, action, theme]);
 
   return (
     <div
