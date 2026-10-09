@@ -17,6 +17,7 @@ export interface CrearZonaGeograficaInput {
   nombre: string;
   /** Solo en zonas principales; una especial no tiene nivel. */
   idNivelRiesgo: number | null;
+  /** Agrupa entidades especiales en vez de paises. Columna NOT NULL en la base. */
   esEntidadEspecial: boolean;
   estatus: EstatusZona;
 }

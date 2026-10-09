@@ -82,8 +82,8 @@ export function DestinosRecursoPage() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-fg">Destino de recursos</h2>
-          <p className="text-sm text-muted">
+          <h2 className="text-xl font-semibold text-foreground">Destino de recursos</h2>
+          <p className="text-sm text-muted-foreground">
             Uso que el socio dará a los recursos y el nivel de riesgo PLD asociado.
           </p>
         </div>

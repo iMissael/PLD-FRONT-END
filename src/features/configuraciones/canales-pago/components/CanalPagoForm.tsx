@@ -71,7 +71,7 @@ export function CanalPagoForm({
 
   return (
     <form onSubmit={handleSubmit} className={`flex flex-col gap-4 p-4 ${card}`}>
-      <h3 className="text-sm font-semibold text-fg">
+      <h3 className="text-sm font-semibold text-foreground">
         {esNuevo ? "Nuevo canal de pago" : `Editar canal: ${canal.nombre}`}
       </h3>
 

@@ -49,8 +49,8 @@ export function HistorialesCrediticiosPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="text-xl font-semibold text-fg">Historial crediticio</h2>
-        <p className="text-sm text-muted">
+        <h2 className="text-xl font-semibold text-foreground">Historial crediticio</h2>
+        <p className="text-sm text-muted-foreground">
           Ajusta el nivel de riesgo PLD asociado a cada caso. El catálogo es fijo: no se
           dan de alta ni de baja registros desde esta vista.
         </p>

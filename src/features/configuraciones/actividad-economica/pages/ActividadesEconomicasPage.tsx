@@ -5,6 +5,7 @@ import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
 import { Button } from "@/shared/components/ui/CatalogoButton";
 
+import { ActividadEconomicaDetalle } from "../components/ActividadEconomicaDetalle";
 import { ActividadEconomicaForm } from "../components/ActividadEconomicaForm";
 import { ActividadesEconomicasTable } from "../components/ActividadesEconomicasTable";
 import { BusquedaActividadesForm } from "../components/BusquedaActividadesForm";
@@ -35,6 +36,8 @@ export function ActividadesEconomicasPage() {
     null,
   );
   const [creandoNueva, setCreandoNueva] = useState(false);
+  /** Un clic solo selecciona y muestra el detalle; editar es un paso aparte. */
+  const [editando, setEditando] = useState(false);
   const [mensajeError, setMensajeError] = useState<string | null>(null);
 
   const crear = useCrearActividadEconomica();
@@ -112,7 +115,8 @@ export function ActividadesEconomicasPage() {
   };
 
   const actividadEnEdicion = creandoNueva ? null : seleccionada;
-  const mostrarFormulario = creandoNueva || seleccionada !== null;
+  const mostrarFormulario = creandoNueva || (seleccionada !== null && editando);
+  const mostrarDetalle = !creandoNueva && seleccionada !== null && !editando;
 
   return (
     <div className="flex flex-col gap-6">
@@ -127,6 +131,7 @@ export function ActividadesEconomicasPage() {
           onClick={() => {
             setCreandoNueva(true);
             setSeleccionada(null);
+            setEditando(false);
             setMensajeError(null);
           }}
         >
@@ -152,14 +157,26 @@ export function ActividadesEconomicasPage() {
         onSeleccionar={(actividad) => {
           setSeleccionada(actividad);
           setCreandoNueva(false);
+          setEditando(false);
           setMensajeError(null);
         }}
         onDoubleClick={(actividad) => {
           setSeleccionada(actividad);
           setCreandoNueva(false);
+          setEditando(true);
           setMensajeError(null);
         }}
       />
+
+      {mostrarDetalle && seleccionada ? (
+        <ActividadEconomicaDetalle
+          actividad={seleccionada}
+          onEditar={() => {
+            setEditando(true);
+            setMensajeError(null);
+          }}
+        />
+      ) : null}
 
       {mostrarFormulario ? (
         <div className="flex flex-col gap-3">
@@ -168,7 +185,7 @@ export function ActividadesEconomicasPage() {
             onGuardar={handleGuardar}
             onCancelar={() => {
               setCreandoNueva(false);
-              setSeleccionada(null);
+              setEditando(false);
               setMensajeError(null);
             }}
             isPending={crear.isPending || actualizar.isPending}

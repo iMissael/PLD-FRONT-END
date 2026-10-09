@@ -121,7 +121,7 @@ export function ZonasTable({
           const t = term.toLowerCase();
           return (
             zona.nombre.toLowerCase().includes(t) ||
-            zona.nivelRiesgoDescripcion.toLowerCase().includes(t)
+            (zona.nivelRiesgoDescripcion ?? "").toLowerCase().includes(t)
           );
         },
       }}

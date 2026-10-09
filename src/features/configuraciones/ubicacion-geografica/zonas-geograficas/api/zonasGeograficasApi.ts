@@ -6,8 +6,7 @@ import type {
   CrearZonaGeograficaInput,
   EntidadAsignadaResponse,
   EstatusZona,
-  PaisAsignadoResponse,
-  ZonaGeograficaResponse, 
+  ZonaGeograficaResponse,
 } from "../types/zonaGeografica";
 
 const BASE_PATH = "/catalogos/zonas-geograficas";
@@ -82,22 +81,4 @@ export async function listarEntidadesDeZona(
 
 export async function asignarEntidades(id: string, entidadIds: string[]): Promise<void> {
   await apiClient.put(`${BASE_PATH}/${id}/entidades`, { entidadIds });
-}
-
-/** Todos los países del catálogo, cada uno con la zona que tenga asignada (si tiene). */
-export async function listarTodosLosPaisesConZonas(): Promise<PaisAsignadoResponse[]> {
-  const { data } = await apiClient.get<PaisAsignadoResponse[]>(`${BASE_PATH}/paises`);
-  return data;
-}
-
-/** Países asignados a una zona específica. Se pide solo al hacer clic en "Ver". */
-export async function listarPaisesDeZona(id: string): Promise<PaisAsignadoResponse[]> {
-  const { data } = await apiClient.get<PaisAsignadoResponse[]>(
-    `${BASE_PATH}/${id}/paises`,
-  );
-  return data;
-}
-
-export async function asignarPaises(id: string, paisIds: string[]): Promise<void> {
-  await apiClient.put(`${BASE_PATH}/${id}/paises`, { paisIds });
 }
