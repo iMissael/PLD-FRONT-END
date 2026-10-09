@@ -1,16 +1,21 @@
 import { Search } from "lucide-react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { cn } from "@/shared/utils/cn";
-import { useListaSocios } from "@/features/socios/hooks/useSocios";
+import { useBuscarSocios, useListaSocios } from "@/features/socios/hooks/useSocios";
+import { useDebounce } from "@/shared/hooks/useDebounce";
 import type { SocioExterno } from "@/features/socios/types/socios";
 
 function sinAcentos(texto: string | undefined) {
   return (texto ?? "").normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
 }
 
+/** Mínimo de caracteres para buscar en el servidor en lugar de filtrar la lista. */
+const MINIMO_BUSQUEDA = 2;
+
 /**
- * Campo de búsqueda con lupa: al abrirlo lista los nombres de los socios del sistema y se
- * filtra escribiendo (por nombre, referencia o RFC).
+ * Campo de búsqueda con lupa: al abrirlo lista los socios del sistema; al escribir busca en el
+ * servidor (por nombre, referencia o RFC). La lista inicial está limitada y, con el sistema de la
+ * SOFOM por /pld/v1, solo trae los socios ya registrados en la Matriz: lo demás solo aparece buscando.
  */
 export function BuscadorSocios({
   variante,
@@ -30,7 +35,11 @@ export function BuscadorSocios({
   const [filtro, setFiltro] = useState("");
   const contenedor = useRef<HTMLDivElement>(null);
   const campo = useRef<HTMLInputElement>(null);
-  const { data: socios, isFetching, isError } = useListaSocios(abierto);
+  const textoBuscado = useDebounce(filtro.trim());
+  const buscaEnServidor = textoBuscado.length >= MINIMO_BUSQUEDA;
+  const lista = useListaSocios(abierto && !buscaEnServidor);
+  const busqueda = useBuscarSocios(abierto && buscaEnServidor ? textoBuscado : "");
+  const { data: socios, isFetching, isError } = buscaEnServidor ? busqueda : lista;
 
   useEffect(() => {
     if (!abierto) return;
@@ -42,6 +51,7 @@ export function BuscadorSocios({
   }, [abierto]);
 
   const coincidencias = useMemo(() => {
+    // El servidor ya filtró; aquí solo se refina mientras llega la respuesta de lo último escrito.
     const buscado = sinAcentos(filtro.trim());
     if (!buscado) return socios ?? [];
     return (socios ?? []).filter((socio) =>
@@ -124,7 +134,9 @@ export function BuscadorSocios({
           <p className="sticky top-0 border-b border-border bg-popover px-3 py-2 text-[11px] font-semibold tracking-wide text-muted-foreground uppercase">
             {isFetching
               ? "Cargando socios…"
-              : `${coincidencias.length} ${coincidencias.length === 1 ? "socio" : "socios"} en el sistema`}
+              : `${coincidencias.length} ${coincidencias.length === 1 ? "socio" : "socios"} ${
+                  buscaEnServidor ? (coincidencias.length === 1 ? "encontrado" : "encontrados") : "en el sistema"
+                }`}
           </p>
           {isError && (
             <p className="px-3 py-3 text-sm text-destructive">
