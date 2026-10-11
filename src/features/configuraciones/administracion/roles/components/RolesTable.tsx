@@ -14,6 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/components/ui/table";
+import { esEstatusActivo, etiquetaEstatus } from "@/shared/utils/estatus";
 import {
   useEliminarRol,
   useRoles,
@@ -82,8 +83,8 @@ export function RolesTable() {
               <TableCell>{rol.categoria}</TableCell>
               <TableCell>{rol.descripcion ?? "—"}</TableCell>
               <TableCell>
-                <Badge variant={rol.estado === "ACTIVO" ? "default" : "secondary"}>
-                  {rol.estado}
+                <Badge variant={esEstatusActivo(rol.estado) ? "default" : "secondary"}>
+                  {etiquetaEstatus(rol.estado)}
                 </Badge>
               </TableCell>
               <TableCell className="space-x-2 text-right">
