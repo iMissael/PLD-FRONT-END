@@ -1,4 +1,5 @@
 import { Badge } from "@/shared/components/ui/badge";
+import { StatusBadge } from "@/shared/components/ui/StatusBadge";
 import {
   Table,
   TableBody,
@@ -48,9 +49,9 @@ export function MatrizRiesgoDetalle({ factores }: { factores: FactorRiesgo[] }) 
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <span className="font-medium">{factor.descripcion}</span>
-                <Badge variant={esActivo(factor.estatus) ? "secondary" : "outline"}>
+                <StatusBadge tono={esActivo(factor.estatus) ? "activo" : "inactivo"}>
                   {esActivo(factor.estatus) ? "Activo" : "Inactivo"}
-                </Badge>
+                </StatusBadge>
               </div>
               <span className="text-sm font-semibold">{factor.peso}%</span>
             </div>
@@ -71,11 +72,11 @@ export function MatrizRiesgoDetalle({ factores }: { factores: FactorRiesgo[] }) 
                         <TableCell>{sub.descripcion}</TableCell>
                         <TableCell>{sub.ponderacion}%</TableCell>
                         <TableCell>
-                          <Badge
-                            variant={esActivo(sub.estatus) ? "secondary" : "outline"}
+                          <StatusBadge
+                            tono={esActivo(sub.estatus) ? "activo" : "inactivo"}
                           >
                             {esActivo(sub.estatus) ? "Activo" : "Inactivo"}
-                          </Badge>
+                          </StatusBadge>
                         </TableCell>
                       </TableRow>
                     ))}

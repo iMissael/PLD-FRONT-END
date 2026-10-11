@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { FuenteInformacionMoral } from "@/features/alertas/components/FuenteInformacionMoral";
@@ -179,13 +180,17 @@ export function CapturaAlertasPage() {
       {
         onSuccess: (alerta) => {
           setCreada(alerta);
+          toast.success(
+            `Alerta ${alerta.folio} (${alerta.tipoAlertaDescripcion}) registrada correctamente.`,
+          );
           setForm(VACIO);
           setIntentoGuardar(false);
         },
-        onError: (error) =>
-          setMensajeError(
-            isAppError(error) ? error.message : "Ocurrió un error inesperado.",
-          ),
+        onError: (error) => {
+          const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
+          setMensajeError(msg);
+          toast.error(msg);
+        },
       },
     );
   };
@@ -371,7 +376,7 @@ export function CapturaAlertasPage() {
                     reportado: {
                       referencia: s.id ?? "",
                       nombre: s.nombre ?? "",
-                      esMoral: s.tipoPersona === "MORAL",
+                      esMoral: (s as { tipoPersona?: string }).tipoPersona === "MORAL" || (s.rfc ? s.rfc.trim().length === 12 : false),
                     },
                     fuente: FUENTE_VACIA,
                   }))

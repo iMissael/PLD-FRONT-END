@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import { useAuthStore } from "@/shared/auth/authStore";
@@ -23,6 +23,7 @@ import {
 } from "@/shared/components/icons";
 import { ExternalLink } from "lucide-react";
 import { ThemeToggle } from "@/shared/components/ThemeToggle";
+import { Breadcrumbs } from "@/shared/components/Breadcrumbs";
 
 interface NavLeaf {
   label: string;
@@ -76,12 +77,12 @@ const NAV_ITEMS: NavNode[] = [
         label: "Ubicación geográfica",
         children: [
           {
-            label: "Zonas geográficas (Países)",
-            to: "configuraciones/ubicacion-geografica/zonas-geograficas/paises",
+            label: "Listas de países",
+            to: "configuraciones/ubicacion-geografica/listas-paises",
           },
           {
-            label: "Zonas geográficas (Entidades)",
-            to: "configuraciones/ubicacion-geografica/zonas-geograficas/entidades",
+            label: "Zonas de riesgo",
+            to: "configuraciones/ubicacion-geografica/zonas-geograficas",
           },
           {
             label: "Entidades",
@@ -98,6 +99,7 @@ const NAV_ITEMS: NavNode[] = [
         ],
       },
       { label: "Configuración de personas", to: "configuraciones/personas" },
+      { label: "Configuración de PEPs", to: "configuraciones/peps" },
       {
         label: "Configuración de edades",
         children: [
@@ -144,7 +146,7 @@ const NAV_ITEMS: NavNode[] = [
   },
   {
     label: "Configuración de alertas",
-    icon: ShieldSearchIcon,
+    icon: BellIcon,
     children: [
       { label: "Configuración de alertas", to: "configuracion-alertas/reglas" },
       { label: "Consulta Personas bloqueados", to: "configuracion-alertas" },
@@ -272,13 +274,7 @@ export function AppLayout() {
 
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <button
-            type="button"
-            title="Notificaciones"
-            className="hover:bg-secondary text-foreground rounded-full p-2"
-          >
-            <BellIcon className="h-5 w-5" />
-          </button>
+
           <button
             type="button"
             title={nombreEmpresa ? `Perfil · ${nombreEmpresa}` : "Perfil"}
@@ -371,7 +367,19 @@ export function AppLayout() {
         </aside>
 
         <main className="flex-1 overflow-y-auto px-6 py-6">
-          <Outlet />
+          <Breadcrumbs />
+          <Suspense
+            fallback={
+              <div className="flex items-center justify-center py-20">
+                <div className="flex flex-col items-center gap-3 text-muted-foreground">
+                  <div className="h-8 w-8 animate-spin rounded-full border-4 border-border border-t-primary" />
+                  <span className="text-sm">Cargando…</span>
+                </div>
+              </div>
+            }
+          >
+            <Outlet />
+          </Suspense>
         </main>
       </div>
     </div>
@@ -407,10 +415,10 @@ function navLinkClassName(collapsed: boolean) {
  */
 function nestedLinkClassName({ isActive }: { isActive: boolean }) {
   return [
-    "rounded-md px-3 py-2 text-sm transition-colors",
+    "rounded-md px-3 py-1.5 text-xs sm:text-sm transition-colors flex items-center gap-2",
     isActive
-      ? "text-nav hover:text-nav-hover font-bold"
-      : "hover:text-nav-link-hover text-muted-foreground",
+      ? "text-primary font-bold bg-primary/10"
+      : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
   ].join(" ");
 }
 
@@ -516,7 +524,7 @@ function NavNodeRenderer({
           target="_blank"
           rel="noopener noreferrer"
           title={`${node.label} (Abrir en nueva ventana)`}
-          className="rounded-md px-3 py-2 text-sm transition-colors text-muted-foreground hover:text-nav-link-hover flex items-center justify-between gap-1.5"
+          className="rounded-md px-3 py-1.5 text-xs sm:text-sm transition-colors text-muted-foreground hover:text-foreground hover:bg-muted/50 flex items-center justify-between gap-1.5"
         >
           <span className="truncate">{node.label}</span>
           <ExternalLink className="h-3.5 w-3.5 text-muted-foreground/70 shrink-0" />
@@ -545,36 +553,40 @@ function NavNodeRenderer({
 
 function NavGroupSection({ node, depth }: { node: NavGroup; depth: number }) {
   const location = useLocation();
-  const [open, setOpen] = useState(() => isNodeActive(node, location.pathname));
+  const isActiveGroup = isNodeActive(node, location.pathname);
+  const [open, setOpen] = useState(() => isActiveGroup);
   const Icon = node.icon;
   const destacado = depth === 0 && open;
 
   return (
-    <div>
+    <div className="flex flex-col">
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
         className={
           depth === 0
             ? [
-                "mx-2 flex w-[calc(100%-1rem)] items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors",
+                "mx-2 flex w-[calc(100%-1rem)] items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors cursor-pointer",
                 destacado
                   ? "bg-nav hover:bg-nav-hover text-white shadow-sm"
                   : "hover:bg-nav-soft text-foreground",
               ].join(" ")
-            : "hover:text-nav-link-hover text-muted-foreground flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors"
+            : [
+                "flex w-full items-center gap-2 rounded-md px-3 py-1.5 text-xs sm:text-sm font-medium transition-colors cursor-pointer",
+                isActiveGroup ? "text-primary font-semibold" : "text-muted-foreground hover:text-foreground hover:bg-muted/40",
+              ].join(" ")
         }
       >
         {Icon && <Icon className="h-5 w-5 shrink-0" />}
         <span className="flex-1 truncate text-left">{node.label}</span>
         <ChevronDownIcon
-          className={`h-4 w-4 shrink-0 transition-transform ${
+          className={`h-4 w-4 shrink-0 transition-transform duration-200 ${
             destacado ? "text-white" : "text-muted-foreground"
-          } ${open ? "" : "-rotate-90"}`}
+          } ${open ? "rotate-0" : "-rotate-90"}`}
         />
       </button>
       {open && (
-        <div className="border-border ml-4 mt-0.5 flex flex-col gap-0.5 border-l pl-2">
+        <div className="border-border/60 ml-4 mt-0.5 flex flex-col gap-0.5 border-l pl-2 transition-all">
           {node.children.map((child) => (
             <NavNodeRenderer
               key={child.label}

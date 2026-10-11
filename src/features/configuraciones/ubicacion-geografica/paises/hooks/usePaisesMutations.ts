@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
+import { listasPaisesKeys } from "../../listas-paises/hooks/listasPaisesKeys";
 import { actualizarPais, crearPais, eliminarPais } from "../api/paisesApi";
 import type { ActualizarPaisInput, CrearPaisInput } from "../types/pais";
 import { paisesKeys } from "./paisesKeys";
@@ -10,6 +11,7 @@ export function useCrearPais() {
     mutationFn: (input: CrearPaisInput) => crearPais(input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: paisesKeys.all });
+      queryClient.invalidateQueries({ queryKey: listasPaisesKeys.all });
     },
   });
 }
@@ -21,7 +23,8 @@ export function useActualizarPais() {
       actualizarPais(id, input),
     onSuccess: (_data, { id }) => {
       queryClient.invalidateQueries({ queryKey: paisesKeys.all });
-      queryClient.invalidateQueries({ queryKey: paisesKeys.zonasDePais(id) });
+      queryClient.invalidateQueries({ queryKey: listasPaisesKeys.all });
+      queryClient.invalidateQueries({ queryKey: listasPaisesKeys.listasDePais(id) });
     },
   });
 }
@@ -32,6 +35,7 @@ export function useEliminarPais() {
     mutationFn: (id: string) => eliminarPais(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: paisesKeys.all });
+      queryClient.invalidateQueries({ queryKey: listasPaisesKeys.all });
     },
   });
 }

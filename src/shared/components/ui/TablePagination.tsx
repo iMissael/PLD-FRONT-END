@@ -24,7 +24,7 @@ export function TablePagination({
   onPageChange,
   rowsPerPage,
   onRowsPerPageChange,
-  rowsPerPageOptions = [5, 10, 25, 50],
+  rowsPerPageOptions = [ 10, 25, 30],
   labelRowsPerPage = "Filas por página:",
   labelDisplayedRows,
   showFirstButton = true,

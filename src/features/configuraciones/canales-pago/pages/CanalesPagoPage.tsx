@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
 import { Button } from "@/shared/components/ui/CatalogoButton";
 
 import { CanalesPagoTable } from "../components/CanalesPagoTable";
+import { CanalPagoDetalle } from "../components/CanalPagoDetalle";
 import { CanalPagoForm } from "../components/CanalPagoForm";
 import { useCanalesPago } from "../hooks/useCanalesPago";
 import {
@@ -19,6 +21,8 @@ export function CanalesPagoPage() {
 
   const [seleccionado, setSeleccionado] = useState<CanalPagoResponse | null>(null);
   const [creandoNuevo, setCreandoNuevo] = useState(false);
+  /** Un clic solo selecciona y muestra el detalle; editar es un paso aparte. */
+  const [editando, setEditando] = useState(false);
   const [mensajeError, setMensajeError] = useState<string | null>(null);
 
   const crear = useCrearCanalPago();
@@ -26,24 +30,33 @@ export function CanalesPagoPage() {
   const eliminar = useEliminarCanalPago();
 
   const canalEnEdicion = creandoNuevo ? null : seleccionado;
-  const mostrarFormulario = creandoNuevo || seleccionado !== null;
+  const mostrarFormulario = creandoNuevo || (seleccionado !== null && editando);
+  const mostrarDetalle = !creandoNuevo && seleccionado !== null && !editando;
 
   const handleGuardar = (input: Parameters<typeof crear.mutate>[0]) => {
     setMensajeError(null);
     const onError = (error: unknown) => {
-      setMensajeError(isAppError(error) ? error.message : "Ocurrió un error inesperado.");
+      const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
+      setMensajeError(msg);
+      toast.error(msg);
     };
 
     if (creandoNuevo) {
       crear.mutate(input, {
-        onSuccess: () => setCreandoNuevo(false),
+        onSuccess: () => {
+          setCreandoNuevo(false);
+          toast.success("Canal de pago creado correctamente");
+        },
         onError,
       });
     } else if (seleccionado) {
       actualizar.mutate(
         { id: seleccionado.id, input },
         {
-          onSuccess: (canalActualizado) => setSeleccionado(canalActualizado),
+          onSuccess: (canalActualizado) => {
+            setSeleccionado(canalActualizado);
+            toast.success("Canal de pago actualizado correctamente");
+          },
           onError,
         },
       );
@@ -51,24 +64,34 @@ export function CanalesPagoPage() {
   };
 
   const handleEliminar = () => {
-    if (!seleccionado) return;
+    if (!seleccionadaOpcion(seleccionado)) return;
+    if (!window.confirm(`¿Estás seguro de que deseas dar de baja el canal "${seleccionado?.nombre}"?`)) {
+      return;
+    }
     setMensajeError(null);
-    eliminar.mutate(seleccionado.id, {
-      onSuccess: () => setSeleccionado(null),
+    eliminar.mutate(seleccionado!.id, {
+      onSuccess: () => {
+        setSeleccionado(null);
+        toast.success("Canal de pago dado de baja correctamente");
+      },
       onError: (error) => {
-        setMensajeError(
-          isAppError(error) ? error.message : "Ocurrió un error inesperado.",
-        );
+        const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
+        setMensajeError(msg);
+        toast.error(msg);
       },
     });
   };
+
+  function seleccionadaOpcion(item: CanalPagoResponse | null): item is CanalPagoResponse {
+    return item !== null;
+  }
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-fg">Canales de pago</h2>
-          <p className="text-sm text-muted">
+          <h2 className="text-xl font-semibold text-foreground">Canales de pago</h2>
+          <p className="text-sm text-muted-foreground">
             Medios por los que el socio realiza sus pagos y el nivel de riesgo PLD
             asociado.
           </p>
@@ -77,6 +100,7 @@ export function CanalesPagoPage() {
           onClick={() => {
             setCreandoNuevo(true);
             setSeleccionado(null);
+            setEditando(false);
             setMensajeError(null);
           }}
         >
@@ -93,14 +117,26 @@ export function CanalesPagoPage() {
         onSeleccionar={(canal) => {
           setSeleccionado(canal);
           setCreandoNuevo(false);
+          setEditando(false);
           setMensajeError(null);
         }}
         onDoubleClick={(canal) => {
           setSeleccionado(canal);
           setCreandoNuevo(false);
+          setEditando(true);
           setMensajeError(null);
         }}
       />
+
+      {mostrarDetalle && seleccionado ? (
+        <CanalPagoDetalle
+          canal={seleccionado}
+          onEditar={() => {
+            setEditando(true);
+            setMensajeError(null);
+          }}
+        />
+      ) : null}
 
       {mostrarFormulario ? (
         <div className="flex flex-col gap-3">
@@ -109,7 +145,7 @@ export function CanalesPagoPage() {
             onGuardar={handleGuardar}
             onCancelar={() => {
               setCreandoNuevo(false);
-              setSeleccionado(null);
+              setEditando(false);
               setMensajeError(null);
             }}
             isPending={crear.isPending || actualizar.isPending}

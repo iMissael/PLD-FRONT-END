@@ -58,6 +58,7 @@ export interface CrearDenunciaInput {
   catTipoAlertaId: number;
   descripcion: string;
   nombreDenunciado?: string;
+  turnstileToken?: string;
 }
 
 export interface EditarDenunciaInput {

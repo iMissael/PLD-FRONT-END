@@ -22,15 +22,18 @@ export interface CrearEntidadInput {
   esEntidad?: EsEntidad;
   paisId: string;
   zonaId: string;
+  zonaIds?: string[];
 }
 
 /** Igual a `ActualizarCatEntidadGeograficaRequest` (mismo shape que Crear). */
 export type ActualizarEntidadInput = CrearEntidadInput;
 
 /**
- * Igual a `EntidadCatGeograficaResponse`. OJO: `claveZona` está hardcoded a
- * `""` en el mapper actual del backend (comentario fuente: "claveZona not
- * found") — nunca confiar en que traiga un valor real.
+ * Igual a `EntidadCatGeograficaResponse`. Los campos de zona van nulos si la
+ * entidad no tiene zona asignada, y `claveZona` espeja `idZona` (no es un dato
+ * propio). La relación es muchos a muchos: `zonasAsignadas` trae todas, pero
+ * `idZona`/`nombreZona`/`nivelRiesgo*` describen solo la primera que devuelve
+ * la consulta, así que con varias zonas cuál se expone es arbitrario.
  */
 export interface EntidadResponse {
   idEntidad: string;
@@ -40,9 +43,10 @@ export interface EntidadResponse {
   esEntidad: EsEntidad;
   idPais: string;
   nombrePais: string;
-  idZona: string;
-  nombreZona: string;
-  claveZona: string;
-  nivelRiesgoValor: number;
-  nivelRiesgoDescripcion: string;
+  idZona?: string;
+  nombreZona?: string;
+  claveZona?: string;
+  nivelRiesgoValor?: number;
+  nivelRiesgoDescripcion?: string;
+  zonasAsignadas?: string[];
 }

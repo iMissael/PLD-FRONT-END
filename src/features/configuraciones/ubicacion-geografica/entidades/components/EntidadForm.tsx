@@ -5,8 +5,9 @@ import { Button } from "@/shared/components/ui/CatalogoButton";
 import { card, field, label } from "@/shared/components/ui/styles";
 
 import { useMexicoPaisId } from "../hooks/useMexicoPaisId";
+import { useZonasDeEntidad } from "../hooks/useEntidades";
 import type { CrearEntidadInput, EsEntidad, EntidadResponse } from "../types/entidad";
-import { ZonaSelect } from "./ZonaSelect";
+import { ZonasEntidadMultiSelect } from "./ZonasEntidadMultiSelect";
 
 interface EntidadFormProps {
   entidad: EntidadResponse | null;
@@ -20,7 +21,7 @@ interface FormState {
   nombre: string;
   preBuro: string;
   esEntidad: EsEntidad;
-  zonaId: string;
+  zonaIds: string[];
 }
 
 const VACIO: FormState = {
@@ -28,49 +29,63 @@ const VACIO: FormState = {
   nombre: "",
   preBuro: "",
   esEntidad: "N",
-  zonaId: "",
+  zonaIds: [],
 };
 
-/**
- * Sin selector de país: todas las entidades de este catálogo son de México,
- * así que `paisId` se resuelve automáticamente (ver `useMexicoPaisId`) y no
- * se le pide nada al usuario al respecto.
- */
+function aFormState(entidad: EntidadResponse | null): FormState {
+  if (!entidad) return VACIO;
+  const asignadas =
+    Array.isArray(entidad.zonasAsignadas) && entidad.zonasAsignadas.length > 0
+      ? entidad.zonasAsignadas
+      : entidad.idZona
+      ? [entidad.idZona]
+      : [];
+  return {
+    claveCurp: entidad.claveCurp ?? "",
+    nombre: entidad.nombre ?? "",
+    preBuro: entidad.preBuro ?? "",
+    esEntidad: entidad.esEntidad ?? "N",
+    zonaIds: asignadas,
+  };
+}
+
 export function EntidadForm({
   entidad,
   onGuardar,
   onCancelar,
   isPending,
 }: EntidadFormProps) {
-  const [form, setForm] = useState<FormState>(VACIO);
+  const [form, setForm] = useState<FormState>(() => aFormState(entidad));
   const { paisId: mexicoPaisId, isLoading: cargandoPais } = useMexicoPaisId();
+  const { data: zonasReales } = useZonasDeEntidad(entidad?.idEntidad);
 
   useEffect(() => {
-    setForm(
-      entidad
-        ? {
-            claveCurp: entidad.claveCurp,
-            nombre: entidad.nombre,
-            preBuro: entidad.preBuro ?? "",
-            esEntidad: entidad.esEntidad ?? "N",
-            zonaId: entidad.idZona,
-          }
-        : VACIO,
-    );
+    setForm(aFormState(entidad));
   }, [entidad]);
 
+  useEffect(() => {
+    if (zonasReales && Array.isArray(zonasReales)) {
+      setForm((prev) => ({
+        ...prev,
+        zonaIds: zonasReales,
+      }));
+    }
+  }, [zonasReales]);
+
   const esNueva = entidad === null;
+  const paisIdFinal = entidad?.idPais || mexicoPaisId || "1";
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    if (!mexicoPaisId || !form.zonaId) return;
+    if (form.zonaIds.length === 0) return;
     onGuardar({
       claveCurp: form.claveCurp.trim(),
       nombre: form.nombre.trim(),
       preBuro: form.preBuro.trim(),
       esEntidad: form.esEntidad,
-      paisId: mexicoPaisId,
-      zonaId: form.zonaId,
+      paisId: paisIdFinal,
+      zonaId: form.zonaIds[0] || "",
+      zonaIds: form.zonaIds,
     });
   };
 
@@ -80,7 +95,7 @@ export function EntidadForm({
         {esNueva ? "Nueva entidad" : `Editar entidad: ${entidad.nombre}`}
       </h3>
 
-      {!cargandoPais && !mexicoPaisId ? (
+      {!cargandoPais && !mexicoPaisId && !entidad?.idPais ? (
         <Alert tono="advertencia">
           No se encontró "México" en el catálogo de países. Registra ese país antes de
           crear entidades.
@@ -155,14 +170,10 @@ export function EntidadForm({
         </div>
 
         <div className="flex flex-col gap-1 sm:col-span-2">
-          <label htmlFor="zonaEntidad" className={label}>
-            Zona geográfica
-          </label>
-          <ZonaSelect
-            id="zonaEntidad"
-            required
-            value={form.zonaId}
-            onChange={(zonaId) => setForm((prev) => ({ ...prev, zonaId }))}
+          <span className={label}>Zonas de riesgo asignadas</span>
+          <ZonasEntidadMultiSelect
+            value={form.zonaIds}
+            onChange={(zonaIds) => setForm((prev) => ({ ...prev, zonaIds }))}
           />
         </div>
       </div>
@@ -171,7 +182,7 @@ export function EntidadForm({
         <Button variante="secundario" onClick={onCancelar}>
           Cancelar
         </Button>
-        <Button type="submit" disabled={isPending || !mexicoPaisId}>
+        <Button type="submit" disabled={isPending || form.zonaIds.length === 0}>
           {isPending ? "Guardando..." : "Guardar"}
         </Button>
       </div>

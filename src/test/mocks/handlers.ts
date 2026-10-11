@@ -23,7 +23,7 @@ const usuarios: UsuarioResponse[] = [
     username: "admin",
     nombre: "Administrador",
     correo: "admin@example.com",
-    estado: "ACTIVO",
+    estado: "A",
     rolId: 1,
   },
 ];
@@ -34,7 +34,7 @@ const roles: RolResponse[] = [
     nombre: "ROLE_ADMIN",
     categoria: "ESTANDAR",
     descripcion: "Administrador general del sistema",
-    estado: "ACTIVO",
+    estado: "A",
   },
 ];
 
@@ -44,7 +44,7 @@ const permisos: PermisoResponse[] = [
     recurso: "usuarios",
     accion: "crear",
     descripcion: "Permite crear usuarios",
-    estado: "ACTIVO",
+    estado: "A",
   },
 ];
 
@@ -111,7 +111,7 @@ export const handlers = [
   http.post(`${API_BASE_URL}/usuarios`, async ({ request }) => {
     const body = (await request.json()) as Partial<UsuarioResponse>;
     return HttpResponse.json(
-      { ...body, idUsuario: Math.floor(Math.random() * 100000), estado: "ACTIVO" },
+      { ...body, idUsuario: Math.floor(Math.random() * 100000), estado: "A" },
       { status: 201 },
     );
   }),
@@ -120,7 +120,7 @@ export const handlers = [
   http.post(`${API_BASE_URL}/roles`, async ({ request }) => {
     const body = (await request.json()) as Partial<RolResponse>;
     return HttpResponse.json(
-      { ...body, idRol: Math.floor(Math.random() * 100000), estado: "ACTIVO" },
+      { ...body, idRol: Math.floor(Math.random() * 100000), estado: "A" },
       { status: 201 },
     );
   }),
@@ -130,7 +130,7 @@ export const handlers = [
   http.post(`${API_BASE_URL}/permisos`, async ({ request }) => {
     const body = (await request.json()) as Partial<PermisoResponse>;
     return HttpResponse.json(
-      { ...body, idPermiso: Math.floor(Math.random() * 100000), estado: "ACTIVO" },
+      { ...body, idPermiso: Math.floor(Math.random() * 100000), estado: "A" },
       { status: 201 },
     );
   }),

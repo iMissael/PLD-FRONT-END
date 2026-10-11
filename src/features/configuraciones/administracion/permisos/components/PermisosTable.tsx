@@ -1,4 +1,6 @@
 import { useMemo } from "react";
+import { toast } from "sonner";
+import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -14,6 +16,7 @@ import {
   usePermisos,
 } from "@/features/configuraciones/administracion/permisos/hooks/usePermisos";
 import type { PermisoResponse } from "@/features/configuraciones/administracion/permisos/types/permisos";
+import { esEstatusActivo, etiquetaEstatus } from "@/shared/utils/estatus";
 
 export function PermisosTable() {
   const { data: permisos, isLoading, isError } = usePermisos();
@@ -60,18 +63,35 @@ export function PermisosTable() {
             <TableCell>{permiso.accion}</TableCell>
             <TableCell>{permiso.descripcion ?? "—"}</TableCell>
             <TableCell>
-              <Badge variant={permiso.estado === "ACTIVO" ? "default" : "secondary"}>
-                {permiso.estado}
+              <Badge variant={esEstatusActivo(permiso.estado) ? "default" : "secondary"}>
+                {etiquetaEstatus(permiso.estado)}
               </Badge>
             </TableCell>
             <TableCell className="text-right">
               <Button
                 variant="ghost"
                 size="sm"
+                className="text-destructive hover:bg-destructive/10"
                 disabled={eliminarPermiso.isPending}
                 onClick={() => {
                   if (permiso.idPermiso) {
-                    eliminarPermiso.mutate(permiso.idPermiso);
+                    if (
+                      !window.confirm(
+                        `¿Está seguro de eliminar el permiso ${permiso.recurso}:${permiso.accion}?`,
+                      )
+                    ) {
+                      return;
+                    }
+                    eliminarPermiso.mutate(permiso.idPermiso, {
+                      onSuccess: () => {
+                        toast.success("Permiso eliminado correctamente");
+                      },
+                      onError: (error) => {
+                        toast.error(
+                          isAppError(error) ? error.message : "No se pudo eliminar el permiso",
+                        );
+                      },
+                    });
                   }
                 }}
               >

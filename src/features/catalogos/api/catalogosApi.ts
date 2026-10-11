@@ -109,6 +109,15 @@ export async function listarTiposPersona() {
   return listarCatalogoCompleto<TipoPersonaResponse>("/catalogos/tipos-persona");
 }
 
+/**
+ * Condición de PEP, para el `<select>` del subfactor 6 de la evaluación de
+ * riesgo.
+ *
+ * Tiene que apuntar al mismo catálogo con el que el backend puntúa el
+ * subfactor (`cat_peps`, ver `ConsultaAdapter.obtenerPuntajePep`). Los dos
+ * catálogos de PEP empiezan en el id 1, así que apuntar al equivocado no da
+ * error: puntúa un registro distinto con el mismo número.
+ */
 export async function listarPeps() {
   return listarCatalogoCompleto<PepResponse>("/catalogos/peps");
 }

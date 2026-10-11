@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
 import { Button } from "@/shared/components/ui/CatalogoButton";
 
+import { ExperienciaActividadDetalle } from "../components/ExperienciaActividadDetalle";
 import { ExperienciaActividadForm } from "../components/ExperienciaActividadForm";
 import { ExperienciasActividadTable } from "../components/ExperienciasActividadTable";
 import { useExperienciasActividad } from "../hooks/useExperienciasActividad";
@@ -21,6 +23,8 @@ export function ExperienciasActividadPage() {
     null,
   );
   const [creandoNueva, setCreandoNueva] = useState(false);
+  /** Un clic solo selecciona y muestra el detalle; editar es un paso aparte. */
+  const [editando, setEditando] = useState(false);
   const [mensajeError, setMensajeError] = useState<string | null>(null);
 
   const crear = useCrearExperienciaActividad();
@@ -28,24 +32,33 @@ export function ExperienciasActividadPage() {
   const eliminar = useEliminarExperienciaActividad();
 
   const experienciaEnEdicion = creandoNueva ? null : seleccionada;
-  const mostrarFormulario = creandoNueva || seleccionada !== null;
+  const mostrarFormulario = creandoNueva || (seleccionada !== null && editando);
+  const mostrarDetalle = !creandoNueva && seleccionada !== null && !editando;
 
   const handleGuardar = (input: Parameters<typeof crear.mutate>[0]) => {
     setMensajeError(null);
     const onError = (error: unknown) => {
-      setMensajeError(isAppError(error) ? error.message : "Ocurrió un error inesperado.");
+      const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
+      setMensajeError(msg);
+      toast.error(msg);
     };
 
     if (creandoNueva) {
       crear.mutate(input, {
-        onSuccess: () => setCreandoNueva(false),
+        onSuccess: () => {
+          setCreandoNueva(false);
+          toast.success("Rango de experiencia creado correctamente");
+        },
         onError,
       });
     } else if (seleccionada) {
       actualizar.mutate(
         { id: seleccionada.id, input },
         {
-          onSuccess: (experienciaActualizada) => setSeleccionada(experienciaActualizada),
+          onSuccess: (experienciaActualizada) => {
+            setSeleccionada(experienciaActualizada);
+            toast.success("Rango de experiencia actualizado correctamente");
+          },
           onError,
         },
       );
@@ -54,13 +67,19 @@ export function ExperienciasActividadPage() {
 
   const handleEliminar = () => {
     if (!seleccionada) return;
+    if (!window.confirm(`¿Estás seguro de que deseas dar de baja el rango "${seleccionada.nombre}"?`)) {
+      return;
+    }
     setMensajeError(null);
     eliminar.mutate(seleccionada.id, {
-      onSuccess: () => setSeleccionada(null),
+      onSuccess: () => {
+        setSeleccionada(null);
+        toast.success("Rango de experiencia dado de baja correctamente");
+      },
       onError: (error) => {
-        setMensajeError(
-          isAppError(error) ? error.message : "Ocurrió un error inesperado.",
-        );
+        const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
+        setMensajeError(msg);
+        toast.error(msg);
       },
     });
   };
@@ -81,6 +100,7 @@ export function ExperienciasActividadPage() {
           onClick={() => {
             setCreandoNueva(true);
             setSeleccionada(null);
+            setEditando(false);
             setMensajeError(null);
           }}
         >
@@ -97,14 +117,26 @@ export function ExperienciasActividadPage() {
         onSeleccionar={(experiencia) => {
           setSeleccionada(experiencia);
           setCreandoNueva(false);
+          setEditando(false);
           setMensajeError(null);
         }}
         onDoubleClick={(experiencia) => {
           setSeleccionada(experiencia);
           setCreandoNueva(false);
+          setEditando(true);
           setMensajeError(null);
         }}
       />
+
+      {mostrarDetalle && seleccionada ? (
+        <ExperienciaActividadDetalle
+          experiencia={seleccionada}
+          onEditar={() => {
+            setEditando(true);
+            setMensajeError(null);
+          }}
+        />
+      ) : null}
 
       {mostrarFormulario ? (
         <div className="flex flex-col gap-3">
@@ -113,7 +145,7 @@ export function ExperienciasActividadPage() {
             onGuardar={handleGuardar}
             onCancelar={() => {
               setCreandoNueva(false);
-              setSeleccionada(null);
+              setEditando(false);
               setMensajeError(null);
             }}
             isPending={crear.isPending || actualizar.isPending}

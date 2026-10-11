@@ -49,7 +49,7 @@ export function OficialCumplimientoPage() {
   const oficiales = useMemo(
     () =>
       (usuarios ?? []).filter(
-        (usuario) => usuario.estado !== "ELIMINADO" && esRolOficial(roles, usuario.rolId),
+        (usuario) => usuario.estado !== "E" && esRolOficial(roles, usuario.rolId),
       ),
     [usuarios, roles],
   );

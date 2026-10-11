@@ -3,14 +3,13 @@ import { Badge } from "@/shared/components/ui/CatalogoBadge";
 import { Button } from "@/shared/components/ui/CatalogoButton";
 import { DataTable, type ColumnDef } from "@/shared/components/ui/DataTable";
 import { table } from "@/shared/components/ui/styles";
-import type { EntidadPais, ZonaGeograficaResponse } from "../types/zonaGeografica";
+import type { ZonaGeograficaResponse } from "../types/zonaGeografica";
 
 interface ZonasTableProps {
   zonas: ZonaGeograficaResponse[] | undefined;
   isLoading: boolean;
   seleccionadaId: string | null;
   verId: string | null;
-  tipoFiltro?: EntidadPais;
   onSeleccionar: (zona: ZonaGeograficaResponse) => void;
   onVer: (zona: ZonaGeograficaResponse) => void;
   onDoubleClick?: (zona: ZonaGeograficaResponse) => void;
@@ -21,46 +20,37 @@ export function ZonasTable({
   isLoading,
   seleccionadaId,
   verId,
-  tipoFiltro,
   onSeleccionar,
   onVer,
   onDoubleClick,
 }: ZonasTableProps) {
-  const zonasSegunTipo = useMemo(() => {
-    const listaZonas = Array.isArray(zonas)
-      ? zonas
-      : Array.isArray((zonas as unknown as { contenido?: typeof zonas })?.contenido)
-      ? ((zonas as unknown as { contenido: typeof zonas }).contenido ?? [])
-      : [];
-    if (!listaZonas || listaZonas.length === 0) return [];
-    if (!tipoFiltro) return listaZonas;
-
-    if (tipoFiltro === "P") {
-      return listaZonas.filter(
-        (z) =>
-          z.entidadPais === "P" ||
-          (z.entidadPais === null && z.totalPaisesAsignados > 0) ||
-          (z.entidadPais === null && z.totalEntidadesAsignadas === 0),
-      );
+  const listaZonas = useMemo(() => {
+    if (!zonas) return [];
+    if (Array.isArray(zonas)) return zonas;
+    if (Array.isArray((zonas as unknown as { contenido?: typeof zonas })?.contenido)) {
+      return (zonas as unknown as { contenido: typeof zonas }).contenido ?? [];
     }
-
-    if (tipoFiltro === "E") {
-      return listaZonas.filter(
-        (z) =>
-          z.entidadPais === "E" ||
-          (z.entidadPais === null && z.totalEntidadesAsignadas > 0),
-      );
-    }
-
-    return listaZonas;
-  }, [zonas, tipoFiltro]);
+    return [];
+  }, [zonas]);
 
   const columns = useMemo<ColumnDef<ZonaGeograficaResponse>[]>(() => {
-    const cols: ColumnDef<ZonaGeograficaResponse>[] = [
+    return [
       {
         header: "Nombre",
-        accessorKey: "nombre",
         className: table.cellStrong,
+        cell: (zona) => (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onSeleccionar(zona);
+            }}
+            className="font-semibold text-foreground hover:text-primary hover:underline text-left cursor-pointer"
+            title="Seleccionar y editar zona"
+          >
+            {zona.nombre}
+          </button>
+        ),
       },
       {
         header: "Nivel de riesgo",
@@ -70,23 +60,21 @@ export function ZonasTable({
           </span>
         ),
       },
-    ];
-
-    if (!tipoFiltro || tipoFiltro === "E") {
-      cols.push({
-        header: "Entidades",
-        accessorKey: "totalEntidadesAsignadas",
-      });
-    }
-
-    if (!tipoFiltro || tipoFiltro === "P") {
-      cols.push({
-        header: "Países",
-        accessorKey: "totalPaisesAsignados",
-      });
-    }
-
-    cols.push(
+      {
+        header: "Entidad especial",
+        cell: (zona) => (
+          <span className="text-xs text-muted-foreground">
+            {zona.esEntidadEspecial ? "Sí" : "No"}
+          </span>
+        ),
+      },
+      {
+        header: "Entidades asignadas",
+        align: "right",
+        headerClassName: "text-right",
+        className: "text-right font-mono",
+        cell: (zona) => Number(zona.totalEntidadesAsignadas ?? 0).toLocaleString("es-MX"),
+      },
       {
         header: "Estatus",
         cell: (zona) => (
@@ -96,54 +84,51 @@ export function ZonasTable({
         ),
       },
       {
-        header: "Doble click para ver",
+        header: "Acciones",
+        align: "right",
+        headerClassName: "text-right",
+        width: "130px",
         cell: (zona) => (
           <Button
-            variante="secundario"
-            className={`px-3 py-1 text-xs ${zona.id === verId ? "border-fg text-foreground" : ""}`}
-            onClick={(event) => {
-              event.stopPropagation();
+            variante={verId === zona.id ? "primario" : "secundario"}
+            size="sm"
+            onClick={(e) => {
+              e.stopPropagation();
               onVer(zona);
             }}
           >
-            Ver
+            {verId === zona.id ? "Ocultar" : "Ver entidades"}
           </Button>
         ),
       },
-    );
-
-    return cols;
-  }, [tipoFiltro, verId, onVer]);
+    ];
+  }, [verId, onVer, onSeleccionar]);
 
   return (
-    <DataTable<ZonaGeograficaResponse>
-      data={zonasSegunTipo}
+    <DataTable
+      data={listaZonas}
       columns={columns}
       isLoading={isLoading}
-      getRowId={(zona) => zona.id}
-      selectedRowId={seleccionadaId}
+      loadingMessage="Cargando zonas de riesgo..."
+      emptyMessage="No hay zonas de riesgo registradas."
+      seleccionadoId={seleccionadaId}
       onRowClick={onSeleccionar}
-      onRowDoubleClick={(zona) => {
-        if (onDoubleClick) {
-          onDoubleClick(zona);
-        } else {
-          onVer(zona);
-          onSeleccionar(zona);
-        }
-      }}
-      doubleClickTitle="Doble clic para ver asignaciones de este registro"
-      emptyMessage="No hay zonas registradas."
+      onRowDoubleClick={onDoubleClick}
+      doubleClickTitle="Doble clic para ver las entidades de esta zona"
       search={{
-        placeholder: "Buscar zona por nombre, nivel de riesgo o estatus...",
-        filterFn: (zona, term) =>
-          zona.nombre.toLowerCase().includes(term) ||
-          (zona.nivelRiesgoDescripcion?.toLowerCase().includes(term) ?? false) ||
-          (zona.estatus === "A" ? "activa" : "inactiva").includes(term),
+        placeholder: "Buscar zona de riesgo...",
+        filterFn: (zona, term) => {
+          const t = term.toLowerCase();
+          return (
+            zona.nombre.toLowerCase().includes(t) ||
+            zona.nivelRiesgoDescripcion.toLowerCase().includes(t)
+          );
+        },
       }}
       pagination={{
         mode: "client",
         defaultRowsPerPage: 10,
-        rowsPerPageOptions: [5, 10, 25, 50],
+        rowsPerPageOptions: [10, 25, 30],
       }}
     />
   );

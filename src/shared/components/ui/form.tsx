@@ -141,9 +141,10 @@ function FormMessage({ className, ...props }: React.ComponentProps<"p">) {
     <p
       data-slot="form-message"
       id={formMessageId}
-      className={cn("text-destructive text-sm", className)}
+      className={cn("text-destructive text-xs font-semibold flex items-center gap-1.5 mt-1", className)}
       {...props}
     >
+      <span className="inline-block size-1.5 rounded-full bg-destructive shrink-0" />
       {body}
     </p>
   );

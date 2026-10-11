@@ -1,5 +1,7 @@
 import { Search, Trash2, Users } from "lucide-react";
 import { useMemo, useState } from "react";
+import { toast } from "sonner";
+import { isAppError } from "@/api/interceptors/errorInterceptor";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -29,6 +31,7 @@ import {
   useEliminarUsuario,
   useUsuarios,
 } from "@/features/configuraciones/administracion/usuarios/hooks/useUsuarios";
+import { esEstatusActivo, etiquetaEstatus } from "@/shared/utils/estatus";
 import type { UsuarioResponse } from "@/features/configuraciones/administracion/usuarios/types/usuarios";
 
 function inicialesDe(nombre: string | undefined, username: string | undefined) {
@@ -45,9 +48,9 @@ function AvatarUsuario({ usuario }: { usuario: UsuarioResponse }) {
 }
 
 function BadgeEstado({ estado }: { estado: UsuarioResponse["estado"] }) {
-  if (estado === "ACTIVO") return <Badge>Activo</Badge>;
-  if (estado === "ELIMINADO") return <Badge variant="outline">Eliminado</Badge>;
-  return <Badge variant="secondary">Inactivo</Badge>;
+  if (esEstatusActivo(estado)) return <Badge>{etiquetaEstatus(estado)}</Badge>;
+  if (estado === "E") return <Badge variant="outline">{etiquetaEstatus(estado)}</Badge>;
+  return <Badge variant="secondary">{etiquetaEstatus(estado)}</Badge>;
 }
 
 function FilaEsqueleto() {
@@ -107,7 +110,18 @@ function BotonEliminar({ usuario }: { usuario: UsuarioResponse }) {
             className="bg-destructive text-white hover:bg-destructive-hover"
             disabled={eliminarUsuario.isPending}
             onClick={() => {
-              if (usuario.idUsuario) eliminarUsuario.mutate(usuario.idUsuario);
+              if (usuario.idUsuario) {
+                eliminarUsuario.mutate(usuario.idUsuario, {
+                  onSuccess: () => {
+                    toast.success("Usuario eliminado correctamente.");
+                  },
+                  onError: (error) => {
+                    toast.error(
+                      isAppError(error) ? error.message : "No se pudo eliminar el usuario.",
+                    );
+                  },
+                });
+              }
             }}
           >
             {eliminarUsuario.isPending ? "Eliminando…" : "Eliminar"}
@@ -270,7 +284,7 @@ export function UsuariosTable() {
           onPageChange={handleChangePage}
           rowsPerPage={rowsPerPage}
           onRowsPerPageChange={handleChangeRowsPerPage}
-          rowsPerPageOptions={[5, 10, 25, 50]}
+          rowsPerPageOptions={[10, 25, 30]}
         />
       </div>
     </div>

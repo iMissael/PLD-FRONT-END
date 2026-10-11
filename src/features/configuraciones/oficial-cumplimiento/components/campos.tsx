@@ -282,14 +282,17 @@ export function CampoCatalogo({
                         aria-haspopup="listbox"
                         title={`Buscar en el catálogo: ${label}`}
                         className={cn(
-                          "aria-invalid:border-destructive flex h-10 min-w-0 flex-1 items-center justify-between gap-2 border border-slate-300 bg-slate-50 dark:border-border dark:bg-card px-3 text-left text-sm font-semibold text-slate-800 dark:text-foreground outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50",
+                          "aria-invalid:border-destructive flex h-10 min-w-0 flex-1 items-center justify-between gap-2 border border-slate-300 bg-slate-50 dark:border-border dark:bg-card px-3 text-left text-sm font-semibold text-slate-800 dark:text-foreground outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-colors",
+                          deshabilitado
+                            ? "cursor-not-allowed bg-muted/80 text-muted-foreground border-border/60 opacity-70"
+                            : "hover:bg-slate-100/80 dark:hover:bg-muted/30 cursor-pointer",
                           actual?.codigo ? "rounded-r-lg" : "rounded-lg",
                         )}
                       >
                         <span
                           className={cn(
                             "truncate",
-                            !actual && "font-normal text-slate-400",
+                            !actual && "font-normal text-muted-foreground",
                           )}
                         >
                           {actual?.etiqueta ??
@@ -300,10 +303,13 @@ export function CampoCatalogo({
                     </PopoverTrigger>
                   </FormControl>
                 </div>
-                <PopoverContent className="w-[max(var(--radix-popover-trigger-width),20rem)] p-0">
-                  <div className="border-b p-2">
+                <PopoverContent className="w-[max(var(--radix-popover-trigger-width),20rem)] p-0 shadow-lg">
+                  <div className="border-b border-border p-2.5 bg-muted/40">
+                    <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wide px-1 pb-1.5">
+                      Seleccionar {label}
+                    </p>
                     <div className="relative">
-                      <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-slate-400" />
+                      <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
                       <Input
                         value={busqueda}
                         onChange={(evento) => setBusqueda(evento.target.value)}
@@ -316,7 +322,7 @@ export function CampoCatalogo({
                         placeholder="Buscar por nombre o clave…"
                         aria-label={`Buscar en ${label}`}
                         aria-controls={idLista}
-                        className="h-9 pl-8"
+                        className="h-9 pl-8 text-xs bg-background"
                       />
                     </div>
                   </div>

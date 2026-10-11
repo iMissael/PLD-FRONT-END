@@ -7,24 +7,51 @@ interface MensajeCabeceraDenunciaProps {
   className?: string;
 }
 
+const MENSAJE_DEFAULT_CABECERA = `<div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 10px; padding: 14px 16px;">
+  <strong style="color: #059669; display: flex; align-items: center; gap: 6px; margin-bottom: 4px; font-size: 0.95rem;">🔒 Canal 100% Seguro y Confidencial</strong>
+  <p style="margin: 0; font-size: 0.88rem; line-height: 1.5;">Tus denuncias son tratadas con estricta confidencialidad y sin represalias. Puedes detallar los hechos con total tranquilidad.</p>
+</div>`;
+
 export function MensajeCabeceraDenuncia({
   tenantId,
   className = "",
 }: MensajeCabeceraDenunciaProps) {
-  const { data, isLoading, isError } = useMensajeDenunciaPublico(tenantId);
+  const { data, isLoading } = useMensajeDenunciaPublico(tenantId);
 
-  const rawHtml =
-    data?.contenidoSanitizado ||
-    data?.contenidoHtml ||
-    data?.html ||
-    "";
+  const rawHtml = useMemo(() => {
+    if (!data) return "";
+    if (typeof data === "string") return data;
+    const d = data as unknown as Record<string, unknown>;
+    const inner = (d.data || d.result || d) as Record<string, unknown>;
+    return (
+      (inner.contenidoSanitizado as string) ||
+      (inner.contenidoHtml as string) ||
+      (inner.html as string) ||
+      (inner.contenido as string) ||
+      (inner.mensaje as string) ||
+      (inner.htmlContent as string) ||
+      (inner.texto as string) ||
+      (typeof inner === "string" ? inner : "") ||
+      ""
+    );
+  }, [data]);
 
   const cleanHtml = useMemo(() => {
-    if (!rawHtml || typeof rawHtml !== "string") return "";
-    return DOMPurify.sanitize(rawHtml, {
-      USE_PROFILES: { html: true },
-      ADD_ATTR: ["target", "rel"],
+    const htmlToSanitize = rawHtml && rawHtml.trim() ? rawHtml : MENSAJE_DEFAULT_CABECERA;
+
+    let decoded = htmlToSanitize;
+    if (decoded.includes("&lt;") && decoded.includes("&gt;")) {
+      const parser = new DOMParser();
+      const dom = parser.parseFromString(decoded, "text/html");
+      decoded = dom.body.textContent || decoded;
+    }
+
+    const sanitized = DOMPurify.sanitize(decoded, {
+      ADD_ATTR: ["target", "rel", "style", "class"],
+      ADD_TAGS: ["mark"],
     });
+
+    return sanitized && sanitized.trim() ? sanitized : MENSAJE_DEFAULT_CABECERA;
   }, [rawHtml]);
 
   if (isLoading) {
@@ -34,10 +61,6 @@ export function MensajeCabeceraDenuncia({
         <div className="mt-2.5 h-3 w-1/2 rounded bg-muted"></div>
       </div>
     );
-  }
-
-  if (isError || !cleanHtml.trim()) {
-    return null;
   }
 
   return (

@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
 import { Button } from "@/shared/components/ui/CatalogoButton";
 
+import { TiempoConstitucionDetalle } from "../components/TiempoConstitucionDetalle";
 import { TiempoConstitucionForm } from "../components/TiempoConstitucionForm";
 import { TiemposConstitucionTable } from "../components/TiemposConstitucionTable";
 import { useTiemposConstitucion } from "../hooks/useTiemposConstitucion";
@@ -21,6 +23,8 @@ export function TiemposConstitucionPage() {
     null,
   );
   const [creandoNuevo, setCreandoNuevo] = useState(false);
+  /** Un clic solo selecciona y muestra el detalle; editar es un paso aparte. */
+  const [editando, setEditando] = useState(false);
   const [mensajeError, setMensajeError] = useState<string | null>(null);
 
   const crear = useCrearTiempoConstitucion();
@@ -28,24 +32,33 @@ export function TiemposConstitucionPage() {
   const eliminar = useEliminarTiempoConstitucion();
 
   const tiempoEnEdicion = creandoNuevo ? null : seleccionado;
-  const mostrarFormulario = creandoNuevo || seleccionado !== null;
+  const mostrarFormulario = creandoNuevo || (seleccionado !== null && editando);
+  const mostrarDetalle = !creandoNuevo && seleccionado !== null && !editando;
 
   const handleGuardar = (input: Parameters<typeof crear.mutate>[0]) => {
     setMensajeError(null);
     const onError = (error: unknown) => {
-      setMensajeError(isAppError(error) ? error.message : "Ocurrió un error inesperado.");
+      const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
+      setMensajeError(msg);
+      toast.error(msg);
     };
 
     if (creandoNuevo) {
       crear.mutate(input, {
-        onSuccess: () => setCreandoNuevo(false),
+        onSuccess: () => {
+          setCreandoNuevo(false);
+          toast.success("Tiempo de constitución creado correctamente");
+        },
         onError,
       });
     } else if (seleccionado) {
       actualizar.mutate(
         { id: seleccionado.id, input },
         {
-          onSuccess: (tiempoActualizado) => setSeleccionado(tiempoActualizado),
+          onSuccess: (tiempoActualizado) => {
+            setSeleccionado(tiempoActualizado);
+            toast.success("Tiempo de constitución actualizado correctamente");
+          },
           onError,
         },
       );
@@ -54,13 +67,19 @@ export function TiemposConstitucionPage() {
 
   const handleEliminar = () => {
     if (!seleccionado) return;
+    if (!window.confirm(`¿Estás seguro de que deseas dar de baja el rango "${seleccionado.nombre}"?`)) {
+      return;
+    }
     setMensajeError(null);
     eliminar.mutate(seleccionado.id, {
-      onSuccess: () => setSeleccionado(null),
+      onSuccess: () => {
+        setSeleccionado(null);
+        toast.success("Tiempo de constitución dado de baja correctamente");
+      },
       onError: (error) => {
-        setMensajeError(
-          isAppError(error) ? error.message : "Ocurrió un error inesperado.",
-        );
+        const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
+        setMensajeError(msg);
+        toast.error(msg);
       },
     });
   };
@@ -81,6 +100,7 @@ export function TiemposConstitucionPage() {
           onClick={() => {
             setCreandoNuevo(true);
             setSeleccionado(null);
+            setEditando(false);
             setMensajeError(null);
           }}
         >
@@ -97,14 +117,26 @@ export function TiemposConstitucionPage() {
         onSeleccionar={(tiempo) => {
           setSeleccionado(tiempo);
           setCreandoNuevo(false);
+          setEditando(false);
           setMensajeError(null);
         }}
         onDoubleClick={(tiempo) => {
           setSeleccionado(tiempo);
           setCreandoNuevo(false);
+          setEditando(true);
           setMensajeError(null);
         }}
       />
+
+      {mostrarDetalle && seleccionado ? (
+        <TiempoConstitucionDetalle
+          tiempo={seleccionado}
+          onEditar={() => {
+            setEditando(true);
+            setMensajeError(null);
+          }}
+        />
+      ) : null}
 
       {mostrarFormulario ? (
         <div className="flex flex-col gap-3">
@@ -113,7 +145,7 @@ export function TiemposConstitucionPage() {
             onGuardar={handleGuardar}
             onCancelar={() => {
               setCreandoNuevo(false);
-              setSeleccionado(null);
+              setEditando(false);
               setMensajeError(null);
             }}
             isPending={crear.isPending || actualizar.isPending}

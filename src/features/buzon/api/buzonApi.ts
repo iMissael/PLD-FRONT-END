@@ -86,14 +86,19 @@ export async function crearDenunciaAnonima(
   formData.append("denuncia", jsonBlob);
   evidencias?.forEach((file) => formData.append("evidencias", file));
 
+  const headers: Record<string, string> = {
+    "Content-Type": "multipart/form-data",
+  };
+  if (input.turnstileToken) {
+    headers["cf-turnstile-response"] = input.turnstileToken;
+  }
+
   const { data } = await apiClient.post<Denuncia>("/buzon/denuncias", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-      signal,
-    });
-    return data;
-  } 
+    headers,
+    signal,
+  });
+  return data;
+} 
 
 
 

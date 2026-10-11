@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
@@ -31,19 +32,27 @@ export function DestinosRecursoPage() {
   const handleGuardar = (input: Parameters<typeof crear.mutate>[0]) => {
     setMensajeError(null);
     const onError = (error: unknown) => {
-      setMensajeError(isAppError(error) ? error.message : "Ocurrió un error inesperado.");
+      const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
+      setMensajeError(msg);
+      toast.error(msg);
     };
 
     if (creandoNuevo) {
       crear.mutate(input, {
-        onSuccess: () => setCreandoNuevo(false),
+        onSuccess: () => {
+          setCreandoNuevo(false);
+          toast.success("Destino de recurso creado correctamente");
+        },
         onError,
       });
     } else if (seleccionado) {
       actualizar.mutate(
         { id: seleccionado.id, input },
         {
-          onSuccess: (destinoActualizado) => setSeleccionado(destinoActualizado),
+          onSuccess: (destinoActualizado) => {
+            setSeleccionado(destinoActualizado);
+            toast.success("Destino de recurso actualizado correctamente");
+          },
           onError,
         },
       );
@@ -52,13 +61,19 @@ export function DestinosRecursoPage() {
 
   const handleEliminar = () => {
     if (!seleccionado) return;
+    if (!window.confirm(`¿Estás seguro de que deseas dar de baja el destino "${seleccionado.nombre}"?`)) {
+      return;
+    }
     setMensajeError(null);
     eliminar.mutate(seleccionado.id, {
-      onSuccess: () => setSeleccionado(null),
+      onSuccess: () => {
+        setSeleccionado(null);
+        toast.success("Destino de recurso dado de baja correctamente");
+      },
       onError: (error) => {
-        setMensajeError(
-          isAppError(error) ? error.message : "Ocurrió un error inesperado.",
-        );
+        const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
+        setMensajeError(msg);
+        toast.error(msg);
       },
     });
   };
@@ -67,8 +82,8 @@ export function DestinosRecursoPage() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-fg">Destino de recursos</h2>
-          <p className="text-sm text-muted">
+          <h2 className="text-xl font-semibold text-foreground">Destino de recursos</h2>
+          <p className="text-sm text-muted-foreground">
             Uso que el socio dará a los recursos y el nivel de riesgo PLD asociado.
           </p>
         </div>
