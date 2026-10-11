@@ -5,6 +5,7 @@ import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/ui/Alert";
 import { Button } from "@/shared/components/ui/CatalogoButton";
 
+import { TipoPersonaDetalle } from "../components/TipoPersonaDetalle";
 import { TipoPersonaForm } from "../components/TipoPersonaForm";
 import { TiposPersonaTable } from "../components/TiposPersonaTable";
 import { useTiposPersona } from "../hooks/useTiposPersona";
@@ -20,6 +21,8 @@ export function TiposPersonaPage() {
 
   const [seleccionado, setSeleccionado] = useState<TipoPersonaResponse | null>(null);
   const [creandoNuevo, setCreandoNuevo] = useState(false);
+  /** Un clic solo selecciona y muestra el detalle; editar es un paso aparte. */
+  const [editando, setEditando] = useState(false);
   const [mensajeError, setMensajeError] = useState<string | null>(null);
 
   const crear = useCrearTipoPersona();
@@ -27,7 +30,8 @@ export function TiposPersonaPage() {
   const eliminar = useEliminarTipoPersona();
 
   const tipoEnEdicion = creandoNuevo ? null : seleccionado;
-  const mostrarFormulario = creandoNuevo || seleccionado !== null;
+  const mostrarFormulario = creandoNuevo || (seleccionado !== null && editando);
+  const mostrarDetalle = !creandoNuevo && seleccionado !== null && !editando;
 
   const handleGuardar = (input: Parameters<typeof crear.mutate>[0]) => {
     setMensajeError(null);
@@ -93,6 +97,7 @@ export function TiposPersonaPage() {
           onClick={() => {
             setCreandoNuevo(true);
             setSeleccionado(null);
+            setEditando(false);
             setMensajeError(null);
           }}
         >
@@ -109,14 +114,26 @@ export function TiposPersonaPage() {
         onSeleccionar={(tipo) => {
           setSeleccionado(tipo);
           setCreandoNuevo(false);
+          setEditando(false);
           setMensajeError(null);
         }}
         onDoubleClick={(tipo) => {
           setSeleccionado(tipo);
           setCreandoNuevo(false);
+          setEditando(true);
           setMensajeError(null);
         }}
       />
+
+      {mostrarDetalle && seleccionado ? (
+        <TipoPersonaDetalle
+          tipo={seleccionado}
+          onEditar={() => {
+            setEditando(true);
+            setMensajeError(null);
+          }}
+        />
+      ) : null}
 
       {mostrarFormulario ? (
         <div className="flex flex-col gap-3">
@@ -125,7 +142,7 @@ export function TiposPersonaPage() {
             onGuardar={handleGuardar}
             onCancelar={() => {
               setCreandoNuevo(false);
-              setSeleccionado(null);
+              setEditando(false);
               setMensajeError(null);
             }}
             isPending={crear.isPending || actualizar.isPending}

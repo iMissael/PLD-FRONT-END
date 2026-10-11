@@ -365,6 +365,10 @@ export const router = createBrowserRouter([
                         element: <TiposPersonaPage />,
                       },
                       {
+                        path: "configuraciones/peps",
+                        element: <PepsPage />,
+                      },
+                      {
                         path: "configuraciones/edades/rangos-edad",
                         element: <EdadesPage />,
                       },
@@ -403,10 +407,6 @@ export const router = createBrowserRouter([
                       {
                         path: "configuraciones/canales-pago",
                         element: <CanalesPagoPage />,
-                      },
-                      {
-                        path: "configuraciones/peps",
-                        element: <PepsPage />,
                       },
                       {
                         path: "configuraciones",
