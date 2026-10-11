@@ -32,15 +32,37 @@ function idsDeZona(entidad: EntidadResponse): string[] {
   return entidad.idZona ? [entidad.idZona] : [];
 }
 
+/** Datos de una zona ya resueltos contra el catálogo. */
+interface ZonaInfo {
+  nombre: string;
+  nivelRiesgoDescripcion: string;
+  nivelRiesgoValor: number;
+  esEntidadEspecial: boolean;
+}
+
+/**
+ * Zonas que la tabla muestra: solo las que no son de entidades especiales. Las
+ * especiales se ven unicamente en el panel de detalle.
+ *
+ * Una zona que no este en el catalogo no se muestra: sin su registro no se
+ * puede saber si es especial, y mostrarla seria filtrar justo lo que se quiere
+ * ocultar.
+ */
+function zonasNoEspeciales(
+  entidad: EntidadResponse,
+  mapaZonas: Record<string, ZonaInfo>,
+): ZonaInfo[] {
+  return idsDeZona(entidad)
+    .map((id) => mapaZonas[id])
+    .filter((info): info is ZonaInfo => info !== undefined && !info.esEntidadEspecial);
+}
+
 export function EntidadesPage() {
   const { data: entidades, isLoading } = useEntidades();
   const { data: zonas } = useZonasGeograficasSelect();
 
   const mapaZonas = useMemo(() => {
-    const mapa: Record<
-      string,
-      { nombre: string; nivelRiesgoDescripcion: string; nivelRiesgoValor: number }
-    > = {};
+    const mapa: Record<string, ZonaInfo> = {};
     const listaZonas = Array.isArray(zonas)
       ? zonas
       : Array.isArray((zonas as unknown as { contenido?: typeof zonas })?.contenido)
@@ -51,6 +73,7 @@ export function EntidadesPage() {
         nombre: z.nombre,
         nivelRiesgoDescripcion: z.nivelRiesgoDescripcion,
         nivelRiesgoValor: z.nivelRiesgoValor,
+        esEntidadEspecial: z.esEntidadEspecial,
       };
     });
     return mapa;
@@ -152,32 +175,17 @@ export function EntidadesPage() {
       {
         header: "Zona de riesgo",
         cell: (item: EntidadResponse) => {
-          const zonaIds = idsDeZona(item);
-          const nombres = zonaIds
-            .map((id: string) => mapaZonas[id]?.nombre ?? id)
-            .filter((nombre): nombre is string => Boolean(nombre));
-          if (nombres.length > 0) return nombres.join(", ");
-          if (item.nombreZona) return item.nombreZona;
-          return "—";
+          const nombres = zonasNoEspeciales(item, mapaZonas).map((info) => info.nombre);
+          return nombres.length > 0 ? nombres.join(", ") : "—";
         },
       },
       {
         header: "Nivel de riesgo",
         cell: (item: EntidadResponse) => {
-          const zonaIds = idsDeZona(item);
-          const niveles = zonaIds
-            .map((id: string) => {
-              const info = mapaZonas[id];
-              return info
-                ? `${info.nivelRiesgoDescripcion} (${info.nivelRiesgoValor})`
-                : null;
-            })
-            .filter((n): n is string => Boolean(n));
-          if (niveles.length > 0) return niveles.join(", ");
-          if (item.nivelRiesgoDescripcion) {
-            return `${item.nivelRiesgoDescripcion} (${item.nivelRiesgoValor ?? 0})`;
-          }
-          return "—";
+          const niveles = zonasNoEspeciales(item, mapaZonas).map(
+            (info) => `${info.nivelRiesgoDescripcion} (${info.nivelRiesgoValor})`,
+          );
+          return niveles.length > 0 ? niveles.join(", ") : "—";
         },
       },
     ],
@@ -274,7 +282,7 @@ export function EntidadesPage() {
         onRowDoubleClick={handleEditar}
         doubleClickTitle="Doble clic para modificar este registro"
         search={{
-          placeholder: "Buscar entidad por nombre, clave CURP o zona...",
+          placeholder: "Buscar entidad por nombre",
           filterFn: (entidad: EntidadResponse, query: string) => {
             const q = normalizar(query);
             const zonaIds = idsDeZona(entidad);
