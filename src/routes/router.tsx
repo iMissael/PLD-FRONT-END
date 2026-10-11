@@ -86,6 +86,9 @@ const OficialCumplimientoPage = lazy(() =>
 const TiposPersonaPage = lazy(() =>
   import("@/features/configuraciones/personas/pages/TiposPersonaPage").then((m) => ({ default: m.TiposPersonaPage })),
 );
+const PepsPage = lazy(() =>
+  import("@/features/configuraciones/peps/pages/PepsPage").then((m) => ({ default: m.PepsPage })),
+);
 const DestinosRecursoPage = lazy(() =>
   import("@/features/configuraciones/recursos/destino/pages/DestinosRecursoPage").then((m) => ({ default: m.DestinosRecursoPage })),
 );
@@ -335,6 +338,10 @@ export const router = createBrowserRouter([
                       {
                         path: "configuraciones/personas",
                         element: <TiposPersonaPage />,
+                      },
+                      {
+                        path: "configuraciones/peps",
+                        element: <PepsPage />,
                       },
                       {
                         path: "configuraciones/edades/rangos-edad",
