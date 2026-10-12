@@ -8,9 +8,8 @@ import { apiClient } from "@/api/client";
  * antes de que haya sesión, para el tenant de la URL (:tenantId).
  */
 export async function fetchTenantNombre(id: string): Promise<string> {
-  const { data } = await apiClient.get<{ nombreComercial: string }>("/publico/nombre", {
-    skipTenantInterceptor: true,
-    headers: { "X-Tenant-Id": id },
-  });
+  const { data } = await apiClient.get<{ nombreComercial: string }>(`/SICANETSC/PLD/${id}/publico/nombre`, {
+    skipTenantInterceptor: true, 
+  }); 
   return data.nombreComercial;
 }

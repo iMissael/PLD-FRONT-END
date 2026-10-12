@@ -10,7 +10,7 @@ import type {
   ActualizarMensajeDenunciaInput,
   ListarAlertasParams,
   ListarDenunciasParams,
-  MensajeDenunciaResponse,
+  MensajeDenunciaResponse, 
   ObservacionDenuncia,
   PageResponse,
 } from "../types/buzon";
@@ -25,7 +25,7 @@ export async function obtenerMensajeDenunciaPublico(
 ): Promise<MensajeDenunciaResponse> {
   const { data } = await apiClient.get<MensajeDenunciaResponse>(
     `/publico/mensaje-denuncia`,
-    { signal, tenantHeaderOnly: true },
+    { signal },
   );
   return data;
 }
@@ -36,10 +36,12 @@ export async function obtenerNombreTenantPublico(
 ): Promise<{ nombreComercial: string }> {
   const { data } = await apiClient.get<{ nombreComercial: string }>(
     `/publico/nombre`,
-    { signal, tenantHeaderOnly: true },
+    { signal },
   );
   return data;
 }
+
+
 
 /** Consultar mensaje HTML de cabecera de denuncia (Administración) */
 export async function obtenerMensajeDenunciaAdmin(
@@ -47,7 +49,7 @@ export async function obtenerMensajeDenunciaAdmin(
 ): Promise<MensajeDenunciaResponse> {
   const { data } = await apiClient.get<MensajeDenunciaResponse>(
     `/mensaje-denuncia`,
-    { signal, tenantHeaderOnly: true },
+    { signal },
   );
   return data;
 }
@@ -60,7 +62,7 @@ export async function actualizarMensajeDenunciaAdmin(
   const { data } = await apiClient.put<MensajeDenunciaResponse>(
     `/mensaje-denuncia`,
     input,
-    { signal, tenantHeaderOnly: true },
+    { signal},
   );
   return data;
 }
