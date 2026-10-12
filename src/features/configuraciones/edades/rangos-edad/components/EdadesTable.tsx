@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { DataTable, type ColumnDef } from "@/shared/components/DataTable";
 import { useNivelesRiesgo } from "../../../ubicacion-geografica/niveles-riesgo/hooks/useNivelesRiesgo";
 import type { EdadResponse } from "../types/edad";
+import { formatearRango } from "../utils/formatearRango";
 
 interface EdadesTableProps {
   edades: EdadResponse[] | undefined;
@@ -9,12 +10,6 @@ interface EdadesTableProps {
   seleccionadaId: string | null;
   onSeleccionar: (edad: EdadResponse) => void;
   onDoubleClick?: (edad: EdadResponse) => void;
-}
-
-/** Compartido con `EdadDetalle`: el rango se etiqueta igual en los dos lados. */
-export function formatearRango(edadInicial: number, edadFinal: number | null): string {
-  if (edadFinal === null) return `${edadInicial} años o más`;
-  return `${edadInicial} – ${edadFinal} años`;
 }
 
 export function EdadesTable({

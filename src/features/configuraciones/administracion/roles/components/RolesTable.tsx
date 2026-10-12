@@ -14,17 +14,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/components/ui/table";
+import { esEstatusActivo, etiquetaEstatus } from "@/shared/utils/estatus";
 import {
   useEliminarRol,
   useRoles,
 } from "@/features/configuraciones/administracion/roles/hooks/useRoles";
-
-const ETIQUETA_ESTADO: Record<string, string> = {
-  A: "Activo",
-  B: "Inactivo",
-  S: "Suspendido",
-  E: "Eliminado",
-};
 
 export function RolesTable() {
   const rutaEnTenant = useRutaTenant();
@@ -89,8 +83,8 @@ export function RolesTable() {
               <TableCell>{rol.categoria}</TableCell>
               <TableCell>{rol.descripcion ?? "—"}</TableCell>
               <TableCell>
-                <Badge variant={rol.estado === "A" ? "default" : "secondary"}>
-                  {ETIQUETA_ESTADO[rol.estado ?? ""] ?? rol.estado}
+                <Badge variant={esEstatusActivo(rol.estado) ? "default" : "secondary"}>
+                  {etiquetaEstatus(rol.estado)}
                 </Badge>
               </TableCell>
               <TableCell className="space-x-2 text-right">

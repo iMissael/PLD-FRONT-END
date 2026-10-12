@@ -32,6 +32,7 @@ import {
   useUsuarios,
 } from "@/features/configuraciones/administracion/usuarios/hooks/useUsuarios";
 import { useAuthStore } from "@/shared/auth/authStore";
+import { esEstatusActivo, etiquetaEstatus } from "@/shared/utils/estatus";
 import type { UsuarioResponse } from "@/features/configuraciones/administracion/usuarios/types/usuarios";
 
 function inicialesDe(nombre: string | undefined, username: string | undefined) {
@@ -48,9 +49,9 @@ function AvatarUsuario({ usuario }: { usuario: UsuarioResponse }) {
 }
 
 function BadgeEstado({ estado }: { estado: UsuarioResponse["estado"] }) {
-  if (estado === "A") return <Badge>Activo</Badge>;
-  if (estado === "E") return <Badge variant="outline">Eliminado</Badge>;
-  return <Badge variant="secondary">Inactivo</Badge>;
+  if (esEstatusActivo(estado)) return <Badge>{etiquetaEstatus(estado)}</Badge>;
+  if (estado === "E") return <Badge variant="outline">{etiquetaEstatus(estado)}</Badge>;
+  return <Badge variant="secondary">{etiquetaEstatus(estado)}</Badge>;
 }
 
 function FilaEsqueleto() {

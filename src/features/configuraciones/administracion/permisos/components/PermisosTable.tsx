@@ -16,6 +16,7 @@ import {
   usePermisos,
 } from "@/features/configuraciones/administracion/permisos/hooks/usePermisos";
 import type { PermisoResponse } from "@/features/configuraciones/administracion/permisos/types/permisos";
+import { esEstatusActivo, etiquetaEstatus } from "@/shared/utils/estatus";
 
 export function PermisosTable() {
   const { data: permisos, isLoading, isError } = usePermisos();
@@ -62,8 +63,8 @@ export function PermisosTable() {
             <TableCell>{permiso.accion}</TableCell>
             <TableCell>{permiso.descripcion ?? "—"}</TableCell>
             <TableCell>
-              <Badge variant={permiso.estado === "A" ? "default" : "secondary"}>
-                {permiso.estado === "A" ? "Activo" : "Inactivo"}
+              <Badge variant={esEstatusActivo(permiso.estado) ? "default" : "secondary"}>
+                {etiquetaEstatus(permiso.estado)}
               </Badge>
             </TableCell>
             <TableCell className="text-right">

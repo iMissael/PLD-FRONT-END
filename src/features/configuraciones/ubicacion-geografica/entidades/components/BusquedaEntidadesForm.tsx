@@ -8,13 +8,6 @@ interface BusquedaEntidadesFormProps {
   onBuscar: (busqueda: string, filtrarPor: FiltroEntidades) => void;
 }
 
-/**
- * Barra de búsqueda de la pantalla de Entidades, con el mismo patrón de
- * "Filtrar por" (Entidad / Zona Geográfica) y filtrado en vivo que ya usa
- * la pantalla de Países: cada letra escrita dispara `onBuscar` de
- * inmediato (el catálogo completo ya está en memoria en la página, así
- * que no hace falta ir al backend en cada tecla).
- */
 export function BusquedaEntidadesForm({ onBuscar }: BusquedaEntidadesFormProps) {
   const [valor, setValor] = useState("");
   const [filtro, setFiltro] = useState<FiltroEntidades>("ENTIDAD");

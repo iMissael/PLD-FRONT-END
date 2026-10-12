@@ -46,7 +46,7 @@ export function EntidadDetalle({ entidad, zonas, onEditar }: EntidadDetalleProps
         </div>
 
         <div className="flex flex-col gap-0.5">
-          <span className="text-xs font-medium text-muted-foreground">Pre buró</span>
+          <span className="text-xs font-medium text-muted-foreground">Prefijo buró</span>
           <span className="font-mono text-sm text-foreground">{entidad.preBuro || "—"}</span>
         </div>
 

@@ -99,6 +99,7 @@ const NAV_ITEMS: NavNode[] = [
         ],
       },
       { label: "Configuración de personas", to: "configuraciones/personas" },
+      { label: "Configuración de PEPs", to: "configuraciones/peps" },
       {
         label: "Configuración de edades",
         children: [
@@ -165,13 +166,14 @@ const NAV_ITEMS: NavNode[] = [
       { label: "Captura de alertas", to: "operacion/captura-alertas" },
       { label: "Revisión de alertas", to: "operacion/revision-alertas" },
       {
-        label: "Revisión de alertas de automatización",
-        to: "operacion/revision-alertas-automatizacion",
+        label: "Revisión de alertas de autorización",
+        to: "operacion/revision-alertas-autorizacion",
       },
       {
         label: "Revisión de alertas de seguimiento en operación",
         to: "operacion/revision-alertas-seguimiento",
       },
+      { label: "Revisión de coincidencias", to: "operacion/coincidencias" },
     ],
   },
   {
@@ -180,7 +182,6 @@ const NAV_ITEMS: NavNode[] = [
     children: [
       { label: "Resumen", to: "control" },
       { label: "Quien es quien", to: "control/quienesquien" },
-      { label: "Revisión de coincidencias", to: "control/coincidencias" },
       // Provisional: falta decidir dónde va (el manual de Sicanet lo pone en Control, 4.4.1).
       { label: "Control dólar", to: "control-dolar" },
     ],

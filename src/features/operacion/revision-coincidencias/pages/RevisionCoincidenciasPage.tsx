@@ -19,7 +19,7 @@ export function RevisionCoincidenciasPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold">Revisión de coincidencias</h1>
+          <h1 className="text-2xl font-semibold">Revisión de Incidencias</h1>
           <p className="text-muted-foreground">
             Socios cuya evaluación de riesgo se detuvo por coincidir con una lista negra o
             de personas bloqueadas. Confirma si es la misma persona o descarta la

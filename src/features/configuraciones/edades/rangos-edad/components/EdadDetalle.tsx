@@ -6,7 +6,7 @@ import { card } from "@/shared/components/ui/styles";
 
 import { useNivelesRiesgo } from "../../../ubicacion-geografica/niveles-riesgo/hooks/useNivelesRiesgo";
 import type { EdadResponse } from "../types/edad";
-import { formatearRango } from "./EdadesTable";
+import { formatearRango } from "../utils/formatearRango";
 
 interface EdadDetalleProps {
   edad: EdadResponse;
