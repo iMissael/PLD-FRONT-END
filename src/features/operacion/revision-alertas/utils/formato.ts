@@ -15,3 +15,17 @@ export function rangoPorDefecto(hoy = new Date()): { desde: string; hasta: strin
     hasta: iso(hoy),
   };
 }
+
+export function formatearMoneda(
+  importe: number | null | undefined,
+  moneda: string,
+): string {
+  if (importe === null || importe === undefined) return "—";
+  const texto = new Intl.NumberFormat("es-MX", {
+    style: "currency",
+    currency: "MXN",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(importe);
+  return moneda === "MXN" ? texto : `${texto} ${moneda}`;
+}

@@ -147,6 +147,9 @@ const OperacionPage = lazy(() =>
 const RevisionAlertasPage = lazy(() =>
   import("@/features/operacion/revision-alertas/pages/RevisionAlertasPage").then((m) => ({ default: m.RevisionAlertasPage })),
 );
+const RevisionAutorizacionesPage = lazy(() =>
+  import("@/features/operacion/revision-autorizaciones/pages/RevisionAutorizacionesPage").then((m) => ({ default: m.RevisionAutorizacionesPage })),
+);
 
 // ─── Router ───────────────────────────────────────────────────────────────────
 
@@ -232,9 +235,9 @@ export const router = createBrowserRouter([
                     element: <RevisionAlertasPage />,
                   },
                   {
-                    path: "operacion/revision-alertas-automatizacion",
-                    element: <PlaceholderPage title="Revisión de alertas de automatización" />,
-                  },
+                    path: "operacion/revision-alertas-autorizacion",
+                    element: <RevisionAutorizacionesPage />,
+                  }, 
                   {
                     path: "operacion/revision-alertas-seguimiento",
                     element: <PlaceholderPage title="Revisión de alertas de seguimiento en operación" />,

@@ -7,6 +7,7 @@ import type {
   EmpleadoExterno,
   ExpedienteAlerta,
   FiltroAlertas,
+  PaginaAlertas,
   RazonAlerta,
   TipoAlerta,
 } from "../types/alertas";
@@ -28,12 +29,20 @@ export async function listarRazonesAlerta(
   return data;
 }
 
-export async function listarAlertas(filtro: FiltroAlertas): Promise<Alerta[]> {
+export async function listarAlertas(
+  filtro: FiltroAlertas,
+  pagina: number,
+  tamanio: number,
+): Promise<PaginaAlertas> {
   // Se quitan los vacíos para no mandar `?estatus=` (el backend no lo acepta como enum).
-  const params = Object.fromEntries(
-    Object.entries(filtro).filter(([, valor]) => valor !== undefined && valor !== ""),
-  );
-  const { data } = await apiClient.get<Alerta[]>(`${BASE}/alertas`, { params });
+  const params = {
+    ...Object.fromEntries(
+      Object.entries(filtro).filter(([, valor]) => valor !== undefined && valor !== ""),
+    ),
+    pagina,
+    tamanio,
+  };
+  const { data } = await apiClient.get<PaginaAlertas>(`${BASE}/alertas`, { params });
   return data;
 }
 

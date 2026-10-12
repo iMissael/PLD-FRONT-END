@@ -1,4 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 
 import {
   buscarEmpleados,
@@ -21,7 +26,8 @@ export const alertasKeys = {
   razones: (acronimo?: string) =>
     [...alertasKeys.all, "razones", acronimo ?? "todas"] as const,
   listas: () => [...alertasKeys.all, "lista"] as const,
-  lista: (filtro: FiltroAlertas) => [...alertasKeys.listas(), filtro] as const,
+  lista: (filtro: FiltroAlertas, pagina: number, tamanio: number) =>
+    [...alertasKeys.listas(), filtro, pagina, tamanio] as const,
   expedientes: () => [...alertasKeys.all, "expediente"] as const,
   expediente: (id: number) => [...alertasKeys.expedientes(), id] as const,
 };
@@ -45,10 +51,11 @@ export function useRazonesAlerta(alertaAcronimo?: string, habilitado = true) {
   });
 }
 
-export function useListaAlertas(filtro: FiltroAlertas) {
+export function useListaAlertas(filtro: FiltroAlertas, pagina: number, tamanio: number) {
   return useQuery({
-    queryKey: alertasKeys.lista(filtro),
-    queryFn: () => listarAlertas(filtro),
+    queryKey: alertasKeys.lista(filtro, pagina, tamanio),
+    queryFn: () => listarAlertas(filtro, pagina, tamanio),
+    placeholderData: keepPreviousData,
   });
 }
 
