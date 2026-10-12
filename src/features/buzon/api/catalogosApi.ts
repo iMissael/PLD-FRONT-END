@@ -8,28 +8,20 @@ const NO_CACHE_HEADERS = {
 
 
 export async function getTiposAlertaBuzon(signal?: AbortSignal): Promise<TipoAlertaBuzon[]> {
-  try {
-    const { data } = await apiClient.get<TipoAlertaBuzon[]>(
-      "/catalogos/tipos-alerta/buzon",
-      { headers: NO_CACHE_HEADERS, signal },
-    );
-    return data
-  } catch (error) {
-    throw error;
-  }
+  const { data } = await apiClient.get<TipoAlertaBuzon[]>(
+    "/catalogos/tipos-alerta/buzon",
+    { headers: NO_CACHE_HEADERS, signal },
+  );
+  return data;
 }
 
 export async function getRazonesAlertaPorTipo(
   tipoAlertaId: number,
   signal?: AbortSignal,
 ): Promise<RazonAlerta[]> {
-  try {
-    const { data } = await apiClient.get<RazonAlerta[]>(
-      `/catalogos/razones-alerta/tipo-alerta/${tipoAlertaId}`,
-      { headers: NO_CACHE_HEADERS, signal },
-    );
-    return data
-  } catch (error) {
-    throw error;
-  }
+  const { data } = await apiClient.get<RazonAlerta[]>(
+    `/catalogos/razones-alerta/tipo-alerta/${tipoAlertaId}`,
+    { headers: NO_CACHE_HEADERS, signal },
+  );
+  return data;
 }
