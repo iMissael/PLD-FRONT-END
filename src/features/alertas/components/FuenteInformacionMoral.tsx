@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { CalendarioFecha } from "@/shared/components/ui/CalendarioFecha";
-import { card, field, label } from "@/shared/components/ui/styles";
+import { CalendarioFecha } from "@/shared/components/molecules/CalendarioFecha";
+import { card, field, label } from "@/shared/styles/tokens";
 import { cn } from "@/shared/utils/cn";
 
 import type { DatosFuenteInformacion } from "../utils/fuenteInformacion";

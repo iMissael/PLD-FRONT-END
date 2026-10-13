@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import { Button } from "@/shared/components/ui/button";
+import { Button } from "@/shared/components/atoms/Button";
 import { useTenantNombre } from "@/shared/tenant/useTenantNombre";
 import {
   Form,
@@ -13,8 +13,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/shared/components/ui/form";
-import { Input } from "@/shared/components/ui/input";
+} from "@/shared/components/molecules/Form";
+import { Input } from "@/shared/components/atoms/Input";
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { useLogin } from "@/features/auth/hooks/useLogin";
 import type { LoginResponse } from "@/features/auth/types/auth";

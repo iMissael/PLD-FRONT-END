@@ -1,6 +1,6 @@
 import { StatusBadge } from "@/shared/components/atoms/StatusBadge";
 import { Button } from "@/shared/components/atoms/Button";
-import { card } from "@/shared/components/ui/styles";
+import { card } from "@/shared/styles/tokens";
 
 import type { ListaPaisResponse } from "../types/listaPais";
 

@@ -2,7 +2,7 @@ import { useMemo } from "react";
 
 import { StatusBadge } from "@/shared/components/atoms/StatusBadge";
 import { Button } from "@/shared/components/atoms/Button";
-import { card } from "@/shared/components/ui/styles";
+import { card } from "@/shared/styles/tokens";
 
 import { useNivelesRiesgo } from "../../ubicacion-geografica/niveles-riesgo/hooks/useNivelesRiesgo";
 import type { PrestamoMontoResponse } from "../types/prestamoMonto";

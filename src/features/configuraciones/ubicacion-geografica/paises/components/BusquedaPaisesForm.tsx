@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { card, field, label } from "@/shared/components/ui/styles";
+import { card, field, label } from "@/shared/styles/tokens";
 
 export type FiltroPaises = "PAIS" | "ZONA";
 

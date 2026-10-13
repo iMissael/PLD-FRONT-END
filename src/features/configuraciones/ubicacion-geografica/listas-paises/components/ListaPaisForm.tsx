@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { Button } from "@/shared/components/atoms/Button";
-import { card, field, label } from "@/shared/components/ui/styles";
+import { card, field, label } from "@/shared/styles/tokens";
 
 import { NivelRiesgoSelect } from "../../niveles-riesgo/components/NivelRiesgoSelect";
 import type {

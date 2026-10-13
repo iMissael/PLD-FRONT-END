@@ -2,8 +2,8 @@ import { useMemo, useState } from "react";
 
 import { useListaSocios } from "@/features/socios/hooks/useSocios";
 import type { SocioExterno } from "@/features/socios/types/socios";
-import { Badge } from "@/shared/components/ui/CatalogoBadge";
-import { card, emptyState, field, table } from "@/shared/components/ui/styles";
+import { StatusBadge as Badge } from "@/shared/components/atoms/StatusBadge";
+import { card, emptyState, field, table } from "@/shared/styles/tokens";
 import { cn } from "@/shared/utils/cn";
 
 type Criterio = "id" | "nombre" | "rfc";

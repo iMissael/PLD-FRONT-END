@@ -1,5 +1,5 @@
 import type { ComponentProps } from "react";
-import { Input } from "@/shared/components/ui/input";
+import { Input } from "@/shared/components/atoms/Input";
 import type { Formato } from "@/shared/utils/entradas";
 
 type InputFormateadoProps = Omit<ComponentProps<typeof Input>, "onChange" | "value"> & {

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
-import { Button } from "@/shared/components/ui/CatalogoButton";
-import { Checkbox } from "@/shared/components/ui/checkbox";
-import { card, field, hint, label } from "@/shared/components/ui/styles";
+import { Button } from "@/shared/components/atoms/Button";
+import { Checkbox } from "@/shared/components/atoms/Checkbox";
+import { card, field, hint, label } from "@/shared/styles/tokens";
 
 import { useScopesIntegracion } from "../hooks/useIntegraciones";
 import {

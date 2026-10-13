@@ -9,7 +9,7 @@ import {
   SearchIcon,
   UserCheckIcon,
   XIcon,
-} from "@/shared/components/icons";
+} from "@/shared/components/atoms/icons";
 import {
   Table,
   TableBody,
@@ -17,7 +17,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/shared/components/ui/table";
+} from "@/shared/components/atoms/Table";
 import { es } from "@/shared/i18n/es";
 import { toast } from "sonner";
 import { isAppError } from "@/api/interceptors/errorInterceptor";

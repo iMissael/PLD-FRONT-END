@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
-import { Alert } from "@/shared/components/ui/Alert";
-import { Button } from "@/shared/components/ui/CatalogoButton";
-import { card, field, label } from "@/shared/components/ui/styles";
+import { Alert } from "@/shared/components/molecules/Alert";
+import { Button } from "@/shared/components/atoms/Button";
+import { card, field, label } from "@/shared/styles/tokens";
 
 import { useMexicoPaisId } from "../hooks/useMexicoPaisId";
 import { useZonasDeEntidad } from "../hooks/useEntidades";

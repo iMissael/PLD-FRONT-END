@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/shared/components/atoms/Button";
 import { FormFieldGroup } from "@/shared/components/molecules/FormFieldGroup";
-import { field } from "@/shared/components/ui/styles";
+import { field } from "@/shared/styles/tokens";
 import { Search } from "lucide-react";
 
 import {

@@ -2,23 +2,23 @@ import { Search, UserRound } from "lucide-react";
 import { useId, useMemo, useRef, useState } from "react";
 import type { ComponentProps, ElementType, KeyboardEvent, ReactNode } from "react";
 import type { FieldPath, FieldValues, UseFormReturn } from "react-hook-form";
-import { InputFormateado } from "@/shared/components/InputFormateado";
-import { Input } from "@/shared/components/ui/input";
+import { InputFormateado } from "@/shared/components/atoms/InputFormateado";
+import { Input } from "@/shared/components/atoms/Input";
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/shared/components/ui/form";
-import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
+} from "@/shared/components/molecules/Form";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/molecules/Popover";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/shared/components/ui/select";
+} from "@/shared/components/molecules/Select";
 import {
   CLASE_CODIGO,
   CLASE_CONTROL,

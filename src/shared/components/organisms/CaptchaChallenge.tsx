@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { es } from "@/shared/i18n/es";
-import { RefreshCwIcon, Volume2Icon } from "./icons";
+import { RefreshCwIcon, Volume2Icon } from "@/shared/components/atoms/icons";
 
 interface CaptchaChallengeProps {
   onVerify: (isValid: boolean) => void;

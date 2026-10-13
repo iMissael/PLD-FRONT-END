@@ -1,10 +1,10 @@
 import { RefreshCw } from "lucide-react";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
-import { Button } from "@/shared/components/ui/button";
-import { Badge } from "@/shared/components/ui/CatalogoBadge";
-import { TablePagination } from "@/shared/components/ui/TablePagination";
-import { card, emptyState, table } from "@/shared/components/ui/styles";
+import { Button } from "@/shared/components/atoms/Button";
+import { StatusBadge as Badge } from "@/shared/components/atoms/StatusBadge";
+import { TablePagination } from "@/shared/components/molecules/TablePagination";
+import { card, emptyState, table } from "@/shared/styles/tokens";
 
 import type { ReglaAlerta } from "../types/reglaAlerta";
 

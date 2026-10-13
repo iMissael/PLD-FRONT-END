@@ -14,7 +14,7 @@ import {
   FormField,
   FormItem,
   FormMessage,
-} from "@/shared/components/ui/form";
+} from "@/shared/components/molecules/Form";
 
 import {
   Table,
@@ -23,7 +23,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/shared/components/ui/table";
+} from "@/shared/components/atoms/Table";
 import { useCrearNuevaVersion } from "@/features/configuraciones/matriz-riesgo/hooks/useMatrizRiesgo";
 import {
   matrizRiesgoFormSchema,

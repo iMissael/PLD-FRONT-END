@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
 import { useRazonesAlerta, useTiposAlerta } from "@/features/alertas/hooks/useAlertas";
-import { PlusIcon, XIcon } from "@/shared/components/icons";
-import { Button } from "@/shared/components/ui/CatalogoButton";
-import { card, field, hint, label, table } from "@/shared/components/ui/styles";
+import { PlusIcon, XIcon } from "@/shared/components/atoms/icons";
+import { Button } from "@/shared/components/atoms/Button";
+import { card, field, hint, label, table } from "@/shared/styles/tokens";
 
 import type {
   AplicaRegla,

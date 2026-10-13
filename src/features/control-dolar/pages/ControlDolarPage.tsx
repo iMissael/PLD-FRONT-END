@@ -2,9 +2,9 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
-import { Alert } from "@/shared/components/ui/Alert";
-import { Badge } from "@/shared/components/ui/CatalogoBadge";
-import { Button } from "@/shared/components/ui/CatalogoButton";
+import { Alert } from "@/shared/components/molecules/Alert";
+import { StatusBadge as Badge } from "@/shared/components/atoms/StatusBadge";
+import { Button } from "@/shared/components/atoms/Button";
 import {
   card,
   emptyState,
@@ -12,7 +12,7 @@ import {
   hint,
   label,
   table,
-} from "@/shared/components/ui/styles";
+} from "@/shared/styles/tokens";
 import { hoyIso } from "@/shared/utils/fechas";
 
 import {

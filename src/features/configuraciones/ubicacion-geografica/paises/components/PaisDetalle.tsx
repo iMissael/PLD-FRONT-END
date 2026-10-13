@@ -1,5 +1,5 @@
-import { Button } from "@/shared/components/ui/CatalogoButton";
-import { card } from "@/shared/components/ui/styles";
+import { Button } from "@/shared/components/atoms/Button";
+import { card } from "@/shared/styles/tokens";
 import type { PaisResponse } from "../types/pais";
 
 export interface ItemListaDetalle {

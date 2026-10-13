@@ -1,15 +1,15 @@
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { isAppError } from "@/api/interceptors/errorInterceptor";
-import { Badge } from "@/shared/components/ui/badge";
-import { Button } from "@/shared/components/ui/button";
+import { Badge } from "@/shared/components/atoms/Badge";
+import { Button } from "@/shared/components/atoms/Button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/shared/components/ui/select";
+} from "@/shared/components/molecules/Select";
 import { usePermisos } from "@/features/configuraciones/administracion/permisos/hooks/usePermisos";
 import {
   useAsignarPermiso,

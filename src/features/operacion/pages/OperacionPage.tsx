@@ -1,4 +1,4 @@
-import { PlaceholderPage } from "@/shared/components/PlaceholderPage";
+import { PlaceholderPage } from "@/shared/components/templates/PlaceholderPage";
 
 /**
  * Punto de entrada del dominio "Operación". Hoy es un placeholder; cuando se

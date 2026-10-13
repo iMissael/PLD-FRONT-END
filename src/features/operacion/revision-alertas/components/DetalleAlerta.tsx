@@ -11,9 +11,9 @@ import {
   type Alerta,
   type DictamenInput,
 } from "@/features/alertas/types/alertas";
-import { Alert } from "@/shared/components/ui/Alert";
+import { Alert } from "@/shared/components/molecules/Alert";
 import { Button } from "@/shared/components/atoms/Button";
-import { card, field, hint } from "@/shared/components/ui/styles";
+import { card, field, hint } from "@/shared/styles/tokens";
 
 import { formatearFecha, formatearMoneda } from "../utils/formato";
 

@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { StatusBadge } from "@/shared/components/atoms/StatusBadge";
 import { Button } from "@/shared/components/atoms/Button";
 import { DataTable, type ColumnDef } from "@/shared/components/organisms/DataTable";
-import { table } from "@/shared/components/ui/styles";
+import { table } from "@/shared/styles/tokens";
 import type { ListaPaisResponse } from "../types/listaPais";
 
 interface ListasPaisesTableProps {

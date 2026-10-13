@@ -1,7 +1,7 @@
 import { Search } from "lucide-react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 
-import { field } from "@/shared/components/ui/styles";
+import { field } from "@/shared/styles/tokens";
 
 import { useListaEmpleados } from "../hooks/useAlertas";
 import type { EmpleadoExterno } from "../types/alertas";

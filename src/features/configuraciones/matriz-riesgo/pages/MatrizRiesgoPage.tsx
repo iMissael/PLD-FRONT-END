@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@/shared/components/atoms/Button";
 import { StatusBadge } from "@/shared/components/atoms/StatusBadge";
 import { CatalogoPageTemplate } from "@/shared/components/templates/CatalogoPageTemplate";
-import { card } from "@/shared/components/ui/styles";
+import { card } from "@/shared/styles/tokens";
 import {
   useConfiguracionActiva,
   useVersionMatriz,

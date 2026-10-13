@@ -3,7 +3,7 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import { RequireAuth } from "@/shared/auth/RequireAuth";
 import { RequierePermiso } from "@/shared/auth/RequierePermiso";
-import { PlaceholderPage } from "@/shared/components/PlaceholderPage";
+import { PlaceholderPage } from "@/shared/components/templates/PlaceholderPage";
 import { AppLayout } from "@/shared/layouts/AppLayout";
 import { ContenidoAcotado } from "@/shared/layouts/ContenidoAcotado";
 import { TenantRequeridoPage } from "@/shared/layouts/TenantRequeridoPage";

@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { useTiposAlerta } from "@/features/alertas/hooks/useAlertas";
-import { field } from "@/shared/components/ui/styles";
+import { field } from "@/shared/styles/tokens";
 
 import { ReglaForm } from "../components/ReglaForm";
 import { ReglasTable } from "../components/ReglasTable";

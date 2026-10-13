@@ -1,4 +1,4 @@
-import { PlaceholderPage } from "@/shared/components/PlaceholderPage";
+import { PlaceholderPage } from "@/shared/components/templates/PlaceholderPage";
 
 export function ControlPage() {
   return (

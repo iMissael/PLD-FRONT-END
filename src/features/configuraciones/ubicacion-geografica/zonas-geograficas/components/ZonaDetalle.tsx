@@ -1,6 +1,6 @@
-import { Badge } from "@/shared/components/ui/CatalogoBadge";
-import { Button } from "@/shared/components/ui/CatalogoButton";
-import { card } from "@/shared/components/ui/styles";
+import { StatusBadge as Badge } from "@/shared/components/atoms/StatusBadge";
+import { Button } from "@/shared/components/atoms/Button";
+import { card } from "@/shared/styles/tokens";
 
 import type { ZonaGeograficaResponse } from "../types/zonaGeografica";
 

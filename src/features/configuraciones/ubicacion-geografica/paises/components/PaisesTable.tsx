@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { DataTable, type ColumnDef } from "@/shared/components/DataTable";
+import { DataTable, type ColumnDef } from "@/shared/components/organisms/DataTable";
 import type { PaisResponse } from "../types/pais";
 
 export interface InfoListaPais {

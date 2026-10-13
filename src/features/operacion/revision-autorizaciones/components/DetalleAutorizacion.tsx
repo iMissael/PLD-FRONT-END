@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
-import { Alert } from "@/shared/components/ui/Alert";
-import { card, label } from "@/shared/components/ui/styles";
+import { Alert } from "@/shared/components/molecules/Alert";
+import { card, label } from "@/shared/styles/tokens";
 
 import { useDetalleAutorizacion } from "../hooks/useAutorizaciones";
 import type { RevisionAutorizacion } from "../types/autorizaciones";

@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { toast } from "sonner";
 import { isAppError } from "@/api/interceptors/errorInterceptor";
-import { Badge } from "@/shared/components/ui/badge";
-import { Button } from "@/shared/components/ui/button";
+import { Badge } from "@/shared/components/atoms/Badge";
+import { Button } from "@/shared/components/atoms/Button";
 import {
   Table,
   TableBody,
@@ -10,7 +10,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/shared/components/ui/table";
+} from "@/shared/components/atoms/Table";
 import {
   useEliminarPermiso,
   usePermisos,

@@ -15,10 +15,10 @@ import {
   type DatosFuenteInformacion,
   FUENTE_VACIA,
 } from "@/features/alertas/utils/fuenteInformacion";
-import { Alert } from "@/shared/components/ui/Alert";
-import { CalendarioFecha } from "@/shared/components/ui/CalendarioFecha";
-import { Button } from "@/shared/components/ui/CatalogoButton";
-import { card, field, hint, label } from "@/shared/components/ui/styles";
+import { Alert } from "@/shared/components/molecules/Alert";
+import { CalendarioFecha } from "@/shared/components/molecules/CalendarioFecha";
+import { Button } from "@/shared/components/atoms/Button";
+import { card, field, hint, label } from "@/shared/styles/tokens";
 import { cn } from "@/shared/utils/cn";
 import { haceAniosIso, hoyIso } from "@/shared/utils/fechas";
 

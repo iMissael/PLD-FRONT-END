@@ -10,10 +10,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/shared/components/ui/alert-dialog";
-import { Badge } from "@/shared/components/ui/CatalogoBadge";
-import { Button } from "@/shared/components/ui/CatalogoButton";
-import { card, field, hint, label, table } from "@/shared/components/ui/styles";
+} from "@/shared/components/organisms/AlertDialog";
+import { StatusBadge as Badge } from "@/shared/components/atoms/StatusBadge";
+import { Button } from "@/shared/components/atoms/Button";
+import { card, field, hint, label, table } from "@/shared/styles/tokens";
 
 import { useEmitirCredencial, useRevocarCredencial } from "../hooks/useIntegraciones";
 import {

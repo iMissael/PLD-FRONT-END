@@ -1,4 +1,4 @@
-import { field } from "@/shared/components/ui/styles";
+import { field } from "@/shared/styles/tokens";
 
 import { useNivelesRiesgo } from "../hooks/useNivelesRiesgo";
 

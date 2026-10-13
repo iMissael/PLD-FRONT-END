@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { Button } from "@/shared/components/ui/CatalogoButton";
+import { Button } from "@/shared/components/atoms/Button";
 
 import type { CredencialEmitidaResponse } from "../types/integraciones";
 

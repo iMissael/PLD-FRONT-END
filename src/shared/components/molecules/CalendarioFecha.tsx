@@ -1,8 +1,8 @@
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
-import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
-import { field } from "@/shared/components/ui/styles";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/molecules/Popover";
+import { field } from "@/shared/styles/tokens";
 import { cn } from "@/shared/utils/cn";
 import { hoyIso } from "@/shared/utils/fechas";
 

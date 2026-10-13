@@ -1,4 +1,4 @@
-import { SettingsIcon } from "@/shared/components/icons";
+import { SettingsIcon } from "@/shared/components/atoms/icons";
 
 interface PlaceholderPageProps {
   title: string;

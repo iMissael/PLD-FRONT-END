@@ -15,7 +15,7 @@ import {
   SettingsIcon,
   ShieldSearchIcon,
   UserPlusIcon,
-} from "@/shared/components/icons";
+} from "@/shared/components/atoms/icons";
 import { Header } from "@/shared/components/organisms/Header";
 import { Sidebar, type NavNode, type NavLeaf } from "@/shared/components/organisms/Sidebar";
 import { Breadcrumbs } from "@/shared/components/organisms/Breadcrumbs";

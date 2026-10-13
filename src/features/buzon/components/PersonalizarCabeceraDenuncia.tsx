@@ -28,14 +28,14 @@ import {
   Pilcrow,
 } from "lucide-react";
 
-import { Button } from "@/shared/components/ui/button";
-import { Label } from "@/shared/components/ui/label";
-import { Skeleton } from "@/shared/components/ui/skeleton";
+import { Button } from "@/shared/components/atoms/Button";
+import { Label } from "@/shared/components/atoms/Label";
+import { Skeleton } from "@/shared/components/atoms/Skeleton";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/shared/components/ui/popover";
+} from "@/shared/components/molecules/Popover";
 import {
   useActualizarMensajeDenunciaAdmin,
   useMensajeDenunciaAdmin,

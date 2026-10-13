@@ -7,8 +7,8 @@ import {
   type FiltroAlertas,
   type OrigenAlerta,
 } from "@/features/alertas/types/alertas";
-import { Button } from "@/shared/components/ui/CatalogoButton";
-import { card, field, label } from "@/shared/components/ui/styles";
+import { Button } from "@/shared/components/atoms/Button";
+import { card, field, label } from "@/shared/styles/tokens";
 
 interface FiltrosAlertasProps {
   inicial: FiltroAlertas;

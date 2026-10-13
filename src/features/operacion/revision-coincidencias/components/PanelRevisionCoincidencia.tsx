@@ -13,11 +13,11 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/shared/components/ui/alert-dialog";
-import { Badge } from "@/shared/components/ui/badge";
-import { Button } from "@/shared/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/shared/components/ui/card";
-import { Label } from "@/shared/components/ui/label";
+} from "@/shared/components/organisms/AlertDialog";
+import { Badge } from "@/shared/components/atoms/Badge";
+import { Button } from "@/shared/components/atoms/Button";
+import { Card, CardContent, CardHeader } from "@/shared/components/molecules/Card";
+import { Label } from "@/shared/components/atoms/Label";
 
 import { useResolverCoincidencia } from "../hooks/useCoincidencias";
 import type { CoincidenciaSocio } from "../types/coincidencias";

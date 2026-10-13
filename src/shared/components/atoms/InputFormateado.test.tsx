@@ -2,7 +2,7 @@ import { useState } from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
-import { InputFormateado } from "@/shared/components/InputFormateado";
+import { InputFormateado } from "@/shared/components/atoms/InputFormateado";
 import { mayusculas, soloDigitos, type Formato } from "@/shared/utils/entradas";
 
 function Campo({ formato, maxLength }: { formato?: Formato; maxLength?: number }) {

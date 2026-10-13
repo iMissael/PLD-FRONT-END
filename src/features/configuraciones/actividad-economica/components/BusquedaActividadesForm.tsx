@@ -1,4 +1,4 @@
-import { card, field, label } from "@/shared/components/ui/styles";
+import { card, field, label } from "@/shared/styles/tokens";
 
 interface BusquedaActividadesFormProps {
   valor: string;

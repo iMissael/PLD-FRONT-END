@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import { DataTable, type ColumnDef } from "@/shared/components/DataTable";
-import { Button } from "@/shared/components/ui/CatalogoButton";
-import { card } from "@/shared/components/ui/styles";
+import { DataTable, type ColumnDef } from "@/shared/components/organisms/DataTable";
+import { Button } from "@/shared/components/atoms/Button";
+import { card } from "@/shared/styles/tokens";
 import { useEntidadesDeZona } from "../hooks/useZonasGeograficas";
 import type {
   EntidadAsignadaResponse,

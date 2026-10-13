@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { useRutaTenant } from "@/shared/tenant/useRutaTenant";
-import { Badge } from "@/shared/components/ui/badge";
-import { Button } from "@/shared/components/ui/button";
-import { TablePagination } from "@/shared/components/TablePagination";
+import { Badge } from "@/shared/components/atoms/Badge";
+import { Button } from "@/shared/components/atoms/Button";
+import { TablePagination } from "@/shared/components/molecules/TablePagination";
 import {
   Table,
   TableBody,
@@ -13,7 +13,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/shared/components/ui/table";
+} from "@/shared/components/atoms/Table";
 import { esEstatusActivo, etiquetaEstatus } from "@/shared/utils/estatus";
 import {
   useEliminarRol,

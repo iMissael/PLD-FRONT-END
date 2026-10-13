@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/molecules/Card";
 import { ConsultaListasForm } from "@/features/operacion/consulta-listas/components/ConsultaListasForm";
 import { ResultadosConsultaListas } from "@/features/operacion/consulta-listas/components/ResultadosConsultaListas";
 import type { ConsultaLista } from "@/features/operacion/consulta-listas/types/Quienesquien";
