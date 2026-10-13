@@ -33,7 +33,7 @@ describe("PersonalizarCabeceraDenuncia", () => {
         nombreComercial: "Mi SOFOM S.A. de C.V.",
       },
       isLoading: false,
-    } as any);
+    } as unknown as ReturnType<typeof mensajeHooks.useNombreTenantPublico>);
 
     vi.mocked(mensajeHooks.useMensajeDenunciaAdmin).mockReturnValue({
       data: {
@@ -46,12 +46,12 @@ describe("PersonalizarCabeceraDenuncia", () => {
       },
       isLoading: false,
       isError: false,
-    } as any);
+    } as unknown as ReturnType<typeof mensajeHooks.useMensajeDenunciaAdmin>);
 
     vi.mocked(mensajeHooks.useActualizarMensajeDenunciaAdmin).mockReturnValue({
       mutateAsync: mutateAsyncMock,
       isPending: false,
-    } as any);
+    } as unknown as ReturnType<typeof mensajeHooks.useActualizarMensajeDenunciaAdmin>);
   });
 
   const renderComponent = () =>

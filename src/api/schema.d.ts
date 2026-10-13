@@ -2458,6 +2458,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/SICANETSC/PLD/{tenantId}/buzon/denuncias/url-subida": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Generar URL prefirmada de subida a Amazon S3
+         * @description Genera una URL PUT prefirmada (válida por 15 minutos) para que el frontend suba archivos directamente a Amazon S3 sin requerir autenticación.
+         */
+        post: operations["obtenerUrlSubidaS3"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/SICANETSC/PLD/{tenantId}/auth/login": {
         parameters: {
             query?: never;
@@ -3787,6 +3807,7 @@ export interface components {
             /** Format: int32 */
             intentosFallidos?: number;
             isLocked?: boolean;
+            razonBloqueo?: string;
             /** Format: date-time */
             bloqueadoHasta?: string;
             /** Format: date-time */
@@ -3898,6 +3919,22 @@ export interface components {
             cat_nivel_riesgo_id: number;
             observaciones: string;
         };
+        ProblemDetailsResponse: {
+            type?: string;
+            title?: string;
+            /** Format: int32 */
+            status?: number;
+            detail?: string;
+            instance?: string;
+            /** Format: date-time */
+            timestamp?: string;
+            invalidParams?: {
+                [key: string]: string;
+            };
+            coincidencias?: {
+                [key: string]: string;
+            }[];
+        };
         DesglosePuntuacion: {
             factores?: components["schemas"]["PuntajeFactor"][];
         };
@@ -3942,22 +3979,6 @@ export interface components {
             valor?: number;
             ponderacion?: number;
             puntaje?: number;
-        };
-        ProblemDetailsResponse: {
-            type?: string;
-            title?: string;
-            /** Format: int32 */
-            status?: number;
-            detail?: string;
-            instance?: string;
-            /** Format: date-time */
-            timestamp?: string;
-            invalidParams?: {
-                [key: string]: string;
-            };
-            coincidencias?: {
-                [key: string]: string;
-            }[];
         };
         ResolverCoincidenciaRequest: {
             es_la_persona: boolean;
@@ -5815,6 +5836,26 @@ export interface components {
             descripcion: string;
             /** @description Token de verificación de Cloudflare Turnstile (opcional si se envía en header cf-turnstile-response) */
             turnstileToken?: string;
+            /** @description Lista opcional de evidencias subidas directamente a S3 mediante URL prefirmada */
+            evidencias?: components["schemas"]["EvidenciaPreCargadaRequest"][];
+        };
+        /** @description Lista opcional de evidencias subidas directamente a S3 mediante URL prefirmada */
+        EvidenciaPreCargadaRequest: {
+            /**
+             * @description Clave o ruta del objeto en S3
+             * @example 57b37f52-ecd6-483d-addb-1495e96e2492/evidencias/5b4fae74_evidencia.pdf
+             */
+            path: string;
+            /**
+             * @description Nombre original del archivo
+             * @example evidencia.pdf
+             */
+            nombre?: string;
+            /**
+             * @description MIME Type del archivo
+             * @example application/pdf
+             */
+            tipoArchivo?: string;
         };
         CrearObservacionRequest: {
             /**
@@ -5838,6 +5879,35 @@ export interface components {
             createdAt?: string;
             nombre?: string;
             tipoArchivo?: string;
+        };
+        SolicitudUrlSubidaRequest: {
+            /**
+             * @description Nombre original del archivo
+             * @example evidencia_transferencia.pdf
+             */
+            nombreArchivo: string;
+            /**
+             * @description Tipo MIME del archivo (opcional)
+             * @example application/pdf
+             */
+            contentType?: string;
+        };
+        UrlSubidaPresignadaResponse: {
+            /**
+             * @description URL prefirmada de Amazon S3 (método PUT) para subir directamente el archivo
+             * @example https://sicanet-pld-dev.s3.us-east-2.amazonaws.com/...
+             */
+            uploadUrl?: string;
+            /**
+             * @description Clave o ruta del archivo en S3 a enviar al registrar la denuncia
+             * @example 57b37f52-ecd6-483d-addb-1495e96e2492/evidencias/5b4fae74_evidencia.pdf
+             */
+            s3Key?: string;
+            /**
+             * @description Tiempo de validez de la URL prefirmada
+             * @example 15 minutos
+             */
+            expiraEn?: string;
         };
         LoginRequest: {
             username: string;
@@ -12814,6 +12884,38 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["EvidenciaResponse"];
+                };
+            };
+        };
+    };
+    obtenerUrlSubidaS3: {
+        parameters: {
+            query?: {
+                /** @description Nombre original del archivo */
+                nombreArchivo?: string;
+                /** @description MIME Type del archivo */
+                contentType?: string;
+            };
+            header?: never;
+            path: {
+                /** @description Identificador del Tenant */
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["SolicitudUrlSubidaRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["UrlSubidaPresignadaResponse"];
                 };
             };
         };

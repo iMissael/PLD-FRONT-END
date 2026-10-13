@@ -35,6 +35,7 @@ function idsDeZona(entidad: EntidadResponse): string[] {
 /** Datos de una zona ya resueltos contra el catálogo. Nivel null solo en una zona especial. */
 interface ZonaInfo {
   nombre: string;
+  /** Nullable: una zona puede no tener nivel de riesgo resuelto. */
   nivelRiesgoDescripcion: string | null;
   nivelRiesgoValor: number | null;
   esEntidadEspecial: boolean;
@@ -182,6 +183,8 @@ export function EntidadesPage() {
       {
         header: "Nivel de riesgo",
         cell: (item: EntidadResponse) => {
+          // "—" en vez de omitir: mantiene la misma posición/cuenta que la
+          // columna "Zona de riesgo", que lista todas las zonas sin filtrar.
           const niveles = zonasNoEspeciales(item, mapaZonas).map((info) =>
             info.nivelRiesgoDescripcion !== null
               ? `${info.nivelRiesgoDescripcion} (${info.nivelRiesgoValor})`

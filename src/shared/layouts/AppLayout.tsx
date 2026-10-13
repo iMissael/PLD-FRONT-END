@@ -99,7 +99,6 @@ const NAV_ITEMS: NavNode[] = [
         ],
       },
       { label: "Configuración de personas", to: "configuraciones/personas" },
-      { label: "Configuración de PEPs", to: "configuraciones/peps" },
       {
         label: "Configuración de edades",
         children: [
