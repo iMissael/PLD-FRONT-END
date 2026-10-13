@@ -209,8 +209,8 @@ export interface paths {
         };
         get?: never;
         /**
-         * Modificar manualmente el nivel de riesgo
-         * @description Permite al oficial de cumplimiento asignar un nivel de riesgo distinto al calculado por la matriz, con una observación que justifique el cambio. El nivel calculado original no se pierde: queda disponible junto con el manual.
+         * Asignar manualmente el nivel de riesgo
+         * @description Permite al Oficial de Cumplimiento sobrescribir el nivel calculado por la matriz, dejando constancia del motivo. El nivel automatico no se pierde: la respuesta trae ambos.
          */
         put: operations["modificarNivelRiesgo"];
         post?: never;
@@ -2662,40 +2662,6 @@ export interface paths {
         patch: operations["cambiarEstatus_3"];
         trace?: never;
     };
-    "/publico/nombre": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Obtener nombre comercial del tenant (público) */
-        get: operations["obtenerNombrePublico"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/tenants/publico/nombre": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Obtener nombre comercial del tenant (público) */
-        get: operations["obtenerNombrePublico_1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/tenants/publico/mensaje-denuncia": {
         parameters: {
             query?: never;
@@ -2728,6 +2694,23 @@ export interface paths {
          * @description Consulta la configuración actual del mensaje HTML para el tenant.
          */
         get: operations["obtenerMensajePublico_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/publico/nombre": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Obtener nombre comercial del tenant (público) */
+        get: operations["obtenerNombrePublico"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3914,9 +3897,18 @@ export interface components {
             /** @enum {string} */
             estado?: "A" | "B" | "S" | "E";
         };
+        /** @description Nivel de riesgo asignado manualmente y su justificación */
         ModificarNivelRiesgoRequest: {
-            /** Format: int64 */
+            /**
+             * Format: int64
+             * @description ID del nivel de riesgo del catálogo
+             * @example 5
+             */
             cat_nivel_riesgo_id: number;
+            /**
+             * @description Justificación del cambio; queda como rastro de auditoría
+             * @example Se eleva el nivel por operaciones inusuales detectadas en revisión manual
+             */
             observaciones: string;
         };
         ProblemDetailsResponse: {
@@ -3981,7 +3973,9 @@ export interface components {
             puntaje?: number;
         };
         ResolverCoincidenciaRequest: {
-            es_la_persona: boolean;
+            es_la_persona?: boolean;
+            pais_nacimiento_decision?: string;
+            nacionalidad_decision?: string;
             comentario?: string;
         };
         CoincidenciaListaResponse: {
@@ -3990,6 +3984,8 @@ export interface components {
             lista_negra?: components["schemas"]["ListaDto"];
             lista_bloqueadas?: components["schemas"]["ListaDto"];
             lista_peps?: components["schemas"]["ListaDto"];
+            pais_nacimiento?: components["schemas"]["ListaDto"];
+            nacionalidad?: components["schemas"]["ListaDto"];
             sucursal?: string;
             /** Format: date-time */
             fecha_registro?: string;
@@ -5346,6 +5342,7 @@ export interface components {
             curp?: string;
             tipo_persona_id: string;
             nacionalidad_id: string;
+            pais_nacimiento_id?: string;
             fecha_nacimiento?: string;
             antiguedad_giro_anios?: string;
             pep_nacional_id?: string;
@@ -6190,6 +6187,7 @@ export interface components {
             esPep?: boolean;
             tipoPersona?: components["schemas"]["TipoPersonaInfo"];
             nacionalidad?: components["schemas"]["NacionalidadInfo"];
+            paisNacimientoId?: string;
             actividadEconomica?: components["schemas"]["ActividadEconomicaInfo"];
             sucursal?: string;
             domicilio?: components["schemas"]["DomicilioSocio"];
@@ -7204,7 +7202,7 @@ export interface operations {
             header?: never;
             path: {
                 /**
-                 * @description Llave de seguimiento de la evaluación
+                 * @description Llave de seguimiento de la evaluacion
                  * @example 1052
                  */
                 llaveSeguimiento: number;
@@ -7219,7 +7217,7 @@ export interface operations {
             };
         };
         responses: {
-            /** @description Nivel de riesgo modificado */
+            /** @description Nivel de riesgo actualizado */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -7228,8 +7226,26 @@ export interface operations {
                     "application/json": components["schemas"]["EvaluacionRiesgoResponseDto"];
                 };
             };
-            /** @description Evaluación no encontrada */
+            /** @description Datos de entrada invalidos */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetailsResponse"];
+                };
+            };
+            /** @description Evaluacion no encontrada */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetailsResponse"];
+                };
+            };
+            /** @description Violacion de regla de negocio */
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -13201,46 +13217,6 @@ export interface operations {
             };
         };
     };
-    obtenerNombrePublico: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["TenantNombrePublicoResponse"];
-                };
-            };
-        };
-    };
-    obtenerNombrePublico_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["TenantNombrePublicoResponse"];
-                };
-            };
-        };
-    };
     obtenerMensajePublico: {
         parameters: {
             query?: never;
@@ -13277,6 +13253,26 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["MensajeDenunciaResponse"];
+                };
+            };
+        };
+    };
+    obtenerNombrePublico: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TenantNombrePublicoResponse"];
                 };
             };
         };

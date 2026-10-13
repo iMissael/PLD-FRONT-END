@@ -31,6 +31,19 @@ function nombreEncontrado(coincidencia: CoincidenciaSocio) {
   );
 }
 
+/** Riesgo-pais es informativo (nunca bloquea): solo se muestra si nacimiento y/o nacionalidad coinciden. */
+function estatusPais(coincidencia: CoincidenciaSocio) {
+  const partes: string[] = [];
+  if (coincidencia.pais_nacimiento?.coincide) partes.push("Nacimiento");
+  if (coincidencia.nacionalidad?.coincide) partes.push("Nacionalidad");
+  return partes;
+}
+
+// Pendiente de Feature 2 (persona relacionada): hoy toda coincidencia es del socio directo.
+function tipoRelacion(_coincidencia: CoincidenciaSocio) {
+  return "—";
+}
+
 interface TablaIncidenciasPendientesProps {
   coincidencias: CoincidenciaSocio[] | undefined;
   isLoading: boolean;
@@ -65,15 +78,18 @@ export function TablaIncidenciasPendientes({
     <Table>
       <TableHeader>
         <TableRow>
+          <TableHead className="w-12">#</TableHead>
+          <TableHead>Fecha Incidencia</TableHead>
           <TableHead>Socio</TableHead>
           <TableHead>Lista</TableHead>
+          <TableHead>Estatus País</TableHead>
           <TableHead>Nombre en la lista</TableHead>
-          <TableHead>Detectada</TableHead>
+          <TableHead>Tipo de Relación</TableHead>
           <TableHead className="text-right">Acción</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {coincidencias.map((coincidencia) => (
+        {coincidencias.map((coincidencia, indice) => (
           <TableRow
             key={coincidencia.socio_ref}
             className={
@@ -82,6 +98,12 @@ export function TablaIncidenciasPendientes({
                 : undefined
             }
           >
+            <TableCell className="text-muted-foreground">{indice + 1}</TableCell>
+            <TableCell className="text-muted-foreground">
+              {formatearFecha(
+                coincidencia.fecha_modificacion ?? coincidencia.fecha_registro,
+              )}
+            </TableCell>
             <TableCell>
               <div className="font-medium">{coincidencia.socio?.nombre ?? "—"}</div>
               <div className="text-xs text-muted-foreground">
@@ -95,13 +117,27 @@ export function TablaIncidenciasPendientes({
                     {lista}
                   </Badge>
                 ))}
+                {coincidencia.lista_peps?.coincide ? (
+                  <Badge variant="outline">PEP</Badge>
+                ) : null}
+              </div>
+            </TableCell>
+            <TableCell>
+              <div className="flex flex-wrap gap-1">
+                {estatusPais(coincidencia).length > 0 ? (
+                  estatusPais(coincidencia).map((parte) => (
+                    <Badge key={parte} variant="outline">
+                      {parte}
+                    </Badge>
+                  ))
+                ) : (
+                  <span className="text-muted-foreground">—</span>
+                )}
               </div>
             </TableCell>
             <TableCell>{nombreEncontrado(coincidencia)}</TableCell>
             <TableCell className="text-muted-foreground">
-              {formatearFecha(
-                coincidencia.fecha_modificacion ?? coincidencia.fecha_registro,
-              )}
+              {tipoRelacion(coincidencia)}
             </TableCell>
             <TableCell className="text-right">
               <Button size="sm" onClick={() => onRevisar(coincidencia)}>

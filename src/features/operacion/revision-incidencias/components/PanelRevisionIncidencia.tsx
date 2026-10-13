@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
@@ -20,9 +20,56 @@ import { Card, CardContent, CardHeader } from "@/shared/components/ui/card";
 import { Label } from "@/shared/components/ui/label";
 
 import { useResolverIncidencia } from "../hooks/useIncidencias";
-import type { CoincidenciaSocio } from "../types/incidencias";
+import type { CoincidenciaSocio, DecisionRiesgoPais } from "../types/incidencias";
 import { listasCoincidentes } from "../utils/comparar";
 import { ComparacionPersona } from "./ComparacionPersona";
+
+type ListaPaisDto = NonNullable<CoincidenciaSocio["pais_nacimiento"]>;
+
+/** Un bucket de riesgo-pais (pais de nacimiento o nacionalidad): es informativo, nunca bloquea. */
+function RiesgoPaisBucket({
+  titulo,
+  lista,
+  valor,
+  onChange,
+  disabled,
+}: {
+  titulo: string;
+  lista: ListaPaisDto;
+  valor: DecisionRiesgoPais | undefined;
+  onChange: (valor: DecisionRiesgoPais) => void;
+  disabled: boolean;
+}) {
+  const nombre = `riesgo-pais-${titulo}`;
+  return (
+    <div className="space-y-2 rounded-md border p-3">
+      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">{titulo}</p>
+      <p className="text-sm">{lista.nombre_encontrado ?? "—"}</p>
+      <div className="flex items-center gap-4 text-sm">
+        <label className="flex items-center gap-1.5">
+          <input
+            type="radio"
+            name={nombre}
+            disabled={disabled}
+            checked={valor === "CONFIRMADO"}
+            onChange={() => onChange("CONFIRMADO")}
+          />
+          Confirmar
+        </label>
+        <label className="flex items-center gap-1.5">
+          <input
+            type="radio"
+            name={nombre}
+            disabled={disabled}
+            checked={valor === "MINIMIZADO"}
+            onChange={() => onChange("MINIMIZADO")}
+          />
+          Minimizar
+        </label>
+      </div>
+    </div>
+  );
+}
 
 // Solo quien tiene el permiso asignado en su rol resuelve (el backend no aplica aquí el acceso
 // total del administrador: separación de funciones).
@@ -64,11 +111,39 @@ export function PanelRevisionIncidencia({
   const resolver = useResolverIncidencia();
   const [comentario, setComentario] = useState("");
   const [decision, setDecision] = useState<Decision | null>(null);
+  const [decisionPaisNacimiento, setDecisionPaisNacimiento] = useState<DecisionRiesgoPais>();
+  const [decisionNacionalidad, setDecisionNacionalidad] = useState<DecisionRiesgoPais>();
+
+  // Cambiar de coincidencia (otra fila de la tabla) resetea las decisiones de pais sin guardar:
+  // son de la fila actual, no deben arrastrarse a la siguiente.
+  useEffect(() => {
+    setDecisionPaisNacimiento(undefined);
+    setDecisionNacionalidad(undefined);
+  }, [coincidencia?.socio_ref]);
 
   function cerrar() {
     setComentario("");
     setDecision(null);
     onClose();
+  }
+
+  function guardarDecisionPais() {
+    if (!coincidencia?.socio_ref || (!decisionPaisNacimiento && !decisionNacionalidad)) return;
+    resolver.mutate(
+      {
+        socioRef: coincidencia.socio_ref,
+        payload: {
+          pais_nacimiento_decision: decisionPaisNacimiento,
+          nacionalidad_decision: decisionNacionalidad,
+        },
+      },
+      {
+        onSuccess: () => toast.success("Riesgo de país actualizado."),
+        onError: (error) => {
+          toast.error(isAppError(error) ? error.message : "No se pudo guardar la decisión.");
+        },
+      },
+    );
   }
 
   function aplicarDecision() {
@@ -158,6 +233,44 @@ export function PanelRevisionIncidencia({
           <p className="text-sm text-muted-foreground">
             No hay detalle de la persona en la lista para esta coincidencia.
           </p>
+        ) : null}
+
+        {coincidencia.pais_nacimiento?.coincide || coincidencia.nacionalidad?.coincide ? (
+          <div className="space-y-3 rounded-lg border p-4">
+            <p className="text-sm font-medium">Confirmación de países</p>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {coincidencia.pais_nacimiento?.coincide ? (
+                <RiesgoPaisBucket
+                  titulo="País de nacimiento"
+                  lista={coincidencia.pais_nacimiento}
+                  valor={decisionPaisNacimiento}
+                  onChange={setDecisionPaisNacimiento}
+                  disabled={!esOficial || resolver.isPending}
+                />
+              ) : null}
+              {coincidencia.nacionalidad?.coincide ? (
+                <RiesgoPaisBucket
+                  titulo="Nacionalidad"
+                  lista={coincidencia.nacionalidad}
+                  valor={decisionNacionalidad}
+                  onChange={setDecisionNacionalidad}
+                  disabled={!esOficial || resolver.isPending}
+                />
+              ) : null}
+            </div>
+            {esOficial ? (
+              <div className="flex justify-end">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  disabled={resolver.isPending || (!decisionPaisNacimiento && !decisionNacionalidad)}
+                  onClick={guardarDecisionPais}
+                >
+                  Guardar decisión de país
+                </Button>
+              </div>
+            ) : null}
+          </div>
         ) : null}
 
         {esOficial ? (
