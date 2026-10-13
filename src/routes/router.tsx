@@ -132,8 +132,8 @@ const CapturaAlertasPage = lazy(() =>
 const ConsultaListasPage = lazy(() =>
   import("@/features/operacion/consulta-listas/pages/Quienesquien").then((m) => ({ default: m.ConsultaListasPage })),
 );
-const RevisionCoincidenciasPage = lazy(() =>
-  import("@/features/operacion/revision-coincidencias/pages/RevisionCoincidenciasPage").then((m) => ({ default: m.RevisionCoincidenciasPage })),
+const RevisionIncidenciasPage = lazy(() =>
+  import("@/features/operacion/revision-incidencias/pages/RevisionIncidenciasPage").then((m) => ({ default: m.RevisionIncidenciasPage })),
 );
 const EvaluacionRiesgoPage = lazy(() =>
   import("@/features/operacion/evaluacion-riesgo/pages/EvaluacionRiesgoPage").then((m) => ({ default: m.EvaluacionRiesgoPage })),
@@ -359,7 +359,7 @@ export const router = createBrowserRouter([
                         path: "operacion/coincidencias",
                         element: (
                           <RequierePermiso recurso="coincidencias" accion="ver">
-                            <RevisionCoincidenciasPage />
+                            <RevisionIncidenciasPage />
                           </RequierePermiso>
                         ),
                       },

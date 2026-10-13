@@ -2,19 +2,19 @@ import { apiClient } from "@/api/client";
 
 import type {
   CoincidenciaSocio,
-  ResolverCoincidenciaPayload,
-} from "../types/coincidencias";
+  ResolverIncidenciaPayload,
+} from "../types/incidencias";
 
-export async function listarCoincidenciasPendientes() {
+export async function listarIncidenciasPendientes() {
   const { data } = await apiClient.get<CoincidenciaSocio[]>(
     "/pld/coincidencias/pendientes",
   );
   return data;
 }
 
-export async function resolverCoincidencia(
+export async function resolverIncidencia(
   socioRef: string,
-  payload: ResolverCoincidenciaPayload,
+  payload: ResolverIncidenciaPayload,
 ) {
   const { data } = await apiClient.put<CoincidenciaSocio>(
     `/pld/coincidencias/${encodeURIComponent(socioRef)}/confirmacion`,

@@ -5,14 +5,14 @@ import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent } from "@/shared/components/ui/card";
 
-import { PanelRevisionCoincidencia } from "../components/PanelRevisionCoincidencia";
-import { TablaCoincidenciasPendientes } from "../components/TablaCoincidenciasPendientes";
-import { useCoincidenciasPendientes } from "../hooks/useCoincidencias";
-import type { CoincidenciaSocio } from "../types/coincidencias";
+import { PanelRevisionIncidencia } from "../components/PanelRevisionIncidencia";
+import { TablaIncidenciasPendientes } from "../components/TablaIncidenciasPendientes";
+import { useIncidenciasPendientes } from "../hooks/useIncidencias";
+import type { CoincidenciaSocio } from "../types/incidencias";
 
-export function RevisionCoincidenciasPage() {
+export function RevisionIncidenciasPage() {
   const { data, isLoading, isError, error, refetch, isFetching } =
-    useCoincidenciasPendientes();
+    useIncidenciasPendientes();
   const [seleccionada, setSeleccionada] = useState<CoincidenciaSocio | null>(null);
 
   return (
@@ -41,7 +41,7 @@ export function RevisionCoincidenciasPage() {
                 : "No se pudieron cargar las coincidencias pendientes."}
             </p>
           ) : (
-            <TablaCoincidenciasPendientes
+            <TablaIncidenciasPendientes
               coincidencias={data}
               isLoading={isLoading}
               socioRefSeleccionado={seleccionada?.socio_ref}
@@ -51,7 +51,7 @@ export function RevisionCoincidenciasPage() {
         </CardContent>
       </Card>
 
-      <PanelRevisionCoincidencia
+      <PanelRevisionIncidencia
         coincidencia={seleccionada}
         onClose={() => setSeleccionada(null)}
       />

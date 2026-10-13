@@ -19,8 +19,8 @@ import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/shared/components/ui/card";
 import { Label } from "@/shared/components/ui/label";
 
-import { useResolverCoincidencia } from "../hooks/useCoincidencias";
-import type { CoincidenciaSocio } from "../types/coincidencias";
+import { useResolverIncidencia } from "../hooks/useIncidencias";
+import type { CoincidenciaSocio } from "../types/incidencias";
 import { listasCoincidentes } from "../utils/comparar";
 import { ComparacionPersona } from "./ComparacionPersona";
 
@@ -47,21 +47,21 @@ const TEXTOS: Record<Decision, { titulo: string; descripcion: string; accion: st
     },
   };
 
-interface PanelRevisionCoincidenciaProps {
+interface PanelRevisionIncidenciaProps {
   coincidencia: CoincidenciaSocio | null;
   onClose: () => void;
 }
 
-export function PanelRevisionCoincidencia({
+export function PanelRevisionIncidencia({
   coincidencia,
   onClose,
-}: PanelRevisionCoincidenciaProps) {
+}: PanelRevisionIncidenciaProps) {
   const esOficial = useAuthStore((estado) =>
     estado.permisos.some(
       (p) => p.recurso === PERMISO_CONFIRMAR.recurso && p.accion === PERMISO_CONFIRMAR.accion,
     ),
   );
-  const resolver = useResolverCoincidencia();
+  const resolver = useResolverIncidencia();
   const [comentario, setComentario] = useState("");
   const [decision, setDecision] = useState<Decision | null>(null);
 

@@ -172,7 +172,7 @@ const NAV_ITEMS: NavNode[] = [
         label: "Revisión de alertas de seguimiento en operación",
         to: "operacion/revision-alertas-seguimiento",
       },
-      { label: "Revisión de coincidencias", to: "operacion/coincidencias" },
+      { label: "Revisión de incidencias", to: "operacion/coincidencias" },
     ],
   },
   {

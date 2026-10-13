@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/components/ui/table";
-import type { PersonaEnLista, SocioEnRevision } from "../types/coincidencias";
+import type { PersonaEnLista, SocioEnRevision } from "../types/incidencias";
 import { coinciden } from "../utils/comparar";
 
 function Indicador({ resultado }: { resultado: boolean | null }) {

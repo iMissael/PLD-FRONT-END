@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@/shared/components/ui/table";
 
-import type { CoincidenciaSocio } from "../types/coincidencias";
+import type { CoincidenciaSocio } from "../types/incidencias";
 import { listasCoincidentes } from "../utils/comparar";
 
 function formatearFecha(valor: string | undefined) {
@@ -31,19 +31,19 @@ function nombreEncontrado(coincidencia: CoincidenciaSocio) {
   );
 }
 
-interface TablaCoincidenciasPendientesProps {
+interface TablaIncidenciasPendientesProps {
   coincidencias: CoincidenciaSocio[] | undefined;
   isLoading: boolean;
   socioRefSeleccionado?: string;
   onRevisar: (coincidencia: CoincidenciaSocio) => void;
 }
 
-export function TablaCoincidenciasPendientes({
+export function TablaIncidenciasPendientes({
   coincidencias,
   isLoading,
   socioRefSeleccionado,
   onRevisar,
-}: TablaCoincidenciasPendientesProps) {
+}: TablaIncidenciasPendientesProps) {
   if (isLoading) {
     return (
       <div className="space-y-2" aria-label="Cargando coincidencias">
