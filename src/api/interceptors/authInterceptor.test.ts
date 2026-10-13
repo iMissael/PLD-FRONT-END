@@ -12,7 +12,7 @@ const sesion = {
   tokenType: "Bearer",
   expiresInSeconds: 3600,
   usuario: { id: 1, username: "admin", nombre: "Admin", correo: null },
-  rol: { id: 1, nombre: "ROLE_ADMIN" },
+  rol: { id: 1, nombre: "ADMINISTRADOR" },
   permisos: [],
 };
 

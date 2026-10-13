@@ -10,7 +10,7 @@ describe("RolesTable", () => {
     expect(screen.getByText(/cargando roles/i)).toBeInTheDocument();
 
     await waitFor(() => {
-      expect(screen.getByText("ROLE_ADMIN")).toBeInTheDocument();
+      expect(screen.getByText("ADMINISTRADOR")).toBeInTheDocument();
     });
 
     expect(screen.getByText("ESTANDAR")).toBeInTheDocument();

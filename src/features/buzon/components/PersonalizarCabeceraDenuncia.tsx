@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import DOMPurify from "dompurify";
 import { toast } from "sonner";
+import { escapeHtml, sanitizeRichHtml, urlSegura } from "@/shared/utils/sanitizeHtml";
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import {
   Save,
@@ -77,7 +77,8 @@ export function PersonalizarCabeceraDenuncia() {
   // Cargar contenido inicial cuando la consulta al servidor finalice
   useEffect(() => {
     if (mensajeData) {
-      const contenido = mensajeData.contenidoHtml ?? mensajeData.html ?? "";
+      // Nunca confiar en el HTML persistido: se sanitiza antes de tocar el DOM.
+      const contenido = sanitizeRichHtml(mensajeData.contenidoHtml ?? mensajeData.html ?? "");
       setHtmlInput(contenido);
       if (editorRef.current && !isUpdatingFromEditor.current) {
         editorRef.current.innerHTML = contenido;
@@ -149,7 +150,7 @@ export function PersonalizarCabeceraDenuncia() {
   const aplicarResaltado = (bgHex: string, textHex: string) => {
     const seleccion = window.getSelection();
     if (seleccion && seleccion.toString().trim()) {
-      const texto = seleccion.toString();
+      const texto = escapeHtml(seleccion.toString());
       const markHtml = `<mark style="background-color: ${bgHex}; color: ${textHex}; padding: 2px 6px; border-radius: 4px; font-weight: 500;">${texto}</mark>`;
       insertarElementoHtml(markHtml);
     } else {
@@ -161,12 +162,13 @@ export function PersonalizarCabeceraDenuncia() {
   };
 
   const insertarEnlace = () => {
-    if (!linkUrl.trim() || linkUrl === "https://") {
-      toast.error("Por favor ingresa una URL válida para el enlace.");
+    const href = linkUrl === "https://" ? null : urlSegura(linkUrl);
+    if (!href) {
+      toast.error("Ingresa una URL válida que inicie con http://, https:// o mailto:.");
       return;
     }
-    const texto = linkTexto.trim() || linkUrl;
-    const enlaceHtml = `<a href="${linkUrl}" target="_blank" rel="noopener noreferrer" style="color: #059669; text-decoration: underline; font-weight: 500;">${texto}</a>&nbsp;`;
+    const texto = escapeHtml(linkTexto.trim() || href);
+    const enlaceHtml = `<a href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer" style="color: #059669; text-decoration: underline; font-weight: 500;">${texto}</a>&nbsp;`;
     insertarElementoHtml(enlaceHtml);
     setLinkPopoverAbierto(false);
     setLinkUrl("https://");
@@ -189,10 +191,7 @@ export function PersonalizarCabeceraDenuncia() {
       return;
     }
 
-    const limpio = DOMPurify.sanitize(htmlInput, {
-      USE_PROFILES: { html: true },
-      ADD_ATTR: ["target", "rel", "style", "class"],
-    });
+    const limpio = sanitizeRichHtml(htmlInput);
 
     try {
       await actualizarMutation.mutateAsync({

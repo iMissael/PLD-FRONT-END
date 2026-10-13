@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/SICANETSC/PLD/{tenantId}/v1/pld/configuracion-alertas/{id}": {
+    "/SICANETSC/PLD/{tenantId}/configuracion-alertas/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -1164,7 +1164,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/v1/pld/tipo-cambio": {
+    "/SICANETSC/PLD/{tenantId}/tipo-cambio": {
         parameters: {
             query?: never;
             header?: never;
@@ -1180,7 +1180,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/v1/pld/tipo-cambio/sincronizar": {
+    "/SICANETSC/PLD/{tenantId}/tipo-cambio/sincronizar": {
         parameters: {
             query?: never;
             header?: never;
@@ -1196,7 +1196,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/v1/pld/operaciones/evaluar": {
+    "/SICANETSC/PLD/{tenantId}/operaciones/evaluar": {
         parameters: {
             query?: never;
             header?: never;
@@ -1218,7 +1218,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/v1/pld/configuracion-alertas": {
+    "/SICANETSC/PLD/{tenantId}/configuracion-alertas": {
         parameters: {
             query?: never;
             header?: never;
@@ -1234,7 +1234,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/v1/pld/alertas-manuales": {
+    "/SICANETSC/PLD/{tenantId}/alertas-manuales": {
         parameters: {
             query?: never;
             header?: never;
@@ -2399,7 +2399,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/v1/pld/configuracion-alertas/{id}/estado": {
+    "/SICANETSC/PLD/{tenantId}/configuracion-alertas/{id}/estado": {
         parameters: {
             query?: never;
             header?: never;
@@ -2415,7 +2415,7 @@ export interface paths {
         patch: operations["cambiarEstado"];
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/v1/pld/alertas/{id}/dictamen": {
+    "/SICANETSC/PLD/{tenantId}/alertas/{id}/dictamen": {
         parameters: {
             query?: never;
             header?: never;
@@ -2543,7 +2543,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/v1/pld/tipos-alerta": {
+    "/SICANETSC/PLD/{tenantId}/tipos-alerta": {
         parameters: {
             query?: never;
             header?: never;
@@ -2559,7 +2559,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/v1/pld/tipo-cambio/vigente": {
+    "/SICANETSC/PLD/{tenantId}/tipo-cambio/vigente": {
         parameters: {
             query?: never;
             header?: never;
@@ -2575,7 +2575,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/v1/pld/tipo-cambio/convertir": {
+    "/SICANETSC/PLD/{tenantId}/tipo-cambio/convertir": {
         parameters: {
             query?: never;
             header?: never;
@@ -2591,7 +2591,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/v1/pld/razones-alerta": {
+    "/SICANETSC/PLD/{tenantId}/razones-alerta": {
         parameters: {
             query?: never;
             header?: never;
@@ -2607,7 +2607,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/v1/pld/alertas": {
+    "/SICANETSC/PLD/{tenantId}/alertas": {
         parameters: {
             query?: never;
             header?: never;
@@ -2623,7 +2623,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/v1/pld/alertas/{id}": {
+    "/SICANETSC/PLD/{tenantId}/alertas/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -2639,7 +2639,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/v1/pld/alertas/{id}/expediente": {
+    "/SICANETSC/PLD/{tenantId}/alertas/{id}/expediente": {
         parameters: {
             query?: never;
             header?: never;

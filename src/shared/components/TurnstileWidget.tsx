@@ -105,7 +105,7 @@ export const TurnstileWidget = forwardRef<
         setScriptLoaded(true);
       };
       script.onerror = (e) => {
-        console.error("Error al cargar Cloudflare Turnstile script", e);
+        if (import.meta.env.DEV) console.error("Error al cargar Cloudflare Turnstile script", e);
         onErrorRef.current?.(e);
       };
       document.head.appendChild(script);
@@ -148,7 +148,7 @@ export const TurnstileWidget = forwardRef<
       });
       widgetIdRef.current = id;
     } catch (e) {
-      console.error("Error al renderizar Turnstile widget", e);
+      if (import.meta.env.DEV) console.error("Error al renderizar Turnstile widget", e);
       onErrorRef.current?.(e);
     }
 
