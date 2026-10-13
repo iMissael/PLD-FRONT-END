@@ -1,6 +1,7 @@
 import { useMemo } from "react";
-import { DataTable, type ColumnDef } from "@/shared/components/DataTable";
-import { Button } from "@/shared/components/ui/CatalogoButton";
+import { DataTable, type ColumnDef } from "@/shared/components/organisms/DataTable";
+import { Button } from "@/shared/components/atoms/Button";
+
 import { card } from "@/shared/components/ui/styles";
 import { usePaisesDeLista } from "../hooks/useListasPaises";
 import type { ListaPaisResponse, PaisAsignadoResponse } from "../types/listaPais";

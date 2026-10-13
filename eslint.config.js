@@ -28,9 +28,9 @@ export default tseslint.config(
     },
   },
   {
-    // Los componentes de shadcn exportan también sus variantes (buttonVariants…)
+    // Los componentes compartidos exportan también sus variantes (buttonVariants…)
     // y test-utils reexporta Testing Library: la regla de fast refresh no aplica.
-    files: ["src/shared/components/ui/**/*.{ts,tsx}", "src/test/**/*.{ts,tsx}"],
+    files: ["src/shared/components/**/*.{ts,tsx}", "src/test/**/*.{ts,tsx}"],
     rules: { "react-refresh/only-export-components": "off" },
   },
 );

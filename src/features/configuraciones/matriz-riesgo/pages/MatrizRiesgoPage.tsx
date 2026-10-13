@@ -1,6 +1,8 @@
-import { useState } from "react";
-import { Button } from "@/shared/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
+import { useEffect, useRef, useState } from "react";
+import { Button } from "@/shared/components/atoms/Button";
+import { StatusBadge } from "@/shared/components/atoms/StatusBadge";
+import { CatalogoPageTemplate } from "@/shared/components/templates/CatalogoPageTemplate";
+import { card } from "@/shared/components/ui/styles";
 import {
   useConfiguracionActiva,
   useVersionMatriz,
@@ -14,32 +16,53 @@ export function MatrizRiesgoPage() {
   const [editando, setEditando] = useState(false);
   const [versionSeleccionada, setVersionSeleccionada] = useState<number | null>(null);
   const { data: detalleVersion } = useVersionMatriz(versionSeleccionada);
+  const detalleRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (versionSeleccionada !== null) {
+      detalleRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  }, [versionSeleccionada]);
+
+  const esVersionActivaSeleccionada =
+    versionSeleccionada !== null &&
+    (detalleVersion?.activa || (activa?.id !== undefined && versionSeleccionada === activa.id));
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold">Matriz de riesgo</h1>
-        <p className="text-muted-foreground">
-          Consulta la versión vigente de factores y subfactores de riesgo, y publica
-          nuevas versiones cuando los pesos deban actualizarse.
-        </p>
-      </div>
-
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Versión activa</CardTitle>
+    <CatalogoPageTemplate
+      titulo="Matriz de riesgo"
+      descripcion="Consulta la versión vigente de factores y subfactores de riesgo, y publica nuevas versiones cuando los pesos deban actualizarse."
+      moduloFooter="Configuración de Matriz de Riesgo"
+      acciones={
+        <>
           {activa && !editando && (
-            <Button size="sm" onClick={() => setEditando(true)}>
+            <Button onClick={() => setEditando(true)}>
               Publicar nueva versión
             </Button>
           )}
           {editando && (
-            <Button size="sm" variant="outline" onClick={() => setEditando(false)}>
-              Cancelar
+            <Button variant="outline" onClick={() => setEditando(false)}>
+              Cancelar edición
             </Button>
           )}
-        </CardHeader>
-        <CardContent>
+        </>
+      }
+    >
+      <div className={card}>
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border p-4 sm:p-6">
+          <div className="flex items-center gap-3">
+            <h3 className="text-base font-semibold text-foreground">
+              {editando ? "Editar ponderaciones y publicar nueva versión" : "Versión vigente"}
+            </h3>
+            {activa && !editando && (
+              <StatusBadge tono="activo">
+                v{activa.version ?? activa.id} · Activa
+              </StatusBadge>
+            )}
+          </div>
+        </div>
+
+        <div className="p-4 sm:p-6">
           {isLoading && <p className="text-muted-foreground text-sm">Cargando matriz…</p>}
           {isError && (
             <p className="text-destructive text-sm">
@@ -52,39 +75,56 @@ export function MatrizRiesgoPage() {
           {activa && editando && (
             <MatrizRiesgoForm base={activa} onSuccess={() => setEditando(false)} />
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Historial de versiones</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <VersionesMatrizTable onVerDetalle={setVersionSeleccionada} />
-        </CardContent>
-      </Card>
+      <div className={card}>
+        <div className="border-b border-border p-4 sm:p-6">
+          <h3 className="text-base font-semibold text-foreground">
+            Historial de versiones
+          </h3>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            Haz clic en una versión o en &quot;Ver detalle&quot; para consultar sus ponderaciones y subfactores históricos.
+          </p>
+        </div>
+        <div className="p-4 sm:p-6">
+          <VersionesMatrizTable
+            onVerDetalle={setVersionSeleccionada}
+            seleccionadaId={versionSeleccionada}
+          />
+        </div>
+      </div>
 
       {versionSeleccionada !== null && (
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>Detalle de la versión #{versionSeleccionada}</CardTitle>
+        <div ref={detalleRef} className={card}>
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border p-4 sm:p-6">
+            <div className="flex items-center gap-3">
+              <h3 className="text-base font-semibold text-foreground">
+                Detalle de la versión #{versionSeleccionada}
+              </h3>
+              {esVersionActivaSeleccionada ? (
+                <StatusBadge tono="activo">Versión activa</StatusBadge>
+              ) : (
+                <StatusBadge tono="inactivo">Versión histórica (Solo lectura)</StatusBadge>
+              )}
+            </div>
             <Button
-              size="sm"
               variant="outline"
+              size="sm"
               onClick={() => setVersionSeleccionada(null)}
             >
-              Cerrar
+              Cerrar detalle
             </Button>
-          </CardHeader>
-          <CardContent>
+          </div>
+          <div className="p-4 sm:p-6">
             {detalleVersion ? (
               <MatrizRiesgoDetalle factores={detalleVersion.factores ?? []} />
             ) : (
-              <p className="text-muted-foreground text-sm">Cargando detalle…</p>
+              <p className="text-muted-foreground text-sm">Cargando detalle de la versión…</p>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
-    </div>
+    </CatalogoPageTemplate>
   );
 }

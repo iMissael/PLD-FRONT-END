@@ -1,2 +1,7 @@
-export { DataTable } from "./ui/DataTable";
-export type { ColumnDef, DataTableProps, PaginationConfig, SearchConfig } from "./ui/DataTable";
+export {
+  DataTable,
+  type ColumnDef,
+  type DataTableProps,
+  type PaginationConfig,
+  type SearchConfig,
+} from "@/shared/components/organisms/DataTable";

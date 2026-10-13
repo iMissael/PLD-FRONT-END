@@ -1,26 +1,87 @@
-import { Badge } from "@/shared/components/ui/badge";
-import { Button } from "@/shared/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/shared/components/ui/table";
+import { useMemo } from "react";
+import { DataTable, type ColumnDef } from "@/shared/components/organisms/DataTable";
+import { StatusBadge } from "@/shared/components/atoms/StatusBadge";
+import { Button } from "@/shared/components/atoms/Button";
 import { useVersionesMatriz } from "@/features/configuraciones/matriz-riesgo/hooks/useMatrizRiesgo";
 import type { ConfiguracionMatrizRiesgo } from "@/features/configuraciones/matriz-riesgo/types/matrizRiesgo";
 
+function fechaDe(version: ConfiguracionMatrizRiesgo) {
+  return version.factores?.[0]?.createdAt;
+}
+
+function formatearFecha(fechaStr?: string) {
+  if (!fechaStr) return "—";
+  const fecha = new Date(fechaStr);
+  return isNaN(fecha.getTime()) ? "—" : fecha.toLocaleString();
+}
+
+interface VersionesMatrizTableProps {
+  onVerDetalle: (id: number) => void;
+  seleccionadaId?: number | null;
+}
+
 export function VersionesMatrizTable({
   onVerDetalle,
-}: {
-  onVerDetalle: (id: number) => void;
-}) {
+  seleccionadaId,
+}: VersionesMatrizTableProps) {
   const { data: versiones, isLoading, isError } = useVersionesMatriz();
 
-  if (isLoading) {
-    return <p className="text-muted-foreground text-sm">Cargando versiones…</p>;
-  }
+  const listaOrdenada = useMemo(() => {
+    if (!versiones) return [];
+    return [...versiones].sort((a, b) => (b.id ?? 0) - (a.id ?? 0));
+  }, [versiones]);
+
+  const columns: ColumnDef<ConfiguracionMatrizRiesgo>[] = useMemo(
+    () => [
+      {
+        header: "Versión",
+        width: "110px",
+        cell: (item) => (
+          <span className="font-semibold text-foreground">
+            v{item.version ?? item.id}
+          </span>
+        ),
+      },
+      {
+        header: "Estado",
+        width: "130px",
+        cell: (item) => (
+          <StatusBadge tono={item.activa ? "activo" : "inactivo"}>
+            {item.activa ? "Activa" : "Histórica"}
+          </StatusBadge>
+        ),
+      },
+      {
+        header: "Creado por",
+        accessorKey: "creadoPor",
+        cell: (item) => item.creadoPor ?? "—",
+      },
+      {
+        header: "Fecha",
+        cell: (item) => formatearFecha(fechaDe(item)),
+      },
+      {
+        header: "Acciones",
+        align: "right",
+        width: "130px",
+        cell: (item) => (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (item.id !== undefined) {
+                onVerDetalle(item.id);
+              }
+            }}
+          >
+            Ver detalle
+          </Button>
+        ),
+      },
+    ],
+    [onVerDetalle],
+  );
 
   if (isError) {
     return (
@@ -30,56 +91,24 @@ export function VersionesMatrizTable({
     );
   }
 
-  if (!versiones || versiones.length === 0) {
-    return (
-      <p className="text-muted-foreground text-sm">Aún no hay versiones registradas.</p>
-    );
-  }
-
-  const ordenadas = [...versiones].sort((a, b) => (b.id ?? 0) - (a.id ?? 0));
-
-  // La configuración no trae su propia fecha de creación: se toma la del primer factor,
-  // ya que todos los factores de una versión se crean en el mismo momento.
-  function fechaDe(version: ConfiguracionMatrizRiesgo) {
-    return version.factores?.[0]?.createdAt;
-  }
-
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>ID</TableHead>
-          <TableHead>Estado</TableHead>
-          <TableHead>Creado por</TableHead>
-          <TableHead>Fecha</TableHead>
-          <TableHead className="text-right">Acciones</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {ordenadas.map((version) => (
-          <TableRow key={version.id}>
-            <TableCell className="font-medium">#{version.id}</TableCell>
-            <TableCell>
-              <Badge variant={version.activa ? "default" : "outline"}>
-                {version.activa ? "Activa" : "Histórica"}
-              </Badge>
-            </TableCell>
-            <TableCell>{version.creadoPor ?? "—"}</TableCell>
-            <TableCell>
-              {fechaDe(version) ? new Date(fechaDe(version)!).toLocaleString() : "—"}
-            </TableCell>
-            <TableCell className="text-right">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => version.id !== undefined && onVerDetalle(version.id)}
-              >
-                Ver detalle
-              </Button>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <DataTable
+      data={listaOrdenada}
+      columns={columns}
+      isLoading={isLoading}
+      loadingMessage="Cargando historial de versiones..."
+      emptyMessage="Aún no hay versiones registradas."
+      seleccionadoId={seleccionadaId ?? null}
+      onRowClick={(item) => {
+        if (item.id !== undefined) {
+          onVerDetalle(item.id);
+        }
+      }}
+      pagination={{
+        mode: "client",
+        defaultRowsPerPage: 5,
+        rowsPerPageOptions: [5, 10, 20],
+      }}
+    />
   );
 }

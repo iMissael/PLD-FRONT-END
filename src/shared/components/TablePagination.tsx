@@ -1,2 +1,4 @@
-export { TablePagination } from "./ui/TablePagination";
-export type { TablePaginationProps } from "./ui/TablePagination";
+export {
+  TablePagination,
+  type TablePaginationProps,
+} from "@/shared/components/molecules/TablePagination";
