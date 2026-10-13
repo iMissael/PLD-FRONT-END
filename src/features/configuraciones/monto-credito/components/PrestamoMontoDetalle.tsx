@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 
-import { Badge } from "@/shared/components/ui/CatalogoBadge";
-import { Button } from "@/shared/components/ui/CatalogoButton";
+import { StatusBadge } from "@/shared/components/atoms/StatusBadge";
+import { Button } from "@/shared/components/atoms/Button";
 import { card } from "@/shared/components/ui/styles";
 
 import { useNivelesRiesgo } from "../../ubicacion-geografica/niveles-riesgo/hooks/useNivelesRiesgo";
@@ -70,9 +70,9 @@ export function PrestamoMontoDetalle({ rango, onEditar }: PrestamoMontoDetallePr
       <div className="flex flex-col gap-0.5 border-t border-border pt-3">
         <span className="text-xs font-medium text-muted-foreground">Estatus</span>
         <span className="self-start">
-          <Badge tono={rango.estatus === "A" ? "activo" : "inactivo"}>
+          <StatusBadge tono={rango.estatus === "A" ? "activo" : "inactivo"}>
             {rango.estatus === "A" ? "Activo" : rango.estatus === "B" ? "Baja" : "Inactivo"}
-          </Badge>
+          </StatusBadge>
         </span>
       </div>
     </div>

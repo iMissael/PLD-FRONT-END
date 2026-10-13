@@ -4,14 +4,12 @@ import {
   ClipboardList,
   Download,
   Loader2,
-  Plus,
   RefreshCw,
   Search,
   ShieldCheck,
 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { cn } from "@/shared/utils/cn";
-import { BuscadorSocios } from "@/features/operacion/evaluacion-riesgo/components/BuscadorSocios";
 import {
   EncabezadoDesglose,
   TarjetaFactor,
@@ -190,7 +188,6 @@ export function MatrizRiesgoDashboard({
   const etiquetaAsignada = resultado?.nivel_riesgo_manual
     ? resultado.nivel_riesgo_manual.replaceAll("_", " ")
     : etiquetaGeneral;
-  const rfcEncabezado = cliente && cliente.rfc !== "—" ? cliente.rfc : "";
 
   return (
     <div className="flex h-full flex-col rounded-lg border border-border bg-card shadow-sm">
@@ -204,9 +201,7 @@ export function MatrizRiesgoDashboard({
               <h2 className="text-base font-bold tracking-tight text-foreground">
                 Matriz de Riesgo Integral
               </h2>
-              <span className="rounded-full border border-primary/20 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold tracking-wider text-primary">
-                PLD / FT
-              </span>
+             
             </div>
             <p className="hidden text-xs text-muted-foreground sm:block">
               Módulo de Prevención y Cumplimiento Regulatorio
@@ -214,13 +209,7 @@ export function MatrizRiesgoDashboard({
           </div>
         </div>
 
-        <BuscadorSocios
-          variante="encabezado"
-          valor={rfcEncabezado}
-          placeholder="Buscar por nombre, referencia o RFC…"
-          onSeleccionar={onSeleccionarSocio}
-          className="mx-2 hidden max-w-md min-w-[220px] flex-1 md:block"
-        />
+   
 
         <div className="flex items-center gap-3">
           {evaluacion && (
@@ -264,14 +253,7 @@ export function MatrizRiesgoDashboard({
             <Download className="size-3.5 text-muted-foreground" />
             Exportar
           </Button>
-          <Button
-            size="sm"
-            onClick={onEvaluar}
-            className="h-8 gap-1.5 text-xs"
-          >
-            <Plus className="size-3.5" />
-            Nueva evaluación
-          </Button>
+       
         </div>
       </header>
 
@@ -289,9 +271,6 @@ export function MatrizRiesgoDashboard({
             <div className="min-w-[260px] flex-1">
               <h3 className="flex flex-wrap items-baseline gap-2 text-base font-bold tracking-tight text-foreground">
                 Matriz de Factores y Ponderación de Riesgo
-                <span className="text-xs font-normal text-muted-foreground">
-                  (Metodología EBR / CNBV)
-                </span>
               </h3>
               <p className="text-xs text-muted-foreground">
                 Evaluación cuantitativa y cualitativa de mitigantes y riesgos inherentes.

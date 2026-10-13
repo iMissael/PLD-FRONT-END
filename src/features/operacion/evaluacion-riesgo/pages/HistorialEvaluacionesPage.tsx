@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ShieldCheck, X } from "lucide-react";
 import { DataTable, type ColumnDef } from "@/shared/components/DataTable";
+import { EmptyState } from "@/shared/components/molecules/EmptyState";
 import { cn } from "@/shared/utils/cn";
 import {
   EncabezadoDesglose,
@@ -207,28 +208,25 @@ export function HistorialEvaluacionesPage() {
         />
 
         <div className="flex min-h-0 min-w-0 flex-1 flex-col lg:rounded-br-lg">
-          <header className="flex flex-wrap items-center justify-between gap-4 rounded-tr-lg bg-slate-900 px-5 py-3 text-white">
+          <header className="flex flex-wrap items-center justify-between gap-4 rounded-tr-lg border-b border-border bg-card px-5 py-3 text-foreground">
             <div className="flex items-center gap-3">
-              <div className="flex size-9 items-center justify-center rounded-lg border border-indigo-400/30 bg-indigo-500/20 text-indigo-300">
+              <div className="flex size-9 items-center justify-center rounded-lg border border-primary/20 bg-primary/10 text-primary">
                 <ShieldCheck className="size-5" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="text-base font-bold tracking-tight">
+                  <h2 className="text-base font-bold tracking-tight text-foreground">
                     Historial de Matriz de Riesgo de Cliente
                   </h2>
-                  <span className="rounded-full border border-indigo-400/30 bg-indigo-500/20 px-2 py-0.5 text-[10px] font-semibold tracking-wider text-indigo-300">
-                    PLD / FT
-                  </span>
                 </div>
-                <p className="hidden text-xs text-slate-400 sm:block">
+                <p className="hidden text-xs text-muted-foreground sm:block">
                   Elige una evaluación para ver su matriz de factores completa.
                 </p>
               </div>
             </div>
           </header>
 
-          <section className="flex min-h-0 flex-1 flex-col overflow-x-auto bg-slate-50 dark:bg-background">
+          <section className="flex min-h-0 flex-1 flex-col overflow-x-auto bg-card">
             {socio ? (
               <DataTable
                 data={historial}
@@ -246,9 +244,12 @@ export function HistorialEvaluacionesPage() {
                 pagination={{ mode: "client", defaultRowsPerPage: 10, rowsPerPageOptions: [10, 25, 50] }}
               />
             ) : (
-              <p className="text-muted-foreground p-6 text-sm">
-                Usa la lupa para elegir un socio y ver su historial.
-              </p>
+              <div className="flex-1 flex items-center justify-center p-8 min-h-[320px]">
+                <EmptyState
+                  titulo="Sin socio seleccionado"
+                  descripcion="Utiliza el buscador o la lupa en el panel del Expediente del Cliente para consultar su historial de evaluaciones de riesgo."
+                />
+              </div>
             )}
           </section>
         </div>

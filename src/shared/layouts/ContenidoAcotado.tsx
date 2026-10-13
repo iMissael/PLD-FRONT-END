@@ -7,7 +7,7 @@ import { Outlet } from "react-router-dom";
  */
 export function ContenidoAcotado() {
   return (
-    <div className="mx-auto w-full max-w-6xl">
+    <div className="mx-auto w-full max-w-6xl pb-16">
       <Outlet />
     </div>
   );

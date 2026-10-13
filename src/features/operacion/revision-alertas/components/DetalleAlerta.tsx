@@ -12,8 +12,8 @@ import {
   type DictamenInput,
 } from "@/features/alertas/types/alertas";
 import { Alert } from "@/shared/components/ui/Alert";
-import { Button } from "@/shared/components/ui/CatalogoButton";
-import { card, field, hint, label } from "@/shared/components/ui/styles";
+import { Button } from "@/shared/components/atoms/Button";
+import { card, field, hint } from "@/shared/components/ui/styles";
 
 import { formatearFecha, formatearMoneda } from "../utils/formato";
 
@@ -33,9 +33,9 @@ const ANALISIS_SICANET = [
 function Dato({ titulo, children }: { titulo: string; children: React.ReactNode }) {
   const vacio = children === null || children === undefined || children === "";
   return (
-    <div className="flex flex-col gap-0.5">
-      <dt className="text-muted-foreground text-xs">{titulo}</dt>
-      <dd className="text-foreground text-sm">{vacio ? "—" : children}</dd>
+    <div className="flex flex-col gap-1 p-2 rounded-lg bg-muted/25 border border-border/40">
+      <dt className="text-[11px] font-medium text-muted-foreground">{titulo}</dt>
+      <dd className="text-foreground text-sm font-semibold truncate">{vacio ? "—" : children}</dd>
     </div>
   );
 }
@@ -50,10 +50,10 @@ function Seccion({
   children: React.ReactNode;
 }) {
   return (
-    <section className="flex flex-col gap-2">
-      <div className="border-border flex flex-wrap items-baseline justify-between gap-2 border-b pb-1">
-        <h4 className={label}>{titulo}</h4>
-        {extra ? <span className="text-muted-foreground text-xs">{extra}</span> : null}
+    <section className="flex flex-col gap-3 rounded-xl border border-border/60 bg-muted/10 p-4">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h4 className="text-xs font-bold uppercase tracking-wider text-foreground">{titulo}</h4>
+        {extra ? <span className="text-muted-foreground text-xs font-medium">{extra}</span> : null}
       </div>
       {children}
     </section>
@@ -304,9 +304,7 @@ export function DetalleAlerta({ alerta, onDictaminada }: DetalleAlertaProps) {
           {esManual ? null : (
             <dl className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {ANALISIS_SICANET.map((titulo) => (
-                <div key={titulo} className="border-border rounded-md border p-3">
-                  <Dato titulo={titulo}>{SIN_INFORMACION}</Dato>
-                </div>
+                <Dato key={titulo} titulo={titulo}>{SIN_INFORMACION}</Dato>
               ))}
             </dl>
           )}
@@ -316,26 +314,26 @@ export function DetalleAlerta({ alerta, onDictaminada }: DetalleAlertaProps) {
       {alerta.estatus === "PENDIENTE" ? (
         <form
           onSubmit={handleDictaminar}
-          className="border-border flex flex-col gap-3 border-t pt-4"
+          className="rounded-xl border border-border/80 bg-muted/15 p-4 flex flex-col gap-4"
         >
-          <h4 className={label}>Dictamen</h4>
+          <h4 className="text-xs font-bold uppercase tracking-wider text-foreground">Dictamen</h4>
           {mensajeError ? <Alert>{mensajeError}</Alert> : null}
-          <div className="flex gap-6">
+          <div className="flex flex-wrap gap-6">
             {(["CONFIRMADA", "RECHAZADA"] as const).map((opcion) => (
-              <label key={opcion} className="flex items-center gap-2 text-sm">
+              <label key={opcion} className="flex items-center gap-2 text-sm font-medium text-foreground cursor-pointer">
                 <input
                   type="radio"
                   name="dictamen"
                   checked={dictamen === opcion}
                   onChange={() => setDictamen(opcion)}
-                  className="accent-primary"
+                  className="h-4 w-4 text-primary focus:ring-primary/30 accent-primary cursor-pointer"
                 />
                 {ETIQUETA_ESTATUS[opcion]}
               </label>
             ))}
           </div>
-          <div className="flex flex-col gap-1">
-            <label htmlFor="justificacion" className={label}>
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="justificacion" className="text-xs font-semibold text-foreground">
               Justificación
             </label>
             <textarea
@@ -351,7 +349,7 @@ export function DetalleAlerta({ alerta, onDictaminada }: DetalleAlertaProps) {
             </p>
           </div>
           <div className="flex justify-end">
-            <Button type="submit" disabled={dictaminar.isPending}>
+            <Button type="submit" variant="default" disabled={dictaminar.isPending}>
               {dictaminar.isPending ? "Guardando..." : "Guardar dictamen"}
             </Button>
           </div>

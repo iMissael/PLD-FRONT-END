@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { Download } from "lucide-react";
 
-import { Alert } from "@/shared/components/ui/Alert";
-import { Button } from "@/shared/components/ui/CatalogoButton";
+import { Alert } from "@/shared/components/molecules";
+import { Button } from "@/shared/components/atoms/Button";
+import { DashboardListaTemplate } from "@/shared/components/templates";
 
 import { listarTodasAutorizaciones } from "../api/autorizacionesApi";
 import { AutorizacionesTable } from "../components/AutorizacionesTable";
@@ -39,16 +41,23 @@ export function RevisionAutorizacionesPage() {
   };
 
   return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <h2 className="text-foreground text-xl font-semibold">
-          Revisión de alertas de autorización
-        </h2>
-        <p className="text-muted-foreground text-sm">
-          Movimientos de caja que pidieron autorización y lo que se decidió en caja.
-        </p>
-      </div>
-
+    <DashboardListaTemplate
+      titulo="Revisión de alertas de autorización"
+      descripcion="Movimientos de caja que pidieron autorización y lo que se decidió en caja."
+      alerta={errorExportar ? <Alert>{errorExportar}</Alert> : null}
+      acciones={
+        <Button
+          type="button"
+          variant="outline"
+          disabled={totalElementos === 0 || exportando}
+          onClick={() => void exportar()}
+          className="gap-2"
+        >
+          <Download className="h-4 w-4" />
+          {exportando ? "Exportando..." : "Exportar a Excel"}
+        </Button>
+      }
+    >
       <FiltrosAutorizaciones
         onConsultar={(nuevo) => {
           setFiltro(nuevo);
@@ -57,36 +66,23 @@ export function RevisionAutorizacionesPage() {
         }}
       />
 
-      <div className="flex flex-col gap-3">
-        <div className="flex justify-end">
-          <Button
-            type="button"
-            variant="outline"
-            disabled={totalElementos === 0 || exportando}
-            onClick={() => void exportar()}
-          >
-            {exportando ? "Exportando..." : "Exportar a Excel"}
-          </Button>
-        </div>
-        {errorExportar ? <Alert>{errorExportar}</Alert> : null}
-        <AutorizacionesTable
-          autorizaciones={data?.contenido}
-          consultado={filtro !== null}
-          isLoading={isLoading}
-          seleccionadaId={seleccionada?.id ?? null}
-          onSeleccionar={setSeleccionada}
-          pagina={pagina}
-          tamanio={tamanio}
-          totalElementos={totalElementos}
-          onCambiarPagina={setPagina}
-          onCambiarTamanio={(nuevo) => {
-            setTamanio(nuevo);
-            setPagina(0);
-          }}
-        />
-      </div>
+      <AutorizacionesTable
+        autorizaciones={data?.contenido}
+        consultado={filtro !== null}
+        isLoading={isLoading}
+        seleccionadaId={seleccionada?.id ?? null}
+        onSeleccionar={setSeleccionada}
+        pagina={pagina}
+        tamanio={tamanio}
+        totalElementos={totalElementos}
+        onCambiarPagina={setPagina}
+        onCambiarTamanio={(nuevo) => {
+          setTamanio(nuevo);
+          setPagina(0);
+        }}
+      />
 
       <DetalleAutorizacion seleccionada={seleccionada} />
-    </div>
+    </DashboardListaTemplate>
   );
 }

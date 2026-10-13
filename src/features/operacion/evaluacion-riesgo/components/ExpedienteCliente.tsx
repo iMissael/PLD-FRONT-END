@@ -1,5 +1,6 @@
 import { Calendar, ChevronDown, Clipboard, Copy, User } from "lucide-react";
 import { Skeleton } from "@/shared/components/ui/skeleton";
+import { StatusBadge } from "@/shared/components/atoms/StatusBadge";
 import { cn } from "@/shared/utils/cn";
 import { BuscadorSocios } from "@/features/operacion/evaluacion-riesgo/components/BuscadorSocios";
 import type { ClienteMatrizRiesgo } from "@/features/operacion/evaluacion-riesgo/types/evaluacionRiesgo";
@@ -24,7 +25,7 @@ function CampoCopiable({
     <div className="space-y-1">
       <p
         className={cn(
-          "text-gray-500",
+          "text-muted-foreground",
           mono
             ? "text-[11px] font-semibold tracking-wider uppercase"
             : "text-[11px] font-medium",
@@ -161,23 +162,21 @@ export function ExpedienteClienteAside({
 }) {
   return (
     <aside className="w-full shrink-0 overflow-y-auto border-b border-border bg-card lg:w-[300px] lg:rounded-bl-lg lg:border-r lg:border-b-0">
-      <div className="flex items-center justify-between bg-gradient-to-r from-slate-900 to-slate-800 px-4 py-3 text-white">
+      <div className="flex items-center justify-between border-b border-border bg-muted/40 px-4 py-3 text-foreground">
         <span className="flex items-center gap-2 text-sm font-semibold tracking-wide">
-          <span className="rounded bg-indigo-500/20 p-1 text-indigo-300">
+          <span className="rounded bg-primary/10 p-1 text-primary">
             <User className="size-4" />
           </span>
           {titulo}
         </span>
         {cliente && (
-          <span className="rounded border border-green-500/30 bg-green-500/20 px-2 py-0.5 text-[11px] font-semibold text-green-300">
-            Activo
-          </span>
+          <StatusBadge status="activo">Activo</StatusBadge>
         )}
       </div>
 
       <div className="space-y-4 p-4 text-xs">
-        <div className="space-y-2 rounded-xl border border-gray-200 bg-slate-50 p-3 dark:border-border dark:bg-slate-900/60">
-          <p className="text-[11px] font-semibold tracking-wider text-gray-500 dark:text-muted-foreground uppercase">
+        <div className="space-y-2 rounded-xl border border-border bg-muted/30 p-3">
+          <p className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
             Referencia / No. Cliente / Nombre
           </p>
           <BuscadorSocios

@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
-import { Alert } from "@/shared/components/ui/Alert";
+import { Alert } from "@/shared/components/molecules";
+import { DashboardListaTemplate } from "@/shared/components/templates";
 import { useDebounce } from "@/shared/hooks/useDebounce";
 
 import { CambiarRiesgoLocalidadForm } from "../components/CambiarRiesgoLocalidadForm";
@@ -38,12 +39,12 @@ export function LocalidadesPage() {
   // Al cambiar de filtro, la página actual vuelve al inicio.
   useEffect(() => {
     setPagina(0);
-  }, [busqueda, idEntidad, idMunicipio]);
+  }, [busqueda, idEntidad, idMunicipio, tamanio]);
 
   const { data, isLoading } = useLocalidades({
-    ...(busqueda.trim() ? { busqueda: busqueda.trim() } : {}),
-    ...(idEntidad ? { idEntidad } : {}),
-    ...(idMunicipio ? { idMunicipio } : {}),
+    busqueda: busqueda || undefined,
+    idEntidad: idEntidad ?? undefined,
+    idMunicipio: idMunicipio ?? undefined,
     pagina,
     tamanio,
   });
@@ -56,9 +57,11 @@ export function LocalidadesPage() {
     cambiarRiesgo.mutate(
       { id: seleccionada.idLocalidad, input: { nivelRiesgoId } },
       {
-        onSuccess: (localidadActualizada) => {
-          setSeleccionada(localidadActualizada);
-          toast.success("Nivel de riesgo de la localidad actualizado correctamente");
+        onSuccess: (res) => {
+          setSeleccionada(null);
+          toast.success(
+            `Nivel de riesgo de "${res.nombre}" actualizado a ${res.nivelRiesgoDescripcion} (${res.nivelRiesgoValor})`,
+          );
         },
         onError: (error) => {
           const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
@@ -72,17 +75,11 @@ export function LocalidadesPage() {
   const totalElementos = data?.totalElementos ?? 0;
 
   return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <h2 className="text-xl font-semibold text-foreground">Localidades</h2>
-        <p className="text-sm text-muted-foreground">
-          Consulta las localidades del catálogo y ajusta su nivel de riesgo PLD. El alta y
-          la edición completa de localidades no están disponibles en esta vista.
-        </p>
-      </div>
-
-      {mensajeError ? <Alert>{mensajeError}</Alert> : null}
-
+    <DashboardListaTemplate
+      titulo="Localidades"
+      descripcion="Consulta las localidades del catálogo y ajusta su nivel de riesgo PLD. El alta y la edición completa de localidades no están disponibles en esta vista."
+      alerta={mensajeError ? <Alert>{mensajeError}</Alert> : null}
+    >
       <LocalidadesTable
         localidades={data?.contenido}
         isLoading={isLoading}
@@ -131,6 +128,6 @@ export function LocalidadesPage() {
           isPending={cambiarRiesgo.isPending}
         />
       ) : null}
-    </div>
+    </DashboardListaTemplate>
   );
 }

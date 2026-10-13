@@ -1,5 +1,5 @@
-import { Badge } from "@/shared/components/ui/CatalogoBadge";
-import { Button } from "@/shared/components/ui/CatalogoButton";
+import { StatusBadge } from "@/shared/components/atoms/StatusBadge";
+import { Button } from "@/shared/components/atoms/Button";
 import { card } from "@/shared/components/ui/styles";
 
 import type { ListaPaisResponse } from "../types/listaPais";
@@ -47,9 +47,9 @@ export function ListaPaisDetalle({ lista, onEditar }: ListaPaisDetalleProps) {
         <div className="flex flex-col gap-0.5">
           <span className="text-xs font-medium text-muted-foreground">Estatus</span>
           <span className="self-start">
-            <Badge tono={lista.estatus === "A" ? "activo" : "inactivo"}>
+            <StatusBadge tono={lista.estatus === "A" ? "activo" : "inactivo"}>
               {lista.estatus === "A" ? "Activa" : "Inactiva"}
-            </Badge>
+            </StatusBadge>
           </span>
         </div>
       </div>

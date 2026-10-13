@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Button } from "@/shared/components/ui/CatalogoButton";
+import { Button } from "@/shared/components/atoms/Button";
 import { card, field, hint, label } from "@/shared/components/ui/styles";
 
 import { NivelRiesgoSelect } from "../../ubicacion-geografica/niveles-riesgo/components/NivelRiesgoSelect";

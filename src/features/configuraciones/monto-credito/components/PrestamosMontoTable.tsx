@@ -1,5 +1,6 @@
 import { useMemo } from "react";
-import { DataTable, type ColumnDef } from "@/shared/components/DataTable";
+import { DataTable, type ColumnDef } from "@/shared/components/organisms/DataTable";
+
 import { useNivelesRiesgo } from "../../ubicacion-geografica/niveles-riesgo/hooks/useNivelesRiesgo";
 import type { PrestamoMontoResponse } from "../types/prestamoMonto";
 import { formatearRangoMonto } from "../utils/nombreMonto";
@@ -21,11 +22,14 @@ export function PrestamosMontoTable({
 }: PrestamosMontoTableProps) {
   const { data: niveles } = useNivelesRiesgo();
 
-  const listaNiveles = Array.isArray(niveles)
-    ? niveles
-    : Array.isArray((niveles as unknown as { contenido?: typeof niveles })?.contenido)
-    ? ((niveles as unknown as { contenido: typeof niveles }).contenido ?? [])
-    : [];
+  const listaNiveles = useMemo(() => {
+    if (Array.isArray(niveles)) return niveles;
+    if (Array.isArray((niveles as unknown as { contenido?: typeof niveles })?.contenido)) {
+      return (niveles as unknown as { contenido: typeof niveles }).contenido ?? [];
+    }
+    return [];
+  }, [niveles]);
+
 
   const columns: ColumnDef<PrestamoMontoResponse>[] = useMemo(
     () => [

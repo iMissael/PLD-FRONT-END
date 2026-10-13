@@ -98,7 +98,7 @@
   --secondary-hover: #2d3644;
   --secondary-foreground: #e6eef8;
   --muted: #16202e;
-  --muted-foreground: #9ca3af;
+  --muted-foreground: #cbd5e1;
   --accent: #2d3644;
   --accent-foreground: #e6eef8;
   --border: #374151;
@@ -137,6 +137,8 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --color-background: var(--background);
+  --color-background-base: var(--background);
+  --color-surface: var(--card);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
