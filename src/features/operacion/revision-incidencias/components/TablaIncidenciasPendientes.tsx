@@ -13,7 +13,6 @@ import {
 } from "@/shared/components/ui/table";
 
 import type { CoincidenciaSocio } from "../types/incidencias";
-import { listasCoincidentes } from "../utils/comparar";
 
 function formatearFecha(valor: string | undefined) {
   if (!valor) return "—";
@@ -37,6 +36,31 @@ function estatusPais(coincidencia: CoincidenciaSocio) {
   if (coincidencia.pais_nacimiento?.coincide) partes.push("Nacimiento");
   if (coincidencia.nacionalidad?.coincide) partes.push("Nacionalidad");
   return partes;
+}
+
+/** Estatus de revision de la coincidencia bloqueante (lista negra/bloqueadas): lo que decide el oficial. */
+function estatusLista(coincidencia: CoincidenciaSocio): string {
+  switch (coincidencia.estado) {
+    case "PENDIENTE_REVISION":
+      return "Pendiente";
+    case "BLOQUEADO":
+      return "Confirmado";
+    case "DESCARTADA":
+      return "Rechazado";
+    default:
+      return "—";
+  }
+}
+
+function varianteEstatusLista(coincidencia: CoincidenciaSocio): "outline" | "destructive" | "secondary" {
+  switch (coincidencia.estado) {
+    case "BLOQUEADO":
+      return "destructive";
+    case "DESCARTADA":
+      return "secondary";
+    default:
+      return "outline";
+  }
 }
 
 // Pendiente de Feature 2 (persona relacionada): hoy toda coincidencia es del socio directo.
@@ -80,10 +104,10 @@ export function TablaIncidenciasPendientes({
         <TableRow>
           <TableHead className="w-12">#</TableHead>
           <TableHead>Fecha Incidencia</TableHead>
-          <TableHead>Socio</TableHead>
-          <TableHead>Lista</TableHead>
-          <TableHead>Estatus País</TableHead>
-          <TableHead>Nombre en la lista</TableHead>
+          <TableHead>Nombre</TableHead>
+          <TableHead>Estatus Pais</TableHead>
+          <TableHead>Estatus lista</TableHead>
+          <TableHead>Persona Relacionada</TableHead>
           <TableHead>Tipo de Relación</TableHead>
           <TableHead className="text-right">Acción</TableHead>
         </TableRow>
@@ -112,18 +136,6 @@ export function TablaIncidenciasPendientes({
             </TableCell>
             <TableCell>
               <div className="flex flex-wrap gap-1">
-                {listasCoincidentes(coincidencia).map((lista) => (
-                  <Badge key={lista} variant="destructive">
-                    {lista}
-                  </Badge>
-                ))}
-                {coincidencia.lista_peps?.coincide ? (
-                  <Badge variant="outline">PEP</Badge>
-                ) : null}
-              </div>
-            </TableCell>
-            <TableCell>
-              <div className="flex flex-wrap gap-1">
                 {estatusPais(coincidencia).length > 0 ? (
                   estatusPais(coincidencia).map((parte) => (
                     <Badge key={parte} variant="outline">
@@ -134,6 +146,11 @@ export function TablaIncidenciasPendientes({
                   <span className="text-muted-foreground">—</span>
                 )}
               </div>
+            </TableCell>
+            <TableCell>
+              <Badge variant={varianteEstatusLista(coincidencia)}>
+                {estatusLista(coincidencia)}
+              </Badge>
             </TableCell>
             <TableCell>{nombreEncontrado(coincidencia)}</TableCell>
             <TableCell className="text-muted-foreground">

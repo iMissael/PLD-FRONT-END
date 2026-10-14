@@ -137,7 +137,7 @@ export function UsuarioForm({
   const crearUsuarioCompleto = useCrearUsuarioCompleto();
   const actualizarUsuarioCompleto = useActualizarUsuarioCompleto();
   const guardando = crearUsuarioCompleto.isPending || actualizarUsuarioCompleto.isPending;
-  const { data: roles } = useRoles();
+  const { data: roles, isPending: cargandoRoles } = useRoles();
 
   const form = useForm<CrearUsuarioFormValues>({
     // En edición la contraseña no se valida: el esquema de edición la deja opcional.
@@ -202,6 +202,14 @@ export function UsuarioForm({
   }
 
   function onSubmit(values: CrearUsuarioFormValues) {
+    // esRolOficial necesita el catalogo de roles (compara por nombre, no hay un id fijo): si
+    // todavia esta cargando, roles llega undefined y esRolOficial devuelve false en automatico,
+    // dejando guardar un "Oficial de Cumplimiento" como si fuera un rol cualquiera, sin pedirle
+    // los datos PLD. En vez de arriesgarse, se bloquea el guardado hasta que el catalogo cargue.
+    if (cargandoRoles) {
+      toast.error("Los roles aún se están cargando, intenta de nuevo en un momento.");
+      return;
+    }
     const esOficial = esRolOficial(roles, values.rolId);
     if (esOficial) {
       let faltaAlgo = false;
@@ -320,7 +328,7 @@ export function UsuarioForm({
               Siguiente
             </Button>
           ) : (
-            <Button type="submit" disabled={guardando}>
+            <Button type="submit" disabled={guardando || cargandoRoles}>
               {guardando ? "Guardando…" : edicion ? "Guardar cambios" : "Guardar"}
             </Button>
           )}
