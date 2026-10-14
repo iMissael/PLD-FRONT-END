@@ -1,4 +1,5 @@
 import { type ReactNode } from "react";
+import { Breadcrumbs } from "@/shared/components/organisms/Breadcrumbs";
 import { PageFooter } from "@/shared/components/organisms/PageFooter";
 import { cn } from "@/shared/utils/cn";
 
@@ -7,20 +8,14 @@ export interface DashboardDosColumnasTemplateProps {
   descripcion?: ReactNode;
   acciones?: ReactNode;
   alerta?: ReactNode;
+  mostrarBreadcrumbs?: boolean;
   mostrarFooter?: boolean;
   moduloFooter?: string;
-  /**
-   * Panel lateral (ej. Expediente del Socio, Selección de Entidad, Filtros)
-   */
+
   columnaLateral: ReactNode;
-  /**
-   * Contenido principal (ej. Matriz de Riesgo, Historial, Detalle)
-   */
+
   contenidoPrincipal?: ReactNode;
-  /**
-   * Ancho del panel lateral en resoluciones de escritorio (>= 1024px).
-   * En resoluciones menores a 1024px siempre colapsa verticalmente (100%).
-   */
+
   anchoLateralClassName?: string;
   className?: string;
   children?: ReactNode;
@@ -31,6 +26,7 @@ export function DashboardDosColumnasTemplate({
   descripcion,
   acciones,
   alerta,
+  mostrarBreadcrumbs = false,
   mostrarFooter = true,
   moduloFooter,
   columnaLateral,
@@ -43,6 +39,8 @@ export function DashboardDosColumnasTemplate({
 
   return (
     <div className={cn("flex flex-col gap-6 pb-16", className)}>
+      {mostrarBreadcrumbs && <Breadcrumbs />}
+
       {(titulo || acciones) && (
         <header className="flex flex-wrap items-center justify-between gap-4">
           <div className="space-y-1">

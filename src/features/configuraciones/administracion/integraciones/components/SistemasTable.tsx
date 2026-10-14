@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 
-import { Badge } from "@/shared/components/ui/CatalogoBadge";
-import { DataTable, type ColumnDef } from "@/shared/components/ui/DataTable";
-import { table } from "@/shared/components/ui/styles";
+import { StatusBadge as Badge } from "@/shared/components/atoms/StatusBadge";
+import { DataTable, type ColumnDef } from "@/shared/components/organisms/DataTable";
+import { table } from "@/shared/styles/tokens";
 
 import type { SistemaIntegracionResponse } from "../types/integraciones";
 import { fechaHora } from "./formato";

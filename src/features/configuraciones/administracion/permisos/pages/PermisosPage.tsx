@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/molecules/Card";
 import { PermisoForm } from "@/features/configuraciones/administracion/permisos/components/PermisoForm";
 import { PermisosTable } from "@/features/configuraciones/administracion/permisos/components/PermisosTable";
 

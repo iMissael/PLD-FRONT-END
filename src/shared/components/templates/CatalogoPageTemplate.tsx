@@ -1,4 +1,5 @@
 import { type ReactNode } from "react";
+import { Breadcrumbs } from "@/shared/components/organisms/Breadcrumbs";
 import { PageFooter } from "@/shared/components/organisms/PageFooter";
 import { cn } from "@/shared/utils/cn";
 
@@ -7,6 +8,7 @@ export interface CatalogoPageTemplateProps {
   descripcion?: ReactNode;
   acciones?: ReactNode;
   alerta?: ReactNode;
+  mostrarBreadcrumbs?: boolean;
   mostrarFooter?: boolean;
   moduloFooter?: string;
   className?: string;
@@ -18,6 +20,7 @@ export function CatalogoPageTemplate({
   descripcion,
   acciones,
   alerta,
+  mostrarBreadcrumbs = false,
   mostrarFooter = true,
   moduloFooter,
   className,
@@ -25,6 +28,8 @@ export function CatalogoPageTemplate({
 }: CatalogoPageTemplateProps) {
   return (
     <div className={cn("flex flex-col gap-6 pb-16", className)}>
+      {mostrarBreadcrumbs && <Breadcrumbs />}
+
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div className="space-y-1">
           <h2 className="text-xl font-semibold tracking-tight text-foreground">{titulo}</h2>

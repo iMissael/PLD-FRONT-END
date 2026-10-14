@@ -2,7 +2,7 @@ import { useMemo } from "react";
 
 import { StatusBadge } from "@/shared/components/atoms/StatusBadge";
 import { Button } from "@/shared/components/atoms/Button";
-import { card } from "@/shared/components/ui/styles";
+import { Card } from "@/shared/components/molecules";
 
 import { useNivelesRiesgo } from "../../ubicacion-geografica/niveles-riesgo/hooks/useNivelesRiesgo";
 import type { PrestamoMontoResponse } from "../types/prestamoMonto";
@@ -28,7 +28,7 @@ export function PrestamoMontoDetalle({ rango, onEditar }: PrestamoMontoDetallePr
   }, [niveles, rango.catNivelRiesgoId]);
 
   return (
-    <div className={`flex flex-col gap-4 p-4 ${card}`}>
+    <Card className="flex flex-col gap-4 p-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-foreground">
           Detalle del rango: {formatearRangoMonto(rango.montoMin, rango.montoMax)}
@@ -75,6 +75,6 @@ export function PrestamoMontoDetalle({ rango, onEditar }: PrestamoMontoDetallePr
           </StatusBadge>
         </span>
       </div>
-    </div>
+    </Card>
   );
 }

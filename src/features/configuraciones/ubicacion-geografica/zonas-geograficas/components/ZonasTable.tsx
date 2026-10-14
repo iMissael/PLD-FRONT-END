@@ -1,8 +1,8 @@
 import { useMemo } from "react";
-import { Badge } from "@/shared/components/ui/CatalogoBadge";
-import { Button } from "@/shared/components/ui/CatalogoButton";
-import { DataTable, type ColumnDef } from "@/shared/components/ui/DataTable";
-import { table } from "@/shared/components/ui/styles";
+import { StatusBadge as Badge } from "@/shared/components/atoms/StatusBadge";
+import { Button } from "@/shared/components/atoms/Button";
+import { DataTable, type ColumnDef } from "@/shared/components/organisms/DataTable";
+import { table } from "@/shared/styles/tokens";
 import type { ZonaGeograficaResponse } from "../types/zonaGeografica";
 
 interface ZonasTableProps {

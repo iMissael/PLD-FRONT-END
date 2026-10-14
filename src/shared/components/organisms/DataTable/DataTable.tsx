@@ -4,7 +4,7 @@ import { SearchInput } from "@/shared/components/molecules/SearchInput";
 import { TablePagination } from "@/shared/components/molecules/TablePagination";
 import { EmptyState } from "@/shared/components/molecules/EmptyState";
 import { Skeleton } from "@/shared/components/atoms/Skeleton";
-import { table } from "@/shared/components/ui/styles";
+import { table } from "@/shared/styles/tokens";
 
 export interface ColumnDef<T> {
   header: ReactNode;

@@ -1,5 +1,5 @@
 import { Calendar, ChevronDown, Clipboard, Copy, User } from "lucide-react";
-import { Skeleton } from "@/shared/components/ui/skeleton";
+import { Skeleton } from "@/shared/components/atoms/Skeleton";
 import { StatusBadge } from "@/shared/components/atoms/StatusBadge";
 import { cn } from "@/shared/utils/cn";
 import { BuscadorSocios } from "@/features/operacion/evaluacion-riesgo/components/BuscadorSocios";

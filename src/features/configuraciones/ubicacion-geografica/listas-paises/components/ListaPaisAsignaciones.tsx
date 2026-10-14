@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { DataTable, type ColumnDef } from "@/shared/components/organisms/DataTable";
 import { Button } from "@/shared/components/atoms/Button";
+import { Card } from "@/shared/components/molecules";
 
-import { card } from "@/shared/components/ui/styles";
 import { usePaisesDeLista } from "../hooks/useListasPaises";
 import type { ListaPaisResponse, PaisAsignadoResponse } from "../types/listaPais";
 
@@ -60,7 +60,7 @@ export function ListaPaisAsignaciones({ lista, onCerrar }: ListaPaisAsignaciones
   );
 
   return (
-    <div className={`flex flex-col gap-4 p-4 ${card}`}>
+    <Card className="flex flex-col gap-4 p-4">
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-sm font-semibold text-foreground">
@@ -99,6 +99,6 @@ export function ListaPaisAsignaciones({ lista, onCerrar }: ListaPaisAsignaciones
           rowsPerPageOptions: [10, 25, 30],
         }}
       />
-    </div>
+    </Card>
   );
 }

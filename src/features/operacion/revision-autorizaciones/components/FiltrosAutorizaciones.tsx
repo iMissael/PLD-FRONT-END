@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Button } from "@/shared/components/atoms/Button";
 import { FormFieldGroup } from "@/shared/components/molecules/FormFieldGroup";
-import { CalendarioFecha } from "@/shared/components/ui/CalendarioFecha";
-import { CasillaRedonda } from "@/shared/components/ui/CasillaRedonda";
+import { CalendarioFecha } from "@/shared/components/molecules/CalendarioFecha";
+import { CasillaRedonda } from "@/shared/components/atoms/CasillaRedonda";
 import { Search } from "lucide-react";
 
 import {

@@ -8,11 +8,11 @@ import type {
   OrigenAlerta,
   TipoAlerta,
 } from "@/features/alertas/types/alertas";
-import { CalendarioFecha } from "@/shared/components/ui/CalendarioFecha";
-import { CasillaRedonda } from "@/shared/components/ui/CasillaRedonda";
-import { Button } from "@/shared/components/ui/CatalogoButton";
-import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
-import { field, hint, label } from "@/shared/components/ui/styles";
+import { CalendarioFecha } from "@/shared/components/molecules/CalendarioFecha";
+import { CasillaRedonda } from "@/shared/components/atoms/CasillaRedonda";
+import { Button } from "@/shared/components/atoms/Button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/molecules/Popover";
+import { field, hint, label } from "@/shared/styles/tokens";
 
 import { formatearFecha } from "../utils/formato";
 

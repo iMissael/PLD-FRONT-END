@@ -6,3 +6,5 @@ export * from "./Dialog";
 export * from "./Sheet";
 export * from "./Header";
 export * from "./Sidebar";
+export * from "./CaptchaChallenge";
+export * from "./TurnstileWidget";

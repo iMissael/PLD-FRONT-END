@@ -9,7 +9,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/shared/components/ui/table";
+} from "@/shared/components/atoms/Table";
 import type { FactorRiesgo } from "@/features/configuraciones/matriz-riesgo/types/matrizRiesgo";
 
 function esActivo(estatus: string | undefined) {

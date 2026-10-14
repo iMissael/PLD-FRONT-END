@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/shared/components/ui/table";
+} from "@/shared/components/atoms/Table";
 import type { PersonaEnLista, SocioEnRevision } from "../types/coincidencias";
 import { coinciden } from "../utils/comparar";
 

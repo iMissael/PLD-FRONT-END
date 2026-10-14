@@ -15,13 +15,21 @@ import {
   type DatosFuenteInformacion,
   FUENTE_VACIA,
 } from "@/features/alertas/utils/fuenteInformacion";
-import { Alert } from "@/shared/components/ui/Alert";
-import { CalendarioFecha } from "@/shared/components/ui/CalendarioFecha";
-import { Button } from "@/shared/components/ui/CatalogoButton";
-import { card, field, hint, label } from "@/shared/components/ui/styles";
+import { Alert } from "@/shared/components/molecules/Alert";
+import { CalendarioFecha } from "@/shared/components/molecules/CalendarioFecha";
+import { Button } from "@/shared/components/atoms/Button";
+import { Input } from "@/shared/components/atoms/Input";
+import { Card } from "@/shared/components/molecules";
+import { hint, label } from "@/shared/styles/tokens";
 import type { SocioExterno } from "@/features/socios/types/socios";
 import { cn } from "@/shared/utils/cn";
 import { haceAniosIso, hoyIso } from "@/shared/utils/fechas";
+
+const selectStyle =
+  "border-border bg-card text-foreground focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full rounded-md border px-3 py-1 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:opacity-50 disabled:cursor-not-allowed";
+
+const textareaStyle =
+  "border-border bg-card text-foreground focus-visible:border-ring focus-visible:ring-ring/50 w-full rounded-md border p-3 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:opacity-50 disabled:cursor-not-allowed";
 
 /** Antigüedad máxima de una incidencia capturable (hoy es el límite superior). */
 const ANIOS_ATRAS_INCIDENCIA = 5;
@@ -245,11 +253,12 @@ export function CapturaAlertasPage() {
         </Alert>
       ) : null}
 
-      <form
-        noValidate
-        onSubmit={handleSubmit}
-        className={`flex flex-col gap-5 p-4 ${card}`}
-      >
+      <Card className="p-4">
+        <form
+          noValidate
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-5"
+        >
         <fieldset className="flex flex-col gap-2">
           <legend className={label}>Tipo de alerta</legend>
           {cargandoTipos ? (
@@ -293,7 +302,7 @@ export function CapturaAlertasPage() {
                           e.target.value === "" ? "" : Number(e.target.value),
                       }))
                     }
-                    className={cn(field, marcar("razon"))}
+                    className={cn(selectStyle, marcar("razon"))}
                   >
                     <option value="">Seleccione una razón</option>
                     {razones.map((r) => (
@@ -314,7 +323,7 @@ export function CapturaAlertasPage() {
                     rows={4}
                     value={razon?.descripcionRazonAlerta ?? ""}
                     placeholder="Se muestra al seleccionar la razón de la alerta"
-                    className={`${field} bg-muted/40 resize-none`}
+                    className={cn(textareaStyle, "bg-muted/40 resize-none")}
                   />
                 </div>
               </div>
@@ -333,7 +342,7 @@ export function CapturaAlertasPage() {
                   {ETIQUETA_REPORTADO[tipo.tipoReportado!]} a reportar
                 </label>
                 <div className={marcar("reportado")}>
-                  <input
+                  <Input
                     id="reportado"
                     readOnly
                     value={
@@ -348,7 +357,7 @@ export function CapturaAlertasPage() {
                         ? "Seleccione un empleado de la tabla"
                         : "Seleccione un cliente de la tabla"
                     }
-                    className={`${field} bg-muted/40 w-full`}
+                    className="bg-muted/40 w-full"
                   />
                 </div>
               </div>
@@ -429,7 +438,7 @@ export function CapturaAlertasPage() {
                 onChange={(e) =>
                   setForm((prev) => ({ ...prev, actoHecho: e.target.value }))
                 }
-                className={cn(field, "uppercase", marcar("actoHecho"))}
+                className={cn(textareaStyle, "uppercase", marcar("actoHecho"))}
               />
               <p className={hint}>Qué ocurrió: operación, montos, conducta observada.</p>
             </div>
@@ -445,7 +454,7 @@ export function CapturaAlertasPage() {
                 onChange={(e) =>
                   setForm((prev) => ({ ...prev, informacionAdicional: e.target.value }))
                 }
-                className={cn(field, "uppercase", marcar("informacionAdicional"))}
+                className={cn(textareaStyle, "uppercase", marcar("informacionAdicional"))}
               />
             </div>
 
@@ -466,7 +475,8 @@ export function CapturaAlertasPage() {
             </div>
           </>
         ) : null}
-      </form>
+        </form>
+      </Card>
     </div>
   );
 }

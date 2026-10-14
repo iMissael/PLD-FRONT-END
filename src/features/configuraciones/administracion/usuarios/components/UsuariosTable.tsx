@@ -11,11 +11,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/shared/components/ui/alert-dialog";
-import { Badge } from "@/shared/components/ui/badge";
-import { Button } from "@/shared/components/ui/button";
-import { Input } from "@/shared/components/ui/input";
-import { Skeleton } from "@/shared/components/ui/skeleton";
+} from "@/shared/components/organisms/AlertDialog";
+import { Badge } from "@/shared/components/atoms/Badge";
+import { Button } from "@/shared/components/atoms/Button";
+import { Input } from "@/shared/components/atoms/Input";
+import { Skeleton } from "@/shared/components/atoms/Skeleton";
 import {
   Table,
   TableBody,
@@ -23,8 +23,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/shared/components/ui/table";
-import { TablePagination } from "@/shared/components/TablePagination";
+} from "@/shared/components/atoms/Table";
+import { TablePagination } from "@/shared/components/molecules/TablePagination";
 import { useRoles } from "@/features/configuraciones/administracion/roles/hooks/useRoles";
 import {
   useCambiarEstadoUsuario,

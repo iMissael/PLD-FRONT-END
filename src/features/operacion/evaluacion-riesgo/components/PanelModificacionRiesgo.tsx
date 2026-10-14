@@ -2,7 +2,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { NivelRiesgoSelect } from "@/features/configuraciones/ubicacion-geografica/niveles-riesgo/components/NivelRiesgoSelect";
-import { Button } from "@/shared/components/ui/button";
+import { Button } from "@/shared/components/atoms/Button";
 import type { EvaluacionMostrada } from "@/features/operacion/evaluacion-riesgo/components/MatrizRiesgoDashboard";
 import { useModificarNivelRiesgo } from "@/features/operacion/evaluacion-riesgo/hooks/useEvaluacionRiesgo";
 import { useEvaluacionesSesionStore } from "@/features/operacion/evaluacion-riesgo/stores/evaluacionesSesionStore";

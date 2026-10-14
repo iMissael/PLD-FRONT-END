@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ShieldCheck, X } from "lucide-react";
-import { DataTable, type ColumnDef } from "@/shared/components/DataTable";
+import { DataTable, type ColumnDef } from "@/shared/components/organisms/DataTable";
 import { EmptyState } from "@/shared/components/molecules/EmptyState";
 import { cn } from "@/shared/utils/cn";
 import {

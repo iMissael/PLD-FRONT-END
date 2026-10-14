@@ -1,6 +1,8 @@
 import { useState } from "react";
 
-import { card, field, label } from "@/shared/components/ui/styles";
+import { Input } from "@/shared/components/atoms/Input";
+import { Card } from "@/shared/components/molecules";
+import { label } from "@/shared/styles/tokens";
 
 export type FiltroEntidades = "ENTIDAD" | "ZONA";
 
@@ -23,8 +25,8 @@ export function BusquedaEntidadesForm({ onBuscar }: BusquedaEntidadesFormProps) 
   };
 
   return (
-    <div className={`flex flex-wrap items-center gap-4 p-3 ${card}`}>
-      <input
+    <Card className="flex flex-wrap items-center gap-4 p-3">
+      <Input
         type="text"
         placeholder={
           filtro === "ENTIDAD"
@@ -33,7 +35,7 @@ export function BusquedaEntidadesForm({ onBuscar }: BusquedaEntidadesFormProps) 
         }
         value={valor}
         onChange={(event) => cambiarValor(event.target.value)}
-        className={`w-full max-w-sm flex-1 ${field}`}
+        className="w-full max-w-sm flex-1"
       />
 
       <div className="flex items-center gap-3">
@@ -59,6 +61,6 @@ export function BusquedaEntidadesForm({ onBuscar }: BusquedaEntidadesFormProps) 
           Zona Geográfica
         </label>
       </div>
-    </div>
+    </Card>
   );
 }

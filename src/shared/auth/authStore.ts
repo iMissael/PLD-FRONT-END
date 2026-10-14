@@ -6,12 +6,10 @@ import type { LoginResponse } from "@/features/auth/types/auth";
 const REMEMBER_FLAG_KEY = "auth-remember";
 const STORAGE_KEY = "auth-storage";
 
-// Mismos nombres que AuthenticatedUser.isAdmin() en el backend: el rol sembrado se llama
-// "Administrador" y no tiene permisos asignados, su acceso total depende del nombre.
-const ROLES_ADMIN = ["ROLE_ADMIN", "ADMIN", "ADMINISTRADOR"];
+const ROL_ADMINISTRADOR = ["ADMINISTRADOR"];
 
 export function esRolAdmin(nombre: string | undefined | null) {
-  return Boolean(nombre) && ROLES_ADMIN.includes(nombre!.trim().toUpperCase());
+  return Boolean(nombre) && ROL_ADMINISTRADOR.includes(nombre!.trim().toUpperCase());
 }
 
 function getActiveStorage(): Storage {
@@ -78,13 +76,7 @@ export const useAuthStore = create<AuthState>()(
   ),
 );
 
+/** Único origen del token: el store persistido. Sin fallbacks a claves legacy. */
 export function getAuthToken(): string | null {
-  const stateToken = useAuthStore.getState().token;
-  if (stateToken) return stateToken;
-  const rawToken =
-    sessionStorage.getItem("token") ||
-    sessionStorage.getItem("auth_token") ||
-    localStorage.getItem("token");
-  if (!rawToken) return null;
-  return rawToken.replace(/^"(.*)"$/, "$1");
+  return useAuthStore.getState().token;
 }

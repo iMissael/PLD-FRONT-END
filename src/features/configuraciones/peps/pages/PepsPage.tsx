@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
-import { Alert } from "@/shared/components/ui/Alert";
+import { Alert } from "@/shared/components/molecules/Alert";
 
 import { CambiarRiesgoPepForm } from "../components/CambiarRiesgoPepForm";
 import { PepsTable } from "../components/PepsTable";

@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { isAppError } from "@/api/interceptors/errorInterceptor";
-import { Button } from "@/shared/components/ui/button";
+import { Button } from "@/shared/components/atoms/Button";
 import {
   Form,
   FormControl,
@@ -10,8 +10,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/shared/components/ui/form";
-import { InputFormateado } from "@/shared/components/InputFormateado";
+} from "@/shared/components/molecules/Form";
+import { InputFormateado } from "@/shared/components/atoms/InputFormateado";
 import { mayusculas } from "@/shared/utils/entradas";
 import {
   Select,
@@ -19,7 +19,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/shared/components/ui/select";
+} from "@/shared/components/molecules/Select";
 import {
   useCrearPermiso,
   useRecursosPermiso,

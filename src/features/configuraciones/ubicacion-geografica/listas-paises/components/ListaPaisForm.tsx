@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 
 import { Button } from "@/shared/components/atoms/Button";
-import { card, field, label } from "@/shared/components/ui/styles";
+import { Input } from "@/shared/components/atoms/Input";
+import { Card } from "@/shared/components/molecules";
+import { label } from "@/shared/styles/tokens";
 
 import { NivelRiesgoSelect } from "../../niveles-riesgo/components/NivelRiesgoSelect";
 import type {
@@ -63,69 +65,70 @@ export function ListaPaisForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className={`flex flex-col gap-4 p-4 ${card}`}>
-      <h3 className="text-sm font-semibold text-foreground">
-        {esNueva ? "Nueva lista de países" : `Editar lista: ${lista.nombre}`}
-      </h3>
+    <Card className="p-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <h3 className="text-sm font-semibold text-foreground">
+          {esNueva ? "Nueva lista de países" : `Editar lista: ${lista.nombre}`}
+        </h3>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="flex flex-col gap-1">
-          <label htmlFor="nombreLista" className={label}>
-            Nombre
-          </label>
-          <input
-            id="nombreLista"
-            type="text"
-            required
-            value={form.nombre}
-            onChange={(event) =>
-              setForm((prev) => ({ ...prev, nombre: event.target.value }))
-            }
-            className={field}
-          />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="flex flex-col gap-1">
+            <label htmlFor="nombreLista" className={label}>
+              Nombre
+            </label>
+            <Input
+              id="nombreLista"
+              type="text"
+              required
+              value={form.nombre}
+              onChange={(event) =>
+                setForm((prev) => ({ ...prev, nombre: event.target.value }))
+              }
+            />
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label htmlFor="nivelRiesgoLista" className={label}>
+              Nivel de riesgo
+            </label>
+            <NivelRiesgoSelect
+              id="nivelRiesgoLista"
+              required
+              value={form.nivelRiesgoId}
+              onChange={(id) => setForm((prev) => ({ ...prev, nivelRiesgoId: id }))}
+            />
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label htmlFor="estatusLista" className={label}>
+              Estatus
+            </label>
+            <select
+              id="estatusLista"
+              value={form.estatus}
+              onChange={(event) =>
+                setForm((prev) => ({
+                  ...prev,
+                  estatus: event.target.value as EstatusListaPais,
+                }))
+              }
+              className="border-border bg-card text-foreground focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full rounded-md border px-3 py-1 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <option value="A">Activa</option>
+              <option value="INA">Inactiva</option>
+            </select>
+          </div>
         </div>
 
-        <div className="flex flex-col gap-1">
-          <label htmlFor="nivelRiesgoLista" className={label}>
-            Nivel de riesgo
-          </label>
-          <NivelRiesgoSelect
-            id="nivelRiesgoLista"
-            required
-            value={form.nivelRiesgoId}
-            onChange={(id) => setForm((prev) => ({ ...prev, nivelRiesgoId: id }))}
-          />
+        <div className="flex justify-end gap-2">
+          <Button variante="secundario" onClick={onCancelar}>
+            Cancelar
+          </Button>
+          <Button type="submit" disabled={isPending}>
+            {isPending ? "Guardando..." : "Guardar"}
+          </Button>
         </div>
-
-        <div className="flex flex-col gap-1">
-          <label htmlFor="estatusLista" className={label}>
-            Estatus
-          </label>
-          <select
-            id="estatusLista"
-            value={form.estatus}
-            onChange={(event) =>
-              setForm((prev) => ({
-                ...prev,
-                estatus: event.target.value as EstatusListaPais,
-              }))
-            }
-            className={field}
-          >
-            <option value="A">Activa</option>
-            <option value="INA">Inactiva</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="flex justify-end gap-2">
-        <Button variante="secundario" onClick={onCancelar}>
-          Cancelar
-        </Button>
-        <Button type="submit" disabled={isPending}>
-          {isPending ? "Guardando..." : "Guardar"}
-        </Button>
-      </div>
-    </form>
+      </form>
+    </Card>
   );
 }

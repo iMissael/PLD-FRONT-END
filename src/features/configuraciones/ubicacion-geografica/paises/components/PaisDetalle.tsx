@@ -1,5 +1,5 @@
-import { Button } from "@/shared/components/ui/CatalogoButton";
-import { card } from "@/shared/components/ui/styles";
+import { Button } from "@/shared/components/atoms/Button";
+import { Card } from "@/shared/components/molecules";
 import type { PaisResponse } from "../types/pais";
 
 export interface ItemListaDetalle {
@@ -20,7 +20,7 @@ interface PaisDetalleProps {
  */
 export function PaisDetalle({ pais, listas, nivelRiesgo, onEditar }: PaisDetalleProps) {
   return (
-    <div className={`flex flex-col gap-4 p-4 ${card}`}>
+    <Card className="flex flex-col gap-4 p-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-foreground">
           Detalle del país: {pais.nombre}
@@ -87,6 +87,6 @@ export function PaisDetalle({ pais, listas, nivelRiesgo, onEditar }: PaisDetalle
           <span className="text-sm text-muted-foreground">Sin listas asignadas</span>
         )}
       </div>
-    </div>
+    </Card>
   );
 }

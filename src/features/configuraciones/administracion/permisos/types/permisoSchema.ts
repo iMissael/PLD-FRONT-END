@@ -24,6 +24,22 @@ export const ETIQUETAS_ACCION: Record<AccionPermiso, string> = {
   confirmar: "Confirmar",
 };
 
+/** Recursos base protegidos por el sistema. */
+export const RECURSOS_SISTEMA_BASE = [
+  "alertas",
+  "catalogos",
+  "coincidencias",
+  "control-dolar",
+  "denuncias",
+  "evaluacion-riesgo",
+  "integraciones",
+  "matriz-riesgo",
+  "oficial-cumplimiento",
+  "permisos",
+  "roles",
+  "usuarios",
+] as const;
+
 // El recurso se elige de los que protege el backend; la acción, del enum.
 export const crearPermisoSchema = z.object({
   recurso: z.string().trim().min(1, "El recurso es obligatorio"),

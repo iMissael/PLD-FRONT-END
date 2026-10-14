@@ -11,9 +11,9 @@ import {
   type Alerta,
   type DictamenInput,
 } from "@/features/alertas/types/alertas";
-import { Alert } from "@/shared/components/ui/Alert";
+import { Alert } from "@/shared/components/molecules/Alert";
 import { Button } from "@/shared/components/atoms/Button";
-import { field, hint } from "@/shared/components/ui/styles";
+import { hint } from "@/shared/styles/tokens";
 
 import { formatearFecha, formatearMoneda } from "../utils/formato";
 
@@ -337,7 +337,7 @@ export function DetalleAlerta({ alerta, onDictaminada }: DetalleAlertaProps) {
               rows={3}
               value={justificacion}
               onChange={(e) => setJustificacion(e.target.value)}
-              className={`${field} uppercase`}
+              className="border-border bg-card text-foreground focus-visible:border-ring focus-visible:ring-ring/50 w-full rounded-md border p-3 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:opacity-50 disabled:cursor-not-allowed uppercase"
             />
             <p className={hint}>
               Queda en el historial de la alerta junto con su usuario.

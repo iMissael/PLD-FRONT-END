@@ -5,7 +5,7 @@ import {
   HomeIcon,
   LogOutIcon,
   SearchIcon,
-} from "@/shared/components/icons";
+} from "@/shared/components/atoms/icons";
 import { ExternalLink, X } from "lucide-react";
 import { useRutaTenant } from "@/shared/tenant/useRutaTenant";
 

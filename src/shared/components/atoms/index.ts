@@ -6,3 +6,7 @@ export * from "./Badge";
 export * from "./StatusBadge";
 export * from "./Skeleton";
 export * from "./Divider";
+export * from "./Table";
+export * from "./Toaster";
+export * from "./InputFormateado";
+export * from "./CasillaRedonda";

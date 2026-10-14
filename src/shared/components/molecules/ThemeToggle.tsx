@@ -1,5 +1,5 @@
 import { useTheme } from "@/shared/hooks/useTheme";
-import { MoonIcon, SunIcon } from "@/shared/components/icons";
+import { MoonIcon, SunIcon } from "@/shared/components/atoms/icons";
 
 export function ThemeToggle() {
   const { isDark, toggleTheme } = useTheme();

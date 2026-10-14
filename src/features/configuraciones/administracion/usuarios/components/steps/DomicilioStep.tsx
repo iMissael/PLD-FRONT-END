@@ -6,9 +6,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/shared/components/ui/form";
-import { Input } from "@/shared/components/ui/input";
-import { InputFormateado } from "@/shared/components/InputFormateado";
+} from "@/shared/components/molecules/Form";
+import { Input } from "@/shared/components/atoms/Input";
+import { InputFormateado } from "@/shared/components/atoms/InputFormateado";
 import { mayusculas, numeroDomicilio, soloDigitos } from "@/shared/utils/entradas";
 import {
   Select,
@@ -16,7 +16,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/shared/components/ui/select";
+} from "@/shared/components/molecules/Select";
 import {
   useEntidades,
   useLocalidades,

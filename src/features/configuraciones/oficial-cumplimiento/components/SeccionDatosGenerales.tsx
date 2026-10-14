@@ -1,7 +1,7 @@
 import { IdCard, Mail, Phone, UserRound } from "lucide-react";
 import { useMemo } from "react";
 import { useWatch } from "react-hook-form";
-import { Label } from "@/shared/components/ui/label";
+import { Label } from "@/shared/components/atoms/Label";
 import {
   useEntidades,
   useEstadosCiviles,

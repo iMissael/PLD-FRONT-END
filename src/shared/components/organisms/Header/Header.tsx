@@ -1,5 +1,5 @@
 import { MenuIcon, X } from "lucide-react";
-import { ThemeToggle } from "@/shared/components/ThemeToggle";
+import { ThemeToggle } from "@/shared/components/molecules/ThemeToggle";
 
 export interface HeaderProps {
   collapsed?: boolean;

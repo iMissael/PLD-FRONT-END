@@ -11,9 +11,8 @@ describe("fetchTenantNombre", () => {
       .mockResolvedValue({ data: { nombreComercial: "Empresa Corporativa" } });
 
     await expect(fetchTenantNombre("tenant-123")).resolves.toBe("Empresa Corporativa");
-    expect(get).toHaveBeenCalledWith("/publico/nombre", {
+    expect(get).toHaveBeenCalledWith("/SICANETSC/PLD/tenant-123/publico/nombre", {
       skipTenantInterceptor: true,
-      headers: { "X-Tenant-Id": "tenant-123" },
     });
   });
 });

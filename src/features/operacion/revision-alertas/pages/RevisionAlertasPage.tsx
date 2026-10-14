@@ -7,8 +7,8 @@ import {
   type Alerta,
   type FiltroAlertas,
 } from "@/features/alertas/types/alertas";
-import { Alert } from "@/shared/components/ui/Alert";
-import { Button } from "@/shared/components/ui/CatalogoButton";
+import { Alert } from "@/shared/components/molecules/Alert";
+import { Button } from "@/shared/components/atoms/Button";
 import {
   Dialog,
   DialogBody,
@@ -17,7 +17,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/shared/components/ui/dialog";
+} from "@/shared/components/organisms/Dialog";
 
 import { AlertasTable } from "../components/AlertasTable";
 import { DetalleAlerta } from "../components/DetalleAlerta";
