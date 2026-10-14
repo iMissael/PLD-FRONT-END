@@ -6,3 +6,4 @@ export * from "./AppLayout";
 export * from "./ContenidoAcotado";
 export * from "./TenantRequeridoPage";
 export * from "./TenantRouteLayout";
+export * from "./RouteErrorPage";

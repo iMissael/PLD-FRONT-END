@@ -7,6 +7,7 @@ import { PlaceholderPage } from "@/shared/components/templates/PlaceholderPage";
 import {
   AppLayout,
   ContenidoAcotado,
+  RouteErrorPage,
   TenantRequeridoPage,
   TenantRouteLayout,
 } from "@/shared/components/templates";
@@ -159,6 +160,7 @@ export const router = createBrowserRouter([
   {
     path: "/SICANETSC/PLD/:tenantId",
     element: <TenantRouteLayout />,
+    errorElement: <RouteErrorPage />,
     children: [
       { path: "login", element: <LoginPage /> },
       // Buzón anónimo: cualquiera puede levantar una denuncia sin sesión.
@@ -172,6 +174,7 @@ export const router = createBrowserRouter([
             children: [
               {
                 element: <AppLayout />,
+                errorElement: <RouteErrorPage />,
                 children: [
                   {
                     index: true,

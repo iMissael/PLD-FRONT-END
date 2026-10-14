@@ -20,7 +20,7 @@ export function CatalogoPageTemplate({
   descripcion,
   acciones,
   alerta,
-  mostrarBreadcrumbs = true,
+  mostrarBreadcrumbs = false,
   mostrarFooter = true,
   moduloFooter,
   className,

@@ -97,17 +97,22 @@ export function Breadcrumbs() {
       return [];
     }
 
+    const rutaActual = rutaTenant(segmentos.join("/"));
+
     let acumulado = "";
     return segmentos.map((segmento, idx) => {
       acumulado += (acumulado ? "/" : "") + segmento;
       const esUltimo = idx === segmentos.length - 1;
       const etiqueta = TITULOS_RUTAS[segmento] || decodeURIComponent(segmento);
       const destino = RUTAS_INTERMEDIAS[acumulado] || acumulado;
+      const destinoUrl = rutaTenant(destino);
+      const esMismaRuta = !esUltimo && destinoUrl === rutaActual;
 
       return {
         etiqueta,
-        to: rutaTenant(destino),
+        to: destinoUrl,
         esUltimo,
+        esMismaRuta,
       };
     });
   }, [location.pathname, rutaTenant]);
@@ -132,6 +137,10 @@ export function Breadcrumbs() {
           <ChevronRight className="size-3.5 text-muted-foreground/50 shrink-0" />
           {crumb.esUltimo ? (
             <span className="font-semibold text-foreground truncate max-w-[200px] sm:max-w-none" aria-current="page">
+              {crumb.etiqueta}
+            </span>
+          ) : crumb.esMismaRuta ? (
+            <span className="text-muted-foreground/80 truncate max-w-[150px] sm:max-w-none font-medium cursor-default">
               {crumb.etiqueta}
             </span>
           ) : (
