@@ -8,10 +8,16 @@
  * (botones, alertas) es un componente en esta misma carpeta.
  */
 
-/** Panel/card: el contenedor blanco con borde que envuelve tablas y formularios. */
+/**
+ * Panel/card: el contenedor blanco con borde que envuelve tablas y formularios.
+ * @deprecated Usa el componente `<Card>` de `@/shared/components/molecules`.
+ */
 export const card = "rounded-xl border border-border bg-card shadow-xs";
 
-/** Campo de texto y `<select>`: misma caja para que se vean iguales. */
+/**
+ * Campo de texto y `<select>`: misma caja para que se vean iguales.
+ * @deprecated Usa el componente `<Input>` de `@/shared/components/atoms/Input`.
+ */
 export const field =
   "rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground " +
   "focus:border-primary focus:ring-2 focus:ring-ring/50 focus:outline-none " +

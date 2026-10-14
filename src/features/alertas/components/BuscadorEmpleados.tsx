@@ -1,7 +1,7 @@
 import { Search } from "lucide-react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 
-import { field } from "@/shared/styles/tokens";
+import { Input } from "@/shared/components/atoms/Input";
 
 import { useListaEmpleados } from "../hooks/useAlertas";
 import type { EmpleadoExterno } from "../types/alertas";
@@ -50,7 +50,7 @@ export function BuscadorEmpleados({
   return (
     <div ref={contenedor} className="relative">
       <div className="relative">
-        <input
+        <Input
           id={id}
           value={abierto ? filtro : valor}
           placeholder="Clave o nombre del empleado"
@@ -66,7 +66,7 @@ export function BuscadorEmpleados({
           aria-expanded={abierto}
           aria-controls={idLista}
           autoComplete="off"
-          className={`${field} w-full pr-10`}
+          className="w-full pr-10"
         />
         <Search
           className="text-muted-foreground pointer-events-none absolute inset-y-0 right-3 my-auto size-4"

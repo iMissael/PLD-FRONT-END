@@ -1,6 +1,6 @@
 import { StatusBadge } from "@/shared/components/atoms/StatusBadge";
 import { Button } from "@/shared/components/atoms/Button";
-import { card } from "@/shared/styles/tokens";
+import { Card } from "@/shared/components/molecules";
 
 import type { ListaPaisResponse } from "../types/listaPais";
 
@@ -16,7 +16,7 @@ interface ListaPaisDetalleProps {
  */
 export function ListaPaisDetalle({ lista, onEditar }: ListaPaisDetalleProps) {
   return (
-    <div className={`flex flex-col gap-4 p-4 ${card}`}>
+    <Card className="flex flex-col gap-4 p-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-foreground">
           Detalle de la lista: {lista.nombre}
@@ -60,6 +60,6 @@ export function ListaPaisDetalle({ lista, onEditar }: ListaPaisDetalleProps) {
           {lista.totalPaisesAsignados}
         </span>
       </div>
-    </div>
+    </Card>
   );
 }

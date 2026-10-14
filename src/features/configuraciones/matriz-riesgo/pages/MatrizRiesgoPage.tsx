@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/shared/components/atoms/Button";
 import { StatusBadge } from "@/shared/components/atoms/StatusBadge";
+import { Card } from "@/shared/components/molecules";
 import { CatalogoPageTemplate } from "@/shared/components/templates/CatalogoPageTemplate";
-import { card } from "@/shared/styles/tokens";
 import {
   useConfiguracionActiva,
   useVersionMatriz,
@@ -48,7 +48,7 @@ export function MatrizRiesgoPage() {
         </>
       }
     >
-      <div className={card}>
+      <Card>
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border p-4 sm:p-6">
           <div className="flex items-center gap-3">
             <h3 className="text-base font-semibold text-foreground">
@@ -76,9 +76,9 @@ export function MatrizRiesgoPage() {
             <MatrizRiesgoForm base={activa} onSuccess={() => setEditando(false)} />
           )}
         </div>
-      </div>
+      </Card>
 
-      <div className={card}>
+      <Card>
         <div className="border-b border-border p-4 sm:p-6">
           <h3 className="text-base font-semibold text-foreground">
             Historial de versiones
@@ -93,10 +93,10 @@ export function MatrizRiesgoPage() {
             seleccionadaId={versionSeleccionada}
           />
         </div>
-      </div>
+      </Card>
 
       {versionSeleccionada !== null && (
-        <div ref={detalleRef} className={card}>
+        <Card ref={detalleRef}>
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border p-4 sm:p-6">
             <div className="flex items-center gap-3">
               <h3 className="text-base font-semibold text-foreground">
@@ -123,7 +123,7 @@ export function MatrizRiesgoPage() {
               <p className="text-muted-foreground text-sm">Cargando detalle de la versión…</p>
             )}
           </div>
-        </div>
+        </Card>
       )}
     </CatalogoPageTemplate>
   );

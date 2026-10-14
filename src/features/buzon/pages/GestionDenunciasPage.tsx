@@ -4,7 +4,7 @@ import { es } from "@/shared/i18n/es";
 import { DataTable, type ColumnDef } from "@/shared/components/organisms/DataTable";
 import { useListarDenuncias } from "../hooks/useDenuncias";
 import type { Denuncia, EstadoDenuncia } from "../types/buzon";
-import { DetalleDenunciaModal } from "./DetalleDenunciaModal";
+import { DetalleDenunciaModal } from "../components/DetalleDenunciaModal";
 
 const BADGE_STYLES: Record<EstadoDenuncia, string> = {
   R: "bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300",

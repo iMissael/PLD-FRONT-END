@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/shared/components/atoms/Button";
+import { Input } from "@/shared/components/atoms/Input";
 import { FormFieldGroup } from "@/shared/components/molecules/FormFieldGroup";
-import { field } from "@/shared/styles/tokens";
 import { Search } from "lucide-react";
 
 import {
@@ -36,25 +36,23 @@ export function FiltrosAutorizaciones({ onConsultar }: FiltrosAutorizacionesProp
       <div className="flex flex-wrap items-end gap-4">
         <div className="flex-1 min-w-[200px]">
           <FormFieldGroup label="Fecha inicial" htmlFor="fecha-inicial">
-            <input
+            <Input
               id="fecha-inicial"
               type="date"
               value={desde}
               onChange={(e) => setDesde(e.target.value)}
-              className={field}
             />
           </FormFieldGroup>
         </div>
 
         <div className="flex-1 min-w-[200px]">
           <FormFieldGroup label="Fecha final" htmlFor="fecha-final">
-            <input
+            <Input
               id="fecha-final"
               type="date"
               min={desde || undefined}
               value={hasta}
               onChange={(e) => setHasta(e.target.value)}
-              className={field}
             />
           </FormFieldGroup>
         </div>

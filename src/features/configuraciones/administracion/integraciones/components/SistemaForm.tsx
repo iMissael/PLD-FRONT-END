@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 
 import { Button } from "@/shared/components/atoms/Button";
 import { Checkbox } from "@/shared/components/atoms/Checkbox";
-import { card, field, hint, label } from "@/shared/styles/tokens";
+import { Input } from "@/shared/components/atoms/Input";
+import { Card } from "@/shared/components/molecules/Card";
+import { hint, label } from "@/shared/styles/tokens";
 
 import { useScopesIntegracion } from "../hooks/useIntegraciones";
 import {
@@ -56,87 +58,87 @@ export function SistemaForm({ sistema, onGuardar, onCancelar, isPending }: Siste
   };
 
   return (
-    <form onSubmit={handleSubmit} className={`flex flex-col gap-4 p-4 ${card}`}>
-      <h3 className="text-sm font-semibold text-foreground">
-        {sistema ? `Editar sistema: ${sistema.clientId}` : "Nuevo sistema de integración"}
-      </h3>
+    <Card className="p-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <h3 className="text-sm font-semibold text-foreground">
+          {sistema ? `Editar sistema: ${sistema.clientId}` : "Nuevo sistema de integración"}
+        </h3>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="flex flex-col gap-1">
-          <label htmlFor="clientIdSistema" className={label}>
-            client_id
-          </label>
-          <input
-            id="clientIdSistema"
-            type="text"
-            required
-            disabled={sistema !== null}
-            maxLength={50}
-            placeholder="sistema-socios"
-            value={form.clientId}
-            onChange={(event) =>
-              setForm((prev) => ({ ...prev, clientId: event.target.value.toLowerCase().replace(/\s/g, "") }))
-            }
-            className={field}
-            aria-invalid={form.clientId !== "" && !clientIdValido}
-          />
-          <span className={hint}>
-            {sistema
-              ? "No se puede cambiar: es con el que el sistema pide su token."
-              : "De 3 a 50 caracteres; empieza con letra y usa solo minúsculas, números y guiones."}
-          </span>
-        </div>
-
-        <div className="flex flex-col gap-1">
-          <label htmlFor="nombreSistema" className={label}>
-            Nombre
-          </label>
-          <input
-            id="nombreSistema"
-            type="text"
-            required
-            maxLength={120}
-            placeholder="Sistema de Socios"
-            value={form.nombre}
-            onChange={(event) => setForm((prev) => ({ ...prev, nombre: event.target.value }))}
-            className={field}
-          />
-        </div>
-      </div>
-
-      <fieldset className="flex flex-col gap-2">
-        <legend className={label}>Scopes</legend>
-        <span className={hint}>
-          Lo que el sistema puede hacer en la API. Un cambio aplica a los tokens nuevos; los ya emitidos
-          conservan sus scopes hasta que expiran (15 minutos).
-        </span>
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-          {(scopesDisponibles ?? []).map((scope) => (
-            <label key={scope} className="flex items-start gap-2 text-sm">
-              <Checkbox
-                checked={form.scopes.includes(scope)}
-                onCheckedChange={(marcado) => alternarScope(scope, marcado === true)}
-                className="mt-0.5"
-              />
-              <span>
-                <code className="text-xs">{scope}</code>
-                {DESCRIPCION_SCOPE[scope] ? (
-                  <span className="text-muted-foreground"> · {DESCRIPCION_SCOPE[scope]}</span>
-                ) : null}
-              </span>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="flex flex-col gap-1">
+            <label htmlFor="clientIdSistema" className={label}>
+              client_id
             </label>
-          ))}
-        </div>
-      </fieldset>
+            <Input
+              id="clientIdSistema"
+              type="text"
+              required
+              disabled={sistema !== null}
+              maxLength={50}
+              placeholder="sistema-socios"
+              value={form.clientId}
+              onChange={(event) =>
+                setForm((prev) => ({ ...prev, clientId: event.target.value.toLowerCase().replace(/\s/g, "") }))
+              }
+              aria-invalid={form.clientId !== "" && !clientIdValido}
+            />
+            <span className={hint}>
+              {sistema
+                ? "No se puede cambiar: es con el que el sistema pide su token."
+                : "De 3 a 50 caracteres; empieza con letra y usa solo minúsculas, números y guiones."}
+            </span>
+          </div>
 
-      <div className="flex justify-end gap-2">
-        <Button type="button" variante="secundario" onClick={onCancelar}>
-          Cancelar
-        </Button>
-        <Button type="submit" disabled={isPending || !puedeGuardar}>
-          {isPending ? "Guardando..." : "Guardar"}
-        </Button>
-      </div>
-    </form>
+          <div className="flex flex-col gap-1">
+            <label htmlFor="nombreSistema" className={label}>
+              Nombre
+            </label>
+            <Input
+              id="nombreSistema"
+              type="text"
+              required
+              maxLength={120}
+              placeholder="Sistema de Socios"
+              value={form.nombre}
+              onChange={(event) => setForm((prev) => ({ ...prev, nombre: event.target.value }))}
+            />
+          </div>
+        </div>
+
+        <fieldset className="flex flex-col gap-2">
+          <legend className={label}>Scopes</legend>
+          <span className={hint}>
+            Lo que el sistema puede hacer en la API. Un cambio aplica a los tokens nuevos; los ya emitidos
+            conservan sus scopes hasta que expiran (15 minutos).
+          </span>
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {(scopesDisponibles ?? []).map((scope) => (
+              <label key={scope} className="flex items-start gap-2 text-sm">
+                <Checkbox
+                  checked={form.scopes.includes(scope)}
+                  onCheckedChange={(marcado) => alternarScope(scope, marcado === true)}
+                  className="mt-0.5"
+                />
+                <span>
+                  <code className="text-xs">{scope}</code>
+                  {DESCRIPCION_SCOPE[scope] ? (
+                    <span className="text-muted-foreground"> · {DESCRIPCION_SCOPE[scope]}</span>
+                  ) : null}
+                </span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
+        <div className="flex justify-end gap-2">
+          <Button type="button" variante="secundario" onClick={onCancelar}>
+            Cancelar
+          </Button>
+          <Button type="submit" disabled={isPending || !puedeGuardar}>
+            {isPending ? "Guardando..." : "Guardar"}
+          </Button>
+        </div>
+      </form>
+    </Card>
   );
 }

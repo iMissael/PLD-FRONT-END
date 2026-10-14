@@ -2,7 +2,6 @@ import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/molecules/Popover";
-import { field } from "@/shared/styles/tokens";
 import { cn } from "@/shared/utils/cn";
 import { hoyIso } from "@/shared/utils/fechas";
 
@@ -106,7 +105,9 @@ export function CalendarioFecha({
         <button
           id={id}
           type="button"
-          className={cn(field, "flex items-center justify-between gap-2 text-left")}
+          className={cn(
+            "border-border placeholder:text-muted-foreground flex h-9 w-full min-w-0 rounded-md border bg-card px-3 py-1 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 items-center justify-between gap-2 text-left",
+          )}
         >
           <span className={valor ? "" : "text-muted-foreground"}>
             {valor ? aTexto(valor) : placeholder}

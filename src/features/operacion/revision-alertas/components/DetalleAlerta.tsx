@@ -13,7 +13,8 @@ import {
 } from "@/features/alertas/types/alertas";
 import { Alert } from "@/shared/components/molecules/Alert";
 import { Button } from "@/shared/components/atoms/Button";
-import { card, field, hint } from "@/shared/styles/tokens";
+import { Card } from "@/shared/components/molecules";
+import { hint } from "@/shared/styles/tokens";
 
 import { formatearFecha, formatearMoneda } from "../utils/formato";
 
@@ -133,7 +134,7 @@ export function DetalleAlerta({ alerta, onDictaminada }: DetalleAlertaProps) {
   };
 
   return (
-    <div className={`flex flex-col gap-5 p-4 ${card}`}>
+    <Card className="flex flex-col gap-5 p-4">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h3 className="text-foreground text-sm font-semibold">
           Alerta {alerta.folio} · {alerta.tipoAlertaDescripcion}
@@ -342,7 +343,7 @@ export function DetalleAlerta({ alerta, onDictaminada }: DetalleAlertaProps) {
               rows={3}
               value={justificacion}
               onChange={(e) => setJustificacion(e.target.value)}
-              className={`${field} uppercase`}
+              className="border-border bg-card text-foreground focus-visible:border-ring focus-visible:ring-ring/50 w-full rounded-md border p-3 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:opacity-50 disabled:cursor-not-allowed uppercase"
             />
             <p className={hint}>
               Queda en el historial de la alerta junto con su usuario.
@@ -355,6 +356,6 @@ export function DetalleAlerta({ alerta, onDictaminada }: DetalleAlertaProps) {
           </div>
         </form>
       ) : null}
-    </div>
+    </Card>
   );
 }

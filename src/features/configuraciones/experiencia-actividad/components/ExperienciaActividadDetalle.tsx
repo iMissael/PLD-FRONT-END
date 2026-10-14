@@ -2,7 +2,7 @@ import { useMemo } from "react";
 
 import { StatusBadge as Badge } from "@/shared/components/atoms/StatusBadge";
 import { Button } from "@/shared/components/atoms/Button";
-import { card } from "@/shared/styles/tokens";
+import { Card } from "@/shared/components/molecules/Card";
 
 import { useNivelesRiesgo } from "../../ubicacion-geografica/niveles-riesgo/hooks/useNivelesRiesgo";
 import type { ExperienciaActividadResponse } from "../types/experienciaActividad";
@@ -30,7 +30,7 @@ export function ExperienciaActividadDetalle({
   }, [niveles, experiencia.catNivelRiesgoId]);
 
   return (
-    <div className={`flex flex-col gap-4 p-4 ${card}`}>
+    <Card className="flex flex-col gap-4 p-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-foreground">
           Detalle de la experiencia: {experiencia.nombre}
@@ -81,6 +81,6 @@ export function ExperienciaActividadDetalle({
           </Badge>
         </span>
       </div>
-    </div>
+    </Card>
   );
 }

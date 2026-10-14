@@ -4,10 +4,12 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import { RequireAuth } from "@/shared/auth/RequireAuth";
 import { RequierePermiso } from "@/shared/auth/RequierePermiso";
 import { PlaceholderPage } from "@/shared/components/templates/PlaceholderPage";
-import { AppLayout } from "@/shared/layouts/AppLayout";
-import { ContenidoAcotado } from "@/shared/layouts/ContenidoAcotado";
-import { TenantRequeridoPage } from "@/shared/layouts/TenantRequeridoPage";
-import { TenantRouteLayout } from "@/shared/layouts/TenantRouteLayout";
+import {
+  AppLayout,
+  ContenidoAcotado,
+  TenantRequeridoPage,
+  TenantRouteLayout,
+} from "@/shared/components/templates";
 
 // ─── Lazy page imports ────────────────────────────────────────────────────────
 // Cada página se descarga solo cuando el usuario navega a esa ruta.

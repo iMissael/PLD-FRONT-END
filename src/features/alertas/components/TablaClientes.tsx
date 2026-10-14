@@ -3,7 +3,9 @@ import { useMemo, useState } from "react";
 import { useListaSocios } from "@/features/socios/hooks/useSocios";
 import type { SocioExterno } from "@/features/socios/types/socios";
 import { StatusBadge as Badge } from "@/shared/components/atoms/StatusBadge";
-import { card, emptyState, field, table } from "@/shared/styles/tokens";
+import { Input } from "@/shared/components/atoms/Input";
+import { Card } from "@/shared/components/molecules";
+import { emptyState, table } from "@/shared/styles/tokens";
 import { cn } from "@/shared/utils/cn";
 
 type Criterio = "id" | "nombre" | "rfc";
@@ -41,14 +43,13 @@ export function TablaClientes({ seleccionadoId, onSeleccionar }: TablaClientesPr
 
   return (
     <div className="flex flex-col gap-2">
-      <input
+      <Input
         aria-label="Filtrar clientes"
         placeholder={placeholder}
         value={filtro}
         onChange={(e) => setFiltro(e.target.value)}
-        className={field}
       />
-      <div className={cn(card, "max-h-72 overflow-auto")}>
+      <Card className="max-h-72 overflow-auto py-0 gap-0">
         <table className={table.root}>
           <thead className={table.head}>
             <tr>
@@ -101,7 +102,7 @@ export function TablaClientes({ seleccionadoId, onSeleccionar }: TablaClientesPr
             Sin clientes con este filtro.
           </p>
         ) : null}
-      </div>
+      </Card>
     </div>
   );
 }

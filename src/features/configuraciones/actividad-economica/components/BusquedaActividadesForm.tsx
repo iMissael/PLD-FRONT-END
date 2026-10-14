@@ -1,4 +1,6 @@
-import { card, field, label } from "@/shared/styles/tokens";
+import { Input } from "@/shared/components/atoms/Input";
+import { Card } from "@/shared/components/molecules";
+import { label } from "@/shared/styles/tokens";
 
 interface BusquedaActividadesFormProps {
   valor: string;
@@ -19,20 +21,17 @@ export function BusquedaActividadesForm({
   totalGeneral,
 }: BusquedaActividadesFormProps) {
   return (
-    <div
-      className={`flex flex-col gap-2 p-4 sm:flex-row sm:items-end sm:justify-between ${card}`}
-    >
+    <Card className="flex flex-col gap-2 p-4 sm:flex-row sm:items-end sm:justify-between">
       <div className="flex flex-1 flex-col gap-1">
         <label htmlFor="busqueda" className={label}>
           Buscar por descripción
         </label>
-        <input
+        <Input
           id="busqueda"
           type="search"
           value={valor}
           onChange={(event) => onCambiar(event.target.value)}
           placeholder="Ej. cultivo de arroz"
-          className={field}
         />
       </div>
       <p className="text-sm text-muted-foreground">
@@ -40,6 +39,6 @@ export function BusquedaActividadesForm({
           ? `${totalFiltrado} de ${totalGeneral} actividades`
           : `${totalGeneral} actividades`}
       </p>
-    </div>
+    </Card>
   );
 }

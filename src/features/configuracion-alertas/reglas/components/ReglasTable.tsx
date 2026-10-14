@@ -3,8 +3,9 @@ import { RefreshCw } from "lucide-react";
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Button } from "@/shared/components/atoms/Button";
 import { StatusBadge as Badge } from "@/shared/components/atoms/StatusBadge";
+import { Card } from "@/shared/components/molecules";
 import { TablePagination } from "@/shared/components/molecules/TablePagination";
-import { card, emptyState, table } from "@/shared/styles/tokens";
+import { emptyState, table } from "@/shared/styles/tokens";
 
 import type { ReglaAlerta } from "../types/reglaAlerta";
 
@@ -65,7 +66,7 @@ export function ReglasTable({
     return <p className={emptyState}>No hay reglas con estos filtros.</p>;
 
   return (
-    <div className={card}>
+    <Card>
       <div className="max-h-72 overflow-auto">
         <table className={table.root}>
           <thead className={table.head}>
@@ -116,6 +117,6 @@ export function ReglasTable({
         onRowsPerPageChange={(e) => onCambiarTamanio(Number(e.target.value))}
         rowsPerPageOptions={[10, 20, 50]}
       />
-    </div>
+    </Card>
   );
 }

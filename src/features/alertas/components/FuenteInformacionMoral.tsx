@@ -1,10 +1,14 @@
 import { useState } from "react";
 
 import { CalendarioFecha } from "@/shared/components/molecules/CalendarioFecha";
-import { card, field, label } from "@/shared/styles/tokens";
+import { Card } from "@/shared/components/molecules";
+import { label } from "@/shared/styles/tokens";
 import { cn } from "@/shared/utils/cn";
 
 import type { DatosFuenteInformacion } from "../utils/fuenteInformacion";
+
+const textareaStyle =
+  "border-border bg-card text-foreground focus-visible:border-ring focus-visible:ring-ring/50 w-full rounded-md border p-3 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:opacity-50 disabled:cursor-not-allowed";
 
 function CampoExpandible({
   id,
@@ -21,8 +25,8 @@ function CampoExpandible({
 }) {
   const [expandido, setExpandido] = useState(false);
   return (
-    <div
-      className={cn(card, "flex flex-col gap-2 p-3", faltante && "ring-warning ring-2")}
+    <Card
+      className={cn("flex flex-col gap-2 p-3", faltante && "ring-warning ring-2")}
     >
       <div className="flex items-center justify-between gap-2">
         <label htmlFor={id} className={label}>
@@ -41,9 +45,9 @@ function CampoExpandible({
         rows={expandido ? 8 : 3}
         value={valor}
         onChange={(e) => onCambiar(e.target.value)}
-        className={`${field} uppercase`}
+        className={`${textareaStyle} uppercase`}
       />
-    </div>
+    </Card>
   );
 }
 
@@ -59,7 +63,7 @@ export function FuenteInformacionMoral({
   onCambiar: (datos: DatosFuenteInformacion) => void;
 }) {
   return (
-    <fieldset className={cn(card, "flex flex-col gap-3 p-4")}>
+    <fieldset className="border-border bg-card text-card-foreground rounded-xl border p-4 shadow-sm flex flex-col gap-3">
       <legend className={`${label} px-1`}>Persona moral</legend>
       <div className="flex flex-col gap-1 sm:max-w-xs">
         <label htmlFor="fechaEmisionFuente" className={label}>

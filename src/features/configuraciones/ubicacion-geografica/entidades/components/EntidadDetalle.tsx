@@ -1,5 +1,5 @@
 import { Button } from "@/shared/components/atoms/Button";
-import { card } from "@/shared/styles/tokens";
+import { Card } from "@/shared/components/molecules";
 
 import type { EntidadResponse } from "../types/entidad";
 
@@ -24,7 +24,7 @@ interface EntidadDetalleProps {
  */
 export function EntidadDetalle({ entidad, zonas, onEditar }: EntidadDetalleProps) {
   return (
-    <div className={`flex flex-col gap-4 p-4 ${card}`}>
+    <Card className="flex flex-col gap-4 p-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-foreground">
           Detalle de la entidad: {entidad.nombre}
@@ -85,6 +85,6 @@ export function EntidadDetalle({ entidad, zonas, onEditar }: EntidadDetalleProps
           <span className="text-sm text-muted-foreground">Sin zonas asignadas</span>
         )}
       </div>
-    </div>
+    </Card>
   );
 }

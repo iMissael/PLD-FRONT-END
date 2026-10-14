@@ -1,5 +1,3 @@
-import { field } from "@/shared/styles/tokens";
-
 import { useNivelesRiesgo } from "../hooks/useNivelesRiesgo";
 
 interface NivelRiesgoSelectProps {
@@ -37,7 +35,7 @@ export function NivelRiesgoSelect({
       disabled={disabled || isLoading}
       required={required}
       onChange={(event) => onChange(Number(event.target.value))}
-      className={field}
+      className="border-input bg-card text-foreground focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full rounded-md border px-3 py-1 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:opacity-50 disabled:cursor-not-allowed"
     >
       <option value="">{isLoading ? "Cargando..." : "Selecciona un nivel"}</option>
       {listaNiveles.map((nivel) => (

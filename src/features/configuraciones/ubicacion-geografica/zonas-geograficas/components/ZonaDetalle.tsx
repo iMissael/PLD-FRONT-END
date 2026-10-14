@@ -1,6 +1,6 @@
 import { StatusBadge as Badge } from "@/shared/components/atoms/StatusBadge";
 import { Button } from "@/shared/components/atoms/Button";
-import { card } from "@/shared/styles/tokens";
+import { Card } from "@/shared/components/molecules";
 
 import type { ZonaGeograficaResponse } from "../types/zonaGeografica";
 
@@ -16,7 +16,7 @@ interface ZonaDetalleProps {
  */
 export function ZonaDetalle({ zona, onEditar }: ZonaDetalleProps) {
   return (
-    <div className={`flex flex-col gap-4 p-4 ${card}`}>
+    <Card className="flex flex-col gap-4 p-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-foreground">
           Detalle de la zona: {zona.nombre}
@@ -72,6 +72,6 @@ export function ZonaDetalle({ zona, onEditar }: ZonaDetalleProps) {
         </div>
         
       </div>
-    </div>
+    </Card>
   );
 }

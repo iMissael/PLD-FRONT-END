@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 
 import { useRazonesAlerta, useTiposAlerta } from "@/features/alertas/hooks/useAlertas";
-import { PlusIcon, XIcon } from "@/shared/components/atoms/icons";
+import { XIcon } from "@/shared/components/atoms/icons";
 import { Button } from "@/shared/components/atoms/Button";
-import { card, field, hint, label, table } from "@/shared/styles/tokens";
+import { Input } from "@/shared/components/atoms/Input";
+import { Card } from "@/shared/components/molecules/Card";
+import { hint, label } from "@/shared/styles/tokens";
 
 import type {
   AplicaRegla,
@@ -20,6 +22,12 @@ import {
   leerLista,
   leerMonedas,
 } from "../utils/formatoSicanet";
+import {
+  ReglaMonedasSection,
+  MONEDAS,
+  type MonedaConfigurada,
+  type PermisoMoneda,
+} from "./ReglaMonedasSection";
 
 const TIPOS_PERSONA: { valor: TipoPersonaRegla; etiqueta: string }[] = [
   { valor: "F", etiqueta: "Física" },
@@ -33,21 +41,6 @@ const FORMAS_PAGO: { valor: Exclude<FormaPagoRegla, ".">; etiqueta: string }[] =
   { valor: "*", etiqueta: "Otras" },
 ];
 
-const MONEDAS: Moneda[] = ["MXN", "USD"];
-
-type PermisoMoneda = "PERMITIDO" | "NO_PERMITIDO";
-
-const PERMISOS: { valor: PermisoMoneda; etiqueta: string }[] = [
-  { valor: "PERMITIDO", etiqueta: "Permitido" },
-  { valor: "NO_PERMITIDO", etiqueta: "No permitido" },
-];
-
-/** Renglón de la tabla "Configuración de monedas". */
-interface MonedaConfigurada {
-  permiso: PermisoMoneda;
-  moneda: Moneda;
-}
-
 interface FormState {
   alertaAcronimo: string;
   descripcion: string;
@@ -55,9 +48,6 @@ interface FormState {
   tiposPersona: TipoPersonaRegla[];
   importe: string;
   importeMoneda: Moneda | "";
-  /** Selección en curso antes de agregarla a la tabla. */
-  permisoMoneda: PermisoMoneda | "";
-  monedaPorAgregar: Moneda | "";
   monedas: MonedaConfigurada[];
   cualquierFormaPago: boolean;
   formasPago: Exclude<FormaPagoRegla, ".">[];
@@ -74,8 +64,6 @@ const VACIO: FormState = {
   tiposPersona: ["F", "FA", "M"],
   importe: "",
   importeMoneda: "",
-  permisoMoneda: "",
-  monedaPorAgregar: "",
   monedas: [],
   cualquierFormaPago: true,
   formasPago: [],
@@ -124,9 +112,6 @@ function alternar<T>(lista: T[], valor: T): T[] {
   return lista.includes(valor) ? lista.filter((v) => v !== valor) : [...lista, valor];
 }
 
-const etiquetaPermiso = (permiso: PermisoMoneda) =>
-  PERMISOS.find((p) => p.valor === permiso)?.etiqueta ?? permiso;
-
 interface ReglaFormProps {
   regla: ReglaAlerta | null;
   onGuardar?: (input: GuardarReglaInput) => void;
@@ -138,64 +123,56 @@ interface ReglaFormProps {
   soloLectura?: boolean;
 }
 
-/**
- * Alta/edición de una regla ("Configuración de Alertas", manual Sicanet 4.2.1).
- * Sigue el orden de la pantalla de Sicanet: datos de la alerta, importe,
- * configuración de monedas y, al final, acumulativo / tipo de proceso / estatus.
- * El importe se compara contra el monto de la operación; si están en monedas
- * distintas, el backend convierte con el tipo de cambio de Banxico del día.
- */
 export function ReglaForm({
   regla,
   onGuardar,
   onCancelar,
   isPending,
-  onInvalido = () => {},
+  onInvalido,
   soloLectura = false,
 }: ReglaFormProps) {
-  const [form, setForm] = useState<FormState>(() => aFormState(regla));
   const { data: tipos } = useTiposAlerta();
-  const { data: razones } = useRazonesAlerta(
-    form.alertaAcronimo,
-    Boolean(form.alertaAcronimo),
-  );
+  const [form, setForm] = useState<FormState>(() => aFormState(regla));
 
-  useEffect(() => setForm(aFormState(regla)), [regla]);
+  useEffect(() => {
+    setForm(aFormState(regla));
+  }, [regla]);
 
-  const set = <K extends keyof FormState>(clave: K, valor: FormState[K]) =>
-    setForm((prev) => ({ ...prev, [clave]: valor }));
+  const { data: razones } = useRazonesAlerta(form.alertaAcronimo);
 
-  const agregarMoneda = () => {
-    const { permisoMoneda, monedaPorAgregar } = form;
-    if (permisoMoneda === "" || monedaPorAgregar === "")
-      return onInvalido("Seleccione el permiso y la moneda a agregar.");
-    if (form.monedas.some((m) => m.moneda === monedaPorAgregar))
-      return onInvalido(`La moneda ${monedaPorAgregar} ya está configurada.`);
-    setForm((prev) => ({
-      ...prev,
-      monedas: [...prev.monedas, { permiso: permisoMoneda, moneda: monedaPorAgregar }],
-      monedaPorAgregar: "",
-    }));
-  };
+  const set = <K extends keyof FormState>(campo: K, valor: FormState[K]) =>
+    setForm((prev) => ({ ...prev, [campo]: valor }));
 
-  const quitarMoneda = (moneda: Moneda) =>
-    set(
-      "monedas",
-      form.monedas.filter((m) => m.moneda !== moneda),
-    );
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!onGuardar) return;
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    if (soloLectura || !onGuardar) return;
-    const importe = form.importe === "" ? 0 : Number(form.importe);
-    if (Number.isNaN(importe) || importe < 0)
-      return onInvalido("El importe no es válido.");
-    if (importe > 0 && form.importeMoneda === "")
-      return onInvalido("Indique la moneda del importe.");
-    if (form.tiposPersona.length === 0)
-      return onInvalido("Seleccione al menos un tipo de persona.");
+    if (!form.alertaAcronimo) {
+      onInvalido?.("Seleccione un tipo de alerta.");
+      return;
+    }
+    if (!form.descripcion.trim()) {
+      onInvalido?.("Escriba la descripción de la regla.");
+      return;
+    }
+    if (form.tiposPersona.length === 0) {
+      onInvalido?.("Seleccione al menos un tipo de persona.");
+      return;
+    }
+
+    const importe = form.importe ? Number(form.importe) : 0;
+    if (importe > 0 && !form.importeMoneda) {
+      onInvalido?.("Seleccione la moneda del importe.");
+      return;
+    }
+    if (importe === 0 && form.importeMoneda) {
+      onInvalido?.("Si especifica moneda, debe indicar un importe mayor a cero.");
+      return;
+    }
+
     if (!form.cualquierFormaPago && form.formasPago.length === 0) {
-      return onInvalido("Seleccione al menos una forma de pago o marque «Cualquiera».");
+      onInvalido?.("Seleccione al menos una forma de pago o marque 'Cualquiera'.");
+      return;
     }
 
     const monedasCon = (permiso: PermisoMoneda) =>
@@ -213,7 +190,6 @@ export function ReglaForm({
         permitidas: monedasCon("PERMITIDO"),
         noPermitidas: monedasCon("NO_PERMITIDO"),
       }),
-      // Mismo orden que Sicanet para que las reglas se lean igual.
       tipoPersona: escribirLista(
         TIPOS_PERSONA.map((t) => t.valor).filter((t) => form.tiposPersona.includes(t)),
       ),
@@ -229,379 +205,278 @@ export function ReglaForm({
     });
   };
 
+  const selectClasses =
+    "border-input bg-background text-foreground focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full rounded-md border px-3 py-1 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:opacity-50";
+
   return (
-    <form onSubmit={handleSubmit} className={`flex flex-col gap-5 p-4 ${card}`}>
-      <h3 className="text-foreground text-sm font-semibold">
-        {soloLectura
-          ? `Regla ${regla?.idConfiguracionAlerta ?? ""}`
-          : regla
-            ? `Editar regla ${regla.idConfiguracionAlerta}`
-            : "Nueva regla de alerta"}
-      </h3>
+    <Card className="p-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+        <h3 className="text-foreground text-sm font-semibold">
+          {soloLectura
+            ? `Regla ${regla?.idConfiguracionAlerta ?? ""}`
+            : regla
+              ? `Editar regla ${regla.idConfiguracionAlerta}`
+              : "Nueva regla de alerta"}
+        </h3>
 
-      {/* `disabled` en el fieldset deshabilita todos los campos y botones de adentro. */}
-      <fieldset disabled={soloLectura} className="flex min-w-0 flex-col gap-5">
-        {/* Datos de la alerta */}
-        <div className="grid grid-cols-1 gap-4">
-          <div className="flex flex-col gap-1">
-            <label htmlFor="tipoAlerta" className={label}>
-              Tipo de alerta
-            </label>
-            <select
-              id="tipoAlerta"
-              required
-              value={form.alertaAcronimo}
-              onChange={(e) =>
-                setForm((prev) => ({
-                  ...prev,
-                  alertaAcronimo: e.target.value,
-                  razonId: 0,
-                }))
-              }
-              className={field}
-            >
-              <option value="">Seleccione</option>
-              {(tipos ?? []).map((t) => (
-                <option key={t.alertaAcronimo} value={t.alertaAcronimo}>
-                  {t.alertaAcronimo} - {t.descripcion}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <label htmlFor="descripcion" className={label}>
-              Descripción
-            </label>
-            <input
-              id="descripcion"
-              required
-              maxLength={150}
-              value={form.descripcion}
-              onChange={(e) => set("descripcion", e.target.value)}
-              className={`${field} uppercase`}
-            />
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <label htmlFor="razon" className={label}>
-              Razón de la alerta
-            </label>
-            <select
-              id="razon"
-              value={form.razonId}
-              onChange={(e) => set("razonId", Number(e.target.value))}
-              className={field}
-              disabled={!razones || razones.length === 0}
-            >
-              <option value={0}>Sin razón</option>
-              {(razones ?? []).map((r) => (
-                <option key={r.idRazonAlerta} value={r.idRazonAlerta}>
-                  {r.numeroRazonAlerta ? `${r.numeroRazonAlerta}. ` : ""}
-                  {r.descripcionRazonAlerta.length > 110
-                    ? `${r.descripcionRazonAlerta.slice(0, 110)}…`
-                    : r.descripcionRazonAlerta}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <fieldset className="flex flex-col gap-2">
-            <legend className={label}>Tipo de persona</legend>
-            <div className="flex flex-wrap gap-4">
-              {TIPOS_PERSONA.map((t) => (
-                <label key={t.valor} className="flex items-center gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={form.tiposPersona.includes(t.valor)}
-                    onChange={() =>
-                      set("tiposPersona", alternar(form.tiposPersona, t.valor))
-                    }
-                    className="accent-primary"
-                  />
-                  {t.etiqueta}
-                </label>
-              ))}
-            </div>
-          </fieldset>
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <fieldset disabled={soloLectura} className="flex min-w-0 flex-col gap-5">
+          {/* Datos de la alerta */}
+          <div className="grid grid-cols-1 gap-4">
             <div className="flex flex-col gap-1">
-              <label htmlFor="importe" className={label}>
-                Importe
+              <label htmlFor="tipoAlerta" className={label}>
+                Tipo de alerta
               </label>
-              <input
-                id="importe"
-                type="number"
-                min={0}
-                step="0.01"
-                value={form.importe}
-                onChange={(e) => set("importe", e.target.value)}
-                className={field}
+              <select
+                id="tipoAlerta"
+                required
+                value={form.alertaAcronimo}
+                onChange={(e) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    alertaAcronimo: e.target.value,
+                    razonId: 0,
+                  }))
+                }
+                className={selectClasses}
+              >
+                <option value="">Seleccione</option>
+                {(tipos ?? []).map((t) => (
+                  <option key={t.alertaAcronimo} value={t.alertaAcronimo}>
+                    {t.alertaAcronimo} - {t.descripcion}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label htmlFor="descripcion" className={label}>
+                Descripción
+              </label>
+              <Input
+                id="descripcion"
+                required
+                maxLength={150}
+                value={form.descripcion}
+                onChange={(e) => set("descripcion", e.target.value)}
+                className="uppercase"
               />
             </div>
+
             <div className="flex flex-col gap-1">
-              <label htmlFor="importeMoneda" className={label}>
-                Moneda del importe
+              <label htmlFor="razon" className={label}>
+                Razón de la alerta
               </label>
-              <div className="flex gap-2">
-                <select
-                  id="importeMoneda"
-                  value={form.importeMoneda}
-                  onChange={(e) => set("importeMoneda", e.target.value as Moneda | "")}
-                  className={`${field} flex-1`}
-                >
-                  <option value="">Seleccione</option>
-                  {MONEDAS.map((m) => (
-                    <option key={m} value={m}>
-                      {m}
-                    </option>
-                  ))}
-                </select>
-                <Button
-                  variante="secundario"
-                  className="px-3"
-                  aria-label="Limpiar importe"
-                  title="Limpiar importe"
-                  onClick={() =>
-                    setForm((prev) => ({ ...prev, importe: "", importeMoneda: "" }))
-                  }
-                >
-                  <XIcon className="size-4" />
-                </Button>
-              </div>
+              <select
+                id="razon"
+                value={form.razonId}
+                onChange={(e) => set("razonId", Number(e.target.value))}
+                className={selectClasses}
+                disabled={!razones || razones.length === 0}
+              >
+                <option value={0}>Sin razón</option>
+                {(razones ?? []).map((r) => (
+                  <option key={r.idRazonAlerta} value={r.idRazonAlerta}>
+                    {r.numeroRazonAlerta ? `${r.numeroRazonAlerta}. ` : ""}
+                    {r.descripcionRazonAlerta.length > 110
+                      ? `${r.descripcionRazonAlerta.slice(0, 110)}…`
+                      : r.descripcionRazonAlerta}
+                  </option>
+                ))}
+              </select>
             </div>
-            <p className={`${hint} sm:col-span-2`}>
-              0 = la regla no se dispara por monto (perfil, listas, países). Si la
-              operación está en otra moneda se convierte con el tipo de cambio de Banxico.
-            </p>
-          </div>
-        </div>
 
-        {/* Configuración de monedas (de la operación) */}
-        <section className="border-border flex flex-col gap-3 border-t pt-4">
-          <h4 className="text-foreground text-center text-sm font-semibold">
-            Configuración de monedas
-          </h4>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className="flex flex-col gap-3">
+            <fieldset className="flex flex-col gap-2">
+              <legend className={label}>Tipo de persona</legend>
+              <div className="flex flex-wrap gap-4">
+                {TIPOS_PERSONA.map((t) => (
+                  <label key={t.valor} className="flex items-center gap-2 text-sm">
+                    <input
+                      type="checkbox"
+                      checked={form.tiposPersona.includes(t.valor)}
+                      onChange={() =>
+                        set("tiposPersona", alternar(form.tiposPersona, t.valor))
+                      }
+                      className="accent-primary"
+                    />
+                    {t.etiqueta}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="flex flex-col gap-1">
-                <label htmlFor="permisoMoneda" className={label}>
-                  Permiso moneda
+                <label htmlFor="importe" className={label}>
+                  Importe
                 </label>
-                <select
-                  id="permisoMoneda"
-                  value={form.permisoMoneda}
-                  onChange={(e) =>
-                    set("permisoMoneda", e.target.value as PermisoMoneda | "")
-                  }
-                  className={field}
-                >
-                  <option value="">Seleccione</option>
-                  {PERMISOS.map((p) => (
-                    <option key={p.valor} value={p.valor}>
-                      {p.etiqueta}
-                    </option>
-                  ))}
-                </select>
+                <Input
+                  id="importe"
+                  type="number"
+                  min={0}
+                  step="0.01"
+                  value={form.importe}
+                  onChange={(e) => set("importe", e.target.value)}
+                />
               </div>
               <div className="flex flex-col gap-1">
-                <label htmlFor="monedaPorAgregar" className={label}>
-                  Moneda
+                <label htmlFor="importeMoneda" className={label}>
+                  Moneda del importe
                 </label>
-                <select
-                  id="monedaPorAgregar"
-                  value={form.monedaPorAgregar}
-                  onChange={(e) => set("monedaPorAgregar", e.target.value as Moneda | "")}
-                  className={field}
-                >
-                  <option value="">Seleccione</option>
-                  {MONEDAS.map((m) => (
-                    <option key={m} value={m}>
-                      {m}
-                    </option>
-                  ))}
-                </select>
+                <div className="flex gap-2">
+                  <select
+                    id="importeMoneda"
+                    value={form.importeMoneda}
+                    onChange={(e) => set("importeMoneda", e.target.value as Moneda | "")}
+                    className={`${selectClasses} flex-1`}
+                  >
+                    <option value="">Seleccione</option>
+                    {MONEDAS.map((m) => (
+                      <option key={m} value={m}>
+                        {m}
+                      </option>
+                    ))}
+                  </select>
+                  <Button
+                    variante="secundario"
+                    className="px-3"
+                    aria-label="Limpiar importe"
+                    title="Limpiar importe"
+                    onClick={() =>
+                      setForm((prev) => ({ ...prev, importe: "", importeMoneda: "" }))
+                    }
+                  >
+                    <XIcon className="size-4" />
+                  </Button>
+                </div>
               </div>
-              <div className="flex flex-col items-center gap-2">
-                <Button
-                  className="px-3"
-                  aria-label="Agregar moneda"
-                  title="Agregar moneda"
-                  onClick={agregarMoneda}
-                  disabled={form.permisoMoneda === "" || form.monedaPorAgregar === ""}
-                >
-                  <PlusIcon className="size-4" />
-                </Button>
-                <Button
-                  variante="secundario"
-                  onClick={() => set("monedas", [])}
-                  disabled={form.monedas.length === 0}
-                >
-                  Limpiar configuración de monedas
-                </Button>
-              </div>
-            </div>
-
-            <div className={`${table.wrapper} self-start`}>
-              <table className={table.root}>
-                <thead className={table.head}>
-                  <tr>
-                    <th className={table.headCell}>#</th>
-                    <th className={table.headCell}>Moneda</th>
-                    <th className={table.headCell}>Permiso</th>
-                    <th className={table.headCell}>
-                      <span className="sr-only">Quitar</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className={table.body}>
-                  {form.monedas.length === 0 ? (
-                    <tr>
-                      <td colSpan={4} className={`${table.cellMuted} py-8 text-center`}>
-                        Tabla sin contenido (aplica a todas las monedas)
-                      </td>
-                    </tr>
-                  ) : (
-                    form.monedas.map((m, i) => (
-                      <tr key={m.moneda}>
-                        <td className={table.cellMuted}>{i + 1}</td>
-                        <td className={table.cellStrong}>{m.moneda}</td>
-                        <td className={table.cell}>{etiquetaPermiso(m.permiso)}</td>
-                        <td className={`${table.cell} text-right`}>
-                          <button
-                            type="button"
-                            aria-label={`Quitar ${m.moneda}`}
-                            title="Quitar"
-                            onClick={() => quitarMoneda(m.moneda)}
-                            className="text-muted-foreground hover:text-destructive"
-                          >
-                            <XIcon className="size-4" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
+              <p className={`${hint} sm:col-span-2`}>
+                0 = la regla no se dispara por monto (perfil, listas, países). Si la
+                operación está en otra moneda se convierte con el tipo de cambio de Banxico.
+              </p>
             </div>
           </div>
-        </section>
 
-        {/* Forma de pago y a quién aplica: no están en la pantalla de Sicanet, pero
-          el evaluador del backend los usa. */}
-        <section className="border-border grid grid-cols-1 gap-4 border-t pt-4 sm:grid-cols-2">
-          <fieldset className="flex flex-col gap-2">
-            <legend className={label}>Forma de pago</legend>
-            <div className="flex flex-wrap gap-4">
+          {/* Configuración de monedas (de la operación) */}
+          <ReglaMonedasSection
+            monedas={form.monedas}
+            onChange={(nuevasMonedas) => set("monedas", nuevasMonedas)}
+            disabled={soloLectura}
+          />
+
+          {/* Forma de pago y a quién aplica */}
+          <section className="border-border grid grid-cols-1 gap-4 border-t pt-4 sm:grid-cols-2">
+            <fieldset className="flex flex-col gap-2">
+              <legend className={label}>Forma de pago</legend>
+              <div className="flex flex-wrap gap-4">
+                <label className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={form.cualquierFormaPago}
+                    onChange={(e) => set("cualquierFormaPago", e.target.checked)}
+                    className="accent-primary"
+                  />
+                  Cualquiera
+                </label>
+                {FORMAS_PAGO.map((f) => (
+                  <label key={f.valor} className="flex items-center gap-2 text-sm">
+                    <input
+                      type="checkbox"
+                      disabled={form.cualquierFormaPago}
+                      checked={
+                        !form.cualquierFormaPago && form.formasPago.includes(f.valor)
+                      }
+                      onChange={() => set("formasPago", alternar(form.formasPago, f.valor))}
+                      className="accent-primary"
+                    />
+                    {f.etiqueta}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+            <div className="flex flex-col gap-1">
+              <label htmlFor="aplica" className={label}>
+                Aplica a
+              </label>
+              <select
+                id="aplica"
+                value={form.aplica}
+                onChange={(e) => set("aplica", e.target.value as AplicaRegla)}
+                className={selectClasses}
+              >
+                <option value="C">Clientes</option>
+                <option value="E">Entidad</option>
+                <option value="A">Ambos</option>
+              </select>
+            </div>
+          </section>
+
+          {/* Importe acumulativo / Tipo de proceso / Estatus */}
+          <section className="border-border grid grid-cols-1 gap-4 border-t pt-4 sm:grid-cols-3">
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={form.acumulado}
+                onChange={(e) => set("acumulado", e.target.checked)}
+                className="accent-primary"
+              />
+              Importe acumulativo
+            </label>
+            <fieldset className="flex flex-wrap items-center gap-4">
+              <legend className={`${label} sr-only`}>Tipo de proceso</legend>
+              <span className={label} aria-hidden>
+                Tipo de proceso
+              </span>
               <label className="flex items-center gap-2 text-sm">
                 <input
-                  type="checkbox"
-                  checked={form.cualquierFormaPago}
-                  onChange={(e) => set("cualquierFormaPago", e.target.checked)}
+                  type="radio"
+                  name="tipoProceso"
+                  checked={!form.automatica}
+                  onChange={() => set("automatica", false)}
                   className="accent-primary"
                 />
-                Cualquiera
+                Manual
               </label>
-              {FORMAS_PAGO.map((f) => (
-                <label key={f.valor} className="flex items-center gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    disabled={form.cualquierFormaPago}
-                    checked={
-                      !form.cualquierFormaPago && form.formasPago.includes(f.valor)
-                    }
-                    onChange={() => set("formasPago", alternar(form.formasPago, f.valor))}
-                    className="accent-primary"
-                  />
-                  {f.etiqueta}
-                </label>
-              ))}
-            </div>
-          </fieldset>
-          <div className="flex flex-col gap-1">
-            <label htmlFor="aplica" className={label}>
-              Aplica a
-            </label>
-            <select
-              id="aplica"
-              value={form.aplica}
-              onChange={(e) => set("aplica", e.target.value as AplicaRegla)}
-              className={field}
-            >
-              <option value="C">Clientes</option>
-              <option value="E">Entidad</option>
-              <option value="A">Ambos</option>
-            </select>
-          </div>
-        </section>
-
-        {/* Importe acumulativo / Tipo de proceso / Estatus */}
-        <section className="border-border grid grid-cols-1 gap-4 border-t pt-4 sm:grid-cols-3">
-          <label className="flex items-center gap-2 text-sm">
-            <input
-              type="checkbox"
-              checked={form.acumulado}
-              onChange={(e) => set("acumulado", e.target.checked)}
-              className="accent-primary"
-            />
-            Importe acumulativo
-          </label>
-          <fieldset className="flex flex-wrap items-center gap-4">
-            <legend className={`${label} sr-only`}>Tipo de proceso</legend>
-            <span className={label} aria-hidden>
-              Tipo de proceso
-            </span>
+              <label className="flex items-center gap-2 text-sm">
+                <input
+                  type="radio"
+                  name="tipoProceso"
+                  checked={form.automatica}
+                  onChange={() => set("automatica", true)}
+                  className="accent-primary"
+                />
+                Automático
+              </label>
+            </fieldset>
             <label className="flex items-center gap-2 text-sm">
               <input
-                type="radio"
-                name="tipoProceso"
-                checked={!form.automatica}
-                onChange={() => set("automatica", false)}
+                type="checkbox"
+                checked={form.estado === "ACTIVO"}
+                onChange={(e) => set("estado", e.target.checked ? "ACTIVO" : "INACTIVO")}
                 className="accent-primary"
               />
-              Manual
+              Estatus: {form.estado === "ACTIVO" ? "Activa" : "Inactiva"}
             </label>
-            <label className="flex items-center gap-2 text-sm">
-              <input
-                type="radio"
-                name="tipoProceso"
-                checked={form.automatica}
-                onChange={() => set("automatica", true)}
-                className="accent-primary"
-              />
-              Automático
-            </label>
-          </fieldset>
-          <label className="flex items-center gap-2 text-sm">
-            <input
-              type="checkbox"
-              checked={form.estado === "ACTIVO"}
-              onChange={(e) => set("estado", e.target.checked ? "ACTIVO" : "INACTIVO")}
-              className="accent-primary"
-            />
-            Estatus: {form.estado === "ACTIVO" ? "Activa" : "Inactiva"}
-          </label>
-        </section>
-      </fieldset>
+          </section>
+        </fieldset>
 
-      {!soloLectura && form.acumulado && form.automatica ? (
-        <p className={hint}>
-          Las reglas acumuladas (operaciones fraccionadas en el mes) todavía no las evalúa
-          el sistema de cajas: solo las de una operación.
-        </p>
-      ) : null}
+        {!soloLectura && form.acumulado && form.automatica ? (
+          <p className={hint}>
+            Las reglas acumuladas (operaciones fraccionadas en el mes) todavía no las evalúa
+            el sistema de cajas: solo las de una operación.
+          </p>
+        ) : null}
 
-      <div className="flex justify-end gap-2">
-        <Button variante="secundario" onClick={onCancelar}>
-          {soloLectura ? "Cerrar" : "Cancelar"}
-        </Button>
-        {soloLectura ? null : (
-          <Button type="submit" disabled={isPending}>
-            {isPending ? "Guardando..." : "Guardar"}
+        <div className="flex justify-end gap-2">
+          <Button variante="secundario" onClick={onCancelar}>
+            {soloLectura ? "Cerrar" : "Cancelar"}
           </Button>
-        )}
-      </div>
-    </form>
+          {soloLectura ? null : (
+            <Button type="submit" disabled={isPending}>
+              {isPending ? "Guardando..." : "Guardar"}
+            </Button>
+          )}
+        </div>
+      </form>
+    </Card>
   );
 }

@@ -2,7 +2,7 @@ import { useMemo } from "react";
 
 import { StatusBadge as Badge } from "@/shared/components/atoms/StatusBadge";
 import { Button } from "@/shared/components/atoms/Button";
-import { card } from "@/shared/styles/tokens";
+import { Card } from "@/shared/components/molecules";
 
 import { useNivelesRiesgo } from "../../ubicacion-geografica/niveles-riesgo/hooks/useNivelesRiesgo";
 import type { TipoPersonaResponse } from "../types/tipoPersona";
@@ -24,7 +24,7 @@ export function TipoPersonaDetalle({ tipo, onEditar }: TipoPersonaDetalleProps) 
   }, [niveles, tipo.catNivelRiesgoId]);
 
   return (
-    <div className={`flex flex-col gap-4 p-4 ${card}`}>
+    <Card className="flex flex-col gap-4 p-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-foreground">
           Detalle del tipo de persona: {tipo.nombre}
@@ -57,6 +57,6 @@ export function TipoPersonaDetalle({ tipo, onEditar }: TipoPersonaDetalleProps) 
           </span>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

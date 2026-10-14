@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { useTiposAlerta } from "@/features/alertas/hooks/useAlertas";
-import { field } from "@/shared/styles/tokens";
+import { Input } from "@/shared/components/atoms/Input";
 
 import { ReglaForm } from "../components/ReglaForm";
 import { ReglasTable } from "../components/ReglasTable";
@@ -35,6 +35,9 @@ export function ReglasAlertaPage() {
 
   const [seleccionada, setSeleccionada] = useState<ReglaAlerta | null>(null);
 
+  const selectStyle =
+    "border-border bg-card text-foreground focus-visible:border-ring focus-visible:ring-ring/50 h-9 rounded-md border px-3 py-1 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:opacity-50 disabled:cursor-not-allowed";
+
   return (
     <div className="flex flex-col gap-6">
       <div>
@@ -48,14 +51,14 @@ export function ReglasAlertaPage() {
       </div>
 
       <div className="flex flex-wrap gap-3">
-        <input
+        <Input
           aria-label="Buscar regla"
           placeholder="Buscar por descripción"
           value={filtro.busqueda ?? ""}
           onChange={(e) =>
             setFiltro((prev) => ({ ...prev, busqueda: e.target.value || undefined }))
           }
-          className={`${field} min-w-64 flex-1`}
+          className="min-w-64 flex-1"
         />
         <select
           aria-label="Tipo de alerta"
@@ -66,7 +69,7 @@ export function ReglasAlertaPage() {
               alertaAcronimo: e.target.value || undefined,
             }))
           }
-          className={field}
+          className={selectStyle}
         >
           <option value="">Todos los tipos</option>
           {(tipos ?? []).map((t) => (
@@ -84,7 +87,7 @@ export function ReglasAlertaPage() {
               estado: (e.target.value || undefined) as EstadoRegla | undefined,
             }))
           }
-          className={field}
+          className={selectStyle}
         >
           <option value="">Activas e inactivas</option>
           <option value="ACTIVO">Activas</option>

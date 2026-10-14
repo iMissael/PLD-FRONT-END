@@ -7,8 +7,10 @@ export type EvaluacionRiesgoResultado =
 export type PuntajeFactor = components["schemas"]["PuntajeFactor"];
 export type PuntajeSubfactor = components["schemas"]["PuntajeSubfactor"];
 export type NivelRiesgo = components["schemas"]["NivelRiesgoDto"];
-export type ModificarNivelRiesgoInput =
-  components["schemas"]["ModificarNivelRiesgoRequest"];
+export interface ModificarNivelRiesgoInput {
+  cat_nivel_riesgo_id: number;
+  observaciones: string;
+}
 
 /** Datos del socio que se muestran en el expediente de la matriz de riesgo. */
 export type ClienteMatrizRiesgo = {

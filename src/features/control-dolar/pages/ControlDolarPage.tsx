@@ -5,10 +5,10 @@ import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Alert } from "@/shared/components/molecules/Alert";
 import { StatusBadge as Badge } from "@/shared/components/atoms/StatusBadge";
 import { Button } from "@/shared/components/atoms/Button";
+import { Input } from "@/shared/components/atoms/Input";
+import { Card } from "@/shared/components/molecules";
 import {
-  card,
   emptyState,
-  field,
   hint,
   label,
   table,
@@ -120,7 +120,7 @@ export function ControlDolarPage() {
         </p>
       </div>
 
-      <div className={`flex flex-wrap items-center justify-between gap-4 p-4 ${card}`}>
+      <Card className="flex flex-wrap items-center justify-between gap-4 p-4">
         <div>
           <p className="text-muted-foreground text-xs">Tipo de cambio vigente</p>
           {vigente ? (
@@ -139,7 +139,7 @@ export function ControlDolarPage() {
             </p>
           )}
         </div>
-      </div>
+      </Card>
 
       {aviso ? <Alert tono="exito">{aviso}</Alert> : null}
       {mensajeError ? <Alert>{mensajeError}</Alert> : null}
@@ -151,27 +151,25 @@ export function ControlDolarPage() {
               <label htmlFor="desde" className={label}>
                 Desde
               </label>
-              <input
+              <Input
                 id="desde"
                 type="date"
                 max={rango.hasta}
                 value={rango.desde}
                 onChange={(e) => setRango((prev) => ({ ...prev, desde: e.target.value }))}
-                className={field}
               />
             </div>
             <div className="flex flex-col gap-1">
               <label htmlFor="hasta" className={label}>
                 Hasta
               </label>
-              <input
+              <Input
                 id="hasta"
                 type="date"
                 min={rango.desde}
                 max={hoyIso()}
                 value={rango.hasta}
                 onChange={(e) => setRango((prev) => ({ ...prev, hasta: e.target.value }))}
-                className={field}
               />
             </div>
             <Button
@@ -217,47 +215,47 @@ export function ControlDolarPage() {
           )}
         </div>
 
-        <form onSubmit={handleManual} className={`flex h-fit flex-col gap-4 p-4 ${card}`}>
-          <h3 className="text-foreground text-sm font-semibold">Captura manual</h3>
-          <p className={hint}>
-            Solo para días que Banxico todavía no tiene. Cuando Banxico publique ese día,
-            su dato reemplaza al capturado.
-          </p>
-          <div className="flex flex-col gap-1">
-            <label htmlFor="fechaManual" className={label}>
-              Fecha
-            </label>
-            <input
-              id="fechaManual"
-              type="date"
-              required
-              max={hoyIso()}
-              value={manual.fecha}
-              onChange={(e) => setManual((prev) => ({ ...prev, fecha: e.target.value }))}
-              className={field}
-            />
-          </div>
-          <div className="flex flex-col gap-1">
-            <label htmlFor="importeManual" className={label}>
-              Pesos por dólar
-            </label>
-            <input
-              id="importeManual"
-              type="number"
-              required
-              min={0}
-              step="0.0001"
-              value={manual.importe}
-              onChange={(e) =>
-                setManual((prev) => ({ ...prev, importe: e.target.value }))
-              }
-              className={field}
-            />
-          </div>
-          <Button type="submit" disabled={registrar.isPending}>
-            {registrar.isPending ? "Guardando..." : "Guardar"}
-          </Button>
-        </form>
+        <Card className="h-fit p-4">
+          <form onSubmit={handleManual} className="flex flex-col gap-4">
+            <h3 className="text-foreground text-sm font-semibold">Captura manual</h3>
+            <p className={hint}>
+              Solo para días que Banxico todavía no tiene. Cuando Banxico publique ese día,
+              su dato reemplaza al capturado.
+            </p>
+            <div className="flex flex-col gap-1">
+              <label htmlFor="fechaManual" className={label}>
+                Fecha
+              </label>
+              <Input
+                id="fechaManual"
+                type="date"
+                required
+                max={hoyIso()}
+                value={manual.fecha}
+                onChange={(e) => setManual((prev) => ({ ...prev, fecha: e.target.value }))}
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label htmlFor="importeManual" className={label}>
+                Pesos por dólar
+              </label>
+              <Input
+                id="importeManual"
+                type="number"
+                required
+                min={0}
+                step="0.0001"
+                value={manual.importe}
+                onChange={(e) =>
+                  setManual((prev) => ({ ...prev, importe: e.target.value }))
+                }
+              />
+            </div>
+            <Button type="submit" disabled={registrar.isPending}>
+              {registrar.isPending ? "Guardando..." : "Guardar"}
+            </Button>
+          </form>
+        </Card>
       </div>
     </div>
   );
