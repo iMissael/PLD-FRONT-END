@@ -268,27 +268,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/integraciones/sistemas/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Consultar un sistema de integración */
-        get: operations["obtener_2"];
-        /**
-         * Cambiar nombre y scopes
-         * @description Los tokens ya emitidos conservan sus scopes hasta que expiran (15 min).
-         */
-        put: operations["actualizar_4"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/SICANETSC/PLD/{tenantId}/evaluaciones/{llaveSeguimiento}/nivel-manual": {
         parameters: {
             query?: never;
@@ -317,7 +296,7 @@ export interface paths {
             cookie?: never;
         };
         get: operations["obtenerPorId_4"];
-        put: operations["actualizar_5"];
+        put: operations["actualizar_4"];
         post?: never;
         delete: operations["eliminar_4"];
         options?: never;
@@ -413,7 +392,7 @@ export interface paths {
             cookie?: never;
         };
         get: operations["obtenerPorId_6"];
-        put: operations["actualizar_6"];
+        put: operations["actualizar_5"];
         post?: never;
         delete: operations["eliminar_5"];
         options?: never;
@@ -437,7 +416,7 @@ export interface paths {
          * Actualizar tipo de persona
          * @description Modifica los datos de un tipo de persona existente
          */
-        put: operations["actualizar_7"];
+        put: operations["actualizar_6"];
         post?: never;
         /**
          * Eliminar tipo de persona
@@ -465,7 +444,7 @@ export interface paths {
          * Actualizar tipo de crédito
          * @description Modifica los datos de un tipo de crédito existente
          */
-        put: operations["actualizar_8"];
+        put: operations["actualizar_7"];
         post?: never;
         /**
          * Eliminar tipo de crédito
@@ -493,7 +472,7 @@ export interface paths {
          * Actualizar tipo de alerta
          * @description Modifica los datos (nombre, estatus, plazos, buzon) de un tipo de alerta existente
          */
-        put: operations["actualizar_9"];
+        put: operations["actualizar_8"];
         post?: never;
         /**
          * Eliminar tipo de alerta (Soft Delete)
@@ -521,7 +500,7 @@ export interface paths {
          * Actualizar rango de tiempo de constitución
          * @description Modifica los datos de un rango de tiempo de constitución existente
          */
-        put: operations["actualizar_10"];
+        put: operations["actualizar_9"];
         post?: never;
         /**
          * Eliminar rango de tiempo de constitución
@@ -549,7 +528,7 @@ export interface paths {
          * Actualizar razón de alerta
          * @description Modifica los datos (nombre, estatus, tipo alerta, descripcion, 24 horas) de una razón de alerta existente
          */
-        put: operations["actualizar_11"];
+        put: operations["actualizar_10"];
         post?: never;
         /**
          * Eliminar razón de alerta (Soft Delete)
@@ -577,7 +556,7 @@ export interface paths {
          * Actualizar categoría PEP
          * @description Modifica los datos de una categoría PEP existente
          */
-        put: operations["actualizar_12"];
+        put: operations["actualizar_11"];
         post?: never;
         /**
          * Eliminar categoría PEP
@@ -605,7 +584,7 @@ export interface paths {
          * Actualizar rango de monto de préstamo
          * @description Modifica los datos de un rango de monto de préstamo existente
          */
-        put: operations["actualizar_13"];
+        put: operations["actualizar_12"];
         post?: never;
         /**
          * Eliminar rango de monto de préstamo
@@ -633,7 +612,7 @@ export interface paths {
          * Actualizar PEP
          * @description Modifica los datos de un registro existente del catálogo de PEPs
          */
-        put: operations["actualizar_14"];
+        put: operations["actualizar_13"];
         post?: never;
         /**
          * Dar de baja un PEP
@@ -705,7 +684,7 @@ export interface paths {
          * Actualizar origen de recurso
          * @description Modifica los datos de un origen de recurso existente
          */
-        put: operations["actualizar_15"];
+        put: operations["actualizar_14"];
         post?: never;
         /**
          * Eliminar origen de recurso
@@ -733,7 +712,7 @@ export interface paths {
          * Actualizar nivel de riesgo
          * @description Modifica los datos de un nivel de riesgo existente
          */
-        put: operations["actualizar_16"];
+        put: operations["actualizar_15"];
         post?: never;
         /**
          * Eliminar nivel de riesgo
@@ -837,7 +816,7 @@ export interface paths {
          * Actualizar lista restrictiva
          * @description Modifica los datos de una lista restrictiva existente
          */
-        put: operations["actualizar_17"];
+        put: operations["actualizar_16"];
         post?: never;
         /**
          * Eliminar lista restrictiva
@@ -897,7 +876,7 @@ export interface paths {
             cookie?: never;
         };
         get: operations["obtenerPorId_19"];
-        put: operations["actualizar_18"];
+        put: operations["actualizar_17"];
         post?: never;
         delete: operations["eliminar_17"];
         options?: never;
@@ -921,7 +900,7 @@ export interface paths {
          * Actualizar forma de pago
          * @description Modifica los datos de una forma de pago existente
          */
-        put: operations["actualizar_19"];
+        put: operations["actualizar_18"];
         post?: never;
         /**
          * Eliminar forma de pago
@@ -949,7 +928,7 @@ export interface paths {
          * Actualizar forma de pago
          * @description Modifica los datos de una forma de pago existente
          */
-        put: operations["actualizar_20"];
+        put: operations["actualizar_19"];
         post?: never;
         /**
          * Eliminar forma de pago
@@ -977,7 +956,7 @@ export interface paths {
          * Actualizar rango de experiencia en la actividad
          * @description Modifica los datos de un rango de experiencia existente
          */
-        put: operations["actualizar_21"];
+        put: operations["actualizar_20"];
         post?: never;
         /**
          * Eliminar rango de experiencia en la actividad
@@ -1077,7 +1056,7 @@ export interface paths {
          * Actualizar rango de edad
          * @description Modifica los datos de un rango de edad existente
          */
-        put: operations["actualizar_22"];
+        put: operations["actualizar_21"];
         post?: never;
         /**
          * Eliminar rango de edad
@@ -1105,11 +1084,11 @@ export interface paths {
          * Actualizar destino de recurso
          * @description Modifica los datos de un destino de recurso existente
          */
-        put: operations["actualizar_23"];
+        put: operations["actualizar_22"];
         post?: never;
         /**
          * Eliminar destino de recurso
-         * @description Elimina un destino de recurso por su ID
+         * @description Marca como inactivo o elimina un destino de recurso
          */
         delete: operations["eliminar_23"];
         options?: never;
@@ -1133,11 +1112,11 @@ export interface paths {
          * Actualizar canal de pago
          * @description Modifica los datos de un canal de pago existente
          */
-        put: operations["actualizar_24"];
+        put: operations["actualizar_23"];
         post?: never;
         /**
          * Eliminar canal de pago
-         * @description Elimina un canal de pago por su ID
+         * @description Marca como inactivo o elimina un canal de pago
          */
         delete: operations["eliminar_24"];
         options?: never;
@@ -1217,7 +1196,7 @@ export interface paths {
          * Actualizar actividad económica
          * @description Modifica los datos de una actividad económica existente
          */
-        put: operations["actualizar_25"];
+        put: operations["actualizar_24"];
         post?: never;
         /**
          * Eliminar actividad económica
@@ -1327,26 +1306,6 @@ export interface paths {
          * @description Registra un nuevo tenant y aprovisiona atómicamente su esquema PostgreSQL y datos iniciales
          */
         post: operations["crearTenant_1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/SICANETSC/PLD/{tenantId}/v1/oauth/token": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Obtener token de acceso
-         * @description grant_type=client_credentials con client_id y client_secret. Sin scope, el token lleva todos los asignados al sistema. El token dura 15 minutos y solo sirve para esta empresa.
-         */
-        post: operations["emitir"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1603,44 +1562,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/integraciones/sistemas": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Listar sistemas de integración */
-        get: operations["listar_4"];
-        put?: never;
-        /** Registrar un sistema de integración */
-        post: operations["registrar"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/SICANETSC/PLD/{tenantId}/integraciones/sistemas/{id}/credenciales": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Emitir una credencial
-         * @description Devuelve el client_secret una sola vez. Máximo dos credenciales vigentes por sistema.
-         */
-        post: operations["emitirCredencial"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/SICANETSC/PLD/{tenantId}/evaluaciones": {
         parameters: {
             query?: never;
@@ -1708,7 +1629,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["listar_5"];
+        get: operations["listar_4"];
         put?: never;
         post: operations["crear_4"];
         delete?: never;
@@ -2349,8 +2270,8 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Listar Destinos de Recurso (paginado)
-         * @description Consulta paginada de Destinos de Recurso registrados
+         * Listar destinos de recurso (paginado)
+         * @description Consulta paginada de destinos de recurso registrados
          */
         get: operations["listarTodos_17"];
         put?: never;
@@ -2373,8 +2294,8 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Listar Canales de Pago (paginado)
-         * @description Consulta paginada de Canales de Pago registrados
+         * Listar canales de pago (paginado)
+         * @description Consulta paginada de canales de pago registrados
          */
         get: operations["listarTodos_18"];
         put?: never;
@@ -2646,26 +2567,6 @@ export interface paths {
         patch: operations["cambiarEstado"];
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/integraciones/sistemas/{id}/estatus": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /**
-         * Activar (A) o dar de baja (B) un sistema
-         * @description De baja no puede pedir tokens nuevos.
-         */
-        patch: operations["cambiarEstatus"];
-        trace?: never;
-    };
     "/SICANETSC/PLD/{tenantId}/configuracion-alertas/{id}/estado": {
         parameters: {
             query?: never;
@@ -2695,7 +2596,7 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        patch: operations["cambiarEstatus_1"];
+        patch: operations["cambiarEstatus"];
         trace?: never;
     };
     "/SICANETSC/PLD/{tenantId}/catalogos/listas-paises/{id}/estatus": {
@@ -2711,7 +2612,7 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        patch: operations["cambiarEstatus_2"];
+        patch: operations["cambiarEstatus_1"];
         trace?: never;
     };
     "/SICANETSC/PLD/{tenantId}/buzon/denuncias/{id}/estatus": {
@@ -2731,7 +2632,7 @@ export interface paths {
          * Cambiar estatus de denuncia
          * @description Gestiona las transiciones del ciclo de vida (R->V, V->A, V->D) y dispara creación de alerta en A
          */
-        patch: operations["cambiarEstatus_3"];
+        patch: operations["cambiarEstatus_2"];
         trace?: never;
     };
     "/SICANETSC/PLD/{tenantId}/alertas/{id}/dictamen": {
@@ -3096,23 +2997,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/integraciones/scopes": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Scopes que se pueden asignar a un sistema */
-        get: operations["scopes"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/SICANETSC/PLD/{tenantId}/evaluaciones/seguimiento/{llaveSeguimiento}": {
         parameters: {
             query?: never;
@@ -3244,7 +3128,7 @@ export interface paths {
          * Coincidencias de un socio
          * @description Estado de la revisión de las coincidencias del socio.
          */
-        get: operations["obtener_3"];
+        get: operations["obtener_2"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3640,7 +3524,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["listar_6"];
+        get: operations["listar_5"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3736,26 +3620,6 @@ export interface paths {
          * @description Elimina una excepción de permiso de un usuario
          */
         delete: operations["eliminarExcepcionPermiso"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/SICANETSC/PLD/{tenantId}/integraciones/sistemas/{id}/credenciales/{credencialId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /**
-         * Revocar una credencial
-         * @description Deja de servir para pedir tokens de inmediato.
-         */
-        delete: operations["revocarCredencial"];
         options?: never;
         head?: never;
         patch?: never;
@@ -4005,36 +3869,6 @@ export interface components {
             /** Format: date-time */
             updatedAt?: string;
         };
-        ActualizarSistemaRequest: {
-            nombre: string;
-            scopes: string[];
-        };
-        CredencialResponse: {
-            /** Format: int64 */
-            id?: number;
-            etiqueta?: string;
-            /** Format: date-time */
-            expiraEn?: string;
-            /** Format: date-time */
-            revocadaEn?: string;
-            /** Format: date-time */
-            ultimoUsoEn?: string;
-            /** Format: date-time */
-            creadaEn?: string;
-            vigente?: boolean;
-        };
-        SistemaIntegracionResponse: {
-            /** Format: int64 */
-            id?: number;
-            clientId?: string;
-            nombre?: string;
-            /** @enum {string} */
-            estatus?: "A" | "B" | "S" | "E";
-            scopes?: string[];
-            credenciales?: components["schemas"]["CredencialResponse"][];
-            /** Format: date-time */
-            creadoEn?: string;
-        };
         /** @description Nivel de riesgo asignado manualmente y su justificación */
         ModificarNivelRiesgoRequest: {
             /**
@@ -4048,6 +3882,22 @@ export interface components {
              * @example Se eleva el nivel por operaciones inusuales detectadas en revisión manual
              */
             observaciones: string;
+        };
+        ProblemDetailsResponse: {
+            type?: string;
+            title?: string;
+            /** Format: int32 */
+            status?: number;
+            detail?: string;
+            instance?: string;
+            /** Format: date-time */
+            timestamp?: string;
+            invalidParams?: {
+                [key: string]: string;
+            };
+            coincidencias?: {
+                [key: string]: string;
+            }[];
         };
         DesglosePuntuacion: {
             factores?: components["schemas"]["PuntajeFactor"][];
@@ -4093,22 +3943,6 @@ export interface components {
             valor?: number;
             ponderacion?: number;
             puntaje?: number;
-        };
-        ProblemDetailsResponse: {
-            type?: string;
-            title?: string;
-            /** Format: int32 */
-            status?: number;
-            detail?: string;
-            instance?: string;
-            /** Format: date-time */
-            timestamp?: string;
-            invalidParams?: {
-                [key: string]: string;
-            };
-            coincidencias?: {
-                [key: string]: string;
-            }[];
         };
         ConfiguracionAlertaRequest: {
             alertaAcronimo: string;
@@ -4324,7 +4158,8 @@ export interface components {
             estatus?: "A" | "B" | "S" | "E";
         };
         CatTipoPrestamoResponse: {
-            id?: string;
+            /** Format: int64 */
+            id?: number;
             nombre?: string;
             tasaInteresNormalMinima?: number;
             tasaInteresNormalMaxima?: number;
@@ -4358,7 +4193,8 @@ export interface components {
             estatus?: "A" | "B" | "S" | "E";
         };
         CatTipoSocioResponse: {
-            id?: string;
+            /** Format: int64 */
+            id?: number;
             nombre?: string;
             /** Format: int64 */
             catNivelRiesgoId?: number;
@@ -4373,15 +4209,18 @@ export interface components {
             nombre?: string;
             /** Format: int64 */
             catNivelRiesgoId?: number;
-            catTipoPrestamoId?: string;
+            /** Format: int64 */
+            catTipoPrestamoId?: number;
             estatus?: string;
         };
         CatTipoCreditoResponse: {
-            id?: string;
+            /** Format: int64 */
+            id?: number;
             nombre?: string;
             /** Format: int64 */
             catNivelRiesgoId?: number;
-            catTipoPrestamoId?: string;
+            /** Format: int64 */
+            catTipoPrestamoId?: number;
             estatus?: string;
             /** Format: date-time */
             createdAt?: string;
@@ -4482,7 +4321,8 @@ export interface components {
             estatus?: "A" | "B" | "S" | "E";
         };
         CatTiempoConstitucionResponse: {
-            id?: string;
+            /** Format: int64 */
+            id?: number;
             nombre?: string;
             /** Format: int32 */
             aniosMin?: number;
@@ -4570,7 +4410,8 @@ export interface components {
             estatus?: "A" | "B" | "S" | "E";
         };
         CatPuestosPepsResponse: {
-            id?: string;
+            /** Format: int64 */
+            id?: number;
             nombre?: string;
             descripcion?: string;
             /** @enum {string} */
@@ -4590,7 +4431,8 @@ export interface components {
             estatus?: "A" | "B" | "S" | "E";
         };
         CatPrestamoMontoResponse: {
-            id?: string;
+            /** Format: int64 */
+            id?: number;
             nombre?: string;
             montoMin?: number;
             montoMax?: number;
@@ -4615,7 +4457,8 @@ export interface components {
             estatus?: string;
         };
         CatPepsResponse: {
-            id?: string;
+            /** Format: int64 */
+            id?: number;
             nombre?: string;
             /** Format: int64 */
             catNivelRiesgoId?: number;
@@ -4634,7 +4477,8 @@ export interface components {
             zonaIds: string[];
         };
         CatPaisResponse: {
-            idPais?: string;
+            /** Format: int64 */
+            idPais?: number;
             tipo?: string;
             codigoIso?: string;
             nombre?: string;
@@ -4657,7 +4501,8 @@ export interface components {
             estatus?: string;
         };
         CatOrigenRecursoResponse: {
-            id?: string;
+            /** Format: int64 */
+            id?: number;
             nombre?: string;
             /** Format: int64 */
             catNivelRiesgoId?: number;
@@ -4698,8 +4543,10 @@ export interface components {
             nombre: string;
         };
         CatMunicipioResponse: {
-            id?: string;
-            entidadId?: string;
+            /** Format: int64 */
+            id?: number;
+            /** Format: int64 */
+            entidadId?: number;
             nombreEntidad?: string;
             nombre?: string;
             /** Format: date-time */
@@ -4715,8 +4562,10 @@ export interface components {
             nivelRiesgoId?: number;
         };
         CatLocalidadResponse: {
-            idLocalidad?: string;
-            idMunicipio?: string;
+            /** Format: int64 */
+            idLocalidad?: number;
+            /** Format: int64 */
+            idMunicipio?: number;
             nombreMunicipio?: string;
             nombre?: string;
             tipoAsentamiento?: string;
@@ -4743,7 +4592,8 @@ export interface components {
             estatus?: "A" | "B" | "S" | "E";
         };
         ListaRestrictivaResponse: {
-            id?: string;
+            /** Format: int64 */
+            id?: number;
             nombreOficial?: string;
             urlBaseApi?: string;
             esNacional?: boolean;
@@ -4814,7 +4664,7 @@ export interface components {
             totalPaisesAsignados?: number;
         };
         AsignarCatPaisesRequest: {
-            paisIds: string[];
+            paisIds: number[];
         };
         ActualizarCatHistorialCrediticioRequest: {
             nombre?: string;
@@ -4824,7 +4674,8 @@ export interface components {
             estatus?: "A" | "B" | "S" | "E";
         };
         CatHistorialCrediticioResponse: {
-            id?: string;
+            /** Format: int64 */
+            id?: number;
             nombre?: string;
             /** Format: int64 */
             catNivelRiesgoId?: number;
@@ -4844,7 +4695,8 @@ export interface components {
             estatus?: "A" | "B" | "S" | "E";
         };
         CatFormaPagoResponse: {
-            id?: string;
+            /** Format: int64 */
+            id?: number;
             nombre?: string;
             acronimo?: string;
             /** Format: int64 */
@@ -4868,7 +4720,8 @@ export interface components {
             estatus?: "A" | "B" | "S" | "E";
         };
         CatExperienciaActividadResponse: {
-            id?: string;
+            /** Format: int64 */
+            id?: number;
             nombre?: string;
             /** Format: int32 */
             aniosMin?: number;
@@ -4922,10 +4775,11 @@ export interface components {
         /** @description Respuesta con los datos de una entidad federativa y sus zonas de riesgo asignadas */
         EntidadCatGeograficaResponse: {
             /**
+             * Format: int64
              * @description Identificador único de la entidad federativa
-             * @example 0001
+             * @example 1
              */
-            idEntidad?: string;
+            idEntidad?: number;
             /**
              * @description Clave CURP de la entidad federativa
              * @example 14
@@ -4947,10 +4801,11 @@ export interface components {
              */
             esEntidad?: string;
             /**
+             * Format: int64
              * @description ID del país al que pertenece la entidad
              * @example 1
              */
-            idPais?: string;
+            idPais?: number;
             /**
              * @description Nombre del país al que pertenece la entidad
              * @example MÉXICO
@@ -5024,7 +4879,8 @@ export interface components {
             estatus?: "A" | "B" | "S" | "E";
         };
         CatEdadResponse: {
-            id?: string;
+            /** Format: int64 */
+            id?: number;
             /** Format: int32 */
             edadInicial?: number;
             /** Format: int32 */
@@ -5042,14 +4898,17 @@ export interface components {
             nombre?: string;
             /** Format: int64 */
             catNivelRiesgoId?: number;
-            estatus?: string;
+            /** @enum {string} */
+            estatus?: "A" | "B" | "S" | "E";
         };
         CatDestinoRecursoResponse: {
-            id?: string;
+            /** Format: int64 */
+            id?: number;
             nombre?: string;
             /** Format: int64 */
             catNivelRiesgoId?: number;
-            estatus?: string;
+            /** @enum {string} */
+            estatus?: "A" | "B" | "S" | "E";
             /** Format: date-time */
             createdAt?: string;
             /** Format: date-time */
@@ -5061,16 +4920,19 @@ export interface components {
             acronimo?: string;
             /** Format: int64 */
             catNivelRiesgoId?: number;
-            estatus?: string;
+            /** @enum {string} */
+            estatus?: "A" | "B" | "S" | "E";
         };
         CatCanalPagoResponse: {
-            id?: string;
+            /** Format: int64 */
+            id?: number;
             clave?: string;
             nombre?: string;
             acronimo?: string;
             /** Format: int64 */
             catNivelRiesgoId?: number;
-            estatus?: string;
+            /** @enum {string} */
+            estatus?: "A" | "B" | "S" | "E";
             /** Format: date-time */
             createdAt?: string;
             /** Format: date-time */
@@ -5097,7 +4959,8 @@ export interface components {
             estatus?: "A" | "B" | "S" | "E";
         };
         CatActividadEconomicaResponse: {
-            id?: string;
+            /** Format: int64 */
+            id?: number;
             claveSat?: string;
             descripcion?: string;
             esActividadVulnerable?: boolean;
@@ -5202,13 +5065,6 @@ export interface components {
             createdAt?: string;
             /** Format: date-time */
             updatedAt?: string;
-        };
-        TokenResponse: {
-            access_token?: string;
-            token_type?: string;
-            /** Format: int64 */
-            expires_in?: number;
-            scope?: string;
         };
         JsonNode: Record<string, never>;
         Aceptada: {
@@ -5380,22 +5236,6 @@ export interface components {
             fuenteInformacion?: string;
             estatusReportado?: string;
         };
-        RegistrarSistemaRequest: {
-            clientId: string;
-            nombre: string;
-            scopes: string[];
-        };
-        EmitirCredencialRequest: {
-            etiqueta?: string;
-            /** Format: int32 */
-            vigenciaDias?: number;
-        };
-        CredencialEmitidaResponse: {
-            clientId?: string;
-            clientSecret?: string;
-            credencial?: components["schemas"]["CredencialResponse"];
-            aviso?: string;
-        };
         AsentamientoDto: {
             tipo?: string;
             nombre?: string;
@@ -5471,6 +5311,7 @@ export interface components {
             pais_nacimiento_id?: string;
             fecha_nacimiento?: string;
             antiguedad_giro_anios?: string;
+            pep_nacional_id?: string;
             actividad_economica_id: string;
         };
         ConsultaListasRequest: {
@@ -5572,7 +5413,8 @@ export interface components {
             estatus: "A" | "B" | "S" | "E";
         };
         CrearCatTipoPrestamoRequest: {
-            id?: string;
+            /** Format: int64 */
+            id?: number;
             nombre: string;
             tasaInteresNormalMinima?: number;
             tasaInteresNormalMaxima?: number;
@@ -5602,11 +5444,13 @@ export interface components {
             estatus?: "A" | "B" | "S" | "E";
         };
         CrearCatTipoCreditoRequest: {
-            id?: string;
+            /** Format: int64 */
+            id?: number;
             nombre: string;
             /** Format: int64 */
             catNivelRiesgoId: number;
-            catTipoPrestamoId?: string;
+            /** Format: int64 */
+            catTipoPrestamoId?: number;
             estatus?: string;
         };
         /** @description Petición para crear un nuevo tipo de alerta */
@@ -5654,7 +5498,8 @@ export interface components {
             estatus?: "A" | "B" | "S" | "E";
         };
         CrearCatTiempoConstitucionRequest: {
-            id?: string;
+            /** Format: int64 */
+            id?: number;
             nombre: string;
             /** Format: int32 */
             aniosMin: number;
@@ -5702,14 +5547,16 @@ export interface components {
             estatus?: "A" | "B" | "S" | "E";
         };
         CrearCatPuestosPepsRequest: {
-            id: string;
+            /** Format: int64 */
+            id?: number;
             nombre: string;
             descripcion?: string;
             /** @enum {string} */
             estatus?: "A" | "B" | "S" | "E";
         };
         CrearCatPrestamoMontoRequest: {
-            id?: string;
+            /** Format: int64 */
+            id?: number;
             nombre: string;
             montoMin: number;
             montoMax?: number;
@@ -5719,7 +5566,8 @@ export interface components {
             estatus?: "A" | "B" | "S" | "E";
         };
         CrearCatPepsRequest: {
-            id?: string;
+            /** Format: int64 */
+            id?: number;
             nombre: string;
             /** Format: int64 */
             catNivelRiesgoId: number;
@@ -5738,7 +5586,8 @@ export interface components {
             zonaIds: string[];
         };
         CrearCatOrigenRecursoRequest: {
-            id?: string;
+            /** Format: int64 */
+            id?: number;
             nombre: string;
             /** Format: int64 */
             catNivelRiesgoId: number;
@@ -5766,7 +5615,8 @@ export interface components {
             nivelRiesgoId?: number;
         };
         CrearListaRestrictivaRequest: {
-            id: string;
+            /** Format: int64 */
+            id?: number;
             nombreOficial: string;
             urlBaseApi: string;
             esNacional: boolean;
@@ -5793,7 +5643,8 @@ export interface components {
             estatus: "A" | "B" | "S" | "E";
         };
         CrearCatHistorialCrediticioRequest: {
-            id: string;
+            /** Format: int64 */
+            id?: number;
             nombre: string;
             /** Format: int64 */
             catNivelRiesgoId: number;
@@ -5801,7 +5652,8 @@ export interface components {
             estatus?: "A" | "B" | "S" | "E";
         };
         CrearCatFormaPagoRequest: {
-            id: string;
+            /** Format: int64 */
+            id?: number;
             nombre: string;
             acronimo?: string;
             /** Format: int64 */
@@ -5810,7 +5662,8 @@ export interface components {
             estatus?: "A" | "B" | "S" | "E";
         };
         CrearCatExperienciaActividadRequest: {
-            id?: string;
+            /** Format: int64 */
+            id?: number;
             nombre: string;
             /** Format: int32 */
             aniosMin: number;
@@ -5868,27 +5721,32 @@ export interface components {
             estatus?: "A" | "B" | "S" | "E";
         };
         CrearCatDestinoRecursoRequest: {
-            id: string;
+            /** Format: int64 */
+            id?: number;
             nombre: string;
             /** Format: int64 */
             catNivelRiesgoId: number;
-            estatus?: string;
+            /** @enum {string} */
+            estatus?: "A" | "B" | "S" | "E";
         };
         CrearCatCanalPagoRequest: {
-            id?: string;
+            /** Format: int64 */
+            id?: number;
             clave?: string;
             nombre: string;
             acronimo?: string;
             /** Format: int64 */
-            catNivelRiesgoId?: number;
-            estatus?: string;
+            catNivelRiesgoId: number;
+            /** @enum {string} */
+            estatus?: "A" | "B" | "S" | "E";
         };
         CrearElementoAuxiliarRequest: {
             nombre: string;
             descripcion?: string;
         };
         CrearCatActividadEconomicaRequest: {
-            id: string;
+            /** Format: int64 */
+            id?: number;
             claveSat: string;
             descripcion: string;
             esActividadVulnerable: boolean;
@@ -6086,10 +5944,6 @@ export interface components {
             /** @enum {string} */
             estado: "A" | "B" | "S" | "E";
         };
-        CambiarEstatusSistemaRequest: {
-            /** @enum {string} */
-            estatus: "A" | "B" | "S" | "E";
-        };
         /** @description Solicitud para cambiar el estatus de una denuncia */
         CambiarEstatusRequest: {
             /**
@@ -6236,7 +6090,8 @@ export interface components {
             nombreAsentamiento?: string;
         };
         NacionalidadInfo: {
-            id?: string;
+            /** Format: int64 */
+            id?: number;
             nombre?: string;
         };
         PersonaRelacionadaInfo: {
@@ -6272,7 +6127,8 @@ export interface components {
             personasRelacionadas?: components["schemas"]["PersonaRelacionadaInfo"][];
         };
         TipoPersonaInfo: {
-            id?: string;
+            /** Format: int64 */
+            id?: number;
             nombre?: string;
         };
         SocioInfo: {
@@ -7466,58 +7322,6 @@ export interface operations {
             };
         };
     };
-    obtener_2: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-                /** @description Identificador del Tenant */
-                tenantId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["SistemaIntegracionResponse"];
-                };
-            };
-        };
-    };
-    actualizar_4: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-                /** @description Identificador del Tenant */
-                tenantId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ActualizarSistemaRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["SistemaIntegracionResponse"];
-                };
-            };
-        };
-    };
     modificarNivelRiesgo: {
         parameters: {
             query?: never;
@@ -7601,7 +7405,7 @@ export interface operations {
             };
         };
     };
-    actualizar_5: {
+    actualizar_4: {
         parameters: {
             query?: never;
             header?: never;
@@ -7845,7 +7649,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -7864,12 +7668,12 @@ export interface operations {
             };
         };
     };
-    actualizar_6: {
+    actualizar_5: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -7897,7 +7701,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -7920,7 +7724,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID único del tipo de persona */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -7939,13 +7743,13 @@ export interface operations {
             };
         };
     };
-    actualizar_7: {
+    actualizar_6: {
         parameters: {
             query?: never;
             header?: never;
             path: {
                 /** @description ID del tipo de persona */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -7974,7 +7778,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID del tipo de persona a eliminar */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -7997,7 +7801,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID único del tipo de crédito */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -8016,13 +7820,13 @@ export interface operations {
             };
         };
     };
-    actualizar_8: {
+    actualizar_7: {
         parameters: {
             query?: never;
             header?: never;
             path: {
                 /** @description ID del tipo de crédito */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -8051,7 +7855,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID del tipo de crédito a eliminar */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -8102,7 +7906,7 @@ export interface operations {
             };
         };
     };
-    actualizar_9: {
+    actualizar_8: {
         parameters: {
             query?: never;
             header?: never;
@@ -8217,7 +8021,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID único del rango de tiempo de constitución */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -8236,13 +8040,13 @@ export interface operations {
             };
         };
     };
-    actualizar_10: {
+    actualizar_9: {
         parameters: {
             query?: never;
             header?: never;
             path: {
                 /** @description ID del rango de tiempo de constitución */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -8271,7 +8075,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID del rango de tiempo de constitución a eliminar */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -8322,7 +8126,7 @@ export interface operations {
             };
         };
     };
-    actualizar_11: {
+    actualizar_10: {
         parameters: {
             query?: never;
             header?: never;
@@ -8437,7 +8241,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID único de la categoría PEP */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -8456,13 +8260,13 @@ export interface operations {
             };
         };
     };
-    actualizar_12: {
+    actualizar_11: {
         parameters: {
             query?: never;
             header?: never;
             path: {
                 /** @description ID de la categoría PEP */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -8491,7 +8295,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID de la categoría PEP a eliminar */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -8514,7 +8318,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID único del rango de monto de préstamo */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -8533,13 +8337,13 @@ export interface operations {
             };
         };
     };
-    actualizar_13: {
+    actualizar_12: {
         parameters: {
             query?: never;
             header?: never;
             path: {
                 /** @description ID del rango de monto de préstamo */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -8568,7 +8372,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID del rango de monto de préstamo a eliminar */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -8591,7 +8395,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID único del registro */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -8610,13 +8414,13 @@ export interface operations {
             };
         };
     };
-    actualizar_14: {
+    actualizar_13: {
         parameters: {
             query?: never;
             header?: never;
             path: {
                 /** @description ID del registro */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -8645,7 +8449,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID del registro a dar de baja */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -8671,7 +8475,7 @@ export interface operations {
                  * @description ID o código ISO del país
                  * @example 5
                  */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -8699,7 +8503,7 @@ export interface operations {
                  * @description ID del país a actualizar
                  * @example 5
                  */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -8727,7 +8531,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -8749,7 +8553,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -8774,7 +8578,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID del país */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -8801,7 +8605,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID único del origen de recurso */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -8820,13 +8624,13 @@ export interface operations {
             };
         };
     };
-    actualizar_15: {
+    actualizar_14: {
         parameters: {
             query?: never;
             header?: never;
             path: {
                 /** @description ID del origen de recurso */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -8855,7 +8659,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID del origen de recurso a eliminar */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -8897,7 +8701,7 @@ export interface operations {
             };
         };
     };
-    actualizar_16: {
+    actualizar_15: {
         parameters: {
             query?: never;
             header?: never;
@@ -8956,9 +8760,9 @@ export interface operations {
             path: {
                 /**
                  * @description ID único del municipio
-                 * @example 0001
+                 * @example 1
                  */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -8984,9 +8788,9 @@ export interface operations {
             path: {
                 /**
                  * @description ID del municipio a actualizar
-                 * @example 0001
+                 * @example 1
                  */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9015,7 +8819,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID del municipio a eliminar */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9039,9 +8843,9 @@ export interface operations {
             path: {
                 /**
                  * @description ID único de la localidad
-                 * @example 0005
+                 * @example 5
                  */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9067,9 +8871,9 @@ export interface operations {
             path: {
                 /**
                  * @description ID de la localidad
-                 * @example 0005
+                 * @example 5
                  */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9098,7 +8902,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID de la localidad a eliminar */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9121,7 +8925,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID de la localidad */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9150,7 +8954,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID único de la lista restrictiva */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9169,13 +8973,13 @@ export interface operations {
             };
         };
     };
-    actualizar_17: {
+    actualizar_16: {
         parameters: {
             query?: never;
             header?: never;
             path: {
                 /** @description ID de la lista restrictiva */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9204,7 +9008,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID de la lista restrictiva a eliminar */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9358,7 +9162,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9377,12 +9181,12 @@ export interface operations {
             };
         };
     };
-    actualizar_18: {
+    actualizar_17: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9410,7 +9214,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9433,7 +9237,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID único de la forma de pago */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9452,13 +9256,13 @@ export interface operations {
             };
         };
     };
-    actualizar_19: {
+    actualizar_18: {
         parameters: {
             query?: never;
             header?: never;
             path: {
                 /** @description ID de la forma de pago */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9487,7 +9291,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID de la forma de pago a eliminar */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9510,7 +9314,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID único de la forma de pago */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9529,13 +9333,13 @@ export interface operations {
             };
         };
     };
-    actualizar_20: {
+    actualizar_19: {
         parameters: {
             query?: never;
             header?: never;
             path: {
                 /** @description ID de la forma de pago */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9564,7 +9368,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID de la forma de pago a eliminar */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9587,7 +9391,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID único del rango de experiencia */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9606,13 +9410,13 @@ export interface operations {
             };
         };
     };
-    actualizar_21: {
+    actualizar_20: {
         parameters: {
             query?: never;
             header?: never;
             path: {
                 /** @description ID del rango de experiencia */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9641,7 +9445,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID del rango de experiencia a eliminar */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9665,9 +9469,9 @@ export interface operations {
             path: {
                 /**
                  * @description ID único de la entidad
-                 * @example 0001
+                 * @example 1
                  */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9693,9 +9497,9 @@ export interface operations {
             path: {
                 /**
                  * @description ID de la entidad a actualizar
-                 * @example 0001
+                 * @example 1
                  */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9724,7 +9528,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID de la entidad a eliminar */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9747,7 +9551,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID de la entidad */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9772,7 +9576,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID de la entidad */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9799,7 +9603,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID de la entidad */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9828,7 +9632,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID único del rango de edad */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9847,13 +9651,13 @@ export interface operations {
             };
         };
     };
-    actualizar_22: {
+    actualizar_21: {
         parameters: {
             query?: never;
             header?: never;
             path: {
                 /** @description ID del rango de edad */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9882,7 +9686,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID del rango de edad a eliminar */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9905,7 +9709,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID único del destino de recurso */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9924,13 +9728,13 @@ export interface operations {
             };
         };
     };
-    actualizar_23: {
+    actualizar_22: {
         parameters: {
             query?: never;
             header?: never;
             path: {
                 /** @description ID del destino de recurso */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9959,7 +9763,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID del destino de recurso a eliminar */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -9982,7 +9786,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID único del canal de pago */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -10001,13 +9805,13 @@ export interface operations {
             };
         };
     };
-    actualizar_24: {
+    actualizar_23: {
         parameters: {
             query?: never;
             header?: never;
             path: {
                 /** @description ID del canal de pago */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -10036,7 +9840,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID del canal de pago a eliminar */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -10207,7 +10011,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID único de la actividad económica */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -10226,13 +10030,13 @@ export interface operations {
             };
         };
     };
-    actualizar_25: {
+    actualizar_24: {
         parameters: {
             query?: never;
             header?: never;
             path: {
                 /** @description ID de la actividad económica */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -10261,7 +10065,7 @@ export interface operations {
             header?: never;
             path: {
                 /** @description ID de la actividad económica a eliminar */
-                id: string;
+                id: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -10414,34 +10218,6 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["TenantResponse"];
-                };
-            };
-        };
-    };
-    emitir: {
-        parameters: {
-            query: {
-                grant_type: string;
-                client_id?: string;
-                client_secret?: string;
-                scope?: string;
-            };
-            header?: never;
-            path: {
-                /** @description Identificador del Tenant */
-                tenantId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TokenResponse"];
                 };
             };
         };
@@ -10909,84 +10685,6 @@ export interface operations {
             };
         };
     };
-    listar_4: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Identificador del Tenant */
-                tenantId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["SistemaIntegracionResponse"][];
-                };
-            };
-        };
-    };
-    registrar: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Identificador del Tenant */
-                tenantId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RegistrarSistemaRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["SistemaIntegracionResponse"];
-                };
-            };
-        };
-    };
-    emitirCredencial: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-                /** @description Identificador del Tenant */
-                tenantId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": components["schemas"]["EmitirCredencialRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["CredencialEmitidaResponse"];
-                };
-            };
-        };
-    };
     evaluarYRegistrar: {
         parameters: {
             query?: never;
@@ -11127,7 +10825,7 @@ export interface operations {
             };
         };
     };
-    listar_5: {
+    listar_4: {
         parameters: {
             query?: {
                 busqueda?: string;
@@ -12074,7 +11772,7 @@ export interface operations {
                 /** @description Criterio de filtrado */
                 filtrarPor?: string;
                 /** @description ID de la entidad federativa */
-                entidadId?: string;
+                entidadId?: number;
                 /** @description Página (base 0) */
                 pagina?: number;
                 /** @description Filas por página (máximo 50) */
@@ -12135,9 +11833,9 @@ export interface operations {
                 /** @description Criterio de filtrado */
                 filtrarPor?: string;
                 /** @description ID del municipio */
-                idMunicipio?: string;
+                idMunicipio?: number;
                 /** @description ID de la entidad federativa */
-                idEntidad?: string;
+                idEntidad?: number;
                 /** @description ID del nivel de riesgo */
                 idNivelRiesgo?: number;
                 /** @description Página (base 0) */
@@ -12725,7 +12423,7 @@ export interface operations {
     listarTodos_17: {
         parameters: {
             query?: {
-                /** @description Búsqueda por nombre o descripción */
+                /** @description Búsqueda por nombre */
                 busqueda?: string;
                 /** @description Criterio de filtrado */
                 filtrarPor?: string;
@@ -12784,7 +12482,7 @@ export interface operations {
     listarTodos_18: {
         parameters: {
             query?: {
-                /** @description Búsqueda por nombre o descripción */
+                /** @description Búsqueda por nombre, clave o acrónimo */
                 busqueda?: string;
                 /** @description Criterio de filtrado */
                 filtrarPor?: string;
@@ -13350,34 +13048,6 @@ export interface operations {
             };
         };
     };
-    cambiarEstatus: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-                /** @description Identificador del Tenant */
-                tenantId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CambiarEstatusSistemaRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["SistemaIntegracionResponse"];
-                };
-            };
-        };
-    };
     cambiarEstado_1: {
         parameters: {
             query: {
@@ -13404,7 +13074,7 @@ export interface operations {
             };
         };
     };
-    cambiarEstatus_1: {
+    cambiarEstatus: {
         parameters: {
             query: {
                 estatus: string;
@@ -13430,7 +13100,7 @@ export interface operations {
             };
         };
     };
-    cambiarEstatus_2: {
+    cambiarEstatus_1: {
         parameters: {
             query: {
                 estatus: string;
@@ -13456,7 +13126,7 @@ export interface operations {
             };
         };
     };
-    cambiarEstatus_3: {
+    cambiarEstatus_2: {
         parameters: {
             query?: {
                 /** @description Nuevo estatus por query param (V: Verificada, A: Alerta, D: Desestimada) */
@@ -13972,29 +13642,6 @@ export interface operations {
             };
         };
     };
-    scopes: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Identificador del Tenant */
-                tenantId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": string[];
-                };
-            };
-        };
-    };
     consultarPorLlaveSeguimiento: {
         parameters: {
             query?: never;
@@ -14161,7 +13808,7 @@ export interface operations {
             };
         };
     };
-    obtener_3: {
+    obtener_2: {
         parameters: {
             query?: never;
             header?: never;
@@ -14662,7 +14309,7 @@ export interface operations {
             };
         };
     };
-    listar_6: {
+    listar_5: {
         parameters: {
             query?: {
                 alertaAcronimo?: string;
@@ -14792,29 +14439,6 @@ export interface operations {
             path: {
                 id: number;
                 idExcepcion: number;
-                /** @description Identificador del Tenant */
-                tenantId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    revocarCredencial: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-                credencialId: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };

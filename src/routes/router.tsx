@@ -62,9 +62,6 @@ const RolPermisosPage = lazy(() =>
 const UsuariosPage = lazy(() =>
   import("@/features/configuraciones/administracion/usuarios/pages/UsuariosPage").then((m) => ({ default: m.UsuariosPage })),
 );
-const SistemasIntegracionPage = lazy(() =>
-  import("@/features/configuraciones/administracion/integraciones/pages/SistemasIntegracionPage").then((m) => ({ default: m.SistemasIntegracionPage })),
-);
 const CanalesPagoPage = lazy(() =>
   import("@/features/configuraciones/canales-pago/pages/CanalesPagoPage").then((m) => ({ default: m.CanalesPagoPage })),
 );
@@ -337,14 +334,6 @@ export const router = createBrowserRouter([
                       {
                         path: "configuraciones/administracion/permisos",
                         element: <PermisosPage />,
-                      },
-                      {
-                        path: "configuraciones/administracion/integraciones",
-                        element: (
-                          <RequierePermiso recurso="integraciones" accion="ver">
-                            <SistemasIntegracionPage />
-                          </RequierePermiso>
-                        ),
                       },
                       {
                         path: "operacion/captura-alertas",

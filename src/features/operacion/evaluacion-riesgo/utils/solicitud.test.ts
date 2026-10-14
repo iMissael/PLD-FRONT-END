@@ -17,8 +17,8 @@ const perfilCompleto: SocioPerfilRiesgo = {
   curp: "MAHL900514MDFRRC05",
   fechaNacimiento: "1990-05-14",
   esPep: false,
-  tipoPersona: { id: "1", nombre: "Persona Física Nacional" },
-  nacionalidad: { id: "165", nombre: "México" },
+  tipoPersona: { id: 1, nombre: "Persona Física Nacional" },
+  nacionalidad: { id: 165, nombre: "México" },
   actividadEconomica: { id: "10", descripcion: "CULTIVO DE SOYA" },
   sucursal: "SUC-001",
   domicilio: {

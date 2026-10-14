@@ -33,7 +33,7 @@ import { calcularEdad, hoyIso } from "@/shared/utils/fechas";
 function opcionesDe(items: { id?: string; descripcion?: string }[] | undefined) {
   return (items ?? [])
     .filter((item) => item.id)
-    .map((item) => ({ valor: item.id ?? "", etiqueta: item.descripcion ?? "" }));
+    .map((item) => ({ valor: String(item.id ?? ""), etiqueta: item.descripcion ?? "" }));
 }
 
 export function SeccionDatosGenerales({
@@ -58,13 +58,13 @@ export function SeccionDatosGenerales({
     () =>
       (paises ?? [])
         .filter((pais) => pais.idPais)
-        .map((pais) => ({ valor: pais.idPais ?? "", etiqueta: pais.nombre ?? "" })),
+        .map((pais) => ({ valor: String(pais.idPais ?? ""), etiqueta: pais.nombre ?? "" })),
     [paises],
   );
   const opcionesEntidades = useMemo<OpcionCatalogo[]>(
     () =>
       (entidades ?? [])
-        .filter((entidad) => !paisNacimiento || entidad.idPais === paisNacimiento)
+        .filter((entidad) => !paisNacimiento || String(entidad.idPais) === paisNacimiento)
         .map((entidad) => ({
           valor: String(entidad.idEntidad),
           etiqueta: entidad.nombre ?? "",

@@ -68,7 +68,7 @@ export function FormSeccionDomicilio({
                 </FormControl>
                 <SelectContent>
                   {paises?.map((pais) => (
-                    <SelectItem key={pais.idPais} value={pais.idPais ?? ""}>
+                    <SelectItem key={pais.idPais} value={String(pais.idPais ?? "")}>
                       {pais.nombre}
                     </SelectItem>
                   ))}
