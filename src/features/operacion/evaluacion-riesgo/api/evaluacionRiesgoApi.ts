@@ -7,7 +7,7 @@ import type {
 
 export async function evaluarRiesgo(payload: EvaluacionRiesgoSolicitud) {
   const { data } = await apiClient.post<EvaluacionRiesgoResultado>(
-    "/pld/evaluaciones",
+    "/evaluaciones",
     payload,
   );
   return data;
@@ -23,7 +23,7 @@ export async function modificarNivelRiesgo(
   input: ModificarNivelRiesgoInput,
 ) {
   const { data } = await apiClient.put<EvaluacionRiesgoResultado>(
-    `/pld/evaluaciones/${llaveSeguimiento}/nivel-manual`,
+    `/evaluaciones/${llaveSeguimiento}/nivel-manual`,
     input,
   );
   return data;
@@ -32,7 +32,7 @@ export async function modificarNivelRiesgo(
 /** Todas las evaluaciones de un socio, de la más reciente a la más antigua. */
 export async function listarHistorialEvaluaciones(socioRef: string) {
   const { data } = await apiClient.get<EvaluacionRiesgoResultado[]>(
-    `/pld/evaluaciones/historial/${socioRef}`,
+    `/evaluaciones/historial/${socioRef}`,
   );
   return data;
 }

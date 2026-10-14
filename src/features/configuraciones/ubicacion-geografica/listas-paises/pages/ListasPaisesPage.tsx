@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
-import { Alert } from "@/shared/components/ui/Alert";
-import { Button } from "@/shared/components/ui/CatalogoButton";
+import { Button } from "@/shared/components/atoms";
+import { Alert } from "@/shared/components/molecules";
+import { CatalogoPageTemplate } from "@/shared/components/templates";
 
 import { ListaPaisAsignaciones } from "../components/ListaPaisAsignaciones";
 import { ListaPaisDetalle } from "../components/ListaPaisDetalle";
@@ -102,14 +103,12 @@ export function ListasPaisesPage() {
   };
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-xl font-semibold text-foreground">Listas de países</h2>
-          <p className="text-sm text-muted-foreground">
-            Administra las listas de países de riesgo PLD y los países asignados a cada una.
-          </p>
-        </div>
+    <CatalogoPageTemplate
+      titulo="Listas de países"
+      descripcion="Administra las listas de países de riesgo PLD y los países asignados a cada una."
+      moduloFooter="Configuración de Ubicación Geográfica · Listas de Países"
+      alerta={mensajeError ? <Alert tono="error">{mensajeError}</Alert> : null}
+      acciones={
         <Button
           onClick={() => {
             setCreandoNueva(true);
@@ -124,10 +123,8 @@ export function ListasPaisesPage() {
         >
           Nueva lista
         </Button>
-      </div>
-
-      {mensajeError ? <Alert>{mensajeError}</Alert> : null}
-
+      }
+    >
       <ListasPaisesTable
         listas={listas}
         isLoading={isLoading}
@@ -176,7 +173,7 @@ export function ListasPaisesPage() {
           />
           {seleccionada ? (
             <Button
-              variante="peligro"
+              variant="destructive"
               className="self-start"
               onClick={handleEliminar}
               disabled={eliminar.isPending}
@@ -186,6 +183,6 @@ export function ListasPaisesPage() {
           ) : null}
         </div>
       ) : null}
-    </div>
+    </CatalogoPageTemplate>
   );
 }

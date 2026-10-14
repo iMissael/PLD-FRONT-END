@@ -1,6 +1,6 @@
-import { Badge } from "@/shared/components/ui/CatalogoBadge";
-import { Button } from "@/shared/components/ui/CatalogoButton";
-import { card } from "@/shared/components/ui/styles";
+import { StatusBadge } from "@/shared/components/atoms/StatusBadge";
+import { Button } from "@/shared/components/atoms/Button";
+import { Card } from "@/shared/components/molecules";
 
 import type { ListaPaisResponse } from "../types/listaPais";
 
@@ -16,7 +16,7 @@ interface ListaPaisDetalleProps {
  */
 export function ListaPaisDetalle({ lista, onEditar }: ListaPaisDetalleProps) {
   return (
-    <div className={`flex flex-col gap-4 p-4 ${card}`}>
+    <Card className="flex flex-col gap-4 p-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-foreground">
           Detalle de la lista: {lista.nombre}
@@ -47,9 +47,9 @@ export function ListaPaisDetalle({ lista, onEditar }: ListaPaisDetalleProps) {
         <div className="flex flex-col gap-0.5">
           <span className="text-xs font-medium text-muted-foreground">Estatus</span>
           <span className="self-start">
-            <Badge tono={lista.estatus === "A" ? "activo" : "inactivo"}>
+            <StatusBadge tono={lista.estatus === "A" ? "activo" : "inactivo"}>
               {lista.estatus === "A" ? "Activa" : "Inactiva"}
-            </Badge>
+            </StatusBadge>
           </span>
         </div>
       </div>
@@ -60,6 +60,6 @@ export function ListaPaisDetalle({ lista, onEditar }: ListaPaisDetalleProps) {
           {lista.totalPaisesAsignados}
         </span>
       </div>
-    </div>
+    </Card>
   );
 }

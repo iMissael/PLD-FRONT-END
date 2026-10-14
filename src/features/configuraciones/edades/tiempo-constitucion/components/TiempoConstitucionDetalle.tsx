@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 
-import { Badge } from "@/shared/components/ui/CatalogoBadge";
-import { Button } from "@/shared/components/ui/CatalogoButton";
-import { card } from "@/shared/components/ui/styles";
+import { StatusBadge as Badge } from "@/shared/components/atoms/StatusBadge";
+import { Button } from "@/shared/components/atoms/Button";
+import { Card } from "@/shared/components/molecules";
 
 import { useNivelesRiesgo } from "../../../ubicacion-geografica/niveles-riesgo/hooks/useNivelesRiesgo";
 import type { TiempoConstitucionResponse } from "../types/tiempoConstitucion";
@@ -30,7 +30,7 @@ export function TiempoConstitucionDetalle({
   }, [niveles, tiempo.catNivelRiesgoId]);
 
   return (
-    <div className={`flex flex-col gap-4 p-4 ${card}`}>
+    <Card className="flex flex-col gap-4 p-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-foreground">
           Detalle del tiempo de constitución: {tiempo.nombre}
@@ -75,6 +75,6 @@ export function TiempoConstitucionDetalle({
           </Badge>
         </span>
       </div>
-    </div>
+    </Card>
   );
 }

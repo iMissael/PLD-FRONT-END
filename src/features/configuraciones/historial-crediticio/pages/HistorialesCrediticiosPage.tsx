@@ -2,7 +2,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
-import { Alert } from "@/shared/components/ui/Alert";
+import { Alert } from "@/shared/components/molecules/Alert";
 
 import { CambiarRiesgoHistorialForm } from "../components/CambiarRiesgoHistorialForm";
 import { HistorialesCrediticiosTable } from "../components/HistorialesCrediticiosTable";

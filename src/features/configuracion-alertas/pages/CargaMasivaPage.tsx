@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
-import { UploadIcon } from "@/shared/components/icons";
+import { UploadIcon } from "@/shared/components/atoms/icons";
 import {
   Table,
   TableBody,
@@ -10,7 +10,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/shared/components/ui/table";
+} from "@/shared/components/atoms/Table";
 
 import { useCargaMasivaPersonasBloqueadas } from "../hooks/usePersonasBloqueadasMutations";
 

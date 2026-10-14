@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { DataTable, type ColumnDef } from "@/shared/components/DataTable";
+import { DataTable, type ColumnDef } from "@/shared/components/organisms/DataTable";
 import { useNivelesRiesgo } from "../../../ubicacion-geografica/niveles-riesgo/hooks/useNivelesRiesgo";
 import type { EdadResponse } from "../types/edad";
 import { formatearRango } from "../utils/formatearRango";

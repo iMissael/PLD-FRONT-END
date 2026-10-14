@@ -12,7 +12,7 @@ import type {
   TipoAlerta,
 } from "../types/alertas";
 
-const BASE = "/v1/pld";
+const BASE = "";
 
 export async function listarTiposAlerta(): Promise<TipoAlerta[]> {
   const { data } = await apiClient.get<TipoAlerta[]>(`${BASE}/tipos-alerta`);

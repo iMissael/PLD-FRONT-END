@@ -1,8 +1,8 @@
 import { Eye } from "lucide-react";
 
-import { Badge } from "@/shared/components/ui/badge";
-import { Button } from "@/shared/components/ui/button";
-import { Skeleton } from "@/shared/components/ui/skeleton";
+import { Badge } from "@/shared/components/atoms/Badge";
+import { Button } from "@/shared/components/atoms/Button";
+import { Skeleton } from "@/shared/components/atoms/Skeleton";
 import {
   Table,
   TableBody,
@@ -10,7 +10,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/shared/components/ui/table";
+} from "@/shared/components/atoms/Table";
 
 import type { CoincidenciaSocio } from "../types/incidencias";
 
@@ -66,6 +66,11 @@ function varianteEstatusLista(coincidencia: CoincidenciaSocio): "outline" | "des
 // Pendiente de Feature 2 (persona relacionada): hoy toda coincidencia es del socio directo.
 function tipoRelacion(_coincidencia: CoincidenciaSocio) {
   return "—";
+}
+
+/** Hay un socio con nombre igual o parecido aún sin revisar (informativo, nunca bloquea). */
+function tieneDuplicadoPendiente(coincidencia: CoincidenciaSocio) {
+  return coincidencia.duplicados?.some((d) => d.estado === "PENDIENTE") ?? false;
 }
 
 interface TablaIncidenciasPendientesProps {
@@ -148,9 +153,14 @@ export function TablaIncidenciasPendientes({
               </div>
             </TableCell>
             <TableCell>
-              <Badge variant={varianteEstatusLista(coincidencia)}>
-                {estatusLista(coincidencia)}
-              </Badge>
+              <div className="flex flex-wrap gap-1">
+                <Badge variant={varianteEstatusLista(coincidencia)}>
+                  {estatusLista(coincidencia)}
+                </Badge>
+                {tieneDuplicadoPendiente(coincidencia) ? (
+                  <Badge variant="outline">Nombre similar</Badge>
+                ) : null}
+              </div>
             </TableCell>
             <TableCell>{nombreEncontrado(coincidencia)}</TableCell>
             <TableCell className="text-muted-foreground">

@@ -2,8 +2,8 @@ import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
-import { Alert } from "@/shared/components/ui/Alert";
-import { Button } from "@/shared/components/ui/CatalogoButton";
+import { Alert } from "@/shared/components/molecules/Alert";
+import { Button } from "@/shared/components/atoms/Button";
 
 import { ActividadEconomicaDetalle } from "../components/ActividadEconomicaDetalle";
 import { ActividadEconomicaForm } from "../components/ActividadEconomicaForm";

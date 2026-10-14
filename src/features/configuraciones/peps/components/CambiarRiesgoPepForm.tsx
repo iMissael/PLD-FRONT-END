@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 
-import { Button } from "@/shared/components/ui/CatalogoButton";
-import { card, label } from "@/shared/components/ui/styles";
+import { Button } from "@/shared/components/atoms/Button";
+import { Card } from "@/shared/components/molecules";
+import { label } from "@/shared/styles/tokens";
 
 import { NivelRiesgoSelect } from "../../ubicacion-geografica/niveles-riesgo/components/NivelRiesgoSelect";
 import type { PepResponse } from "../types/pep";
@@ -33,7 +34,7 @@ export function CambiarRiesgoPepForm({
   }, [pep]);
 
   return (
-    <div className={`flex flex-col gap-4 p-4 ${card}`}>
+    <Card className="flex flex-col gap-4 p-4">
       <h3 className="text-sm font-semibold text-foreground">
         Cambiar nivel de riesgo: {pep.nombre}
       </h3>
@@ -61,6 +62,6 @@ export function CambiarRiesgoPepForm({
           {isPending ? "Guardando..." : "Guardar"}
         </Button>
       </div>
-    </div>
+    </Card>
   );
 }

@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { useRutaTenant } from "@/shared/tenant/useRutaTenant";
-import { Button } from "@/shared/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
+import { Button } from "@/shared/components/atoms/Button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/molecules/Card";
 import { RolPermisosManager } from "@/features/configuraciones/administracion/roles/components/RolPermisosManager";
 
 export function RolPermisosPage() {

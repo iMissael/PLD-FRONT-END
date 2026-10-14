@@ -11,8 +11,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogFooter,
-} from "@/shared/components/ui/alert-dialog";
-import { Button } from "@/shared/components/ui/button";
+} from "@/shared/components/organisms/AlertDialog";
+import { Button } from "@/shared/components/atoms/Button";
 import {
   Form,
   FormControl,
@@ -20,16 +20,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/shared/components/ui/form";
-import { Input } from "@/shared/components/ui/input";
-import { InputFormateado } from "@/shared/components/InputFormateado";
+} from "@/shared/components/molecules/Form";
+import { Input } from "@/shared/components/atoms/Input";
+import { InputFormateado } from "@/shared/components/atoms/InputFormateado";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/shared/components/ui/select";
+} from "@/shared/components/molecules/Select";
 import { alfanumerico, mayusculas, nombrePropio, rfc } from "@/shared/utils/entradas";
 import { calcularEdad } from "@/shared/utils/fechas";
 import { useConsultarListas } from "@/features/operacion/consulta-listas/hooks/useConsultaListas";

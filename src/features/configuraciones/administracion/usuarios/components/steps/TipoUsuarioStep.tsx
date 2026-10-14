@@ -6,8 +6,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/shared/components/ui/form";
-import { InputFormateado } from "@/shared/components/InputFormateado";
+} from "@/shared/components/molecules/Form";
+import { InputFormateado } from "@/shared/components/atoms/InputFormateado";
 import { clave, soloLetras } from "@/shared/utils/entradas";
 import {
   Select,
@@ -15,7 +15,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/shared/components/ui/select";
+} from "@/shared/components/molecules/Select";
 import { useActividadesEconomicas } from "@/features/catalogos/hooks/useCatalogos";
 import {
   CampoCatalogo,

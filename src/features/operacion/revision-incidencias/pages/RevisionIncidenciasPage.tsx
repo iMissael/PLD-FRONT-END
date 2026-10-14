@@ -2,8 +2,8 @@ import { RefreshCw } from "lucide-react";
 import { useState } from "react";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
-import { Button } from "@/shared/components/ui/button";
-import { Card, CardContent } from "@/shared/components/ui/card";
+import { Button } from "@/shared/components/atoms/Button";
+import { Card, CardContent } from "@/shared/components/molecules/Card";
 
 import { PanelRevisionIncidencia } from "../components/PanelRevisionIncidencia";
 import { TablaIncidenciasPendientes } from "../components/TablaIncidenciasPendientes";

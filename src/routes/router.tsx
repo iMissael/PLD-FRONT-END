@@ -3,11 +3,14 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import { RequireAuth } from "@/shared/auth/RequireAuth";
 import { RequierePermiso } from "@/shared/auth/RequierePermiso";
-import { PlaceholderPage } from "@/shared/components/PlaceholderPage";
-import { AppLayout } from "@/shared/layouts/AppLayout";
-import { ContenidoAcotado } from "@/shared/layouts/ContenidoAcotado";
-import { TenantRequeridoPage } from "@/shared/layouts/TenantRequeridoPage";
-import { TenantRouteLayout } from "@/shared/layouts/TenantRouteLayout";
+import { PlaceholderPage } from "@/shared/components/templates/PlaceholderPage";
+import {
+  AppLayout,
+  ContenidoAcotado,
+  RouteErrorPage,
+  TenantRequeridoPage,
+  TenantRouteLayout,
+} from "@/shared/components/templates";
 
 // ─── Lazy page imports ────────────────────────────────────────────────────────
 // Cada página se descarga solo cuando el usuario navega a esa ruta.
@@ -157,6 +160,7 @@ export const router = createBrowserRouter([
   {
     path: "/SICANETSC/PLD/:tenantId",
     element: <TenantRouteLayout />,
+    errorElement: <RouteErrorPage />,
     children: [
       { path: "login", element: <LoginPage /> },
       // Buzón anónimo: cualquiera puede levantar una denuncia sin sesión.
@@ -170,6 +174,7 @@ export const router = createBrowserRouter([
             children: [
               {
                 element: <AppLayout />,
+                errorElement: <RouteErrorPage />,
                 children: [
                   {
                     index: true,

@@ -6,7 +6,7 @@ import { RouterProvider } from "react-router-dom";
 import { apiClient } from "@/api/client";
 import { registrarInvalidacionDeEvaluaciones } from "@/features/operacion/evaluacion-riesgo/stores/invalidarEvaluaciones";
 import { router } from "@/routes/router";
-import { Toaster } from "@/shared/components/ui/sonner";
+import { Toaster } from "@/shared/components/atoms/Toaster";
 
 import "./index.css";
 

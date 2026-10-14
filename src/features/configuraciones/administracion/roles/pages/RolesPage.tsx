@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/molecules/Card";
 import { RolForm } from "@/features/configuraciones/administracion/roles/components/RolForm";
 import { RolesTable } from "@/features/configuraciones/administracion/roles/components/RolesTable";
 

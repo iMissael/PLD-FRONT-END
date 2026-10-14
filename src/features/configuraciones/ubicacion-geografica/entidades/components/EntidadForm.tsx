@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 
-import { Alert } from "@/shared/components/ui/Alert";
-import { Button } from "@/shared/components/ui/CatalogoButton";
-import { card, field, label } from "@/shared/components/ui/styles";
+import { Alert } from "@/shared/components/molecules/Alert";
+import { Button } from "@/shared/components/atoms/Button";
+import { Input } from "@/shared/components/atoms/Input";
+import { Card } from "@/shared/components/molecules";
+import { label } from "@/shared/styles/tokens";
 
 import { useMexicoPaisId } from "../hooks/useMexicoPaisId";
 import { useZonasDeEntidad } from "../hooks/useEntidades";
@@ -90,102 +92,102 @@ export function EntidadForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className={`flex flex-col gap-4 p-4 ${card}`}>
-      <h3 className="text-sm font-semibold text-foreground">
-        {esNueva ? "Nueva entidad" : `Editar entidad: ${entidad.nombre}`}
-      </h3>
+    <Card className="p-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <h3 className="text-sm font-semibold text-foreground">
+          {esNueva ? "Nueva entidad" : `Editar entidad: ${entidad.nombre}`}
+        </h3>
 
-      {!cargandoPais && !mexicoPaisId && !entidad?.idPais ? (
-        <Alert tono="advertencia">
-          No se encontró "México" en el catálogo de países. Registra ese país antes de
-          crear entidades.
-        </Alert>
-      ) : null}
+        {!cargandoPais && !mexicoPaisId && !entidad?.idPais ? (
+          <Alert tono="advertencia">
+            No se encontró "México" en el catálogo de países. Registra ese país antes de
+            crear entidades.
+          </Alert>
+        ) : null}
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="flex flex-col gap-1">
-          <label htmlFor="claveCurp" className={label}>
-            Clave CURP
-          </label>
-          <input
-            id="claveCurp"
-            type="text"
-            required
-            maxLength={100}
-            value={form.claveCurp}
-            onChange={(event) =>
-              setForm((prev) => ({ ...prev, claveCurp: event.target.value }))
-            }
-            className={field}
-          />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="flex flex-col gap-1">
+            <label htmlFor="claveCurp" className={label}>
+              Clave CURP
+            </label>
+            <Input
+              id="claveCurp"
+              type="text"
+              required
+              maxLength={100}
+              value={form.claveCurp}
+              onChange={(event) =>
+                setForm((prev) => ({ ...prev, claveCurp: event.target.value }))
+              }
+            />
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label htmlFor="nombreEntidad" className={label}>
+              Nombre
+            </label>
+            <Input
+              id="nombreEntidad"
+              type="text"
+              required
+              value={form.nombre}
+              onChange={(event) =>
+                setForm((prev) => ({ ...prev, nombre: event.target.value }))
+              }
+            />
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label htmlFor="preBuro" className={label}>
+              Pre-buró <span className="font-normal text-muted-foreground">(opcional)</span>
+            </label>
+            <Input
+              id="preBuro"
+              type="text"
+              maxLength={4}
+              value={form.preBuro}
+              onChange={(event) =>
+                setForm((prev) => ({ ...prev, preBuro: event.target.value }))
+              }
+              className="uppercase"
+            />
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label htmlFor="esEntidad" className={label}>
+              ¿Es entidad federativa?
+            </label>
+            <select
+              id="esEntidad"
+              value={form.esEntidad}
+              onChange={(event) =>
+                setForm((prev) => ({ ...prev, esEntidad: event.target.value as EsEntidad }))
+              }
+              className="border-border bg-card text-foreground focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full rounded-md border px-3 py-1 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <option value="S">Sí</option>
+              <option value="N">No</option>
+            </select>
+          </div>
+
+          <div className="flex flex-col gap-1 sm:col-span-2">
+            <span className={label}>Zonas de riesgo asignadas</span>
+            <ZonasEntidadMultiSelect
+              value={form.zonaIds}
+              onChange={(zonaIds) => setForm((prev) => ({ ...prev, zonaIds }))}
+            />
+          </div>
         </div>
 
-        <div className="flex flex-col gap-1">
-          <label htmlFor="nombreEntidad" className={label}>
-            Nombre
-          </label>
-          <input
-            id="nombreEntidad"
-            type="text"
-            required
-            value={form.nombre}
-            onChange={(event) =>
-              setForm((prev) => ({ ...prev, nombre: event.target.value }))
-            }
-            className={field}
-          />
+        <div className="flex justify-end gap-2">
+          <Button variante="secundario" onClick={onCancelar}>
+            Cancelar
+          </Button>
+          <Button type="submit" disabled={isPending || form.zonaIds.length === 0}>
+            {isPending ? "Guardando..." : "Guardar"}
+          </Button>
         </div>
-
-        <div className="flex flex-col gap-1">
-          <label htmlFor="preBuro" className={label}>
-            Pre-buró <span className="font-normal text-muted-foreground">(opcional)</span>
-          </label>
-          <input
-            id="preBuro"
-            type="text"
-            maxLength={4}
-            value={form.preBuro}
-            onChange={(event) =>
-              setForm((prev) => ({ ...prev, preBuro: event.target.value }))
-            }
-            className={`${field} uppercase`}
-          />
-        </div>
-
-        <div className="flex flex-col gap-1">
-          <label htmlFor="esEntidad" className={label}>
-            ¿Es entidad federativa?
-          </label>
-          <select
-            id="esEntidad"
-            value={form.esEntidad}
-            onChange={(event) =>
-              setForm((prev) => ({ ...prev, esEntidad: event.target.value as EsEntidad }))
-            }
-            className={field}
-          >
-            <option value="S">Sí</option>
-            <option value="N">No</option>
-          </select>
-        </div>
-
-        <div className="flex flex-col gap-1 sm:col-span-2">
-          <span className={label}>Zonas de riesgo asignadas</span>
-          <ZonasEntidadMultiSelect
-            value={form.zonaIds}
-            onChange={(zonaIds) => setForm((prev) => ({ ...prev, zonaIds }))}
-          />
-        </div>
-      </div>
-
-      <div className="flex justify-end gap-2">
-        <Button variante="secundario" onClick={onCancelar}>
-          Cancelar
-        </Button>
-        <Button type="submit" disabled={isPending || form.zonaIds.length === 0}>
-          {isPending ? "Guardando..." : "Guardar"}
-        </Button>
-      </div>
-    </form>
+      </form>
+    </Card>
   );
 }

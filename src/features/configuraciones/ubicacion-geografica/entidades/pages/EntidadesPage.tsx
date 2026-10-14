@@ -2,9 +2,9 @@ import { useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
-import { Alert } from "@/shared/components/ui/Alert";
-import { Button } from "@/shared/components/ui/CatalogoButton";
-import { DataTable, type ColumnDef } from "@/shared/components/DataTable";
+import { Alert } from "@/shared/components/molecules/Alert";
+import { Button } from "@/shared/components/atoms/Button";
+import { DataTable, type ColumnDef } from "@/shared/components/organisms/DataTable";
 
 import { useZonasGeograficasSelect } from "../../zonas-geograficas/hooks/useZonasGeograficas";
 import { EntidadDetalle, type ZonaConNivel } from "../components/EntidadDetalle";

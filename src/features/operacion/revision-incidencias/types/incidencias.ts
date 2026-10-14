@@ -4,6 +4,8 @@ import type { components } from "@/api/schema";
 export type CoincidenciaSocio = components["schemas"]["CoincidenciaListaResponse"];
 export type PersonaEnLista = components["schemas"]["PersonaEnListaDto"];
 export type SocioEnRevision = components["schemas"]["SocioRevisionDto"];
+/** Otro socio con nombre igual o parecido a este, detectado al dar de alta/actualizar un socio. */
+export type DuplicadoSocio = components["schemas"]["DuplicadoSocioDto"];
 
 export type DecisionRiesgoPais = "CONFIRMADO" | "MINIMIZADO";
 
@@ -16,5 +18,15 @@ export interface ResolverIncidenciaPayload {
   es_la_persona?: boolean;
   pais_nacimiento_decision?: DecisionRiesgoPais;
   nacionalidad_decision?: DecisionRiesgoPais;
+  comentario?: string;
+}
+
+/**
+ * Decisión del oficial sobre un socio con nombre igual o parecido a otro. A diferencia de
+ * `ResolverIncidenciaPayload`, es informativo: nunca bloquea ni modifica a ningún socio, solo
+ * queda constancia de la decisión.
+ */
+export interface ResolverDuplicadoPayload {
+  misma_persona: boolean;
   comentario?: string;
 }

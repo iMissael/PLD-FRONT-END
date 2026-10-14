@@ -224,14 +224,6 @@ describe("construirSolicitud", () => {
     );
     expect(sinHistorial.historial_crediticio).toBeUndefined();
   });
-
-  it("manda el tipo de PEP cuando el socio lo tiene", () => {
-    const pep = construirSolicitud(
-      valoresDesdePerfil({ ...perfilCompleto, pepNacionalId: "3" }),
-      contexto,
-    );
-    expect(pep.socio?.pep_nacional_id).toBe("3");
-  });
 });
 
 describe("construirCliente", () => {

@@ -1,5 +1,5 @@
 import { AlertTriangle } from "lucide-react";
-import { Badge } from "@/shared/components/ui/badge";
+import { Badge } from "@/shared/components/atoms/Badge";
 import {
   Table,
   TableBody,
@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/shared/components/ui/table";
+} from "@/shared/components/atoms/Table";
 import { useListasRestrictivas } from "@/features/operacion/consulta-listas/hooks/useConsultaListas";
 import type { ConsultaLista } from "@/features/operacion/consulta-listas/types/Quienesquien";
 

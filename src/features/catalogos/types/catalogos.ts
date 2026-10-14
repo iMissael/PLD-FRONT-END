@@ -23,4 +23,4 @@ export type TipoCreditoResponse = components["schemas"]["CatTipoCreditoResponse"
 export type OrigenRecursoResponse = components["schemas"]["CatOrigenRecursoResponse"];
 export type DestinoRecursoResponse = components["schemas"]["CatDestinoRecursoResponse"];
 export type CanalPagoResponse = components["schemas"]["CatCanalPagoResponse"];
-export type TipoPagoResponse = components["schemas"]["CatTipoPagoResponse"];
+export type TipoPagoResponse = components["schemas"]["CatFormaPagoResponse"];

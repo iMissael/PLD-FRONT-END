@@ -3,9 +3,9 @@ import {
   type Alerta,
   type EstatusAlerta,
 } from "@/features/alertas/types/alertas";
-import { Badge } from "@/shared/components/ui/CatalogoBadge";
-import { emptyState, table } from "@/shared/components/ui/styles";
-import { TablePagination } from "@/shared/components/ui/TablePagination";
+import { StatusBadge as Badge } from "@/shared/components/atoms/StatusBadge";
+import { emptyState, table } from "@/shared/styles/tokens";
+import { TablePagination } from "@/shared/components/molecules/TablePagination";
 
 import { formatearFecha } from "../utils/formato";
 

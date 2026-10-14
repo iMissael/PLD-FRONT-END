@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import { DataTable, type ColumnDef } from "@/shared/components/DataTable";
-import { Button } from "@/shared/components/ui/CatalogoButton";
-import { card } from "@/shared/components/ui/styles";
+import { DataTable, type ColumnDef } from "@/shared/components/organisms/DataTable";
+import { Button } from "@/shared/components/atoms/Button";
+import { Card } from "@/shared/components/molecules";
 import { useEntidadesDeZona } from "../hooks/useZonasGeograficas";
 import type {
   EntidadAsignadaResponse,
@@ -54,7 +54,7 @@ export function ZonaAsignaciones({ zona, onCerrar }: ZonaAsignacionesProps) {
   );
 
   return (
-    <div className={`flex flex-col gap-4 p-4 ${card}`}>
+    <Card className="flex flex-col gap-4 p-4">
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-sm font-semibold text-foreground">
@@ -93,6 +93,6 @@ export function ZonaAsignaciones({ zona, onCerrar }: ZonaAsignacionesProps) {
           rowsPerPageOptions: [10, 25, 30],
         }}
       />
-    </div>
+    </Card>
   );
 }
