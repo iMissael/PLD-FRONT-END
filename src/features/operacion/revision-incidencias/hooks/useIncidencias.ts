@@ -4,8 +4,13 @@ import {
   listarIncidenciasPendientes,
   resolverDuplicadoSocio,
   resolverIncidencia,
+  resolverPersonaRelacionada,
 } from "../api/incidenciasApi";
-import type { ResolverDuplicadoPayload, ResolverIncidenciaPayload } from "../types/incidencias";
+import type {
+  ResolverDuplicadoPayload,
+  ResolverIncidenciaPayload,
+  ResolverPersonaRelacionadaPayload,
+} from "../types/incidencias";
 
 const incidenciasKeys = {
   pendientes: ["incidencias", "pendientes"] as const,
@@ -45,6 +50,23 @@ export function useResolverDuplicadoSocio() {
       socioRefSimilar: string;
       payload: ResolverDuplicadoPayload;
     }) => resolverDuplicadoSocio(socioRef, socioRefSimilar, payload),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: incidenciasKeys.pendientes }),
+  });
+}
+
+export function useResolverPersonaRelacionada() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      socioRef,
+      idCoincidencia,
+      payload,
+    }: {
+      socioRef: string;
+      idCoincidencia: number;
+      payload: ResolverPersonaRelacionadaPayload;
+    }) => resolverPersonaRelacionada(socioRef, idCoincidencia, payload),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: incidenciasKeys.pendientes }),
   });

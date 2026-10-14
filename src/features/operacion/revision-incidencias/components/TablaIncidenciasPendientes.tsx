@@ -22,14 +22,6 @@ function formatearFecha(valor: string | undefined) {
   });
 }
 
-function nombreEncontrado(coincidencia: CoincidenciaSocio) {
-  return (
-    coincidencia.lista_bloqueadas?.nombre_encontrado ??
-    coincidencia.lista_negra?.nombre_encontrado ??
-    "—"
-  );
-}
-
 /** Riesgo-pais es informativo (nunca bloquea): solo se muestra si nacimiento y/o nacionalidad coinciden. */
 function estatusPais(coincidencia: CoincidenciaSocio) {
   const partes: string[] = [];
@@ -38,39 +30,80 @@ function estatusPais(coincidencia: CoincidenciaSocio) {
   return partes;
 }
 
-/** Estatus de revision de la coincidencia bloqueante (lista negra/bloqueadas): lo que decide el oficial. */
+type EstatusCombinado = "PENDIENTE" | "CONFIRMADO" | "RECHAZADO";
+
+/**
+ * Estatus unico de la fila, combinando los 5 tipos de coincidencia que puede tener un socio (lista
+ * negra/bloqueadas, riesgo-pais de nacimiento, riesgo-pais de nacionalidad, nombre similar entre
+ * socios, persona relacionada): si CUALQUIERA sigue pendiente, la fila es "Pendiente"; si no hay
+ * nada pendiente pero algo se confirmo, "Confirmado"; si todo lo que hubo se descarto o se
+ * minimizo, "Rechazado". La fila nunca desaparece de la tabla al resolverse, solo cambia este
+ * estatus (es una bitacora, no una cola de pendientes).
+ */
+function estatusCombinado(coincidencia: CoincidenciaSocio): EstatusCombinado {
+  const duplicados = coincidencia.duplicados ?? [];
+  const personasRelacionadas = coincidencia.personas_relacionadas ?? [];
+  const confirmacionPais = coincidencia.pais_nacimiento?.confirmacion;
+  const confirmacionNacionalidad = coincidencia.nacionalidad?.confirmacion;
+
+  const hayPendiente =
+    coincidencia.estado === "PENDIENTE_REVISION" ||
+    duplicados.some((d) => d.estado === "PENDIENTE") ||
+    personasRelacionadas.some((p) => p.estado === "PENDIENTE") ||
+    confirmacionPais === "PENDIENTE" ||
+    confirmacionNacionalidad === "PENDIENTE";
+  if (hayPendiente) return "PENDIENTE";
+
+  const hayConfirmado =
+    coincidencia.estado === "BLOQUEADO" ||
+    duplicados.some((d) => d.estado === "CONFIRMADA") ||
+    personasRelacionadas.some((p) => p.estado === "CONFIRMADA") ||
+    confirmacionPais === "CONFIRMADO" ||
+    confirmacionNacionalidad === "CONFIRMADO";
+  if (hayConfirmado) return "CONFIRMADO";
+
+  return "RECHAZADO";
+}
+
 function estatusLista(coincidencia: CoincidenciaSocio): string {
-  switch (coincidencia.estado) {
-    case "PENDIENTE_REVISION":
+  switch (estatusCombinado(coincidencia)) {
+    case "PENDIENTE":
       return "Pendiente";
-    case "BLOQUEADO":
+    case "CONFIRMADO":
       return "Confirmado";
-    case "DESCARTADA":
+    case "RECHAZADO":
       return "Rechazado";
-    default:
-      return "—";
   }
 }
 
 function varianteEstatusLista(coincidencia: CoincidenciaSocio): "outline" | "destructive" | "secondary" {
-  switch (coincidencia.estado) {
-    case "BLOQUEADO":
+  switch (estatusCombinado(coincidencia)) {
+    case "CONFIRMADO":
       return "destructive";
-    case "DESCARTADA":
+    case "RECHAZADO":
       return "secondary";
-    default:
+    case "PENDIENTE":
       return "outline";
   }
 }
 
-// Pendiente de Feature 2 (persona relacionada): hoy toda coincidencia es del socio directo.
-function tipoRelacion(_coincidencia: CoincidenciaSocio) {
-  return "—";
+/** La primera persona relacionada con coincidencia (preferimos una pendiente sobre una ya resuelta). */
+function primeraPersonaRelacionada(coincidencia: CoincidenciaSocio) {
+  const personas = coincidencia.personas_relacionadas ?? [];
+  return personas.find((p) => p.estado === "PENDIENTE") ?? personas[0];
 }
 
-/** Hay un socio con nombre igual o parecido aún sin revisar (informativo, nunca bloquea). */
-function tieneDuplicadoPendiente(coincidencia: CoincidenciaSocio) {
-  return coincidencia.duplicados?.some((d) => d.estado === "PENDIENTE") ?? false;
+function nombrePersonaRelacionada(coincidencia: CoincidenciaSocio) {
+  return primeraPersonaRelacionada(coincidencia)?.nombre ?? "—";
+}
+
+function tipoRelacion(coincidencia: CoincidenciaSocio) {
+  return primeraPersonaRelacionada(coincidencia)?.relacion ?? "—";
+}
+
+/** Hay un socio con nombre igual o parecido registrado (informativo, nunca bloquea). */
+function tieneDuplicado(coincidencia: CoincidenciaSocio) {
+  return (coincidencia.duplicados?.length ?? 0) > 0;
 }
 
 interface TablaIncidenciasPendientesProps {
@@ -98,7 +131,7 @@ export function TablaIncidenciasPendientes({
   if (!coincidencias?.length) {
     return (
       <p className="py-8 text-center text-sm text-muted-foreground">
-        No hay coincidencias pendientes de revisión.
+        No hay incidencias registradas.
       </p>
     );
   }
@@ -121,10 +154,11 @@ export function TablaIncidenciasPendientes({
         {coincidencias.map((coincidencia, indice) => (
           <TableRow
             key={coincidencia.socio_ref}
+            onDoubleClick={() => onRevisar(coincidencia)}
             className={
               coincidencia.socio_ref === socioRefSeleccionado
-                ? "bg-muted hover:bg-muted"
-                : undefined
+                ? "cursor-pointer bg-muted hover:bg-muted"
+                : "cursor-pointer"
             }
           >
             <TableCell className="text-muted-foreground">{indice + 1}</TableCell>
@@ -157,12 +191,12 @@ export function TablaIncidenciasPendientes({
                 <Badge variant={varianteEstatusLista(coincidencia)}>
                   {estatusLista(coincidencia)}
                 </Badge>
-                {tieneDuplicadoPendiente(coincidencia) ? (
+                {tieneDuplicado(coincidencia) ? (
                   <Badge variant="outline">Nombre similar</Badge>
                 ) : null}
               </div>
             </TableCell>
-            <TableCell>{nombreEncontrado(coincidencia)}</TableCell>
+            <TableCell>{nombrePersonaRelacionada(coincidencia)}</TableCell>
             <TableCell className="text-muted-foreground">
               {tipoRelacion(coincidencia)}
             </TableCell>

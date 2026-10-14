@@ -8,8 +8,17 @@ import { Badge } from "@/shared/components/atoms/Badge";
 import { Button } from "@/shared/components/atoms/Button";
 import { Card, CardContent, CardHeader } from "@/shared/components/molecules/Card";
 
-import { useResolverDuplicadoSocio, useResolverIncidencia } from "../hooks/useIncidencias";
-import type { CoincidenciaSocio, DecisionRiesgoPais, DuplicadoSocio } from "../types/incidencias";
+import {
+  useResolverDuplicadoSocio,
+  useResolverIncidencia,
+  useResolverPersonaRelacionada,
+} from "../hooks/useIncidencias";
+import type {
+  CoincidenciaSocio,
+  DecisionRiesgoPais,
+  DuplicadoSocio,
+  PersonaRelacionadaCoincidencia,
+} from "../types/incidencias";
 import { listasCoincidentes } from "../utils/comparar";
 
 type ListaPaisDto = NonNullable<CoincidenciaSocio["pais_nacimiento"]>;
@@ -176,6 +185,112 @@ function FilaDuplicadoSocio({
   );
 }
 
+/**
+ * Una persona relacionada del socio (cónyuge, propietario real, etc.) con coincidencia en lista:
+ * igual que con "nombre similar", confirmar o rechazar aquí nunca bloquea ni modifica al socio,
+ * solo deja constancia de la decisión (ver backend `resolverPersonaRelacionada`).
+ */
+function FilaPersonaRelacionada({
+  socioRef,
+  persona,
+  esOficial,
+}: {
+  socioRef: string;
+  persona: PersonaRelacionadaCoincidencia;
+  esOficial: boolean;
+}) {
+  const resolverPersonaRelacionada = useResolverPersonaRelacionada();
+  const [riesgo, setRiesgo] = useState<Riesgo>();
+  const [comentario, setComentario] = useState("");
+  const pendiente = persona.estado === "PENDIENTE";
+
+  function guardar() {
+    if (persona.id == null || !riesgo) return;
+    const esLaPersona = riesgo === "CONFIRMAR";
+    resolverPersonaRelacionada.mutate(
+      {
+        socioRef,
+        idCoincidencia: persona.id,
+        payload: { es_la_persona: esLaPersona, comentario: comentario.trim() || undefined },
+      },
+      {
+        onSuccess: () => toast.success("Decisión guardada."),
+        onError: (error) => {
+          toast.error(isAppError(error) ? error.message : "No se pudo guardar la decisión.");
+        },
+      },
+    );
+  }
+
+  return (
+    <div className="border-t first:border-t-0">
+      <FilaCampo label="Nombre">
+        {persona.nombre ?? "—"}
+        {persona.relacion ? ` (${persona.relacion})` : ""}
+      </FilaCampo>
+      <FilaCampo label="Lista">{persona.nombre_encontrado ?? "—"}</FilaCampo>
+      {!pendiente ? (
+        <FilaCampo label="Decisión">
+          {persona.estado === "CONFIRMADA" ? "Es la persona" : "No es la persona"}
+          {persona.comentario ? ` — ${persona.comentario}` : ""}
+        </FilaCampo>
+      ) : esOficial ? (
+        <>
+          <FilaCampo label="Riesgo">
+            <div className="flex items-center gap-4">
+              <label className="flex items-center gap-1.5">
+                <input
+                  type="radio"
+                  name={`riesgo-persona-relacionada-${persona.id}`}
+                  disabled={resolverPersonaRelacionada.isPending}
+                  checked={riesgo === "CONFIRMAR"}
+                  onChange={() => setRiesgo("CONFIRMAR")}
+                />
+                Confirmar
+              </label>
+              <label className="flex items-center gap-1.5">
+                <input
+                  type="radio"
+                  name={`riesgo-persona-relacionada-${persona.id}`}
+                  disabled={resolverPersonaRelacionada.isPending}
+                  checked={riesgo === "RECHAZAR"}
+                  onChange={() => setRiesgo("RECHAZAR")}
+                />
+                Rechazar
+              </label>
+            </div>
+          </FilaCampo>
+          <FilaCampo label="Comentario">
+            <textarea
+              value={comentario}
+              maxLength={MAX_JUSTIFICACION}
+              disabled={resolverPersonaRelacionada.isPending}
+              onChange={(evento) => setComentario(evento.target.value)}
+              rows={2}
+              placeholder="Sustento de la decisión."
+              className="w-full resize-none rounded-md border bg-card px-2 py-1.5 text-sm shadow-xs outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+            />
+          </FilaCampo>
+          <div className="flex justify-end px-3 py-2">
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={resolverPersonaRelacionada.isPending || !riesgo}
+              onClick={guardar}
+            >
+              {resolverPersonaRelacionada.isPending ? "Guardando…" : "Guardar decisión"}
+            </Button>
+          </div>
+        </>
+      ) : (
+        <p className="bg-muted p-3 text-sm text-muted-foreground">
+          Solo el oficial de cumplimiento puede confirmar o rechazar.
+        </p>
+      )}
+    </div>
+  );
+}
+
 // Solo quien tiene el permiso asignado en su rol resuelve (el backend no aplica aquí el acceso
 // total del administrador: separación de funciones).
 const PERMISO_CONFIRMAR = { recurso: "coincidencias", accion: "confirmar" } as const;
@@ -327,7 +442,12 @@ export function PanelRevisionIncidencia({
               ))}
             </div>
 
-            {esOficial ? (
+            {coincidencia.estado !== "PENDIENTE_REVISION" ? (
+              <FilaCampo label="Decisión">
+                {coincidencia.estado === "BLOQUEADO" ? "Confirmado: es la persona" : "Rechazado: no es la persona"}
+                {coincidencia.revision?.comentario ? ` — ${coincidencia.revision.comentario}` : ""}
+              </FilaCampo>
+            ) : esOficial ? (
               <div className="border-t">
                 <FilaCampo label="Riesgo">
                   <div className="flex items-center gap-4">
@@ -437,6 +557,22 @@ export function PanelRevisionIncidencia({
                 key={duplicado.socio_ref_similar}
                 socioRef={socioRef}
                 duplicado={duplicado}
+                esOficial={esOficial}
+              />
+            ))}
+          </div>
+        ) : null}
+
+        {socioRef && coincidencia.personas_relacionadas?.length ? (
+          <div className="overflow-hidden rounded-lg border">
+            <div className="border-b bg-muted px-4 py-2 text-sm font-semibold">
+              Personas relacionadas ({coincidencia.personas_relacionadas.length})
+            </div>
+            {coincidencia.personas_relacionadas.map((persona) => (
+              <FilaPersonaRelacionada
+                key={persona.id}
+                socioRef={socioRef}
+                persona={persona}
                 esOficial={esOficial}
               />
             ))}

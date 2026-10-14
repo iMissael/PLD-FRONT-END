@@ -4,6 +4,7 @@ import type {
   CoincidenciaSocio,
   ResolverDuplicadoPayload,
   ResolverIncidenciaPayload,
+  ResolverPersonaRelacionadaPayload,
 } from "../types/incidencias";
 
 export async function listarIncidenciasPendientes() {
@@ -31,6 +32,18 @@ export async function resolverDuplicadoSocio(
 ) {
   const { data } = await apiClient.put<CoincidenciaSocio>(
     `/coincidencias/${encodeURIComponent(socioRef)}/duplicados/${encodeURIComponent(socioRefSimilar)}/confirmacion`,
+    payload,
+  );
+  return data;
+}
+
+export async function resolverPersonaRelacionada(
+  socioRef: string,
+  idCoincidencia: number,
+  payload: ResolverPersonaRelacionadaPayload,
+) {
+  const { data } = await apiClient.put<CoincidenciaSocio>(
+    `/coincidencias/${encodeURIComponent(socioRef)}/personas-relacionadas/${idCoincidencia}/confirmacion`,
     payload,
   );
   return data;

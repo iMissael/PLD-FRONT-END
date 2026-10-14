@@ -304,6 +304,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/SICANETSC/PLD/{tenantId}/coincidencias/{socioRef}/personas-relacionadas/{idCoincidencia}/confirmacion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Confirmar o descartar una persona relacionada con coincidencia en lista
+         * @description Informativo: nunca bloquea ni modifica al socio, solo deja constancia de la decision. Requiere el permiso coincidencias:confirmar, igual que las demas resoluciones.
+         */
+        put: operations["resolverPersonaRelacionada"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/SICANETSC/PLD/{tenantId}/coincidencias/{socioRef}/duplicados/{socioRefSimilar}/confirmacion": {
         parameters: {
             query?: never;
@@ -3982,8 +4002,8 @@ export interface components {
             /** Format: date-time */
             updatedAt?: string;
         };
-        ResolverDuplicadoSocioRequest: {
-            misma_persona: boolean;
+        ResolverPersonaRelacionadaRequest: {
+            es_la_persona: boolean;
             comentario?: string;
         };
         CoincidenciaListaResponse: {
@@ -4003,6 +4023,7 @@ export interface components {
             socio?: components["schemas"]["SocioRevisionDto"];
             personas_en_lista?: components["schemas"]["PersonaEnListaDto"][];
             duplicados?: components["schemas"]["DuplicadoSocioDto"][];
+            personas_relacionadas?: components["schemas"]["PersonaRelacionadaCoincidenciaDto"][];
         };
         DuplicadoSocioDto: {
             socio_ref_similar?: string;
@@ -4039,6 +4060,23 @@ export interface components {
             fecha_publicacion?: string;
             alias_coincidentes?: string[];
         };
+        PersonaRelacionadaCoincidenciaDto: {
+            /** Format: int64 */
+            id?: number;
+            nombre?: string;
+            relacion?: string;
+            lista_negra?: boolean;
+            lista_bloqueadas?: boolean;
+            nombre_encontrado?: string;
+            estado?: string;
+            /** Format: int64 */
+            confirmado_por?: number;
+            /** Format: date-time */
+            fecha_confirmacion?: string;
+            comentario?: string;
+            /** Format: date-time */
+            fecha_registro?: string;
+        };
         RevisionDto: {
             /** Format: int64 */
             confirmado_por?: number;
@@ -4053,6 +4091,10 @@ export interface components {
             curp?: string;
             /** Format: date */
             fecha_nacimiento?: string;
+        };
+        ResolverDuplicadoSocioRequest: {
+            misma_persona: boolean;
+            comentario?: string;
         };
         ResolverCoincidenciaRequest: {
             es_la_persona?: boolean;
@@ -7452,6 +7494,35 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    resolverPersonaRelacionada: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                socioRef: string;
+                idCoincidencia: number;
+                /** @description Identificador del Tenant */
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResolverPersonaRelacionadaRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CoincidenciaListaResponse"];
+                };
             };
         };
     };

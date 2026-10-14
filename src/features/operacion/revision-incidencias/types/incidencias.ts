@@ -6,6 +6,8 @@ export type PersonaEnLista = components["schemas"]["PersonaEnListaDto"];
 export type SocioEnRevision = components["schemas"]["SocioRevisionDto"];
 /** Otro socio con nombre igual o parecido a este, detectado al dar de alta/actualizar un socio. */
 export type DuplicadoSocio = components["schemas"]["DuplicadoSocioDto"];
+/** Una persona relacionada del socio (cónyuge, propietario real, etc.) con coincidencia en lista. */
+export type PersonaRelacionadaCoincidencia = components["schemas"]["PersonaRelacionadaCoincidenciaDto"];
 
 export type DecisionRiesgoPais = "CONFIRMADO" | "MINIMIZADO";
 
@@ -28,5 +30,14 @@ export interface ResolverIncidenciaPayload {
  */
 export interface ResolverDuplicadoPayload {
   misma_persona: boolean;
+  comentario?: string;
+}
+
+/**
+ * Decisión del oficial sobre una persona relacionada del socio con coincidencia en lista.
+ * Informativo: igual que `ResolverDuplicadoPayload`, nunca bloquea ni modifica al socio.
+ */
+export interface ResolverPersonaRelacionadaPayload {
+  es_la_persona: boolean;
   comentario?: string;
 }

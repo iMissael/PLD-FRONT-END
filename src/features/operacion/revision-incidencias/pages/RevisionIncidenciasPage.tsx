@@ -21,9 +21,9 @@ export function RevisionIncidenciasPage() {
         <div>
           <h1 className="text-2xl font-semibold">Revisión de Incidencias</h1>
           <p className="text-muted-foreground">
-            Socios cuya evaluación de riesgo se detuvo por coincidir con una lista negra o
-            de personas bloqueadas. Confirma si es la misma persona o descarta la
-            coincidencia.
+            Socios con alguna coincidencia detectada: en lista negra o de personas bloqueadas,
+            en riesgo-país, con otro socio de nombre parecido, o con una persona relacionada.
+            Confirma o descarta cada una; el registro se queda en la tabla con su estatus.
           </p>
         </div>
         <Button variant="outline" onClick={() => refetch()} disabled={isFetching}>
@@ -38,7 +38,7 @@ export function RevisionIncidenciasPage() {
             <p className="py-8 text-center text-sm text-destructive">
               {isAppError(error)
                 ? error.message
-                : "No se pudieron cargar las coincidencias pendientes."}
+                : "No se pudieron cargar las incidencias."}
             </p>
           ) : (
             <TablaIncidenciasPendientes
