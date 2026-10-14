@@ -7,7 +7,7 @@ import type {
   RevisionAutorizacion,
 } from "../types/autorizaciones";
 
-const BASE = "/v1/pld/alertas-autorizacion";
+const BASE = "/alertas-autorizacion";
 
 function parametros(filtro: FiltroAutorizaciones): Record<string, string> {
   const params: Record<string, string> = {};

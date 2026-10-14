@@ -71,6 +71,9 @@ export interface Alerta {
   actoHecho: string | null;
   informacionAdicional: string | null;
   folioOperacion: string | null;
+  referenciaCredito: string | null;
+  /** Denuncia del buzón que originó la alerta; null en manuales y de caja. */
+  denunciaId: number | null;
   estatus: EstatusAlerta;
   usuarioCapturaId: string | null;
   reportado: ReportadoAlerta | null;
@@ -138,7 +141,7 @@ export interface CrearAlertaManualInput {
   estatusReportado?: string;
 }
 
-/** Filtros de `GET /v1/pld/alertas`; todos opcionales. */
+/** Filtros de `GET /alertas`; todos opcionales. */
 export interface FiltroAlertas {
   alertaAcronimo?: string;
   estatus?: EstatusAlerta;
@@ -146,6 +149,11 @@ export interface FiltroAlertas {
   persona?: string;
   desde?: string;
   hasta?: string;
+  /**
+   * Acrónimo del tipo -> estatus a ver de ese tipo; lista vacía = todos sus estatus.
+   * Se combinan con "o" (Inusual pendientes o Relevante confirmadas). Sin tipos = todos.
+   */
+  tiposEstatus?: Record<string, EstatusAlerta[]>;
 }
 
 export interface PaginaAlertas {

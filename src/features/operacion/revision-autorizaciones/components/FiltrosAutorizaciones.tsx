@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Button } from "@/shared/components/atoms/Button";
 import { FormFieldGroup } from "@/shared/components/molecules/FormFieldGroup";
-import { field } from "@/shared/components/ui/styles";
+import { CalendarioFecha } from "@/shared/components/ui/CalendarioFecha";
+import { CasillaRedonda } from "@/shared/components/ui/CasillaRedonda";
 import { Search } from "lucide-react";
 
 import {
@@ -36,25 +37,24 @@ export function FiltrosAutorizaciones({ onConsultar }: FiltrosAutorizacionesProp
       <div className="flex flex-wrap items-end gap-4">
         <div className="flex-1 min-w-[200px]">
           <FormFieldGroup label="Fecha inicial" htmlFor="fecha-inicial">
-            <input
+            <CalendarioFecha
               id="fecha-inicial"
-              type="date"
-              value={desde}
-              onChange={(e) => setDesde(e.target.value)}
-              className={field}
+              valor={desde}
+              max={hasta || undefined}
+              onCambiar={setDesde}
+              permitirBorrar
             />
           </FormFieldGroup>
         </div>
 
         <div className="flex-1 min-w-[200px]">
           <FormFieldGroup label="Fecha final" htmlFor="fecha-final">
-            <input
+            <CalendarioFecha
               id="fecha-final"
-              type="date"
+              valor={hasta}
               min={desde || undefined}
-              value={hasta}
-              onChange={(e) => setHasta(e.target.value)}
-              className={field}
+              onCambiar={setHasta}
+              permitirBorrar
             />
           </FormFieldGroup>
         </div>
@@ -63,18 +63,14 @@ export function FiltrosAutorizaciones({ onConsultar }: FiltrosAutorizacionesProp
         <fieldset className="flex flex-wrap items-center gap-4 py-2">
           <legend className="sr-only">Estatus asignado</legend>
           {ESTATUS_AUTORIZACION.map((opcion) => (
-            <label
+            <CasillaRedonda
               key={opcion.valor}
-              className="flex items-center gap-2 text-xs sm:text-sm font-medium text-foreground cursor-pointer select-none"
+              marcada={estatus.includes(opcion.valor)}
+              onCambiar={() => alternar(opcion.valor)}
+              className="text-xs sm:text-sm font-medium text-foreground"
             >
-              <input
-                type="checkbox"
-                checked={estatus.includes(opcion.valor)}
-                onChange={() => alternar(opcion.valor)}
-                className="h-4 w-4 rounded border-border text-primary focus:ring-primary/30 accent-primary cursor-pointer"
-              />
               {opcion.etiqueta}
-            </label>
+            </CasillaRedonda>
           ))}
         </fieldset>
 

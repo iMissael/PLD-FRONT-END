@@ -13,7 +13,7 @@ import {
 } from "@/features/alertas/types/alertas";
 import { Alert } from "@/shared/components/ui/Alert";
 import { Button } from "@/shared/components/atoms/Button";
-import { card, field, hint } from "@/shared/components/ui/styles";
+import { field, hint } from "@/shared/components/ui/styles";
 
 import { formatearFecha, formatearMoneda } from "../utils/formato";
 
@@ -70,7 +70,8 @@ interface DetalleAlertaProps {
  * Sicanet: evaluado, perfil transaccional, resumen del periodo e información de la
  * alerta. Lo que aún no tiene fuente de datos se muestra como "Sin información".
  * Solo las PENDIENTES se dictaminan: las automáticas nacen pendientes; las
- * manuales, ya confirmadas.
+ * manuales, ya confirmadas. El folio, el tipo y el estatus los muestra el recuadro
+ * que lo contiene (RevisionAlertasPage).
  */
 export function DetalleAlerta({ alerta, onDictaminada }: DetalleAlertaProps) {
   const [dictamen, setDictamen] = useState<DictamenInput["estatus"] | "">("");
@@ -133,16 +134,7 @@ export function DetalleAlerta({ alerta, onDictaminada }: DetalleAlertaProps) {
   };
 
   return (
-    <div className={`flex flex-col gap-5 p-4 ${card}`}>
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h3 className="text-foreground text-sm font-semibold">
-          Alerta {alerta.folio} · {alerta.tipoAlertaDescripcion}
-        </h3>
-        <span className="text-muted-foreground text-xs">
-          {alerta.origen === "AUTOMATICA" ? "Generada por cajas" : "Captura manual"} ·{" "}
-          {ETIQUETA_ESTATUS[alerta.estatus]}
-        </span>
-      </div>
+    <div className="flex flex-col gap-5">
 
       {errorExpediente ? (
         <Alert>No se pudo cargar la información del evaluado y del periodo.</Alert>
@@ -243,6 +235,9 @@ export function DetalleAlerta({ alerta, onDictaminada }: DetalleAlertaProps) {
                     {formatearFecha(alerta.fechaAlerta)}
                   </Dato>
                   <Dato titulo="Folio de operación">{alerta.folioOperacion}</Dato>
+                  {alerta.referenciaCredito ? (
+                    <Dato titulo="Referencia del crédito">{alerta.referenciaCredito}</Dato>
+                  ) : null}
                 </>
               )}
               {!esManual && alerta.razonAlertaDescripcion ? (

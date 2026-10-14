@@ -1,7 +1,7 @@
 /**
  * Reglas de alerta (`pld_configuracion_alerta`), contra `ConfiguracionAlertaRequest` /
  * `ConfiguracionAlertaResponse` de `denuncias-app`. Las reglas automáticas son las que
- * evalúa cada movimiento de cajas (`POST /v1/pld/operaciones/evaluar`).
+ * evalúa cada movimiento de cajas (`POST /operaciones/evaluar`).
  *
  * Tres campos guardan listas con el formato heredado de Sicanet (ver `utils/formatoSicanet.ts`):
  * - tipoPersona: "['F', 'FA', 'M']"

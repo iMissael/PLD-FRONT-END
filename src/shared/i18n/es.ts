@@ -69,7 +69,7 @@ export const es = {
     adminTitle: "Gestión del Buzón de Denuncias",
     adminSubtitle: "Revisión, dictamen y gestión del ciclo de vida de denuncias recibidas",
     alertsTitle: "Alertas PLD Generadas",
-    alertsSubtitle: "Monitoreo y gestión de alertas paramétricas del sistema",
+    alertsSubtitle: "Alertas generadas a partir de las denuncias del buzón",
     observationsTitle: "Historial de Observaciones",
     addObservation: "Agregar Observación",
     changeStatus: "Cambiar Estatus",
@@ -78,12 +78,6 @@ export const es = {
       V: "En Revisión",
       A: "Aceptada",
       D: "Rechazada",
-    },
-    alertStatusLabels: {
-      A: "Activa",
-      B: "Bloqueada",
-      S: "Suspendida",
-      E: "Evaluada",
     },
   },
   theme: {

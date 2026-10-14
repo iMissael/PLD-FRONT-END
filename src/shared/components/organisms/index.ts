@@ -2,6 +2,7 @@ export * from "./DataTable";
 export * from "./Breadcrumbs";
 export * from "./PageFooter";
 export * from "./AlertDialog";
+export * from "./Dialog";
 export * from "./Sheet";
 export * from "./Header";
 export * from "./Sidebar";

@@ -6,7 +6,7 @@ import type {
   TipoCambioManualInput,
 } from "../types/tipoCambio";
 
-const BASE_PATH = "/v1/pld/tipo-cambio";
+const BASE_PATH = "/tipo-cambio";
 
 export async function listarTiposCambio(
   desde: string,

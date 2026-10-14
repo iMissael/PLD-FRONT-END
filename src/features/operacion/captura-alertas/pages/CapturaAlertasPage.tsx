@@ -19,11 +19,22 @@ import { Alert } from "@/shared/components/ui/Alert";
 import { CalendarioFecha } from "@/shared/components/ui/CalendarioFecha";
 import { Button } from "@/shared/components/ui/CatalogoButton";
 import { card, field, hint, label } from "@/shared/components/ui/styles";
+import type { SocioExterno } from "@/features/socios/types/socios";
 import { cn } from "@/shared/utils/cn";
 import { haceAniosIso, hoyIso } from "@/shared/utils/fechas";
 
 /** Antigüedad máxima de una incidencia capturable (hoy es el límite superior). */
 const ANIOS_ATRAS_INCIDENCIA = 5;
+
+/**
+ * Manda el tipo de persona que trae el socio. El largo del RFC (12 = moral) solo
+ * se usa si no viene: hay físicas con RFC de 12 caracteres (sin homoclave completa).
+ */
+function esPersonaMoral(socio: SocioExterno): boolean {
+  const tipo = socio.tipoPersona?.trim().toUpperCase();
+  if (tipo) return tipo === "MORAL" || tipo === "M";
+  return (socio.rfc?.trim().length ?? 0) === 12;
+}
 
 interface Reportado {
   referencia: string;
@@ -376,7 +387,7 @@ export function CapturaAlertasPage() {
                     reportado: {
                       referencia: s.id ?? "",
                       nombre: s.nombre ?? "",
-                      esMoral: (s as { tipoPersona?: string }).tipoPersona === "MORAL" || (s.rfc ? s.rfc.trim().length === 12 : false),
+                      esMoral: esPersonaMoral(s),
                     },
                     fuente: FUENTE_VACIA,
                   }))

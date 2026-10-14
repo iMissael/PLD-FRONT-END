@@ -4,14 +4,28 @@ import { ShieldSearchIcon } from "@/shared/components/icons";
 import { es } from "@/shared/i18n/es";
 import { DataTable, type ColumnDef } from "@/shared/components/DataTable";
 import { useAlertaDetalle, useListarAlertas } from "../hooks/useAlertas";
-import type { AlertaPLD, EstatusAlerta } from "../types/buzon";
+import {
+  ETIQUETA_ESTATUS,
+  type Alerta,
+  type EstatusAlerta,
+} from "@/features/alertas/types/alertas";
+import { formatearFecha } from "@/features/operacion/revision-alertas/utils/formato";
 
 const ALERTA_BADGES: Record<EstatusAlerta, string> = {
-  A: "bg-red-100 text-red-800 dark:bg-red-950/60 dark:text-red-300",
-  B: "bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300",
-  S: "bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300",
-  E: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300",
+  PENDIENTE: "bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300",
+  CONFIRMADA: "bg-red-100 text-red-800 dark:bg-red-950/60 dark:text-red-300",
+  RECHAZADA: "bg-muted text-muted-foreground",
+  REPORTADA: "bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300",
 };
+
+const ESTATUS: EstatusAlerta[] = ["PENDIENTE", "CONFIRMADA", "RECHAZADA", "REPORTADA"];
+
+function razonDe(alerta: Alerta): string {
+  if (!alerta.razonAlertaDescripcion) return "Sin razón";
+  return alerta.razonAlertaNumero
+    ? `${alerta.razonAlertaNumero} - ${alerta.razonAlertaDescripcion}`
+    : alerta.razonAlertaDescripcion;
+}
 
 export function GestionAlertasPage() {
   const [estatusFilter, setEstatusFilter] = useState<EstatusAlerta | undefined>();
@@ -23,8 +37,8 @@ export function GestionAlertasPage() {
 
   const { data, isLoading } = useListarAlertas({
     estatus: estatusFilter,
-    fechaDesde: fechaDesde ? new Date(fechaDesde).toISOString() : undefined,
-    fechaHasta: fechaHasta ? new Date(fechaHasta).toISOString() : undefined,
+    fechaDesde: fechaDesde || undefined,
+    fechaHasta: fechaHasta || undefined,
     page,
     size: rowsPerPage,
   });
@@ -40,11 +54,11 @@ export function GestionAlertasPage() {
     setPage(0);
   };
 
-  const columns: ColumnDef<AlertaPLD>[] = useMemo(
+  const columns: ColumnDef<Alerta>[] = useMemo(
     () => [
       {
-        header: "ID",
-        width: "80px",
+        header: "Folio",
+        width: "90px",
         className: "font-mono font-bold text-foreground",
         cell: (item) => (
           <button
@@ -56,26 +70,39 @@ export function GestionAlertasPage() {
             className="font-mono font-bold text-primary hover:underline cursor-pointer"
             title="Ver detalle"
           >
-            #{item.id}
+            #{item.folio}
           </button>
         ),
       },
       {
-        header: "Descripción",
-        className: "max-w-xs font-medium text-foreground",
+        header: "Denuncia",
+        width: "100px",
+        className: "font-mono text-muted-foreground",
+        cell: (item) => (item.denunciaId ? `#${item.denunciaId}` : "—"),
+      },
+      {
+        header: "Reportado",
+        className: "max-w-[14rem] font-medium text-foreground",
         cell: (item) => (
-          <span title={item.descripcion} className="block max-w-xs truncate">
-            {item.descripcion}
+          <span
+            title={item.reportado?.nombre ?? undefined}
+            className="block max-w-[14rem] truncate"
+          >
+            {item.reportado?.nombre || "Sin reportado"}
           </span>
         ),
       },
       {
-        header: "Importe",
-        width: "130px",
-        align: "right",
-        headerClassName: "text-right",
-        className: "font-mono text-foreground text-right",
-        cell: (item) => `$${item.importe?.toLocaleString("es-MX") ?? 0}`,
+        header: "Tipo / Razón",
+        className: "max-w-xs text-foreground",
+        cell: (item) => (
+          <div className="max-w-xs">
+            <span className="block truncate font-medium">{item.tipoAlertaDescripcion}</span>
+            <span title={razonDe(item)} className="block truncate text-[11px] text-muted-foreground">
+              {razonDe(item)}
+            </span>
+          </div>
+        ),
       },
       {
         header: "Estatus",
@@ -84,15 +111,15 @@ export function GestionAlertasPage() {
           <span
             className={`inline-block rounded-full px-2.5 py-0.5 text-[10px] font-bold ${ALERTA_BADGES[item.estatus]}`}
           >
-            {es.buzon.alertStatusLabels[item.estatus]}
+            {ETIQUETA_ESTATUS[item.estatus]}
           </span>
         ),
       },
       {
-        header: "Fecha",
-        width: "140px",
+        header: "Fecha alerta",
+        width: "120px",
         className: "text-muted-foreground",
-        cell: (item) => new Date(item.createdAt).toLocaleDateString("es-MX"),
+        cell: (item) => formatearFecha(item.fechaAlerta),
       },
       {
         header: "Acciones",
@@ -132,10 +159,11 @@ export function GestionAlertasPage() {
           className="rounded-md border border-border bg-card px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
         >
           <option value="">Todos los estatus</option>
-          <option value="A">Activas (A)</option>
-          <option value="B">Bloqueadas (B)</option>
-          <option value="S">Suspendidas (S)</option>
-          <option value="E">Evaluadas (E)</option>
+          {ESTATUS.map((estatus) => (
+            <option key={estatus} value={estatus}>
+              {ETIQUETA_ESTATUS[estatus]}
+            </option>
+          ))}
         </select>
       </div>
 
@@ -218,7 +246,7 @@ export function GestionAlertasPage() {
               <div className="flex items-center gap-2">
                 <ShieldSearchIcon className="h-5 w-5 text-amber-500" />
                 <h2 className="text-base font-bold text-foreground">
-                  Alerta PLD #{alertaDetalle.id}
+                  Alerta PLD #{alertaDetalle.folio}
                 </h2>
               </div>
               <button
@@ -231,29 +259,64 @@ export function GestionAlertasPage() {
             </div>
 
             <div className="mt-4 space-y-3 text-xs">
-              <div>
-                <span className="font-semibold text-muted-foreground">Descripción:</span>
-                <p className="mt-1 text-foreground font-medium">{alertaDetalle.descripcion}</p>
-              </div>
               <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <span className="font-semibold text-muted-foreground">Importe:</span>
-                  <p className="font-mono text-foreground">${alertaDetalle.importe?.toLocaleString("es-MX")}</p>
-                </div>
-                <div>
-                  <span className="font-semibold text-muted-foreground">Moneda:</span>
-                  <p className="text-foreground">{alertaDetalle.importeMonedaAcronimo || "MXN"}</p>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <span className="font-semibold text-muted-foreground">Forma de Pago:</span>
-                  <p className="text-foreground">{alertaDetalle.formaPago || "N/A"}</p>
-                </div>
                 <div>
                   <span className="font-semibold text-muted-foreground">Estatus:</span>
-                  <p className="font-bold text-emerald-600 dark:text-emerald-400">{es.buzon.alertStatusLabels[alertaDetalle.estatus]}</p>
+                  <p>
+                    <span
+                      className={`inline-block rounded-full px-2.5 py-0.5 text-[10px] font-bold ${ALERTA_BADGES[alertaDetalle.estatus]}`}
+                    >
+                      {ETIQUETA_ESTATUS[alertaDetalle.estatus]}
+                    </span>
+                  </p>
                 </div>
+                <div>
+                  <span className="font-semibold text-muted-foreground">Denuncia:</span>
+                  <p className="font-mono text-foreground">
+                    {alertaDetalle.denunciaId ? `#${alertaDetalle.denunciaId}` : "—"}
+                  </p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <span className="font-semibold text-muted-foreground">Tipo de alerta:</span>
+                  <p className="text-foreground">{alertaDetalle.tipoAlertaDescripcion}</p>
+                </div>
+                <div>
+                  <span className="font-semibold text-muted-foreground">Razón:</span>
+                  <p className="text-foreground">{razonDe(alertaDetalle)}</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <span className="font-semibold text-muted-foreground">Fecha de incidencia:</span>
+                  <p className="text-foreground">{formatearFecha(alertaDetalle.fechaIncidencia)}</p>
+                </div>
+                <div>
+                  <span className="font-semibold text-muted-foreground">Fecha de alerta:</span>
+                  <p className="text-foreground">{formatearFecha(alertaDetalle.fechaAlerta)}</p>
+                </div>
+              </div>
+              <div>
+                <span className="font-semibold text-muted-foreground">Reportado:</span>
+                {alertaDetalle.reportado ? (
+                  <p className="text-foreground">
+                    {alertaDetalle.reportado.nombre}
+                    {alertaDetalle.reportado.referencia && (
+                      <span className="ml-1 font-mono text-muted-foreground">
+                        ({alertaDetalle.reportado.referencia})
+                      </span>
+                    )}
+                  </p>
+                ) : (
+                  <p className="text-muted-foreground">Sin reportado (denuncia anónima)</p>
+                )}
+              </div>
+              <div>
+                <span className="font-semibold text-muted-foreground">Descripción:</span>
+                <p className="mt-1 whitespace-pre-line text-foreground font-medium">
+                  {alertaDetalle.descripcion || "—"}
+                </p>
               </div>
             </div>
           </div>

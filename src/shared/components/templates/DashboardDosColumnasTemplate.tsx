@@ -1,5 +1,4 @@
 import { type ReactNode } from "react";
-import { Breadcrumbs } from "@/shared/components/organisms/Breadcrumbs";
 import { PageFooter } from "@/shared/components/organisms/PageFooter";
 import { cn } from "@/shared/utils/cn";
 
@@ -8,7 +7,6 @@ export interface DashboardDosColumnasTemplateProps {
   descripcion?: ReactNode;
   acciones?: ReactNode;
   alerta?: ReactNode;
-  mostrarBreadcrumbs?: boolean;
   mostrarFooter?: boolean;
   moduloFooter?: string;
   /**
@@ -33,7 +31,6 @@ export function DashboardDosColumnasTemplate({
   descripcion,
   acciones,
   alerta,
-  mostrarBreadcrumbs = true,
   mostrarFooter = true,
   moduloFooter,
   columnaLateral,
@@ -46,8 +43,6 @@ export function DashboardDosColumnasTemplate({
 
   return (
     <div className={cn("flex flex-col gap-6 pb-16", className)}>
-      {mostrarBreadcrumbs && <Breadcrumbs />}
-
       {(titulo || acciones) && (
         <header className="flex flex-wrap items-center justify-between gap-4">
           <div className="space-y-1">
