@@ -4018,6 +4018,22 @@ export interface components {
              */
             observaciones: string;
         };
+        ProblemDetailsResponse: {
+            type?: string;
+            title?: string;
+            /** Format: int32 */
+            status?: number;
+            detail?: string;
+            instance?: string;
+            /** Format: date-time */
+            timestamp?: string;
+            invalidParams?: {
+                [key: string]: string;
+            };
+            coincidencias?: {
+                [key: string]: string;
+            }[];
+        };
         DesglosePuntuacion: {
             factores?: components["schemas"]["PuntajeFactor"][];
         };
@@ -4062,22 +4078,6 @@ export interface components {
             valor?: number;
             ponderacion?: number;
             puntaje?: number;
-        };
-        ProblemDetailsResponse: {
-            type?: string;
-            title?: string;
-            /** Format: int32 */
-            status?: number;
-            detail?: string;
-            instance?: string;
-            /** Format: date-time */
-            timestamp?: string;
-            invalidParams?: {
-                [key: string]: string;
-            };
-            coincidencias?: {
-                [key: string]: string;
-            }[];
         };
         ConfiguracionAlertaRequest: {
             alertaAcronimo: string;
@@ -6828,8 +6828,8 @@ export interface components {
             /** Format: int64 */
             offset?: number;
             sort?: components["schemas"]["SortObject"];
-            paged?: boolean;
             unpaged?: boolean;
+            paged?: boolean;
         };
         SortObject: {
             sorted?: boolean;
