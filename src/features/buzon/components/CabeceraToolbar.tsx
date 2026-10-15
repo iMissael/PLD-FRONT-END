@@ -4,6 +4,9 @@ import { escapeHtml, urlSegura } from "@/shared/utils/sanitizeHtml";
 import {
   Bold,
   Italic,
+  Underline,
+  Heading2,
+  Heading3,
   List,
   Palette,
   Square,
