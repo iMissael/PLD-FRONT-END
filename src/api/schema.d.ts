@@ -1372,6 +1372,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/SICANETSC/PLD/{tenantId}/socios/{socioReferencia}/perfil-transaccional": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Perfil transaccional vigente del socio */
+        get: operations["vigente_1"];
+        put?: never;
+        /**
+         * Registrar el perfil transaccional declarado
+         * @description Lo envia el modulo de ejecutivos en el alta del socio y en cada modificacion. Cada envio agrega un registro al historial; el ultimo es el vigente para las alertas de perfil. formasPago: E efectivo, T transferencia, * otras.
+         */
+        post: operations["registrar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/SICANETSC/PLD/{tenantId}/roles": {
         parameters: {
             query?: never;
@@ -1458,6 +1479,46 @@ export interface paths {
          * @description Registra un nuevo permiso (recurso + acción) en el catálogo
          */
         post: operations["crear_3"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/operaciones/{folioOperacion}/cancelar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Cancelar un movimiento de caja
+         * @description Marca como cancelado un movimiento ya evaluado para que deje de sumar en las alertas acumuladas. Las alertas que ya genero no se borran. Si ya estaba cancelado lo devuelve sin cambios.
+         */
+        post: operations["cancelar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/operaciones/{folioOperacion}/autorizacion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Registrar el resultado de la autorizacion en caja
+         * @description Caja lo envia despues de que el movimiento pidio autorizacion (requiereAutorizacion = true). AUTORIZADO confirma la alerta de autorizacion; RECHAZADO o CANCELADO la rechaza y cancela la operacion para que no sume en los acumulados. Reenviar el mismo estatus no duplica el registro.
+         */
+        post: operations["registrar_1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2723,6 +2784,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/SICANETSC/PLD/{tenantId}/socios/{socioReferencia}/perfil-transaccional/historial": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Historial del perfil transaccional declarado, del mas reciente al mas antiguo */
+        get: operations["historial"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/SICANETSC/PLD/{tenantId}/socios/{referencia}/perfil-riesgo": {
         parameters: {
             query?: never;
@@ -3313,7 +3391,7 @@ export interface paths {
         };
         /**
          * Listar alertas generadas
-         * @description Retorna el listado paginado de alertas desde configuracion_alerta
+         * @description Retorna el listado paginado de las alertas (pld_alerta) generadas a partir de una denuncia
          */
         get: operations["listarAlertas"];
         put?: never;
@@ -3333,7 +3411,7 @@ export interface paths {
         };
         /**
          * Obtener detalle de alerta
-         * @description Retorna todos los campos de una alerta específica
+         * @description Retorna una alerta generada a partir de una denuncia
          */
         get: operations["verAlertaPorId"];
         put?: never;
@@ -3384,6 +3462,43 @@ export interface paths {
             cookie?: never;
         };
         get: operations["expediente"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/alertas-autorizacion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Revision de Alertas de Autorizacion
+         * @description Filtra por fecha de autorizacion (inclusive) y estatus. Sin estatus devuelve todos.
+         */
+        get: operations["listar_6"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/alertas-autorizacion/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Detalle de una alerta de autorizacion, con la CURP del acreditado */
+        get: operations["detalle"];
         put?: never;
         post?: never;
         delete?: never;
@@ -4952,6 +5067,45 @@ export interface components {
             /** Format: date-time */
             updatedAt?: string;
         };
+        PerfilTransaccionalRequest: {
+            disponibilidad: number;
+            moneda?: string;
+            /** Format: int32 */
+            numeroOperacionesMes: number;
+            periodicidad?: string;
+            formasPago: string[];
+            naturalezaCredito?: string;
+            tipoCredito?: string;
+            actividadEconomica?: string;
+            destinoRecursos?: string;
+            observacionesEjecutivo?: string;
+            terceroBeneficiario?: boolean;
+            tercerosBeneficiarios?: string;
+            terceroAportaRecursos?: boolean;
+            tercerosAportanRecursos?: string;
+        };
+        PerfilTransaccionalResponse: {
+            /** Format: int64 */
+            id?: number;
+            socioReferencia?: string;
+            /** Format: date-time */
+            fechaRegistro?: string;
+            disponibilidad?: number;
+            moneda?: string;
+            /** Format: int32 */
+            numeroOperacionesMes?: number;
+            periodicidad?: string;
+            formasPago?: string[];
+            naturalezaCredito?: string;
+            tipoCredito?: string;
+            actividadEconomica?: string;
+            destinoRecursos?: string;
+            observacionesEjecutivo?: string;
+            terceroBeneficiario?: boolean;
+            tercerosBeneficiarios?: string;
+            terceroAportaRecursos?: boolean;
+            tercerosAportanRecursos?: string;
+        };
         CrearRolRequest: {
             nombre: string;
             categoria: string;
@@ -4976,19 +5130,91 @@ export interface components {
             accion: string;
             descripcion?: string;
         };
+        CancelarOperacionRequest: {
+            motivo: string;
+        };
+        OperacionCajaResponse: {
+            folioOperacion?: string;
+            tipoMovimiento?: string;
+            socioReferencia?: string;
+            importe?: number;
+            importeCapital?: number;
+            moneda?: string;
+            formaPago?: string;
+            /** Format: date */
+            fecha?: string;
+            importeMxn?: number;
+            importeUsd?: number;
+            sucursal?: string;
+            pais?: string;
+            estatus?: string;
+            motivoCancelacion?: string;
+            /** Format: date-time */
+            fechaCancelacion?: string;
+        };
+        RegistrarAutorizacionRequest: {
+            /** @enum {string} */
+            estatus: "AUTORIZADO" | "RECHAZADO" | "CANCELADO";
+            usuarioSolicitante: string;
+            nombreSolicitante?: string;
+            /** Format: date-time */
+            fechaSolicitud?: string;
+            usuarioAutorizante?: string;
+            nombreAutorizante?: string;
+            /** Format: date-time */
+            fechaAutorizacion?: string;
+        };
+        AcreditadoResponse: {
+            numero?: string;
+            referencia?: string;
+            nombre?: string;
+            rfc?: string;
+            curp?: string;
+        };
+        EmpleadoResponse: {
+            /** Format: date-time */
+            fecha?: string;
+            usuario?: string;
+            nombreEmpleado?: string;
+        };
+        MovimientoResponse: {
+            tipoMovimiento?: string;
+            referenciaCredito?: string;
+            importe?: number;
+            moneda?: string;
+            formaPago?: string;
+        };
+        RevisionAutorizacionResponse: {
+            /** Format: int64 */
+            id?: number;
+            /** Format: int64 */
+            folioAlerta?: number;
+            folioOperacion?: string;
+            estatus?: string;
+            acreditado?: components["schemas"]["AcreditadoResponse"];
+            solicitud?: components["schemas"]["EmpleadoResponse"];
+            autorizacion?: components["schemas"]["EmpleadoResponse"];
+            movimiento?: components["schemas"]["MovimientoResponse"];
+            descripcionAlerta?: string;
+        };
         EvaluarOperacionRequest: {
             folioOperacion: string;
             tipoMovimiento?: string;
             socioReferencia: string;
+            socioNumero?: string;
+            referenciaCredito?: string;
             socioNombre?: string;
             socioRfc?: string;
             tipoPersona: string;
             aplica?: string;
             importe: number;
+            importeCapital?: number;
             moneda: string;
             formaPago: string;
             /** Format: date */
             fecha?: string;
+            sucursal?: string;
+            pais?: string;
         };
         AlertaResponse: {
             /** Format: int64 */
@@ -5010,6 +5236,9 @@ export interface components {
             actoHecho?: string;
             informacionAdicional?: string;
             folioOperacion?: string;
+            referenciaCredito?: string;
+            /** Format: int64 */
+            denunciaId?: number;
             estatus?: string;
             /** Format: int64 */
             usuarioCapturaId?: number;
@@ -6375,10 +6604,10 @@ export interface components {
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
-            first?: boolean;
-            last?: boolean;
             /** Format: int32 */
             numberOfElements?: number;
+            first?: boolean;
+            last?: boolean;
             empty?: boolean;
         };
         PageableObject: {
@@ -6420,19 +6649,7 @@ export interface components {
             /** Format: date-time */
             updatedAt?: string;
         };
-        AlertaBuzonResponse: {
-            /** Format: int64 */
-            id?: number;
-            descripcion?: string;
-            /** Format: int64 */
-            catRazonAlertaId?: number;
-            importe?: number;
-            /** @enum {string} */
-            estatus?: "A" | "B" | "I";
-            /** Format: date-time */
-            createdAt?: string;
-        };
-        PageAlertaBuzonResponse: {
+        PageAlertaResponse: {
             /** Format: int32 */
             totalPages?: number;
             /** Format: int64 */
@@ -6440,36 +6657,26 @@ export interface components {
             pageable?: components["schemas"]["PageableObject"];
             /** Format: int32 */
             size?: number;
-            content?: components["schemas"]["AlertaBuzonResponse"][];
+            content?: components["schemas"]["AlertaResponse"][];
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
-            first?: boolean;
-            last?: boolean;
             /** Format: int32 */
             numberOfElements?: number;
+            first?: boolean;
+            last?: boolean;
             empty?: boolean;
         };
-        AlertaDetalleResponse: {
+        PaginaResponseAlertaResponse: {
+            contenido?: components["schemas"]["AlertaResponse"][];
+            /** Format: int32 */
+            pagina?: number;
+            /** Format: int32 */
+            tamanio?: number;
             /** Format: int64 */
-            id?: number;
-            descripcion?: string;
-            /** Format: int64 */
-            catRazonAlertaId?: number;
-            importe?: number;
-            importeMonedaAcronimo?: string;
-            equivalenteMonedaAcronimo?: string;
-            tipoPersonaId?: string;
-            formaPago?: string;
-            acumulado?: string;
-            automatica?: string;
-            aplica?: string;
-            /** @enum {string} */
-            estatus?: "A" | "B" | "I";
-            /** Format: date-time */
-            createdAt?: string;
-            /** Format: date-time */
-            updatedAt?: string;
+            totalElementos?: number;
+            /** Format: int32 */
+            totalPaginas?: number;
         };
         EvaluadoResponse: {
             tipoReportado?: string;
@@ -6482,6 +6689,7 @@ export interface components {
         };
         ExpedienteAlertaResponse: {
             evaluado?: components["schemas"]["EvaluadoResponse"];
+            perfilTransaccional?: components["schemas"]["PerfilTransaccionalResponse"];
             resumenPeriodo?: components["schemas"]["ResumenPeriodoResponse"];
         };
         ResumenPeriodoResponse: {
@@ -6491,6 +6699,21 @@ export interface components {
             hasta?: string;
             /** Format: int64 */
             alertasEmitidas?: number;
+            /** Format: int64 */
+            operacionesRealizadas?: number;
+            importeAcumuladoMxn?: number;
+            importeAcumuladoUsd?: number;
+        };
+        PaginaResponseRevisionAutorizacionResponse: {
+            contenido?: components["schemas"]["RevisionAutorizacionResponse"][];
+            /** Format: int32 */
+            pagina?: number;
+            /** Format: int32 */
+            tamanio?: number;
+            /** Format: int64 */
+            totalElementos?: number;
+            /** Format: int32 */
+            totalPaginas?: number;
         };
     };
     responses: never;
@@ -10224,6 +10447,58 @@ export interface operations {
             };
         };
     };
+    vigente_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                socioReferencia: string;
+                /** @description Identificador del Tenant */
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PerfilTransaccionalResponse"];
+                };
+            };
+        };
+    };
+    registrar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                socioReferencia: string;
+                /** @description Identificador del Tenant */
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PerfilTransaccionalRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PerfilTransaccionalResponse"];
+                };
+            };
+        };
+    };
     listar_2: {
         parameters: {
             query?: never;
@@ -10393,6 +10668,62 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["PermisoResponse"];
+                };
+            };
+        };
+    };
+    cancelar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                folioOperacion: string;
+                /** @description Identificador del Tenant */
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CancelarOperacionRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperacionCajaResponse"];
+                };
+            };
+        };
+    };
+    registrar_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                folioOperacion: string;
+                /** @description Identificador del Tenant */
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RegistrarAutorizacionRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RevisionAutorizacionResponse"];
                 };
             };
         };
@@ -13117,6 +13448,30 @@ export interface operations {
             };
         };
     };
+    historial: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                socioReferencia: string;
+                /** @description Identificador del Tenant */
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PerfilTransaccionalResponse"][];
+                };
+            };
+        };
+    };
     obtenerPerfilRiesgo: {
         parameters: {
             query?: never;
@@ -13881,8 +14236,7 @@ export interface operations {
     listarAlertas: {
         parameters: {
             query?: {
-                estatus?: "A" | "B" | "I";
-                catRazonAlertaId?: number;
+                estatus?: "PENDIENTE" | "CONFIRMADA" | "RECHAZADA" | "REPORTADA";
                 fechaDesde?: string;
                 fechaHasta?: string;
                 page?: number;
@@ -13903,7 +14257,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["PageAlertaBuzonResponse"];
+                    "*/*": components["schemas"]["PageAlertaResponse"];
                 };
             };
         };
@@ -13927,7 +14281,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["AlertaDetalleResponse"];
+                    "*/*": components["schemas"]["AlertaResponse"];
                 };
             };
         };
@@ -13941,6 +14295,8 @@ export interface operations {
                 persona?: string;
                 desde?: string;
                 hasta?: string;
+                pagina?: number;
+                tamanio?: number;
             };
             header?: never;
             path: {
@@ -13957,7 +14313,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AlertaResponse"][];
+                    "application/json": components["schemas"]["PaginaResponseAlertaResponse"];
                 };
             };
         };
@@ -14006,6 +14362,59 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ExpedienteAlertaResponse"];
+                };
+            };
+        };
+    };
+    listar_6: {
+        parameters: {
+            query?: {
+                desde?: string;
+                hasta?: string;
+                estatus?: ("AUTORIZADO" | "RECHAZADO" | "CANCELADO")[];
+                pagina?: number;
+                tamanio?: number;
+            };
+            header?: never;
+            path: {
+                /** @description Identificador del Tenant */
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginaResponseRevisionAutorizacionResponse"];
+                };
+            };
+        };
+    };
+    detalle: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                /** @description Identificador del Tenant */
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RevisionAutorizacionResponse"];
                 };
             };
         };
