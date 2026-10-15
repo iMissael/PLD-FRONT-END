@@ -77,7 +77,12 @@ export function PersonalizarCabeceraDenuncia() {
   // Comandos de formateo simplificados
   const ejecutarComando = (comando: string, valor: string | undefined = undefined) => {
     if (editorRef.current) {
-      editorRef.current.focus();
+      editorRef.current.focus(); 
+    }
+    try {
+      document.execCommand("styleWithCSS", false, "true");
+    } catch {
+      // Ignorar si el navegador no lo soporta
     }
     document.execCommand(comando, false, valor);
     syncEditorToState();

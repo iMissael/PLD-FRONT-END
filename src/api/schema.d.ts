@@ -148,7 +148,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/tenants/mensaje-denuncia": {
+    "/SICANETSC/PLD/{tenantId}/tenant/mensaje-denuncia": {
         parameters: {
             query?: never;
             header?: never;
@@ -200,7 +200,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/pld/coincidencias/{socioRef}/confirmacion": {
+    "/SICANETSC/PLD/{tenantId}/coincidencias/{socioRef}/confirmacion": {
         parameters: {
             query?: never;
             header?: never;
@@ -1298,7 +1298,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/tenants/aprovisionar": {
+    "/SICANETSC/PLD/{tenantId}/tenant/aprovisionar": {
         parameters: {
             query?: never;
             header?: never;
@@ -1338,7 +1338,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/tenants": {
+    "/SICANETSC/PLD/{tenantId}/tenant": {
         parameters: {
             query?: never;
             header?: never;
@@ -2672,7 +2672,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/tenants/publico/nombre": {
+    "/SICANETSC/PLD/{tenantId}/tenant/publico/nombre": {
         parameters: {
             query?: never;
             header?: never;
@@ -2709,7 +2709,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/tenants/publico/mensaje-denuncia": {
+    "/SICANETSC/PLD/{tenantId}/tenant/publico/mensaje-denuncia": {
         parameters: {
             query?: never;
             header?: never;
@@ -2817,7 +2817,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/pld/coincidencias/{socioRef}": {
+    "/SICANETSC/PLD/{tenantId}/coincidencias/{socioRef}": {
         parameters: {
             query?: never;
             header?: never;
@@ -2837,7 +2837,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/pld/coincidencias/pendientes": {
+    "/SICANETSC/PLD/{tenantId}/coincidencias/pendientes": {
         parameters: {
             query?: never;
             header?: never;

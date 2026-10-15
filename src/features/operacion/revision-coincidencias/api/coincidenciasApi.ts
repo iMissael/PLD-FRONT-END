@@ -7,7 +7,7 @@ import type {
 
 export async function listarCoincidenciasPendientes() {
   const { data } = await apiClient.get<CoincidenciaSocio[]>(
-    "/pld/coincidencias/pendientes",
+    "/coincidencias/pendientes",
   );
   return data;
 }
@@ -17,7 +17,7 @@ export async function resolverCoincidencia(
   payload: ResolverCoincidenciaPayload,
 ) {
   const { data } = await apiClient.put<CoincidenciaSocio>(
-    `/pld/coincidencias/${encodeURIComponent(socioRef)}/confirmacion`,
+    `/coincidencias/${encodeURIComponent(socioRef)}/confirmacion`,
     payload,
   );
   return data;
