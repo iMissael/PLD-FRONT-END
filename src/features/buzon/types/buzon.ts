@@ -1,9 +1,6 @@
-import type { Estatus } from "@/shared/utils/estatus";
+import type { EstatusAlerta } from "@/features/alertas/types/alertas";
 
 export type EstadoDenuncia = "R" | "V" | "A" | "D";
-
-/** `/buzon/alertas` lista `configuracion_alerta`, cuyo estatus es el de catálogos. */
-export type EstatusReglaAlerta = Estatus;
 
 export interface ObservacionDenuncia {
   id: number;
@@ -37,23 +34,6 @@ export interface Denuncia {
   evidencias?: EvidenciaDenuncia[];
   createdAt: string;
   updatedAt: string;
-}
-
-export interface AlertaPLD {
-  id: number;
-  descripcion: string;
-  catRazonAlertaId: number;
-  importe: number;
-  importeMonedaAcronimo?: string;
-  equivalenteMonedaAcronimo?: string;
-  tipoPersonaId?: string;
-  formaPago?: string;
-  acumulado?: string;
-  automatica?: string;
-  aplica?: string;
-  estatus: EstatusReglaAlerta;
-  createdAt: string;
-  updatedAt?: string;
 }
 
 export interface CrearDenunciaInput {
@@ -91,8 +71,8 @@ export interface ListarDenunciasParams {
 }
 
 export interface ListarAlertasParams {
-  estatus?: EstatusReglaAlerta;
-  catRazonAlertaId?: number;
+  estatus?: EstatusAlerta;
+  /** AAAA-MM-DD, por fecha en que se generó la alerta. */
   fechaDesde?: string;
   fechaHasta?: string;
   page?: number;

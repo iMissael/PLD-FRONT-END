@@ -58,6 +58,14 @@
   --primary-foreground: #ffffff;
   --ring: #6366f1;
 
+  /* Menú lateral (guía oficial › Sidebar): el verde vive solo aquí; los botones son
+     índigo (--primary). */
+  --nav-active-bg: #15803d; /* green-700 */
+  --nav-active-hover-bg: #166534; /* green-800 */
+  --nav-hover-bg: #dcfce7; /* green-100 */
+  --nav-soft-bg: #dcfce7; /* green-100 */
+  --nav-accent: #15803d; /* green-700: texto de subitem activo */
+
   /* Estado */
   --success: #16a34a;
   --success-hover: #15803d;
@@ -116,6 +124,13 @@
   --primary-foreground: #ffffff;
   --ring: #818cf8;
 
+  /* Menú lateral: mismo verde; fondos tenues oscuros y texto más claro para contraste. */
+  --nav-active-bg: #15803d; /* green-700 */
+  --nav-active-hover-bg: #166534; /* green-800 */
+  --nav-hover-bg: #14532d; /* green-900 */
+  --nav-soft-bg: #14532d; /* green-900 */
+  --nav-accent: #4ade80; /* green-400 */
+
   /* Estado */
   --success: #22c55e;
   --success-hover: #16a34a;
@@ -163,6 +178,11 @@
   --color-primary-soft: var(--primary-soft);
   --color-primary-foreground: var(--primary-foreground);
   --color-ring: var(--ring);
+  --color-nav-active: var(--nav-active-bg);
+  --color-nav-active-hover: var(--nav-active-hover-bg);
+  --color-nav-hover: var(--nav-hover-bg);
+  --color-nav-soft: var(--nav-soft-bg);
+  --color-nav-accent: var(--nav-accent);
   --color-success: var(--success);
   --color-success-hover: var(--success-hover);
   --color-success-soft: var(--success-soft);

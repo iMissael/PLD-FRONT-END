@@ -1,7 +1,7 @@
 import { apiClient } from "@/api/client";
+import type { Alerta } from "@/features/alertas/types/alertas";
 import type {
   AgregarObservacionInput,
-  AlertaPLD,
   CambiarEstatusInput,
   CrearDenunciaInput,
   Denuncia,
@@ -255,12 +255,12 @@ export async function agregarObservacion(
   return data;
 }
 
-/** Listar alertas PLD generadas */
+/** Listar las alertas PLD generadas a partir de denuncias */
 export async function listarAlertas(
   params?: ListarAlertasParams,
   signal?: AbortSignal,
-): Promise<PageResponse<AlertaPLD>> {
-  const { data } = await apiClient.get<PageResponse<AlertaPLD>>("/buzon/alertas", {
+): Promise<PageResponse<Alerta>> {
+  const { data } = await apiClient.get<PageResponse<Alerta>>("/buzon/alertas", {
     params,
     signal,
   });
@@ -271,8 +271,8 @@ export async function listarAlertas(
 export async function verAlertaPorId(
   id: number,
   signal?: AbortSignal,
-): Promise<AlertaPLD> {
-  const { data } = await apiClient.get<AlertaPLD>(`/buzon/alertas/${id}`, {
+): Promise<Alerta> {
+  const { data } = await apiClient.get<Alerta>(`/buzon/alertas/${id}`, {
     signal,
   });
   return data;
