@@ -32,8 +32,8 @@ import {
 import type { ConfiguracionMatrizRiesgo } from "@/features/configuraciones/matriz-riesgo/types/matrizRiesgo";
 import { useAuthStore } from "@/shared/auth/authStore";
 
-function estatusFormValue(estatus: string | undefined): "A" | "INA" {
-  return estatus === "A" ? "A" : "INA";
+function estatusFormValue(estatus: string | undefined): "A" | "I" {
+  return estatus === "A" ? "A" : "I";
 }
 
 function valoresIniciales(base: ConfiguracionMatrizRiesgo): MatrizRiesgoFormValues {
@@ -53,7 +53,7 @@ function valoresIniciales(base: ConfiguracionMatrizRiesgo): MatrizRiesgoFormValu
   };
 }
 
-function sumaActivos(items: { estatus: "A" | "INA"; valor: string }[]) {
+function sumaActivos(items: { estatus: "A" | "I"; valor: string }[]) {
   return items
     .filter((i) => i.estatus === "A")
     .reduce((acc, i) => acc + (Number(i.valor) || 0), 0);

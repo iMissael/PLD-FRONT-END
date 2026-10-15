@@ -50,7 +50,7 @@ function AvatarUsuario({ usuario }: { usuario: UsuarioResponse }) {
 
 function BadgeEstado({ estado }: { estado: UsuarioResponse["estado"] }) {
   if (esEstatusActivo(estado)) return <Badge>{etiquetaEstatus(estado)}</Badge>;
-  if (estado === "E") return <Badge variant="outline">{etiquetaEstatus(estado)}</Badge>;
+  if (estado === "I") return <Badge variant="outline">{etiquetaEstatus(estado)}</Badge>;
   return <Badge variant="secondary">{etiquetaEstatus(estado)}</Badge>;
 }
 
@@ -110,7 +110,7 @@ function BotonEstado({ usuario }: { usuario: UsuarioResponse }) {
   const nombre = usuario.nombre ?? usuario.username;
   const activo = usuario.estado === "A";
 
-  function cambiar(estado: "A" | "B") {
+  function cambiar(estado: "A" | "I") {
     if (!usuario.idUsuario) return;
     cambiarEstado.mutate(
       { id: usuario.idUsuario, estado },
@@ -161,7 +161,7 @@ function BotonEstado({ usuario }: { usuario: UsuarioResponse }) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
-          <AlertDialogAction disabled={cambiarEstado.isPending} onClick={() => cambiar("B")}>
+          <AlertDialogAction disabled={cambiarEstado.isPending} onClick={() => cambiar("I")}>
             {cambiarEstado.isPending ? "Desactivando…" : "Desactivar"}
           </AlertDialogAction>
         </AlertDialogFooter>

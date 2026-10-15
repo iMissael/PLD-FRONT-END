@@ -4,12 +4,8 @@
  * en `denuncias-app`.
  */
 
-/**
- * Valores del enum `Estatus` del backend: A=Activa, B=Baja, S=Suspendido,
- * E=Eliminado. El formulario solo ofrece A y B — `E` lo escribe el
- * soft-delete del backend y `S` no se usa en este catálogo.
- */
-export type EstatusExperienciaActividad = "A" | "B" | "S" | "E";
+/** A=Activo, I=Inactivo, B=Baja (borrado lógico). */
+export type EstatusExperienciaActividad = "A" | "I" | "B";
 
 /**
  * Igual a `CrearCatExperienciaActividadRequest`.

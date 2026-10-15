@@ -86,7 +86,7 @@ export function DomicilioStep({ form }: { form: UseFormReturn<CrearUsuarioFormVa
                   </FormControl>
                   <SelectContent>
                     {paises?.map((pais) => (
-                      <SelectItem key={pais.idPais} value={String(pais.idPais ?? "")}>
+                      <SelectItem key={pais.idPais} value={String(pais.idPais)}>
                         {pais.nombre}
                       </SelectItem>
                     ))}
@@ -268,7 +268,7 @@ export function DomicilioStep({ form }: { form: UseFormReturn<CrearUsuarioFormVa
                   </FormControl>
                   <SelectContent>
                     {tiposVialidad?.map((item) => (
-                      <SelectItem key={item.id} value={String(item.id ?? "")}>
+                      <SelectItem key={item.id} value={item.id ?? ""}>
                         {item.descripcion}
                       </SelectItem>
                     ))}
@@ -406,7 +406,7 @@ export function DomicilioStep({ form }: { form: UseFormReturn<CrearUsuarioFormVa
                   </FormControl>
                   <SelectContent>
                     {posesionesVivienda?.map((item) => (
-                      <SelectItem key={item.id} value={String(item.id ?? "")}>
+                      <SelectItem key={item.id} value={item.id ?? ""}>
                         {item.descripcion}
                       </SelectItem>
                     ))}
@@ -443,7 +443,7 @@ export function DomicilioStep({ form }: { form: UseFormReturn<CrearUsuarioFormVa
                   </FormControl>
                   <SelectContent>
                     {tiposComprobante?.map((item) => (
-                      <SelectItem key={item.id} value={String(item.id ?? "")}>
+                      <SelectItem key={item.id} value={item.id ?? ""}>
                         {item.descripcion}
                       </SelectItem>
                     ))}

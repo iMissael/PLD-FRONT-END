@@ -146,7 +146,7 @@ export function useActualizarUsuarioCompleto() {
 export function useCambiarEstadoUsuario() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, estado }: { id: number; estado: "A" | "B" }) =>
+    mutationFn: ({ id, estado }: { id: number; estado: "A" | "I" }) =>
       cambiarEstadoUsuario(id, estado),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: usuariosKeys.all });

@@ -45,9 +45,12 @@ export function TipoUsuarioStep({
   const opcionesActividad = useMemo<OpcionCatalogo[]>(
     () =>
       (actividadesEconomicas ?? [])
-        .filter((item) => item.id && (item.estatus === "A" || String(item.id) === actividadActual))
+        .filter(
+          (item) =>
+            item.id && (item.estatus === "A" || String(item.id) === actividadActual),
+        )
         .map((item) => ({
-          valor: String(item.id ?? ""),
+          valor: String(item.id),
           etiqueta: item.descripcion ?? "",
           codigo: item.claveSat,
         })),

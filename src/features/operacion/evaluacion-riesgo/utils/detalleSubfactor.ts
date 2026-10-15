@@ -61,22 +61,20 @@ export function etiquetaSubfactor(descripcion: string | undefined) {
   );
 }
 
-/** Los ids de catalogo llegan como numero; el formulario los guarda como texto. */
-type IdCatalogo = string | number;
-
+/** Los ids de catálogo son numéricos en el contrato; el formulario los guarda como texto. */
 interface CatalogosDetalle {
-  tiposPersona?: { id?: IdCatalogo; nombre?: string }[];
-  paises?: { idPais?: IdCatalogo; nombre?: string }[];
-  peps?: { id?: IdCatalogo; nombre?: string }[];
-  actividades?: { id?: IdCatalogo; descripcion?: string }[];
-  tiposCredito?: { id?: IdCatalogo; nombre?: string }[];
-  origenes?: { id?: IdCatalogo; nombre?: string }[];
-  destinos?: { id?: IdCatalogo; nombre?: string }[];
-  canales?: { id?: IdCatalogo; nombre?: string }[];
+  tiposPersona?: { id?: string | number; nombre?: string }[];
+  paises?: { idPais?: string | number; nombre?: string }[];
+  peps?: { id?: string | number; nombre?: string }[];
+  actividades?: { id?: string | number; descripcion?: string }[];
+  tiposCredito?: { id?: string | number; nombre?: string }[];
+  origenes?: { id?: string | number; nombre?: string }[];
+  destinos?: { id?: string | number; nombre?: string }[];
+  canales?: { id?: string | number; nombre?: string }[];
   nombreLocalidad?: string;
 }
 
-function nombreDe(lista: { id?: IdCatalogo; nombre?: string }[] | undefined, id: string) {
+function nombreDe(lista: { id?: string | number; nombre?: string }[] | undefined, id: string) {
   return id ? lista?.find((item) => String(item.id) === id)?.nombre : undefined;
 }
 
@@ -109,8 +107,9 @@ export function construirDetalles(
       : undefined,
     "tipo persona": nombreDe(catalogos.tiposPersona, values.tipoPersonaId),
     edad: edad === null ? undefined : `${edad} años`,
-    nacionalidad: catalogos.paises?.find((pais) => String(pais.idPais) === values.nacionalidadId)
-      ?.nombre,
+    nacionalidad: catalogos.paises?.find(
+      (pais) => String(pais.idPais) === values.nacionalidadId,
+    )?.nombre,
     "antiguedad giro anios": values.antiguedadGiroAnios
       ? `${values.antiguedadGiroAnios} años`
       : undefined,

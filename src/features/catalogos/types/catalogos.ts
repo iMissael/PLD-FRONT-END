@@ -23,4 +23,5 @@ export type TipoCreditoResponse = components["schemas"]["CatTipoCreditoResponse"
 export type OrigenRecursoResponse = components["schemas"]["CatOrigenRecursoResponse"];
 export type DestinoRecursoResponse = components["schemas"]["CatDestinoRecursoResponse"];
 export type CanalPagoResponse = components["schemas"]["CatCanalPagoResponse"];
+/** El back renombró `tipoPago` a `formaPago`; el controller sirve ambas rutas. */
 export type TipoPagoResponse = components["schemas"]["CatFormaPagoResponse"];

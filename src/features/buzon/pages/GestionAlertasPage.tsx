@@ -3,18 +3,18 @@ import { Calendar, Eye, Filter, X } from "lucide-react";
 import { ShieldSearchIcon } from "@/shared/components/atoms/icons";
 import { es } from "@/shared/i18n/es";
 import { DataTable, type ColumnDef } from "@/shared/components/organisms/DataTable";
+import { etiquetaEstatus } from "@/shared/utils/estatus";
 import { useAlertaDetalle, useListarAlertas } from "../hooks/useAlertas";
-import type { AlertaPLD, EstatusAlerta } from "../types/buzon";
+import type { AlertaPLD, EstatusReglaAlerta } from "../types/buzon";
 
-const ALERTA_BADGES: Record<EstatusAlerta, string> = {
-  A: "bg-red-100 text-red-800 dark:bg-red-950/60 dark:text-red-300",
-  B: "bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300",
-  S: "bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300",
-  E: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300",
+const ALERTA_BADGES: Record<EstatusReglaAlerta, string> = {
+  A: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300",
+  I: "bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300",
+  B: "bg-red-100 text-red-800 dark:bg-red-950/60 dark:text-red-300",
 };
 
 export function GestionAlertasPage() {
-  const [estatusFilter, setEstatusFilter] = useState<EstatusAlerta | undefined>();
+  const [estatusFilter, setEstatusFilter] = useState<EstatusReglaAlerta | undefined>();
   const [fechaDesde, setFechaDesde] = useState<string>("");
   const [fechaHasta, setFechaHasta] = useState<string>("");
   const [page, setPage] = useState(0);
@@ -84,7 +84,7 @@ export function GestionAlertasPage() {
           <span
             className={`inline-block rounded-full px-2.5 py-0.5 text-[10px] font-bold ${ALERTA_BADGES[item.estatus]}`}
           >
-            {es.buzon.alertStatusLabels[item.estatus]}
+            {etiquetaEstatus(item.estatus)}
           </span>
         ),
       },
@@ -125,17 +125,15 @@ export function GestionAlertasPage() {
         <select
           value={estatusFilter ?? ""}
           onChange={(e) => {
-            const val = e.target.value as EstatusAlerta | "";
+            const val = e.target.value as EstatusReglaAlerta | "";
             setEstatusFilter(val ? val : undefined);
             setPage(0);
           }}
           className="rounded-md border border-border bg-card px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
         >
           <option value="">Todos los estatus</option>
-          <option value="A">Activas (A)</option>
-          <option value="B">Bloqueadas (B)</option>
-          <option value="S">Suspendidas (S)</option>
-          <option value="E">Evaluadas (E)</option>
+          <option value="A">Activas</option>
+          <option value="I">Inactivas</option>
         </select>
       </div>
 
@@ -252,7 +250,7 @@ export function GestionAlertasPage() {
                 </div>
                 <div>
                   <span className="font-semibold text-muted-foreground">Estatus:</span>
-                  <p className="font-bold text-emerald-600 dark:text-emerald-400">{es.buzon.alertStatusLabels[alertaDetalle.estatus]}</p>
+                  <p className="font-bold text-emerald-600 dark:text-emerald-400">{etiquetaEstatus(alertaDetalle.estatus)}</p>
                 </div>
               </div>
             </div>

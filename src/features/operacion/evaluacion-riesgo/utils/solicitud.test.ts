@@ -202,7 +202,7 @@ describe("construirSolicitud", () => {
       origen_recursos: "2",
       destino_recursos: "3",
       canal_pago_id: 4,
-      tipo_pago_id: undefined,
+      forma_pago_id: undefined,
       ebr_soluciones: undefined,
     });
   });

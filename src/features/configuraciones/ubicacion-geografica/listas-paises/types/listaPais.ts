@@ -2,7 +2,8 @@
  * Tipos del feature `listas-paises`, basados en OpenAPI Swagger (Catálogos - Geografía: Listas de Países).
  */
 
-export type EstatusListaPais = "A" | "INA" | "B" | "S" | "E" | (string & {});
+/** A=Activa, I=Inactiva, B=Baja (borrado lógico). */
+export type EstatusListaPais = "A" | "I" | "B";
 
 /** Igual a `CrearCatListaPaisRequest`. */
 export interface CrearListaPaisInput {

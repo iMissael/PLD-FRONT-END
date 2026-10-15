@@ -1,5 +1,9 @@
+import type { Estatus } from "@/shared/utils/estatus";
+
 export type EstadoDenuncia = "R" | "V" | "A" | "D";
-export type EstatusAlerta = "A" | "B" | "S" | "E";
+
+/** `/buzon/alertas` lista `configuracion_alerta`, cuyo estatus es el de catálogos. */
+export type EstatusReglaAlerta = Estatus;
 
 export interface ObservacionDenuncia {
   id: number;
@@ -47,7 +51,7 @@ export interface AlertaPLD {
   acumulado?: string;
   automatica?: string;
   aplica?: string;
-  estatus: EstatusAlerta;
+  estatus: EstatusReglaAlerta;
   createdAt: string;
   updatedAt?: string;
 }
@@ -87,7 +91,7 @@ export interface ListarDenunciasParams {
 }
 
 export interface ListarAlertasParams {
-  estatus?: EstatusAlerta;
+  estatus?: EstatusReglaAlerta;
   catRazonAlertaId?: number;
   fechaDesde?: string;
   fechaHasta?: string;

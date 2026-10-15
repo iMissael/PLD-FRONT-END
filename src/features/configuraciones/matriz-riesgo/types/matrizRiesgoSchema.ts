@@ -13,14 +13,14 @@ export const subfactorFormSchema = z.object({
   id: z.number(),
   descripcion: z.string(),
   ponderacion: numeroPorcentaje,
-  estatus: z.enum(["A", "INA"]),
+  estatus: z.enum(["A", "I"]),
 });
 
 export const factorFormSchema = z.object({
   id: z.number(),
   descripcion: z.string(),
   peso: numeroPorcentaje,
-  estatus: z.enum(["A", "INA"]),
+  estatus: z.enum(["A", "I"]),
   subfactores: z
     .array(subfactorFormSchema)
     .min(1, "El factor debe tener al menos un subfactor"),

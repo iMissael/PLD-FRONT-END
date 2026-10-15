@@ -79,12 +79,6 @@ export const es = {
       A: "Aceptada",
       D: "Rechazada",
     },
-    alertStatusLabels: {
-      A: "Activa",
-      B: "Bloqueada",
-      S: "Suspendida",
-      E: "Evaluada",
-    },
   },
   theme: {
     light: "Claro",

@@ -36,7 +36,7 @@ function aNumeroOIndefinido(valor: string | undefined) {
 function opcionesDe(items: { id?: string; descripcion?: string }[] | undefined) {
   return (items ?? [])
     .filter((item) => item.id)
-    .map((item) => ({ valor: String(item.id ?? ""), etiqueta: item.descripcion ?? "" }));
+    .map((item) => ({ valor: item.id ?? "", etiqueta: item.descripcion ?? "" }));
 }
 
 export function SeccionDomicilio({ form }: { form: FichaForm }) {
@@ -65,7 +65,7 @@ export function SeccionDomicilio({ form }: { form: FichaForm }) {
       (paises ?? [])
         .filter((item) => item.idPais)
         .map((item) => ({
-          valor: String(item.idPais ?? ""),
+          valor: String(item.idPais),
           etiqueta: item.nombre ?? "",
           codigo: item.codigoIso,
         })),

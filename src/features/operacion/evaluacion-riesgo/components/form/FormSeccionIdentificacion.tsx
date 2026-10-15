@@ -95,7 +95,7 @@ export function FormSeccionIdentificacion({
                 </FormControl>
                 <SelectContent>
                   {tiposPersona?.map((tipo) => (
-                    <SelectItem key={tipo.id} value={String(tipo.id ?? "")}>
+                    <SelectItem key={tipo.id} value={String(tipo.id)}>
                       {tipo.nombre}
                     </SelectItem>
                   ))}
@@ -119,7 +119,7 @@ export function FormSeccionIdentificacion({
                 </FormControl>
                 <SelectContent>
                   {paises?.map((pais) => (
-                    <SelectItem key={pais.idPais} value={String(pais.idPais ?? "")}>
+                    <SelectItem key={pais.idPais} value={String(pais.idPais)}>
                       {pais.nombre}
                     </SelectItem>
                   ))}
@@ -169,7 +169,7 @@ export function FormSeccionIdentificacion({
                 </FormControl>
                 <SelectContent>
                   {peps?.map((pep) => (
-                    <SelectItem key={pep.id} value={String(pep.id ?? "")}>
+                    <SelectItem key={pep.id} value={String(pep.id)}>
                       {pep.nombre}
                     </SelectItem>
                   ))}
