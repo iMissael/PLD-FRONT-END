@@ -13,7 +13,8 @@
  * E=Eliminado. El formulario solo ofrece A y B — `E` lo escribe el
  * soft-delete del backend y `S` no se usa en este catálogo.
  */
-export type EstatusEdad = "A" | "B" | "S" | "E";
+/** A=Activo, I=Inactivo, B=Baja (borrado lógico). */
+export type EstatusEdad = "A" | "I" | "B";
 
 /**
  * Igual a `CrearCatEdadRequest`. No lleva `id`: el backend lo genera como

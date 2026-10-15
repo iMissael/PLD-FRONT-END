@@ -17,7 +17,8 @@
  * Valores del enum `Estatus` del backend: A=Activo, B=Baja, S=Suspendido,
  * E=Eliminado. El soft-delete escribe `E`; `S` no se usa en este catálogo.
  */
-export type EstatusPep = "A" | "B" | "S" | "E";
+/** A=Activo, I=Inactivo, B=Baja (borrado lógico). */
+export type EstatusPep = "A" | "I" | "B";
 
 /**
  * Valores aceptados por `tipo_pep`. El backend los valida en

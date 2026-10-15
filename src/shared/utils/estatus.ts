@@ -7,13 +7,12 @@
  * silencio —el badge siempre caía en "inactivo"— porque `schema.d.ts` todavía
  * tipaba el campo como texto libre y TypeScript no podía detectarlo.
  */
-export type Estatus = "A" | "B" | "S" | "E";
+export type Estatus = "A" | "I" | "B";
 
 const ETIQUETAS: Record<Estatus, string> = {
   A: "Activo",
+  I: "Inactivo",
   B: "Baja",
-  S: "Suspendido",
-  E: "Eliminado",
 };
 
 /** Etiqueta legible; devuelve un guion si el estatus viene vacío o es desconocido. */

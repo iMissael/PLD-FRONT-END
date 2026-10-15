@@ -184,7 +184,7 @@ export function PrestamoMontoForm({
             className={field}
           >
             <option value="A">Activo</option>
-            <option value="B">Baja</option>
+            <option value="I">Inactivo</option>
           </select>
         </div>
       </div>

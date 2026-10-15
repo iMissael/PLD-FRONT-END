@@ -211,7 +211,7 @@ export function ZonaForm({
             className={field}
           >
             <option value="A">Activa</option>
-            <option value="INA">Inactiva</option>
+            <option value="I">Inactiva</option>
           </select>
         </div>
       </div>

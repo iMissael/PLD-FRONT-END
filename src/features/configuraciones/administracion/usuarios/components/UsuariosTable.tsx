@@ -50,7 +50,7 @@ function AvatarUsuario({ usuario }: { usuario: UsuarioResponse }) {
 
 function BadgeEstado({ estado }: { estado: UsuarioResponse["estado"] }) {
   if (esEstatusActivo(estado)) return <Badge>{etiquetaEstatus(estado)}</Badge>;
-  if (estado === "E") return <Badge variant="outline">{etiquetaEstatus(estado)}</Badge>;
+  if (estado === "B") return <Badge variant="outline">{etiquetaEstatus(estado)}</Badge>;
   return <Badge variant="secondary">{etiquetaEstatus(estado)}</Badge>;
 }
 
