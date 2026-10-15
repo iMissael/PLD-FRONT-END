@@ -173,7 +173,7 @@ export function construirSolicitud(
       origen_recursos: values.origenRecursos,
       destino_recursos: values.destinoRecursos,
       canal_pago_id: Number(values.canalPagoId),
-      tipo_pago_id: aNumeroOIndefinido(values.tipoPagoId),
+      forma_pago_id: aNumeroOIndefinido(values.tipoPagoId),
       ebr_soluciones: aTextoOIndefinido(values.ebrSoluciones),
     },
     historial_crediticio: tieneHistorial
