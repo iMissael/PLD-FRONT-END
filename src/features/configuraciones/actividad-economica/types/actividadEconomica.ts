@@ -8,11 +8,8 @@
  * paginación se hacen en el cliente.
  */
 
-/**
- * Valores del enum `Estatus` del backend: A=Activa, B=Baja, S=Suspendido,
- * E=Eliminado. El formulario solo ofrece A y B.
- */
-export type EstatusActividadEconomica = "A" | "B" | "S" | "E";
+/** A=Activo, I=Inactivo, B=Baja (borrado lógico). */
+export type EstatusActividadEconomica = "A" | "I" | "B";
 
 /**
  * Igual a `CrearCatActividadEconomicaRequest`.

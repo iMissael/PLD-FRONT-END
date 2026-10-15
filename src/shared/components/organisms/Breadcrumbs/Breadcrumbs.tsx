@@ -49,7 +49,7 @@ const TITULOS_RUTAS: Record<string, string> = {
   "revision-alertas-seguimiento": "Revisión de alertas de seguimiento",
   control: "Control",
   quienesquien: "Quién es quién",
-  coincidencias: "Revisión de coincidencias",
+  coincidencias: "Revisión de incidencias",
   "control-dolar": "Control dólar",
   administracion: "Administración",
   usuarios: "Usuarios",

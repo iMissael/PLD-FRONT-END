@@ -8,7 +8,7 @@ describe("clienteDesdePerfil", () => {
       nombre: "Alejandro Ramirez Torres",
       rfc: "RATA850312AB1",
       curp: "RATA850312HDFMRL05",
-      tipoPersona: { id: "1", nombre: "Persona Física Nacional" },
+      tipoPersona: { id: 1, nombre: "Persona Física Nacional" },
     });
     expect(cliente).toMatchObject({
       numero: "8",
@@ -24,7 +24,7 @@ describe("clienteDesdePerfil", () => {
     const cliente = clienteDesdePerfil({
       referencia: "CLI-CORP-001",
       nombre: "Socio Alpha",
-      tipoPersona: { id: "2", nombre: "Persona Moral Nacional" },
+      tipoPersona: { id: 2, nombre: "Persona Moral Nacional" },
     });
     expect(cliente.persona).toBe("MORAL");
     expect(cliente.numero).toBe("CLI-CORP-001");

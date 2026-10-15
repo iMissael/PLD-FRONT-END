@@ -62,9 +62,6 @@ const RolPermisosPage = lazy(() =>
 const UsuariosPage = lazy(() =>
   import("@/features/configuraciones/administracion/usuarios/pages/UsuariosPage").then((m) => ({ default: m.UsuariosPage })),
 );
-const SistemasIntegracionPage = lazy(() =>
-  import("@/features/configuraciones/administracion/integraciones/pages/SistemasIntegracionPage").then((m) => ({ default: m.SistemasIntegracionPage })),
-);
 const CanalesPagoPage = lazy(() =>
   import("@/features/configuraciones/canales-pago/pages/CanalesPagoPage").then((m) => ({ default: m.CanalesPagoPage })),
 );
@@ -135,8 +132,8 @@ const CapturaAlertasPage = lazy(() =>
 const ConsultaListasPage = lazy(() =>
   import("@/features/operacion/consulta-listas/pages/Quienesquien").then((m) => ({ default: m.ConsultaListasPage })),
 );
-const RevisionCoincidenciasPage = lazy(() =>
-  import("@/features/operacion/revision-coincidencias/pages/RevisionCoincidenciasPage").then((m) => ({ default: m.RevisionCoincidenciasPage })),
+const RevisionIncidenciasPage = lazy(() =>
+  import("@/features/operacion/revision-incidencias/pages/RevisionIncidenciasPage").then((m) => ({ default: m.RevisionIncidenciasPage })),
 );
 const EvaluacionRiesgoPage = lazy(() =>
   import("@/features/operacion/evaluacion-riesgo/pages/EvaluacionRiesgoPage").then((m) => ({ default: m.EvaluacionRiesgoPage })),
@@ -242,7 +239,7 @@ export const router = createBrowserRouter([
                   {
                     path: "operacion/revision-alertas-autorizacion",
                     element: <RevisionAutorizacionesPage />,
-                  }, 
+                  },
                   {
                     path: "operacion/revision-alertas-seguimiento",
                     element: <PlaceholderPage title="Revisión de alertas de seguimiento en operación" />,
@@ -339,14 +336,6 @@ export const router = createBrowserRouter([
                         element: <PermisosPage />,
                       },
                       {
-                        path: "configuraciones/administracion/integraciones",
-                        element: (
-                          <RequierePermiso recurso="integraciones" accion="ver">
-                            <SistemasIntegracionPage />
-                          </RequierePermiso>
-                        ),
-                      },
-                      {
                         path: "operacion/captura-alertas",
                         element: <CapturaAlertasPage />,
                       },
@@ -361,10 +350,10 @@ export const router = createBrowserRouter([
                         element: <ConsultaListasPage />,
                       },
                       {
-                        path: "control/coincidencias",
+                        path: "operacion/coincidencias",
                         element: (
                           <RequierePermiso recurso="coincidencias" accion="ver">
-                            <RevisionCoincidenciasPage />
+                            <RevisionIncidenciasPage />
                           </RequierePermiso>
                         ),
                       },

@@ -125,7 +125,7 @@ export function EvaluacionRiesgoForm({
   const entidadesDelPais = useMemo(() => {
     if (!entidades) return [];
     if (!paisSeleccionado) return entidades;
-    return entidades.filter((entidad) => entidad.idPais === paisSeleccionado);
+    return entidades.filter((entidad) => String(entidad.idPais) === paisSeleccionado);
   }, [entidades, paisSeleccionado]);
 
   const { data: municipios } = useMunicipios(aNumeroOIndefinido(entidadSeleccionada));
@@ -150,7 +150,7 @@ export function EvaluacionRiesgoForm({
     const payload = construirSolicitud(values, { verificadoPor: String(verificadoPor) });
 
     const tipoPersonaSeleccionado = tiposPersona?.find(
-      (t) => t.id === values.tipoPersonaId,
+      (t) => String(t.id) === values.tipoPersonaId,
     );
     const cliente = construirCliente(values, tipoPersonaSeleccionado?.nombre, undefined);
 

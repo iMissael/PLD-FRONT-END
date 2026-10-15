@@ -1,7 +1,7 @@
 import { apiClient } from "@/api/client";
+import type { Alerta } from "@/features/alertas/types/alertas";
 import type {
   AgregarObservacionInput,
-  AlertaPLD,
   CambiarEstatusInput,
   CrearDenunciaInput,
   Denuncia,
@@ -10,7 +10,7 @@ import type {
   ActualizarMensajeDenunciaInput,
   ListarAlertasParams,
   ListarDenunciasParams,
-  MensajeDenunciaResponse, 
+  MensajeDenunciaResponse,
   ObservacionDenuncia,
   PageResponse,
 } from "../types/buzon";
@@ -25,7 +25,7 @@ export async function obtenerMensajeDenunciaPublico(
 ): Promise<MensajeDenunciaResponse> {
   const { data } = await apiClient.get<MensajeDenunciaResponse>(
     `/publico/mensaje-denuncia`,
-    { signal },
+    { signal, tenantHeaderOnly: true },
   );
   return data;
 }
@@ -36,12 +36,10 @@ export async function obtenerNombreTenantPublico(
 ): Promise<{ nombreComercial: string }> {
   const { data } = await apiClient.get<{ nombreComercial: string }>(
     `/publico/nombre`,
-    { signal },
+    { signal, tenantHeaderOnly: true },
   );
   return data;
 }
-
-
 
 /** Consultar mensaje HTML de cabecera de denuncia (Administración) */
 export async function obtenerMensajeDenunciaAdmin(
@@ -49,7 +47,7 @@ export async function obtenerMensajeDenunciaAdmin(
 ): Promise<MensajeDenunciaResponse> {
   const { data } = await apiClient.get<MensajeDenunciaResponse>(
     `/mensaje-denuncia`,
-    { signal },
+    { signal, tenantHeaderOnly: true },
   );
   return data;
 }
@@ -62,7 +60,7 @@ export async function actualizarMensajeDenunciaAdmin(
   const { data } = await apiClient.put<MensajeDenunciaResponse>(
     `/mensaje-denuncia`,
     input,
-    { signal},
+    { signal, tenantHeaderOnly: true },
   );
   return data;
 }
@@ -257,12 +255,12 @@ export async function agregarObservacion(
   return data;
 }
 
-/** Listar alertas PLD generadas */
+/** Listar las alertas PLD generadas a partir de denuncias */
 export async function listarAlertas(
   params?: ListarAlertasParams,
   signal?: AbortSignal,
-): Promise<PageResponse<AlertaPLD>> {
-  const { data } = await apiClient.get<PageResponse<AlertaPLD>>("/buzon/alertas", {
+): Promise<PageResponse<Alerta>> {
+  const { data } = await apiClient.get<PageResponse<Alerta>>("/buzon/alertas", {
     params,
     signal,
   });
@@ -273,8 +271,8 @@ export async function listarAlertas(
 export async function verAlertaPorId(
   id: number,
   signal?: AbortSignal,
-): Promise<AlertaPLD> {
-  const { data } = await apiClient.get<AlertaPLD>(`/buzon/alertas/${id}`, {
+): Promise<Alerta> {
+  const { data } = await apiClient.get<Alerta>(`/buzon/alertas/${id}`, {
     signal,
   });
   return data;

@@ -4,9 +4,6 @@ import { escapeHtml, urlSegura } from "@/shared/utils/sanitizeHtml";
 import {
   Bold,
   Italic,
-  Underline,
-  Heading2,
-  Heading3,
   List,
   Palette,
   Square,
@@ -14,9 +11,7 @@ import {
   ChevronDown,
   Shield,
   HelpCircle,
-  AlertTriangle,
-  Undo,
-  Redo,
+  AlertTriangle, 
   Trash2,
 } from "lucide-react";
 import { Button } from "@/shared/components/atoms/Button";

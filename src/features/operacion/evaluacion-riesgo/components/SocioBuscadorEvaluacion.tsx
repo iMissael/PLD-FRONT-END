@@ -149,10 +149,14 @@ export function SocioBuscadorEvaluacion({
       form.setValue("curp", perfil.curp ?? "");
       form.setValue("fechaNacimiento", perfil.fechaNacimiento ?? "");
       if (perfil.tipoPersona?.id) {
-        form.setValue("tipoPersonaId", perfil.tipoPersona.id, { shouldValidate: true });
+        form.setValue("tipoPersonaId", String(perfil.tipoPersona.id), {
+          shouldValidate: true,
+        });
       }
       if (perfil.nacionalidad?.id) {
-        form.setValue("nacionalidadId", perfil.nacionalidad.id, { shouldValidate: true });
+        form.setValue("nacionalidadId", String(perfil.nacionalidad.id), {
+          shouldValidate: true,
+        });
       }
       if (perfil.actividadEconomica?.id) {
         form.setValue("actividadEconomicaId", perfil.actividadEconomica.id, {

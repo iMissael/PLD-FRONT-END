@@ -10,8 +10,8 @@
  * conserva su valor actual en el backend, así que no se pierden.
  */
 
-/** Valores del enum `Estatus` del backend. El formulario solo ofrece A y B. */
-export type EstatusCanalPago = "A" | "B" | "S" | "E";
+/** A=Activo, I=Inactivo, B=Baja (borrado lógico). */
+export type EstatusCanalPago = "A" | "I" | "B";
 
 /**
  * Igual a `CrearCatCanalPagoRequest`. Sin `id`: lo genera el adaptador como

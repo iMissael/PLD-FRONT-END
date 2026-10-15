@@ -19,6 +19,7 @@ import { useUsuarios } from "@/features/configuraciones/administracion/usuarios/
 import type { UsuarioResponse } from "@/features/configuraciones/administracion/usuarios/types/usuarios";
 import { esRolOficial } from "@/features/configuraciones/administracion/usuarios/utils/usuarios";
 import { useAuthStore } from "@/shared/auth/authStore";
+import { esEstatusActivo } from "@/shared/utils/estatus";
 
 function nombreCompleto(usuario: UsuarioResponse) {
   return [usuario.nombre, usuario.primerApellido, usuario.segundoApellido]
@@ -49,7 +50,7 @@ export function OficialCumplimientoPage() {
   const oficiales = useMemo(
     () =>
       (usuarios ?? []).filter(
-        (usuario) => usuario.estado !== "E" && esRolOficial(roles, usuario.rolId),
+        (usuario) => esEstatusActivo(usuario.estado) && esRolOficial(roles, usuario.rolId),
       ),
     [usuarios, roles],
   );

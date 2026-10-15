@@ -81,7 +81,7 @@ export function FormSeccionCredito({
                 </FormControl>
                 <SelectContent>
                   {tiposCredito?.map((tipo) => (
-                    <SelectItem key={tipo.id} value={tipo.id ?? ""}>
+                    <SelectItem key={tipo.id} value={String(tipo.id)}>
                       {tipo.nombre}
                     </SelectItem>
                   ))}
@@ -137,7 +137,7 @@ export function FormSeccionCredito({
                 </FormControl>
                 <SelectContent>
                   {origenesRecurso?.map((origen) => (
-                    <SelectItem key={origen.id} value={origen.id ?? ""}>
+                    <SelectItem key={origen.id} value={String(origen.id)}>
                       {origen.nombre}
                     </SelectItem>
                   ))}
@@ -161,7 +161,7 @@ export function FormSeccionCredito({
                 </FormControl>
                 <SelectContent>
                   {destinosRecurso?.map((destino) => (
-                    <SelectItem key={destino.id} value={destino.id ?? ""}>
+                    <SelectItem key={destino.id} value={String(destino.id)}>
                       {destino.nombre}
                     </SelectItem>
                   ))}

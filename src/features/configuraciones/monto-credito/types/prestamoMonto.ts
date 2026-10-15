@@ -6,10 +6,8 @@
  * tabla es `cat_prestamo_monto` y el menú dice "monto de crédito".
  */
 
-/**
- * Valores del enum `Estatus` del backend. El formulario solo ofrece A y B.
- */
-export type EstatusPrestamoMonto = "A" | "B" | "S" | "E";
+/** A=Activo, I=Inactivo, B=Baja (borrado lógico). */
+export type EstatusPrestamoMonto = "A" | "I" | "B";
 
 /**
  * Igual a `CrearCatPrestamoMontoRequest`.

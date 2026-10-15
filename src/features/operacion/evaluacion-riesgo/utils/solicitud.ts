@@ -120,7 +120,7 @@ export function datosFaltantes(values: EvaluacionRiesgoFormValues): string[] {
   return [...new Set(etiquetas)];
 }
 
-/** Cuerpo de `POST /pld/evaluaciones` a partir de lo capturado (o cargado del perfil). */
+/** Cuerpo de `POST /evaluaciones` a partir de lo capturado (o cargado del perfil). */
 export function construirSolicitud(
   values: EvaluacionRiesgoFormValues,
   contexto: { sucursalId?: string; verificadoPor: string },
@@ -146,7 +146,9 @@ export function construirSolicitud(
       nacionalidad_id: values.nacionalidadId,
       fecha_nacimiento: values.fechaNacimiento,
       antiguedad_giro_anios: values.antiguedadGiroAnios,
-      pep_nacional_id: aTextoOIndefinido(values.pepNacionalId),
+      // pep_nacional_id ya no existe en el contrato: el backend lo quitó y lo ignoraba de todas
+      // formas (el riesgo PEP se resuelve por listas, no por este campo). El selector "PEP
+      // Nacional" del formulario queda pendiente de retirar aparte.
       actividad_economica_id: values.actividadEconomicaId,
     },
     domicilio: {
@@ -173,7 +175,7 @@ export function construirSolicitud(
       origen_recursos: values.origenRecursos,
       destino_recursos: values.destinoRecursos,
       canal_pago_id: Number(values.canalPagoId),
-      tipo_pago_id: aNumeroOIndefinido(values.tipoPagoId),
+      forma_pago_id: aNumeroOIndefinido(values.tipoPagoId),
       ebr_soluciones: aTextoOIndefinido(values.ebrSoluciones),
     },
     historial_crediticio: tieneHistorial

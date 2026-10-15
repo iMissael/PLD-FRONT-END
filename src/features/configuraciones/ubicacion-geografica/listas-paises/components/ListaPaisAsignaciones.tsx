@@ -88,7 +88,7 @@ export function ListaPaisAsignaciones({ lista, onCerrar }: ListaPaisAsignaciones
             const t = term.toLowerCase().trim();
             return (
               (pais.nombre?.toLowerCase().includes(t) ?? false) ||
-              (pais.id?.toLowerCase().includes(t) ?? false) ||
+              String(pais.id ?? "").toLowerCase().includes(t) ||
               (pais.codigoIso?.toLowerCase().includes(t) ?? false)
             );
           },

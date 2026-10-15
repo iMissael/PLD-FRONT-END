@@ -32,12 +32,13 @@ export function SeccionParametrosPld({ form }: { form: FichaForm }) {
     () =>
       (actividades ?? [])
         .filter(
-          (item) => item.id && (item.estatus === "A" || item.id === actividadActual),
+          (item) =>
+            item.id && (item.estatus === "A" || String(item.id) === actividadActual),
         )
         .map((item) => ({
-          valor: item.id ?? "",
+          valor: String(item.id),
           etiqueta: item.descripcion ?? "",
-          codigo: item.id,
+          codigo: item.claveSat,
         })),
     [actividades, actividadActual],
   );

@@ -9,8 +9,8 @@
  * nivel: cada entidad conserva el de su zona principal.
  */
 
-/** A = activa, B = baja. */
-export type EstatusZona = "A" | "B" | (string & {});
+/** A=Activa, I=Inactiva, B=Baja (borrado lógico). */
+export type EstatusZona = "A" | "I" | "B";
 
 /** Igual a `CrearCatZonaRiesgoRequest`. */
 export interface CrearZonaGeograficaInput {

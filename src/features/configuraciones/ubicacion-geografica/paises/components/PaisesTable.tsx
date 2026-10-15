@@ -125,7 +125,7 @@ export function PaisesTable({
             : "";
           return (
             pais.nombre.toLowerCase().includes(t) ||
-            pais.idPais.toLowerCase().includes(t) ||
+            String(pais.idPais).toLowerCase().includes(t) ||
             (pais.codigoIso?.toLowerCase().includes(t) ?? false) ||
             nombresListas.includes(t) ||
             riesgoTexto.includes(t)

@@ -17,8 +17,8 @@ const perfilCompleto: SocioPerfilRiesgo = {
   curp: "MAHL900514MDFRRC05",
   fechaNacimiento: "1990-05-14",
   esPep: false,
-  tipoPersona: { id: "1", nombre: "Persona Física Nacional" },
-  nacionalidad: { id: "165", nombre: "México" },
+  tipoPersona: { id: 1, nombre: "Persona Física Nacional" },
+  nacionalidad: { id: 165, nombre: "México" },
   actividadEconomica: { id: "10", descripcion: "CULTIVO DE SOYA" },
   sucursal: "SUC-001",
   domicilio: {
@@ -202,7 +202,7 @@ describe("construirSolicitud", () => {
       origen_recursos: "2",
       destino_recursos: "3",
       canal_pago_id: 4,
-      tipo_pago_id: undefined,
+      forma_pago_id: undefined,
       ebr_soluciones: undefined,
     });
   });
@@ -223,14 +223,6 @@ describe("construirSolicitud", () => {
       contexto,
     );
     expect(sinHistorial.historial_crediticio).toBeUndefined();
-  });
-
-  it("manda el tipo de PEP cuando el socio lo tiene", () => {
-    const pep = construirSolicitud(
-      valoresDesdePerfil({ ...perfilCompleto, pepNacionalId: "3" }),
-      contexto,
-    );
-    expect(pep.socio?.pep_nacional_id).toBe("3");
   });
 });
 
