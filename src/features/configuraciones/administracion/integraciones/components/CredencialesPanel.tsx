@@ -10,10 +10,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/shared/components/ui/alert-dialog";
-import { Badge } from "@/shared/components/ui/CatalogoBadge";
-import { Button } from "@/shared/components/ui/CatalogoButton";
-import { card, field, hint, label, table } from "@/shared/components/ui/styles";
+} from "@/shared/components/organisms/AlertDialog";
+import { StatusBadge as Badge } from "@/shared/components/atoms/StatusBadge";
+import { Button } from "@/shared/components/atoms/Button";
+import { Input } from "@/shared/components/atoms/Input";
+import { Card } from "@/shared/components/molecules/Card";
+import { hint, label, table } from "@/shared/styles/tokens";
 
 import { useEmitirCredencial, useRevocarCredencial } from "../hooks/useIntegraciones";
 import {
@@ -67,7 +69,7 @@ export function CredencialesPanel({ sistema, onError }: CredencialesPanelProps) 
   const credenciales = [...sistema.credenciales].sort((a, b) => Number(b.vigente) - Number(a.vigente));
 
   return (
-    <section className={`flex flex-col gap-4 p-4 ${card}`}>
+    <Card className="flex flex-col gap-4 p-4">
       <div>
         <h3 className="text-sm font-semibold text-foreground">Credenciales de {sistema.clientId}</h3>
         <p className={hint}>
@@ -148,28 +150,26 @@ export function CredencialesPanel({ sistema, onError }: CredencialesPanelProps) 
           <label htmlFor="etiquetaCredencial" className={label}>
             Etiqueta (opcional)
           </label>
-          <input
+          <Input
             id="etiquetaCredencial"
             type="text"
             maxLength={60}
             placeholder="produccion-2026"
             value={etiqueta}
             onChange={(event) => setEtiqueta(event.target.value)}
-            className={field}
           />
         </div>
         <div className="flex flex-col gap-1 sm:w-40">
           <label htmlFor="vigenciaCredencial" className={label}>
             Vigencia (días)
           </label>
-          <input
+          <Input
             id="vigenciaCredencial"
             type="number"
             min={1}
             max={730}
             value={vigenciaDias}
             onChange={(event) => setVigenciaDias(Number(event.target.value))}
-            className={field}
             aria-invalid={!vigenciaValida}
           />
         </div>
@@ -184,6 +184,6 @@ export function CredencialesPanel({ sistema, onError }: CredencialesPanelProps) 
         <p className={hint}>Ya tiene {MAX_CREDENCIALES_VIGENTES} credenciales vigentes: revoca una para emitir otra.</p>
       ) : null}
       {sistema.estatus !== "A" ? <p className={hint}>El sistema está de baja: actívalo para emitir credenciales.</p> : null}
-    </section>
+    </Card>
   );
 }

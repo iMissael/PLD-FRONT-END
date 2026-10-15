@@ -12,12 +12,10 @@ export function authInterceptor(
   config: InternalAxiosRequestConfig,
 ): InternalAxiosRequestConfig {
   const tenantId = getCurrentTenantId();
-  const { token: storeToken, tenantId: tenantDeLaSesion } = useAuthStore.getState();
-  const activeToken = storeToken || getAuthToken();
+  const { token, tenantId: tenantDeLaSesion } = useAuthStore.getState();
 
-  if (activeToken && tenantId && (!tenantDeLaSesion || tenantDeLaSesion === tenantId)) {
-    config.headers.set("Authorization", `Bearer ${activeToken}`);
-    config.headers["Authorization"] = `Bearer ${activeToken}`;
+  if (token && tenantId && tenantDeLaSesion === tenantId) {
+    config.headers.set("Authorization", `Bearer ${token}`);
   }
   return config;
 }
@@ -25,7 +23,7 @@ export function authInterceptor(
 export function unauthorizedInterceptor(error: AxiosError): Promise<never> {
   const esLogin = error.config?.url?.endsWith("/auth/login") ?? false;
   const tenantId = getCurrentTenantId();
-  const haySesion = useAuthStore.getState().token !== null || getAuthToken() !== null;
+  const haySesion = getAuthToken() !== null;
 
   if (error.response?.status === 401 && !esLogin && tenantId && haySesion) {
     useAuthStore.getState().logout();

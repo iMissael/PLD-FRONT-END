@@ -5,9 +5,9 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
-import { TurnstileWidget, type TurnstileWidgetRef } from "@/shared/components/TurnstileWidget";
-import { CheckCircleIcon, PaperclipIcon, UploadIcon } from "@/shared/components/icons";
-import { ThemeToggle } from "@/shared/components/ThemeToggle";
+import { TurnstileWidget, type TurnstileWidgetRef } from "@/shared/components/organisms/TurnstileWidget";
+import { CheckCircleIcon, PaperclipIcon, UploadIcon } from "@/shared/components/atoms/icons";
+import { ThemeToggle } from "@/shared/components/molecules/ThemeToggle";
 import { es } from "@/shared/i18n/es";
 
 import { MensajeCabeceraDenuncia } from "../components/MensajeCabeceraDenuncia";

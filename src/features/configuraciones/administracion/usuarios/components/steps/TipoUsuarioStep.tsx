@@ -6,8 +6,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/shared/components/ui/form";
-import { InputFormateado } from "@/shared/components/InputFormateado";
+} from "@/shared/components/molecules/Form";
+import { InputFormateado } from "@/shared/components/atoms/InputFormateado";
 import { clave, soloLetras } from "@/shared/utils/entradas";
 import {
   Select,
@@ -15,7 +15,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/shared/components/ui/select";
+} from "@/shared/components/molecules/Select";
 import { useActividadesEconomicas } from "@/features/catalogos/hooks/useCatalogos";
 import {
   CampoCatalogo,
@@ -45,11 +45,14 @@ export function TipoUsuarioStep({
   const opcionesActividad = useMemo<OpcionCatalogo[]>(
     () =>
       (actividadesEconomicas ?? [])
-        .filter((item) => item.id && (item.estatus === "A" || item.id === actividadActual))
+        .filter(
+          (item) =>
+            item.id && (item.estatus === "A" || String(item.id) === actividadActual),
+        )
         .map((item) => ({
-          valor: item.id ?? "",
+          valor: String(item.id),
           etiqueta: item.descripcion ?? "",
-          codigo: item.id,
+          codigo: String(item.id),
         })),
     [actividadesEconomicas, actividadActual],
   );

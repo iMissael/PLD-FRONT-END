@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/molecules/Card";
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@/shared/components/ui/sheet";
+} from "@/shared/components/organisms/Sheet";
 import { useEvaluacionAutomatica } from "@/features/operacion/evaluacion-riesgo/hooks/useEvaluacionAutomatica";
 import { EvaluacionRiesgoForm } from "@/features/operacion/evaluacion-riesgo/components/EvaluacionRiesgoForm";
 import { MatrizRiesgoDashboard } from "@/features/operacion/evaluacion-riesgo/components/MatrizRiesgoDashboard";

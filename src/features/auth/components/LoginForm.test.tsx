@@ -6,7 +6,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { LoginForm } from "@/features/auth/components/LoginForm";
 import { useAuthStore } from "@/shared/auth/authStore";
-import { Toaster } from "@/shared/components/ui/sonner";
+import { Toaster } from "@/shared/components/atoms/Toaster";
 import { setCurrentTenantId } from "@/shared/tenant/tenantStore";
 import { TEST_TENANT_ID } from "@/test/mocks/handlers";
 

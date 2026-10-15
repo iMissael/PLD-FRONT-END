@@ -8,7 +8,7 @@ import type {
   ReglaAlerta,
 } from "../types/reglaAlerta";
 
-const BASE_PATH = "/v1/pld/configuracion-alertas";
+const BASE_PATH = "/configuracion-alertas";
 
 export async function listarReglas(
   filtro: FiltroReglas,

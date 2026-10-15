@@ -1,6 +1,6 @@
 import { UserPlus, X } from "lucide-react";
 import { useState } from "react";
-import { Button } from "@/shared/components/ui/button";
+import { Button } from "@/shared/components/atoms/Button";
 import {
   Card,
   CardContent,
@@ -8,8 +8,8 @@ import {
   CardTitle,
   CardDescription,
   CardAction,
-} from "@/shared/components/ui/card";
-import { Skeleton } from "@/shared/components/ui/skeleton";
+} from "@/shared/components/molecules/Card";
+import { Skeleton } from "@/shared/components/atoms/Skeleton";
 import { UsuarioForm } from "@/features/configuraciones/administracion/usuarios/components/UsuarioForm";
 import { UsuariosTable } from "@/features/configuraciones/administracion/usuarios/components/UsuariosTable";
 import { useDetalleUsuario } from "@/features/configuraciones/administracion/usuarios/hooks/useUsuarios";

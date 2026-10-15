@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 
-import { Button } from "@/shared/components/ui/CatalogoButton";
-import { card, field, hint, label } from "@/shared/components/ui/styles";
+import { Button } from "@/shared/components/atoms/Button";
+import { Input } from "@/shared/components/atoms/Input";
+import { Card } from "@/shared/components/molecules";
+import { hint, label } from "@/shared/styles/tokens";
 
 import { NivelRiesgoSelect } from "../../ubicacion-geografica/niveles-riesgo/components/NivelRiesgoSelect";
 import type {
@@ -98,112 +100,112 @@ export function PrestamoMontoForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className={`flex flex-col gap-4 p-4 ${card}`}>
-      <h3 className="text-sm font-semibold text-foreground">
-        {esNuevo
-          ? "Nuevo rango de monto"
-          : `Editar rango: ${formatearRangoMonto(rango.montoMin, rango.montoMax)}`}
-      </h3>
+    <Card className="p-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <h3 className="text-sm font-semibold text-foreground">
+          {esNuevo
+            ? "Nuevo rango de monto"
+            : `Editar rango: ${formatearRangoMonto(rango.montoMin, rango.montoMax)}`}
+        </h3>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="flex flex-col gap-1">
-          <label htmlFor="montoMin" className={label}>
-            Monto mínimo
-          </label>
-          <input
-            id="montoMin"
-            type="number"
-            required
-            min={0}
-            // La columna es numeric(15,2): dos decimales, no más.
-            step="0.01"
-            value={form.montoMin}
-            onChange={(event) =>
-              setForm((prev) => ({ ...prev, montoMin: aNumero(event.target.value) }))
-            }
-            className={field}
-          />
-        </div>
-
-        <div className="flex flex-col gap-1">
-          <label htmlFor="montoMax" className={label}>
-            Monto máximo
-          </label>
-          <input
-            id="montoMax"
-            type="number"
-            required={!form.sinLimiteSuperior}
-            disabled={form.sinLimiteSuperior}
-            // Evita capturar un rango invertido con la validación nativa.
-            min={form.montoMin === "" ? 0 : form.montoMin}
-            step="0.01"
-            value={form.sinLimiteSuperior ? "" : form.montoMax}
-            onChange={(event) =>
-              setForm((prev) => ({ ...prev, montoMax: aNumero(event.target.value) }))
-            }
-            className={field}
-          />
-          <label className={`flex items-center gap-2 ${hint}`}>
-            <input
-              type="checkbox"
-              checked={form.sinLimiteSuperior}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="flex flex-col gap-1">
+            <label htmlFor="montoMin" className={label}>
+              Monto mínimo
+            </label>
+            <Input
+              id="montoMin"
+              type="number"
+              required
+              min={0}
+              // La columna es numeric(15,2): dos decimales, no más.
+              step="0.01"
+              value={form.montoMin}
               onChange={(event) =>
-                setForm((prev) => ({ ...prev, sinLimiteSuperior: event.target.checked }))
+                setForm((prev) => ({ ...prev, montoMin: aNumero(event.target.value) }))
               }
-              className="rounded border-border accent-accent"
             />
-            Sin límite superior
-          </label>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label htmlFor="montoMax" className={label}>
+              Monto máximo
+            </label>
+            <Input
+              id="montoMax"
+              type="number"
+              required={!form.sinLimiteSuperior}
+              disabled={form.sinLimiteSuperior}
+              // Evita capturar un rango invertido con la validación nativa.
+              min={form.montoMin === "" ? 0 : form.montoMin}
+              step="0.01"
+              value={form.sinLimiteSuperior ? "" : form.montoMax}
+              onChange={(event) =>
+                setForm((prev) => ({ ...prev, montoMax: aNumero(event.target.value) }))
+              }
+            />
+            <label className={`flex items-center gap-2 ${hint}`}>
+              <input
+                type="checkbox"
+                checked={form.sinLimiteSuperior}
+                onChange={(event) =>
+                  setForm((prev) => ({ ...prev, sinLimiteSuperior: event.target.checked }))
+                }
+                className="rounded border-border accent-accent"
+              />
+              Sin límite superior
+            </label>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label htmlFor="nivelRiesgo" className={label}>
+              Nivel de riesgo
+            </label>
+            <NivelRiesgoSelect
+              id="nivelRiesgo"
+              required
+              value={form.catNivelRiesgoId}
+              onChange={(id) => setForm((prev) => ({ ...prev, catNivelRiesgoId: id }))}
+            />
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label htmlFor="estatus" className={label}>
+              Estatus
+            </label>
+            <select
+              id="estatus"
+              value={form.estatus}
+              onChange={(event) =>
+                setForm((prev) => ({
+                  ...prev,
+                  estatus: event.target.value as EstatusPrestamoMonto,
+                }))
+              }
+              className="border-border bg-card text-foreground focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full rounded-md border px-3 py-1 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <option value="A">Activo</option>
+              <option value="I">Inactivo</option>
+            </select>
+          </div>
         </div>
 
-        <div className="flex flex-col gap-1">
-          <label htmlFor="nivelRiesgo" className={label}>
-            Nivel de riesgo
-          </label>
-          <NivelRiesgoSelect
-            id="nivelRiesgo"
-            required
-            value={form.catNivelRiesgoId}
-            onChange={(id) => setForm((prev) => ({ ...prev, catNivelRiesgoId: id }))}
-          />
+        <p className="rounded-md bg-muted px-3 py-2 text-sm text-muted-foreground">
+          Nombre que se guardará:{" "}
+          <span className="font-medium text-foreground">
+            {nombrePrevio ?? "— captura el rango —"}
+          </span>
+        </p>
+
+        <div className="flex justify-end gap-2">
+          <Button variante="secundario" onClick={onCancelar}>
+            Cancelar
+          </Button>
+          <Button type="submit" disabled={isPending}>
+            {isPending ? "Guardando..." : "Guardar"}
+          </Button>
         </div>
-
-        <div className="flex flex-col gap-1">
-          <label htmlFor="estatus" className={label}>
-            Estatus
-          </label>
-          <select
-            id="estatus"
-            value={form.estatus}
-            onChange={(event) =>
-              setForm((prev) => ({
-                ...prev,
-                estatus: event.target.value as EstatusPrestamoMonto,
-              }))
-            }
-            className={field}
-          >
-            <option value="A">Activo</option>
-            <option value="I">Inactivo</option>
-          </select>
-        </div>
-      </div>
-
-      <p className="rounded-md bg-muted px-3 py-2 text-sm text-muted-foreground">
-        Nombre que se guardará:{" "}
-        <span className="font-medium text-foreground">
-          {nombrePrevio ?? "— captura el rango —"}
-        </span>
-      </p>
-
-      <div className="flex justify-end gap-2">
-        <Button variante="secundario" onClick={onCancelar}>
-          Cancelar
-        </Button>
-        <Button type="submit" disabled={isPending}>
-          {isPending ? "Guardando..." : "Guardar"}
-        </Button>
-      </div>
-    </form>
+      </form>
+    </Card>
   );
 }

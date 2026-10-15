@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 
-import { Button } from "@/shared/components/ui/CatalogoButton";
-import { card, field, hint, label } from "@/shared/components/ui/styles";
+import { Button } from "@/shared/components/atoms/Button";
+import { Input } from "@/shared/components/atoms/Input";
+import { Card } from "@/shared/components/molecules";
+import { hint, label } from "@/shared/styles/tokens";
 
 import { NivelRiesgoSelect } from "../../ubicacion-geografica/niveles-riesgo/components/NivelRiesgoSelect";
 import type {
@@ -78,90 +80,91 @@ export function ActividadEconomicaForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className={`flex flex-col gap-4 p-4 ${card}`}>
-      <h3 className="text-sm font-semibold text-foreground">
-        {esNueva
-          ? "Nueva actividad económica"
-          : `Editar actividad: ${actividad.descripcion}`}
-      </h3>
+    <Card className="p-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <h3 className="text-sm font-semibold text-foreground">
+          {esNueva
+            ? "Nueva actividad económica"
+            : `Editar actividad: ${actividad.descripcion}`}
+        </h3>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="flex flex-col gap-1">
-          <label htmlFor="claveSat" className={label}>
-            Clave SAT
-          </label>
-          <input
-            id="claveSat"
-            type="text"
-            required
-            maxLength={20}
-            value={form.claveSat}
-            onChange={(event) =>
-              setForm((prev) => ({ ...prev, claveSat: event.target.value }))
-            }
-            className={`${field} font-mono`}
-          />
-          <span className={hint}>No puede repetirse.</span>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="flex flex-col gap-1">
+            <label htmlFor="claveSat" className={label}>
+              Clave SAT
+            </label>
+            <Input
+              id="claveSat"
+              type="text"
+              required
+              maxLength={20}
+              value={form.claveSat}
+              onChange={(event) =>
+                setForm((prev) => ({ ...prev, claveSat: event.target.value }))
+              }
+              className="font-mono"
+            />
+            <span className={hint}>No puede repetirse.</span>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label htmlFor="nivelRiesgo" className={label}>
+              Nivel de riesgo
+            </label>
+            <NivelRiesgoSelect
+              id="nivelRiesgo"
+              required
+              value={form.catNivelRiesgoId}
+              onChange={(id) => setForm((prev) => ({ ...prev, catNivelRiesgoId: id }))}
+            />
+          </div>
+
+          <div className="flex flex-col gap-1 sm:col-span-2">
+            <label htmlFor="descripcion" className={label}>
+              Descripción
+            </label>
+            <Input
+              id="descripcion"
+              type="text"
+              required
+              maxLength={255}
+              value={form.descripcion}
+              onChange={(event) =>
+                setForm((prev) => ({ ...prev, descripcion: event.target.value }))
+              }
+            />
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label htmlFor="estatus" className={label}>
+              Estatus
+            </label>
+            <select
+              id="estatus"
+              value={form.estatus}
+              onChange={(event) =>
+                setForm((prev) => ({
+                  ...prev,
+                  estatus: event.target.value as EstatusActividadEconomica,
+                }))
+              }
+              className="border-border bg-card text-foreground focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full rounded-md border px-3 py-1 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <option value="A">Activo</option>
+              <option value="I">Inactivo</option>
+            </select>
+          </div>
         </div>
 
-        <div className="flex flex-col gap-1">
-          <label htmlFor="nivelRiesgo" className={label}>
-            Nivel de riesgo
-          </label>
-          <NivelRiesgoSelect
-            id="nivelRiesgo"
-            required
-            value={form.catNivelRiesgoId}
-            onChange={(id) => setForm((prev) => ({ ...prev, catNivelRiesgoId: id }))}
-          />
+        <div className="flex justify-end gap-2">
+          <Button variante="secundario" onClick={onCancelar}>
+            Cancelar
+          </Button>
+          <Button type="submit" disabled={isPending}>
+            {isPending ? "Guardando..." : "Guardar"}
+          </Button>
         </div>
-
-        <div className="flex flex-col gap-1 sm:col-span-2">
-          <label htmlFor="descripcion" className={label}>
-            Descripción
-          </label>
-          <input
-            id="descripcion"
-            type="text"
-            required
-            maxLength={255}
-            value={form.descripcion}
-            onChange={(event) =>
-              setForm((prev) => ({ ...prev, descripcion: event.target.value }))
-            }
-            className={field}
-          />
-        </div>
-
-        <div className="flex flex-col gap-1">
-          <label htmlFor="estatus" className={label}>
-            Estatus
-          </label>
-          <select
-            id="estatus"
-            value={form.estatus}
-            onChange={(event) =>
-              setForm((prev) => ({
-                ...prev,
-                estatus: event.target.value as EstatusActividadEconomica,
-              }))
-            }
-            className={field}
-          >
-            <option value="A">Activo</option>
-            <option value="I">Inactivo</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="flex justify-end gap-2">
-        <Button variante="secundario" onClick={onCancelar}>
-          Cancelar
-        </Button>
-        <Button type="submit" disabled={isPending}>
-          {isPending ? "Guardando..." : "Guardar"}
-        </Button>
-      </div>
-    </form>
+      </form>
+    </Card>
   );
 }

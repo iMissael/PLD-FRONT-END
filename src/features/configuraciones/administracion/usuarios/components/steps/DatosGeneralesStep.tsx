@@ -6,9 +6,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/shared/components/ui/form";
-import { Input } from "@/shared/components/ui/input";
-import { InputFormateado } from "@/shared/components/InputFormateado";
+} from "@/shared/components/molecules/Form";
+import { Input } from "@/shared/components/atoms/Input";
+import { InputFormateado } from "@/shared/components/atoms/InputFormateado";
 import {
   alfanumerico,
   correo,
@@ -24,7 +24,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/shared/components/ui/select";
+} from "@/shared/components/molecules/Select";
 import {
   useEntidades,
   useEstadosCiviles,
@@ -54,7 +54,7 @@ export function DatosGeneralesStep({
   const entidadesDelPais = useMemo(() => {
     if (!entidades) return [];
     if (!paisSeleccionado) return entidades;
-    return entidades.filter((entidad) => entidad.idPais === paisSeleccionado);
+    return entidades.filter((entidad) => String(entidad.idPais) === paisSeleccionado);
   }, [entidades, paisSeleccionado]);
 
   return (
@@ -252,7 +252,7 @@ export function DatosGeneralesStep({
                   </FormControl>
                   <SelectContent>
                     {paises?.map((pais) => (
-                      <SelectItem key={pais.idPais} value={pais.idPais ?? ""}>
+                      <SelectItem key={pais.idPais} value={String(pais.idPais)}>
                         {pais.nombre}
                       </SelectItem>
                     ))}

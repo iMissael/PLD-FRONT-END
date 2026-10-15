@@ -6,9 +6,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/shared/components/ui/form";
-import { Input } from "@/shared/components/ui/input";
-import { InputFormateado } from "@/shared/components/InputFormateado";
+} from "@/shared/components/molecules/Form";
+import { Input } from "@/shared/components/atoms/Input";
+import { InputFormateado } from "@/shared/components/atoms/InputFormateado";
 import { mayusculas, numeroDomicilio, soloDigitos } from "@/shared/utils/entradas";
 import {
   Select,
@@ -16,7 +16,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/shared/components/ui/select";
+} from "@/shared/components/molecules/Select";
 import {
   useEntidades,
   useLocalidades,
@@ -53,7 +53,7 @@ export function DomicilioStep({ form }: { form: UseFormReturn<CrearUsuarioFormVa
   const entidadesDelPais = useMemo(() => {
     if (!entidades) return [];
     if (!paisSeleccionado) return entidades;
-    return entidades.filter((entidad) => entidad.idPais === paisSeleccionado);
+    return entidades.filter((entidad) => String(entidad.idPais) === paisSeleccionado);
   }, [entidades, paisSeleccionado]);
 
   const { data: municipios } = useMunicipios(aNumeroOIndefinido(entidadSeleccionada));
@@ -86,7 +86,7 @@ export function DomicilioStep({ form }: { form: UseFormReturn<CrearUsuarioFormVa
                   </FormControl>
                   <SelectContent>
                     {paises?.map((pais) => (
-                      <SelectItem key={pais.idPais} value={pais.idPais ?? ""}>
+                      <SelectItem key={pais.idPais} value={String(pais.idPais)}>
                         {pais.nombre}
                       </SelectItem>
                     ))}

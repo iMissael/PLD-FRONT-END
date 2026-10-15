@@ -2,8 +2,9 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
-import { Alert } from "@/shared/components/ui/Alert";
-import { Button } from "@/shared/components/ui/CatalogoButton";
+import { Button } from "@/shared/components/atoms";
+import { Alert } from "@/shared/components/molecules";
+import { CatalogoPageTemplate } from "@/shared/components/templates";
 
 import { PrestamoMontoDetalle } from "../components/PrestamoMontoDetalle";
 import { PrestamoMontoForm } from "../components/PrestamoMontoForm";
@@ -83,15 +84,12 @@ export function PrestamosMontoPage() {
   };
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-xl font-semibold text-foreground">Monto de crédito</h2>
-          <p className="text-sm text-muted-foreground">
-            Rangos de monto solicitado y el nivel de riesgo PLD asociado. El nombre se
-            genera a partir del rango.
-          </p>
-        </div>
+    <CatalogoPageTemplate
+      titulo="Monto de crédito"
+      descripcion="Rangos de monto solicitado y el nivel de riesgo PLD asociado. El nombre se genera a partir del rango."
+      moduloFooter="Configuración de Recursos · Monto de Crédito"
+      alerta={mensajeError ? <Alert tono="error">{mensajeError}</Alert> : null}
+      acciones={
         <Button
           onClick={() => {
             setCreandoNuevo(true);
@@ -102,10 +100,8 @@ export function PrestamosMontoPage() {
         >
           Nuevo rango
         </Button>
-      </div>
-
-      {mensajeError ? <Alert>{mensajeError}</Alert> : null}
-
+      }
+    >
       <PrestamosMontoTable
         rangos={rangos}
         isLoading={isLoading}
@@ -148,7 +144,7 @@ export function PrestamosMontoPage() {
           />
           {seleccionado ? (
             <Button
-              variante="peligro"
+              variant="destructive"
               className="self-start"
               onClick={handleEliminar}
               disabled={eliminar.isPending}
@@ -158,6 +154,6 @@ export function PrestamosMontoPage() {
           ) : null}
         </div>
       ) : null}
-    </div>
+    </CatalogoPageTemplate>
   );
 }

@@ -31,7 +31,7 @@ const usuarios: UsuarioResponse[] = [
 const roles: RolResponse[] = [
   {
     idRol: 1,
-    nombre: "ROLE_ADMIN",
+    nombre: "ADMINISTRADOR",
     categoria: "ESTANDAR",
     descripcion: "Administrador general del sistema",
     estado: "A",
@@ -58,7 +58,7 @@ const loginResponse: LoginResponse = {
     nombre: "Administrador",
     correo: "admin@example.com",
   },
-  rol: { id: 1, nombre: "ROLE_ADMIN" },
+  rol: { id: 1, nombre: "ADMINISTRADOR" },
   permisos: [{ recurso: "usuarios", accion: "crear" }],
 };
 

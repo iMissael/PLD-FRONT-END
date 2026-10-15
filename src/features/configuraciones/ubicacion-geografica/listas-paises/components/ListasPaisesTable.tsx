@@ -1,8 +1,8 @@
 import { useMemo } from "react";
-import { Badge } from "@/shared/components/ui/CatalogoBadge";
-import { Button } from "@/shared/components/ui/CatalogoButton";
-import { DataTable, type ColumnDef } from "@/shared/components/ui/DataTable";
-import { table } from "@/shared/components/ui/styles";
+import { StatusBadge } from "@/shared/components/atoms/StatusBadge";
+import { Button } from "@/shared/components/atoms/Button";
+import { DataTable, type ColumnDef } from "@/shared/components/organisms/DataTable";
+import { table } from "@/shared/styles/tokens";
 import type { ListaPaisResponse } from "../types/listaPais";
 
 interface ListasPaisesTableProps {
@@ -70,9 +70,9 @@ export function ListasPaisesTable({
       {
         header: "Estatus",
         cell: (lista) => (
-          <Badge tono={lista.estatus === "A" ? "activo" : "inactivo"}>
+          <StatusBadge tono={lista.estatus === "A" ? "activo" : "inactivo"}>
             {lista.estatus === "A" ? "Activa" : "Inactiva"}
-          </Badge>
+          </StatusBadge>
         ),
       },
       {
@@ -82,11 +82,11 @@ export function ListasPaisesTable({
         width: "130px",
         cell: (lista) => (
           <Button
-            variante={verId === lista.id ? "primario" : "secundario"}
+            variant={verId === lista.id ? "default" : "outline"}
             size="sm"
             onClick={(e) => {
               e.stopPropagation();
-              onVer(lista); 
+              onVer(lista);
             }}
           >
             {verId === lista.id ? "Ocultar" : "Ver países"}

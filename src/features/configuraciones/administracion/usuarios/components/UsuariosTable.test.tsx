@@ -12,7 +12,7 @@ describe("UsuariosTable", () => {
       expect(screen.getByText("@admin")).toBeInTheDocument();
     });
 
-    expect(screen.getByText("ROLE_ADMIN")).toBeInTheDocument();
+    expect(screen.getByText("ADMINISTRADOR")).toBeInTheDocument();
     expect(screen.getByText("Activo")).toBeInTheDocument();
   });
 

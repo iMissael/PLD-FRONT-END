@@ -1,24 +1,21 @@
+import { useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm, useWatch, type Control } from "react-hook-form";
 import { toast } from "sonner";
 import { isAppError } from "@/api/interceptors/errorInterceptor";
-import { Badge } from "@/shared/components/ui/badge";
-import { Button } from "@/shared/components/ui/button";
+import { Button } from "@/shared/components/atoms/Button";
+import { Input } from "@/shared/components/atoms/Input";
+import { StatusBadge } from "@/shared/components/atoms/StatusBadge";
+import { BadgeSuma } from "@/shared/components/molecules/BadgeSuma";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from "@/shared/components/ui/form";
-import { Input } from "@/shared/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/shared/components/ui/select";
+} from "@/shared/components/molecules/Form";
+
 import {
   Table,
   TableBody,
@@ -26,7 +23,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/shared/components/ui/table";
+} from "@/shared/components/atoms/Table";
 import { useCrearNuevaVersion } from "@/features/configuraciones/matriz-riesgo/hooks/useMatrizRiesgo";
 import {
   matrizRiesgoFormSchema,
@@ -62,13 +59,6 @@ function sumaActivos(items: { estatus: "A" | "I"; valor: string }[]) {
     .reduce((acc, i) => acc + (Number(i.valor) || 0), 0);
 }
 
-function BadgeSuma({ suma }: { suma: number }) {
-  const enCien = Math.abs(suma - 100) < 0.01;
-  return (
-    <Badge variant={enCien ? "default" : "destructive"}>Suma: {suma.toFixed(2)}%</Badge>
-  );
-}
-
 function FactorCard({
   control,
   factorIndex,
@@ -78,6 +68,7 @@ function FactorCard({
   factorIndex: number;
   descripcion: string;
 }) {
+  const [abierto, setAbierto] = useState(true);
   const { fields } = useFieldArray({
     control,
     name: `factores.${factorIndex}.subfactores`,
@@ -94,10 +85,41 @@ function FactorCard({
   );
 
   return (
-    <div className="space-y-3 rounded-md border p-3">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <span className="font-medium">{descripcion}</span>
+    <div className="rounded-xl border border-border bg-card shadow-2xs">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 sm:p-4">
+        <div className="flex flex-wrap items-center gap-2.5">
+          <button
+            type="button"
+            onClick={() => setAbierto((prev) => !prev)}
+            className="flex items-center gap-2 text-left font-semibold text-foreground text-sm sm:text-base hover:text-primary transition-colors cursor-pointer"
+          >
+            <span>{descripcion}</span>
+            {abierto ? (
+              <ChevronUp className="size-4 text-muted-foreground" />
+            ) : (
+              <ChevronDown className="size-4 text-muted-foreground" />
+            )}
+          </button>
+          <FormField
+            control={control}
+            name={`factores.${factorIndex}.estatus`}
+            render={({ field }) => (
+              <FormItem className="flex items-center">
+                <StatusBadge tono={field.value === "A" ? "activo" : "inactivo"}>
+                  {field.value === "A" ? "Activo" : "Inactivo"}
+                </StatusBadge>
+              </FormItem>
+            )}
+          />
+          {fields.length > 0 && (
+            <span className="text-xs text-muted-foreground">
+              ({fields.length} subfactor{fields.length > 1 ? "es" : ""})
+            </span>
+          )}
+        </div>
+
         <div className="flex items-center gap-3">
+          <span className="text-xs font-medium text-muted-foreground">Peso (%):</span>
           <FormField
             control={control}
             name={`factores.${factorIndex}.peso`}
@@ -109,7 +131,7 @@ function FactorCard({
                     step="0.01"
                     min={0}
                     max={100}
-                    className="w-24"
+                    className="w-24 font-mono font-semibold"
                     {...field}
                   />
                 </FormControl>
@@ -117,92 +139,70 @@ function FactorCard({
               </FormItem>
             )}
           />
-          <FormField
-            control={control}
-            name={`factores.${factorIndex}.estatus`}
-            render={({ field }) => (
-              <FormItem>
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl>
-                    <SelectTrigger className="w-28">
-                      <SelectValue />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="A">Activo</SelectItem>
-                    <SelectItem value="I">Inactivo</SelectItem>
-                  </SelectContent>
-                </Select>
-              </FormItem>
-            )}
-          />
         </div>
       </div>
 
-      {estatusFactor === "A" && fields.length > 0 && (
-        <div className="space-y-2 pl-2">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Subfactor</TableHead>
-                <TableHead>Ponderación</TableHead>
-                <TableHead>Estado</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {fields.map((field, subIndex) => (
-                <TableRow key={field.fieldKey}>
-                  <TableCell>{field.descripcion}</TableCell>
-                  <TableCell>
-                    <FormField
-                      control={control}
-                      name={`factores.${factorIndex}.subfactores.${subIndex}.ponderacion`}
-                      render={({ field: ponderacionField }) => (
-                        <FormItem>
-                          <FormControl>
-                            <Input
-                              type="number"
-                              step="0.01"
-                              min={0}
-                              max={100}
-                              className="w-24"
-                              {...ponderacionField}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <FormField
-                      control={control}
-                      name={`factores.${factorIndex}.subfactores.${subIndex}.estatus`}
-                      render={({ field: estatusField }) => (
-                        <FormItem>
-                          <Select
-                            onValueChange={estatusField.onChange}
-                            value={estatusField.value}
-                          >
-                            <FormControl>
-                              <SelectTrigger className="w-28">
-                                <SelectValue />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="A">Activo</SelectItem>
-                              <SelectItem value="I">Inactivo</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </FormItem>
-                      )}
-                    />
-                  </TableCell>
+      {abierto && estatusFactor === "A" && fields.length > 0 && (
+        <div className="border-t border-border p-3.5 sm:p-4 space-y-3">
+          <div className="overflow-hidden rounded-lg border border-border bg-card">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-1/2">Subfactor</TableHead>
+                  <TableHead className="w-1/4">Ponderación (%)</TableHead>
+                  <TableHead className="w-1/4">Estado</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          <div className="flex justify-end">
+              </TableHeader>
+              <TableBody>
+                {fields.map((field, subIndex) => (
+                  <TableRow key={field.fieldKey}>
+                    <TableCell className="font-medium text-foreground">
+                      {field.descripcion}
+                    </TableCell>
+                    <TableCell>
+                      <FormField
+                        control={control}
+                        name={`factores.${factorIndex}.subfactores.${subIndex}.ponderacion`}
+                        render={({ field: ponderacionField }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Input
+                                type="number"
+                                step="0.01"
+                                min={0}
+                                max={100}
+                                className="w-24 font-mono"
+                                {...ponderacionField}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormField
+                        control={control}
+                        name={`factores.${factorIndex}.subfactores.${subIndex}.estatus`}
+                        render={({ field: estatusField }) => (
+                          <FormItem className="flex items-center">
+                            <StatusBadge
+                              tono={estatusField.value === "A" ? "activo" : "inactivo"}
+                            >
+                              {estatusField.value === "A" ? "Activo" : "Inactivo"}
+                            </StatusBadge>
+                          </FormItem>
+                        )}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+
+          <div className="flex items-center justify-between text-xs text-muted-foreground pt-1">
+            <span>Suma de ponderaciones de subfactores activos:</span>
             <BadgeSuma suma={sumaSubfactores} />
           </div>
         </div>
@@ -294,12 +294,14 @@ export function MatrizRiesgoForm({
           />
         ))}
 
-        <div className="flex items-center justify-end gap-3">
-          {!puedeEnviar && (
-            <p className="text-destructive text-sm">
-              Los pesos activos deben sumar 100% en cada nivel.
-            </p>
-          )}
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
+          <div>
+            {!puedeEnviar && (
+              <p className="text-destructive text-sm font-medium">
+                Los pesos activos deben sumar 100% en cada nivel.
+              </p>
+            )}
+          </div>
           <Button type="submit" disabled={!puedeEnviar || crearNuevaVersion.isPending}>
             {crearNuevaVersion.isPending ? "Publicando…" : "Publicar nueva versión"}
           </Button>

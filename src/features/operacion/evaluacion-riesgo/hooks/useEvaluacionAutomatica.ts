@@ -151,7 +151,7 @@ export function useEvaluacionAutomatica({
     const payload = construirSolicitud(valores, { verificadoPor: String(verificadoPor) });
     const cliente = construirCliente(
       valores,
-      tiposPersona.data?.find((tipo) => tipo.id === valores.tipoPersonaId)?.nombre,
+      tiposPersona.data?.find((tipo) => String(tipo.id) === valores.tipoPersonaId)?.nombre,
       undefined,
     );
     const detalles = construirDetalles(valores, {

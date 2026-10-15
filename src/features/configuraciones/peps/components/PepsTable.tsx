@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 
-import { DataTable, type ColumnDef } from "@/shared/components/DataTable";
-import { Badge } from "@/shared/components/ui/CatalogoBadge";
+import { DataTable, type ColumnDef } from "@/shared/components/organisms/DataTable";
+import { StatusBadge as Badge } from "@/shared/components/atoms/StatusBadge";
 
 import { useNivelesRiesgo } from "../../ubicacion-geografica/niveles-riesgo/hooks/useNivelesRiesgo";
 import { ETIQUETAS_TIPO_PEP, type PepResponse } from "../types/pep";

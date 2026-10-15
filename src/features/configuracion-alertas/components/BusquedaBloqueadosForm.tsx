@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
-import { InputFormateado } from "@/shared/components/InputFormateado";
+import { InputFormateado } from "@/shared/components/atoms/InputFormateado";
 import { alfanumerico, nombrePropio, rfc } from "@/shared/utils/entradas";
 import {
   busquedaBloqueadosSchema,

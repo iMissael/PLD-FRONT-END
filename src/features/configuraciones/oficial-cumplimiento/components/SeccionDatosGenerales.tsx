@@ -1,7 +1,7 @@
 import { IdCard, Mail, Phone, UserRound } from "lucide-react";
 import { useMemo } from "react";
 import { useWatch } from "react-hook-form";
-import { Label } from "@/shared/components/ui/label";
+import { Label } from "@/shared/components/atoms/Label";
 import {
   useEntidades,
   useEstadosCiviles,
@@ -58,13 +58,13 @@ export function SeccionDatosGenerales({
     () =>
       (paises ?? [])
         .filter((pais) => pais.idPais)
-        .map((pais) => ({ valor: pais.idPais ?? "", etiqueta: pais.nombre ?? "" })),
+        .map((pais) => ({ valor: String(pais.idPais), etiqueta: pais.nombre ?? "" })),
     [paises],
   );
   const opcionesEntidades = useMemo<OpcionCatalogo[]>(
     () =>
       (entidades ?? [])
-        .filter((entidad) => !paisNacimiento || entidad.idPais === paisNacimiento)
+        .filter((entidad) => !paisNacimiento || String(entidad.idPais) === paisNacimiento)
         .map((entidad) => ({
           valor: String(entidad.idEntidad),
           etiqueta: entidad.nombre ?? "",

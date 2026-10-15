@@ -61,19 +61,20 @@ export function etiquetaSubfactor(descripcion: string | undefined) {
   );
 }
 
+/** Los ids de catálogo son numéricos en el contrato; el formulario los guarda como texto. */
 interface CatalogosDetalle {
-  tiposPersona?: { id?: string; nombre?: string }[];
-  paises?: { idPais?: string; nombre?: string }[];
-  peps?: { id?: string; nombre?: string }[];
-  actividades?: { id?: string; descripcion?: string }[];
-  tiposCredito?: { id?: string; nombre?: string }[];
-  origenes?: { id?: string; nombre?: string }[];
-  destinos?: { id?: string; nombre?: string }[];
-  canales?: { id?: string; nombre?: string }[];
+  tiposPersona?: { id?: string | number; nombre?: string }[];
+  paises?: { idPais?: string | number; nombre?: string }[];
+  peps?: { id?: string | number; nombre?: string }[];
+  actividades?: { id?: string | number; descripcion?: string }[];
+  tiposCredito?: { id?: string | number; nombre?: string }[];
+  origenes?: { id?: string | number; nombre?: string }[];
+  destinos?: { id?: string | number; nombre?: string }[];
+  canales?: { id?: string | number; nombre?: string }[];
   nombreLocalidad?: string;
 }
 
-function nombreDe(lista: { id?: string; nombre?: string }[] | undefined, id: string) {
+function nombreDe(lista: { id?: string | number; nombre?: string }[] | undefined, id: string) {
   return id ? lista?.find((item) => String(item.id) === id)?.nombre : undefined;
 }
 
@@ -106,8 +107,9 @@ export function construirDetalles(
       : undefined,
     "tipo persona": nombreDe(catalogos.tiposPersona, values.tipoPersonaId),
     edad: edad === null ? undefined : `${edad} años`,
-    nacionalidad: catalogos.paises?.find((pais) => pais.idPais === values.nacionalidadId)
-      ?.nombre,
+    nacionalidad: catalogos.paises?.find(
+      (pais) => String(pais.idPais) === values.nacionalidadId,
+    )?.nombre,
     "antiguedad giro anios": values.antiguedadGiroAnios
       ? `${values.antiguedadGiroAnios} años`
       : undefined,

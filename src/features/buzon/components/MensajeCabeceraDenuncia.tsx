@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import DOMPurify from "dompurify";
+import { sanitizeRichHtml } from "@/shared/utils/sanitizeHtml";
 import { useMensajeDenunciaPublico } from "../hooks/useMensajeDenuncia";
 
 interface MensajeCabeceraDenunciaProps {
@@ -38,18 +38,8 @@ export function MensajeCabeceraDenuncia({
 
   const cleanHtml = useMemo(() => {
     const htmlToSanitize = rawHtml && rawHtml.trim() ? rawHtml : MENSAJE_DEFAULT_CABECERA;
-
-    let decoded = htmlToSanitize;
-    if (decoded.includes("&lt;") && decoded.includes("&gt;")) {
-      const parser = new DOMParser();
-      const dom = parser.parseFromString(decoded, "text/html");
-      decoded = dom.body.textContent || decoded;
-    }
-
-    const sanitized = DOMPurify.sanitize(decoded, {
-      ADD_ATTR: ["target", "rel", "style", "class"],
-      ADD_TAGS: ["mark"],
-    });
+    // No se "decodifican" entidades (&lt; → <): eso convertiría texto escapado en HTML activo.
+    const sanitized = sanitizeRichHtml(htmlToSanitize);
 
     return sanitized && sanitized.trim() ? sanitized : MENSAJE_DEFAULT_CABECERA;
   }, [rawHtml]);

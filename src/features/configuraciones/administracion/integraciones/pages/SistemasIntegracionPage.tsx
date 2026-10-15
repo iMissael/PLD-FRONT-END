@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
-import { Alert } from "@/shared/components/ui/Alert";
-import { Button } from "@/shared/components/ui/CatalogoButton";
+import { Alert } from "@/shared/components/molecules/Alert";
+import { Button } from "@/shared/components/atoms/Button";
 
 import { CredencialesPanel } from "../components/CredencialesPanel";
 import { SistemaForm } from "../components/SistemaForm";

@@ -14,8 +14,8 @@ import {
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { isAppError } from "@/api/interceptors/errorInterceptor";
-import { Button } from "@/shared/components/ui/button";
-import { Form } from "@/shared/components/ui/form";
+import { Button } from "@/shared/components/atoms/Button";
+import { Form } from "@/shared/components/molecules/Form";
 import { useGuardarOficialCumplimiento } from "@/features/configuraciones/oficial-cumplimiento/hooks/useOficialCumplimiento";
 import {
   AvisoCumplimiento,

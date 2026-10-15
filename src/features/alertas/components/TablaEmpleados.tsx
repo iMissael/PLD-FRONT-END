@@ -1,7 +1,9 @@
 import { useMemo, useState } from "react";
 
-import { Badge } from "@/shared/components/ui/CatalogoBadge";
-import { card, emptyState, field, table } from "@/shared/components/ui/styles";
+import { StatusBadge as Badge } from "@/shared/components/atoms/StatusBadge";
+import { Input } from "@/shared/components/atoms/Input";
+import { Card } from "@/shared/components/molecules";
+import { emptyState, table } from "@/shared/styles/tokens";
 import { cn } from "@/shared/utils/cn";
 
 import { useListaEmpleados } from "../hooks/useAlertas";
@@ -46,14 +48,13 @@ export function TablaEmpleados({ seleccionadoId, onSeleccionar }: TablaEmpleados
 
   return (
     <div className="flex flex-col gap-2">
-      <input
+      <Input
         aria-label="Filtrar empleados"
         placeholder={placeholder}
         value={filtro}
         onChange={(e) => setFiltro(e.target.value)}
-        className={field}
       />
-      <div className={cn(card, "max-h-72 overflow-auto")}>
+      <Card className="max-h-72 overflow-auto py-0 gap-0">
         <table className={table.root}>
           <thead className={table.head}>
             <tr>
@@ -111,7 +112,7 @@ export function TablaEmpleados({ seleccionadoId, onSeleccionar }: TablaEmpleados
             Sin empleados con este filtro.
           </p>
         ) : null}
-      </div>
+      </Card>
     </div>
   );
 }

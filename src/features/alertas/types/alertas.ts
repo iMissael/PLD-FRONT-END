@@ -138,7 +138,7 @@ export interface CrearAlertaManualInput {
   estatusReportado?: string;
 }
 
-/** Filtros de `GET /v1/pld/alertas`; todos opcionales. */
+/** Filtros de `GET /alertas`; todos opcionales. */
 export interface FiltroAlertas {
   alertaAcronimo?: string;
   estatus?: EstatusAlerta;

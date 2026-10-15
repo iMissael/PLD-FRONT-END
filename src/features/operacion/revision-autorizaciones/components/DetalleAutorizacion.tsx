@@ -1,7 +1,8 @@
 import type { ReactNode } from "react";
 
-import { Alert } from "@/shared/components/ui/Alert";
-import { card, label } from "@/shared/components/ui/styles";
+import { Alert } from "@/shared/components/molecules/Alert";
+import { Card } from "@/shared/components/molecules";
+import { label } from "@/shared/styles/tokens";
 
 import { useDetalleAutorizacion } from "../hooks/useAutorizaciones";
 import type { RevisionAutorizacion } from "../types/autorizaciones";
@@ -47,7 +48,7 @@ export function DetalleAutorizacion({ seleccionada }: DetalleAutorizacionProps) 
   const cargando = seleccionada !== null && isLoading;
 
   return (
-    <div className={`flex flex-col gap-5 p-4 ${card}`}>
+    <Card className="flex flex-col gap-5 p-4">
       {isError ? (
         <Alert>
           No se pudo cargar el detalle; se muestra la información de la lista.
@@ -116,6 +117,6 @@ export function DetalleAutorizacion({ seleccionada }: DetalleAutorizacionProps) 
           </div>
         </dl>
       </Seccion>
-    </div>
+    </Card>
   );
 }

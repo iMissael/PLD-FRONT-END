@@ -1,5 +1,5 @@
 import { useMemo, type ReactNode } from "react";
-import { DataTable, type ColumnDef, type PaginationConfig, type SearchConfig } from "@/shared/components/DataTable";
+import { DataTable, type ColumnDef, type PaginationConfig, type SearchConfig } from "@/shared/components/organisms/DataTable";
 import type { LocalidadResponse } from "../types/localidad";
 
 interface LocalidadesTableProps {

@@ -7,7 +7,7 @@ const sesion = {
   tokenType: "Bearer",
   expiresInSeconds: 3600,
   usuario: { id: 1, username: "admin", nombre: "Admin", correo: null },
-  rol: { id: 1, nombre: "ROLE_ADMIN" },
+  rol: { id: 1, nombre: "ADMINISTRADOR" },
   permisos: [{ recurso: "usuarios", accion: "crear" }],
 };
 
@@ -48,7 +48,7 @@ describe("authStore", () => {
   });
 
   it("reconoce los nombres de administrador sin importar mayúsculas", () => {
-    expect(esRolAdmin("ROLE_ADMIN")).toBe(true);
+    expect(esRolAdmin("ADMINISTRADOR")).toBe(true);
     expect(esRolAdmin("administrador")).toBe(true);
     expect(esRolAdmin("Oficial de Cumplimiento")).toBe(false);
     expect(esRolAdmin(undefined)).toBe(false);

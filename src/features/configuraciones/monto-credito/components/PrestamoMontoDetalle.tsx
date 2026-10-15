@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 
-import { Badge } from "@/shared/components/ui/CatalogoBadge";
-import { Button } from "@/shared/components/ui/CatalogoButton";
-import { card } from "@/shared/components/ui/styles";
+import { StatusBadge } from "@/shared/components/atoms/StatusBadge";
+import { Button } from "@/shared/components/atoms/Button";
+import { Card } from "@/shared/components/molecules";
 
 import { useNivelesRiesgo } from "../../ubicacion-geografica/niveles-riesgo/hooks/useNivelesRiesgo";
 import type { PrestamoMontoResponse } from "../types/prestamoMonto";
@@ -28,7 +28,7 @@ export function PrestamoMontoDetalle({ rango, onEditar }: PrestamoMontoDetallePr
   }, [niveles, rango.catNivelRiesgoId]);
 
   return (
-    <div className={`flex flex-col gap-4 p-4 ${card}`}>
+    <Card className="flex flex-col gap-4 p-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-foreground">
           Detalle del rango: {formatearRangoMonto(rango.montoMin, rango.montoMax)}
@@ -70,11 +70,11 @@ export function PrestamoMontoDetalle({ rango, onEditar }: PrestamoMontoDetallePr
       <div className="flex flex-col gap-0.5 border-t border-border pt-3">
         <span className="text-xs font-medium text-muted-foreground">Estatus</span>
         <span className="self-start">
-          <Badge tono={rango.estatus === "A" ? "activo" : "inactivo"}>
+          <StatusBadge tono={rango.estatus === "A" ? "activo" : "inactivo"}>
             {rango.estatus === "A" ? "Activo" : rango.estatus === "B" ? "Baja" : "Inactivo"}
-          </Badge>
+          </StatusBadge>
         </span>
       </div>
-    </div>
+    </Card>
   );
 }

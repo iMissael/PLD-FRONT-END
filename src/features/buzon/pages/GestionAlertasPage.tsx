@@ -1,8 +1,8 @@
 import { useState, useMemo } from "react";
 import { Calendar, Eye, Filter, X } from "lucide-react";
-import { ShieldSearchIcon } from "@/shared/components/icons";
+import { ShieldSearchIcon } from "@/shared/components/atoms/icons";
 import { es } from "@/shared/i18n/es";
-import { DataTable, type ColumnDef } from "@/shared/components/DataTable";
+import { DataTable, type ColumnDef } from "@/shared/components/organisms/DataTable";
 import { etiquetaEstatus } from "@/shared/utils/estatus";
 import { useAlertaDetalle, useListarAlertas } from "../hooks/useAlertas";
 import type { AlertaPLD, EstatusReglaAlerta } from "../types/buzon";

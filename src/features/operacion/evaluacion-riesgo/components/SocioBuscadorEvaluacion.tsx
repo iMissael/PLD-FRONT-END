@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
-import { Badge } from "@/shared/components/ui/badge";
-import { Input } from "@/shared/components/ui/input";
+import { Badge } from "@/shared/components/atoms/Badge";
+import { Input } from "@/shared/components/atoms/Input";
 import type { EvaluacionRiesgoFormValues } from "@/features/operacion/evaluacion-riesgo/types/evaluacionRiesgoSchema";
 import {
   useActividadesEconomicas,
@@ -149,10 +149,14 @@ export function SocioBuscadorEvaluacion({
       form.setValue("curp", perfil.curp ?? "");
       form.setValue("fechaNacimiento", perfil.fechaNacimiento ?? "");
       if (perfil.tipoPersona?.id) {
-        form.setValue("tipoPersonaId", perfil.tipoPersona.id, { shouldValidate: true });
+        form.setValue("tipoPersonaId", String(perfil.tipoPersona.id), {
+          shouldValidate: true,
+        });
       }
       if (perfil.nacionalidad?.id) {
-        form.setValue("nacionalidadId", perfil.nacionalidad.id, { shouldValidate: true });
+        form.setValue("nacionalidadId", String(perfil.nacionalidad.id), {
+          shouldValidate: true,
+        });
       }
       if (perfil.actividadEconomica?.id) {
         form.setValue("actividadEconomicaId", perfil.actividadEconomica.id, {

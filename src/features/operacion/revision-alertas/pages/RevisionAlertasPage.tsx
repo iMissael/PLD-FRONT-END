@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { useListaAlertas } from "@/features/alertas/hooks/useAlertas";
 import type { Alerta, FiltroAlertas } from "@/features/alertas/types/alertas";
-import { Alert } from "@/shared/components/ui/Alert";
+import { Alert } from "@/shared/components/molecules/Alert";
 
 import { AlertasTable } from "../components/AlertasTable";
 import { DetalleAlerta } from "../components/DetalleAlerta";
