@@ -22,15 +22,45 @@ function formatearFecha(valor: string | undefined) {
   });
 }
 
-/** Riesgo-pais es informativo (nunca bloquea): solo se muestra si nacimiento y/o nacionalidad coinciden. */
-function estatusPais(coincidencia: CoincidenciaSocio) {
-  const partes: string[] = [];
-  if (coincidencia.pais_nacimiento?.coincide) partes.push("Nacimiento");
-  if (coincidencia.nacionalidad?.coincide) partes.push("Nacionalidad");
-  return partes;
+type EstatusCombinado = "PENDIENTE" | "CONFIRMADO" | "RECHAZADO";
+
+function textoEstatus(estado: EstatusCombinado): string {
+  switch (estado) {
+    case "PENDIENTE":
+      return "Pendiente";
+    case "CONFIRMADO":
+      return "Confirmado";
+    case "RECHAZADO":
+      return "Rechazado";
+  }
 }
 
-type EstatusCombinado = "PENDIENTE" | "CONFIRMADO" | "RECHAZADO";
+function varianteEstatus(estado: EstatusCombinado): "outline" | "destructive" | "secondary" {
+  switch (estado) {
+    case "CONFIRMADO":
+      return "destructive";
+    case "RECHAZADO":
+      return "secondary";
+    case "PENDIENTE":
+      return "outline";
+  }
+}
+
+/**
+ * Estatus combinado de los 2 buckets de riesgo-pais (nacimiento y nacionalidad); null si ninguno
+ * coincide con una lista. Es informativo (nunca bloquea al socio), pero la columna muestra su
+ * estatus de revision igual que las demas: Pendiente/Confirmado/Rechazado, no de que tipo es.
+ */
+function estatusPais(coincidencia: CoincidenciaSocio): EstatusCombinado | null {
+  const coincide = coincidencia.pais_nacimiento?.coincide || coincidencia.nacionalidad?.coincide;
+  if (!coincide) return null;
+
+  const confirmacionPais = coincidencia.pais_nacimiento?.confirmacion;
+  const confirmacionNacionalidad = coincidencia.nacionalidad?.confirmacion;
+  if (confirmacionPais === "PENDIENTE" || confirmacionNacionalidad === "PENDIENTE") return "PENDIENTE";
+  if (confirmacionPais === "CONFIRMADO" || confirmacionNacionalidad === "CONFIRMADO") return "CONFIRMADO";
+  return "RECHAZADO";
+}
 
 /**
  * Estatus unico de la fila, combinando los 5 tipos de coincidencia que puede tener un socio (lista
@@ -65,28 +95,6 @@ function estatusCombinado(coincidencia: CoincidenciaSocio): EstatusCombinado {
   return "RECHAZADO";
 }
 
-function estatusLista(coincidencia: CoincidenciaSocio): string {
-  switch (estatusCombinado(coincidencia)) {
-    case "PENDIENTE":
-      return "Pendiente";
-    case "CONFIRMADO":
-      return "Confirmado";
-    case "RECHAZADO":
-      return "Rechazado";
-  }
-}
-
-function varianteEstatusLista(coincidencia: CoincidenciaSocio): "outline" | "destructive" | "secondary" {
-  switch (estatusCombinado(coincidencia)) {
-    case "CONFIRMADO":
-      return "destructive";
-    case "RECHAZADO":
-      return "secondary";
-    case "PENDIENTE":
-      return "outline";
-  }
-}
-
 /** La primera persona relacionada con coincidencia (preferimos una pendiente sobre una ya resuelta). */
 function primeraPersonaRelacionada(coincidencia: CoincidenciaSocio) {
   const personas = coincidencia.personas_relacionadas ?? [];
@@ -99,11 +107,6 @@ function nombrePersonaRelacionada(coincidencia: CoincidenciaSocio) {
 
 function tipoRelacion(coincidencia: CoincidenciaSocio) {
   return primeraPersonaRelacionada(coincidencia)?.relacion ?? "—";
-}
-
-/** Hay un socio con nombre igual o parecido registrado (informativo, nunca bloquea). */
-function tieneDuplicado(coincidencia: CoincidenciaSocio) {
-  return (coincidencia.duplicados?.length ?? 0) > 0;
 }
 
 interface TablaIncidenciasPendientesProps {
@@ -174,27 +177,19 @@ export function TablaIncidenciasPendientes({
               </div>
             </TableCell>
             <TableCell>
-              <div className="flex flex-wrap gap-1">
-                {estatusPais(coincidencia).length > 0 ? (
-                  estatusPais(coincidencia).map((parte) => (
-                    <Badge key={parte} variant="outline">
-                      {parte}
-                    </Badge>
-                  ))
+              {(() => {
+                const estado = estatusPais(coincidencia);
+                return estado ? (
+                  <Badge variant={varianteEstatus(estado)}>{textoEstatus(estado)}</Badge>
                 ) : (
                   <span className="text-muted-foreground">—</span>
-                )}
-              </div>
+                );
+              })()}
             </TableCell>
             <TableCell>
-              <div className="flex flex-wrap gap-1">
-                <Badge variant={varianteEstatusLista(coincidencia)}>
-                  {estatusLista(coincidencia)}
-                </Badge>
-                {tieneDuplicado(coincidencia) ? (
-                  <Badge variant="outline">Nombre similar</Badge>
-                ) : null}
-              </div>
+              <Badge variant={varianteEstatus(estatusCombinado(coincidencia))}>
+                {textoEstatus(estatusCombinado(coincidencia))}
+              </Badge>
             </TableCell>
             <TableCell>{nombrePersonaRelacionada(coincidencia)}</TableCell>
             <TableCell className="text-muted-foreground">
