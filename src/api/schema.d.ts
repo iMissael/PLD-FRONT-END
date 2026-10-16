@@ -6614,7 +6614,7 @@ export interface components {
             /** Format: date */
             fechaNacimiento?: string;
         };
-        acreditadoPerfilRiesgoResponse: {
+        SocioPerfilRiesgoResponse: {
             referencia?: string;
             nombre?: string;
             nombres?: string;
@@ -6643,7 +6643,7 @@ export interface components {
             id?: number;
             nombre?: string;
         };
-        acreditadoInfo: {
+        SocioInfo: {
             id?: string;
             nombre?: string;
             status?: string;
@@ -14151,7 +14151,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["acreditadoPerfilRiesgoResponse"];
+                    "*/*": components["schemas"]["SocioPerfilRiesgoResponse"];
                 };
             };
         };
@@ -14175,7 +14175,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["acreditadoInfo"];
+                    "*/*": components["schemas"]["SocioInfo"];
                 };
             };
         };

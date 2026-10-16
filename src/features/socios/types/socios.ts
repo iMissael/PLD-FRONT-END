@@ -6,7 +6,7 @@ export type SocioPerfilRiesgo = components["schemas"]["SocioPerfilRiesgoResponse
 export type CriterioBusquedaSocio = "referencia" | "nombre" | "rfc";
 
 /** "fisica" incluye actividad empresarial. Sin valor no se filtra. */
-export type TipoPersonaBusqueda = "fisica" | "moral";
+export type TipoPersonaBusqueda = "fisica" | "moral"; 
 
 export interface BusquedaSocios {
   criterio: CriterioBusquedaSocio;

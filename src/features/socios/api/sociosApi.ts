@@ -7,7 +7,7 @@ import type {
 } from "@/features/socios/types/socios";
 
 export async function buscarSocios(nombre: string) {
-  const { data } = await apiClient.get<SocioExterno[]>("/socios/buscar", {
+  const { data } = await apiClient.get<SocioExterno[]>("/acreditados/buscar", {
     params: nombre ? { nombre } : undefined,
   });
   return data;
