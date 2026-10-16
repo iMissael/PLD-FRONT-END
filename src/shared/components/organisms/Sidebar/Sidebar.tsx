@@ -226,7 +226,7 @@ function SectionLabel({ children }: { children: string }) {
 
 /**
  * Item de primer nivel.
- * Estado Activo claramente diferenciado: fondo sólido primario, texto blanco y anillo sutil.
+ * Estado Activo claramente diferenciado: fondo verde sólido (guía oficial), texto blanco.
  */
 function navLinkClassName(collapsed: boolean) {
   return ({ isActive }: { isActive: boolean }) =>
@@ -234,21 +234,21 @@ function navLinkClassName(collapsed: boolean) {
       "flex items-center gap-3 rounded-lg text-sm font-medium transition-all duration-150 cursor-pointer",
       collapsed ? "mx-2 justify-center px-0 py-2.5" : "mx-2 px-3 py-2.5",
       isActive
-        ? "bg-primary text-primary-foreground font-semibold shadow-sm shadow-primary/20 ring-1 ring-primary/40"
-        : "text-foreground hover:bg-muted/70 hover:text-foreground",
+        ? "bg-nav-active text-white font-semibold shadow-sm hover:bg-nav-active-hover"
+        : "text-foreground hover:bg-nav-hover hover:text-foreground",
     ].join(" ");
 }
 
 /**
  * Sub-item:
- * Estado Activo evidente: resalta con fondo teñido, borde izquierdo primario y texto en negrita.
+ * Estado Activo evidente: fondo verde tenue, borde izquierdo verde y texto en negrita.
  */
 function nestedLinkClassName({ isActive }: { isActive: boolean }) {
   return [
     "rounded-md px-3 py-1.5 text-xs sm:text-sm transition-all duration-150 flex items-center gap-2 cursor-pointer",
     isActive
-      ? "text-primary font-bold bg-primary/15 border-l-3 border-primary pl-2.5 rounded-r-md shadow-xs"
-      : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
+      ? "text-nav-accent font-bold bg-nav-soft border-l-3 border-nav-active pl-2.5 rounded-r-md shadow-xs"
+      : "text-muted-foreground hover:text-nav-accent hover:bg-muted/50",
   ].join(" ");
 }
 
@@ -426,14 +426,14 @@ function NavGroupSection({
             ? [
                 "mx-2 flex w-[calc(100%-1rem)] items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors cursor-pointer",
                 destacado
-                  ? "bg-primary/10 text-primary font-semibold shadow-xs"
-                  : "hover:bg-muted/70 text-foreground",
+                  ? "bg-nav-soft text-nav-accent font-semibold shadow-xs"
+                  : "hover:bg-nav-hover text-foreground",
               ].join(" ")
             : [
                 "flex w-full items-center gap-2 rounded-md px-3 py-1.5 text-xs sm:text-sm font-medium transition-colors cursor-pointer",
                 isActiveGroup
-                  ? "text-primary font-bold"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted/40",
+                  ? "text-nav-accent font-bold"
+                  : "text-muted-foreground hover:text-nav-accent hover:bg-muted/40",
               ].join(" ")
         }
       >
@@ -441,7 +441,7 @@ function NavGroupSection({
         <span className="flex-1 truncate text-left">{node.label}</span>
         <ChevronDownIcon
           className={`h-4 w-4 shrink-0 transition-transform duration-200 ${
-            destacado ? "text-primary" : "text-muted-foreground"
+            destacado ? "text-nav-accent" : "text-muted-foreground"
           } ${open ? "rotate-0" : "-rotate-90"}`}
         />
       </button>

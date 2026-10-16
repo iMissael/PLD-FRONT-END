@@ -69,7 +69,9 @@ export function AlertasTable({
                 <td className={table.cellStrong}>{alerta.folio}</td>
                 <td className={table.cellMuted}>{formatearFecha(alerta.fechaAlerta)}</td>
                 <td className={table.cell}>{alerta.tipoAlertaDescripcion}</td>
-                <td className={table.cellMuted}>{alerta.reportado?.referencia ?? "—"}</td>
+                <td className={table.cellMuted}>
+                  {alerta.referenciaCredito ?? alerta.reportado?.referencia ?? "—"}
+                </td>
                 <td className={table.cell}>{alerta.reportado?.nombre ?? "—"}</td>
                 <td className={table.cellMuted}>
                   {alerta.origen === "AUTOMATICA" ? "Automática" : "Manual"}

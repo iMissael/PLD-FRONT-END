@@ -7,6 +7,7 @@ import {
 
 import {
   buscarEmpleados,
+  buscarEmpleadosPaginados,
   capturarAlertaManual,
   dictaminarAlerta,
   listarAlertas,
@@ -16,6 +17,7 @@ import {
   obtenerMovimientoAlerta,
 } from "../api/alertasApi";
 import type {
+  BusquedaEmpleados,
   CrearAlertaManualInput,
   DictamenInput,
   FiltroAlertas,
@@ -102,6 +104,16 @@ export function useDictaminarAlerta() {
     mutationFn: ({ id, input }: { id: number; input: DictamenInput }) =>
       dictaminarAlerta(id, input),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: alertasKeys.listas() }),
+  });
+}
+
+export function useEmpleadosPaginados(busqueda: BusquedaEmpleados, habilitado: boolean) {
+  return useQuery({
+    queryKey: ["empleados", "pagina", busqueda],
+    queryFn: () => buscarEmpleadosPaginados(busqueda),
+    enabled: habilitado,
+    placeholderData: keepPreviousData,
+    staleTime: 60_000,
   });
 }
 

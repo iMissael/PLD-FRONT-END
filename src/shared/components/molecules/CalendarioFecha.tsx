@@ -30,6 +30,8 @@ interface CalendarioFechaProps {
   min?: string;
   max?: string;
   placeholder?: string;
+  /** Muestra "Borrar" para dejar la fecha vacía (útil en filtros opcionales). */
+  permitirBorrar?: boolean;
 }
 
 function aIso(anio: number, mes: number, dia: number) {
@@ -53,6 +55,7 @@ export function CalendarioFecha({
   min,
   max,
   placeholder = "Seleccione una fecha",
+  permitirBorrar = false,
 }: CalendarioFechaProps) {
   const [abierto, setAbierto] = useState(false);
   const hoy = hoyIso();
@@ -206,15 +209,28 @@ export function CalendarioFecha({
           })}
         </div>
 
-        {!fueraDeRango(hoy) ? (
-          <div className="mt-2 flex justify-end border-t pt-2">
-            <button
-              type="button"
-              onClick={() => elegir(hoy)}
-              className="text-primary text-sm font-medium hover:underline"
-            >
-              Hoy
-            </button>
+        {!fueraDeRango(hoy) || (permitirBorrar && valor) ? (
+          <div className="mt-2 flex items-center justify-between border-t pt-2">
+            {permitirBorrar && valor ? (
+              <button
+                type="button"
+                onClick={() => elegir("")}
+                className="text-muted-foreground hover:text-foreground text-sm font-medium hover:underline"
+              >
+                Borrar
+              </button>
+            ) : (
+              <span />
+            )}
+            {!fueraDeRango(hoy) ? (
+              <button
+                type="button"
+                onClick={() => elegir(hoy)}
+                className="text-primary text-sm font-medium hover:underline"
+              >
+                Hoy
+              </button>
+            ) : null}
           </div>
         ) : null}
       </PopoverContent>
