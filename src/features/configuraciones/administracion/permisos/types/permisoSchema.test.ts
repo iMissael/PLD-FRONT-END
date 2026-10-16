@@ -1,41 +1,46 @@
 import { describe, expect, it } from "vitest";
-import { crearPermisoSchema } from "@/features/configuraciones/administracion/permisos/types/permisoSchema";
+import { crearPermisosPorMenuSchema } from "@/features/configuraciones/administracion/permisos/types/permisoSchema";
 
-describe("crearPermisoSchema", () => {
-  it("acepta un recurso y una acción del enum", () => {
+describe("crearPermisosPorMenuSchema", () => {
+  it("acepta un menú y una o varias acciones del enum", () => {
     expect(
-      crearPermisoSchema.safeParse({ recurso: "usuarios", accion: "crear" }).success,
+      crearPermisosPorMenuSchema.safeParse({ menu: "configuraciones", acciones: ["crear"] })
+        .success,
     ).toBe(true);
     expect(
-      crearPermisoSchema.safeParse({ recurso: "coincidencias", accion: "confirmar" })
-        .success,
+      crearPermisosPorMenuSchema.safeParse({
+        menu: "operacion",
+        acciones: ["ver", "confirmar"],
+      }).success,
     ).toBe(true);
   });
 
-  it("exige recurso y acción", () => {
-    const resultado = crearPermisoSchema.safeParse({ recurso: "", accion: "" });
+  it("exige menú y al menos una acción", () => {
+    const resultado = crearPermisosPorMenuSchema.safeParse({ menu: "", acciones: [] });
     expect(resultado.success).toBe(false);
     if (!resultado.success) {
       const mensajes = resultado.error.issues.map((problema) => problema.message);
-      expect(mensajes).toContain("El recurso es obligatorio");
-      expect(mensajes).toContain("La acción es obligatoria");
+      expect(mensajes).toContain("El menú es obligatorio");
+      expect(mensajes).toContain("Elige al menos una acción");
     }
   });
 
   it("rechaza acciones fuera del enum, incluso en mayúsculas", () => {
     expect(
-      crearPermisoSchema.safeParse({ recurso: "usuarios", accion: "aprobar" }).success,
+      crearPermisosPorMenuSchema.safeParse({ menu: "configuraciones", acciones: ["aprobar"] })
+        .success,
     ).toBe(false);
     expect(
-      crearPermisoSchema.safeParse({ recurso: "usuarios", accion: "CREAR" }).success,
+      crearPermisosPorMenuSchema.safeParse({ menu: "configuraciones", acciones: ["CREAR"] })
+        .success,
     ).toBe(false);
   });
 
   it("limita la descripción a 255 caracteres", () => {
     expect(
-      crearPermisoSchema.safeParse({
-        recurso: "usuarios",
-        accion: "ver",
+      crearPermisosPorMenuSchema.safeParse({
+        menu: "configuraciones",
+        acciones: ["ver"],
         descripcion: "D".repeat(256),
       }).success,
     ).toBe(false);

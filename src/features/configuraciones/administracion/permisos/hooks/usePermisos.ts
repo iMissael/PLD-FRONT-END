@@ -1,12 +1,13 @@
-import { useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   crearPermiso,
   eliminarPermiso,
   listarPermisos,
 } from "@/features/configuraciones/administracion/permisos/api/permisosApi";
-import { RECURSOS_SISTEMA_BASE } from "@/features/configuraciones/administracion/permisos/types/permisoSchema";
-import type { PermisoResponse } from "@/features/configuraciones/administracion/permisos/types/permisos";
+import type {
+  CrearPermisoRequest,
+  PermisoResponse,
+} from "@/features/configuraciones/administracion/permisos/types/permisos";
 
 const permisosKeys = {
   all: ["permisos"] as const,
@@ -19,33 +20,21 @@ export function usePermisos() {
   });
 }
 
-export function useRecursosPermiso() {
-  const { data: permisos, isLoading, isError } = usePermisos();
-
-  const data = useMemo(() => {
-    const conjunto = new Set<string>(RECURSOS_SISTEMA_BASE);
-    const lista: PermisoResponse[] = Array.isArray(permisos)
-      ? permisos
-      : (permisos as unknown as { contenido?: PermisoResponse[] })?.contenido ?? [];
-
-    if (Array.isArray(lista)) {
-      lista.forEach((p) => {
-        if (p.recurso?.trim()) {
-          conjunto.add(p.recurso.trim());
-        }
-      });
-    }
-
-    return Array.from(conjunto).sort((a, b) => a.localeCompare(b, "es"));
-  }, [permisos]);
-
-  return { data, isLoading, isError };
-}
-
-export function useCrearPermiso() {
+/**
+ * Crea varios permisos de una sola vez (un recurso-del-menú × acción marcada, ver
+ * MENUS_PERMISO): el backend no tiene un endpoint de lote, así que se manda un POST por cada
+ * combinación y se sigue aunque alguna falle (p. ej. ya existe, choca con uq_permiso_recurso_accion).
+ */
+export function useCrearPermisosEnLote() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: crearPermiso,
+    mutationFn: async (payloads: CrearPermisoRequest[]) => {
+      const resultados = await Promise.allSettled(payloads.map((payload) => crearPermiso(payload)));
+      const creados = resultados.filter(
+        (r): r is PromiseFulfilledResult<PermisoResponse> => r.status === "fulfilled",
+      ).length;
+      return { creados, fallidos: resultados.length - creados };
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: permisosKeys.all });
     },

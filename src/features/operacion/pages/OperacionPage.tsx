@@ -11,7 +11,7 @@ export function OperacionPage() {
   return (
     <PlaceholderPage
       title="Operación"
-      description="Aquí vivirán las vistas del área de Operación. Todavía no se definen."
+      description="Hola mundo, esta sección todavía no tiene vistas definidas. Cuando se agreguen, aparecerán aquí."
     />
   );
 }

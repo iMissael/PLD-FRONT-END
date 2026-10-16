@@ -223,7 +223,7 @@ export interface paths {
          * Obtener persona bloqueada por ID
          * @description Consulta una persona bloqueada por su identificador único
          */
-        get: operations["obtener_1"];
+        get: operations["obtener"];
         /**
          * Actualizar persona bloqueada por ID
          * @description Modifica los datos de una persona bloqueada existente
@@ -1332,46 +1332,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/v1/integrations/socios": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Enviar alta o cambio de un socio
-         * @description Valida la forma, guarda la solicitud y responde 202. El resultado se consulta en status_url.
-         */
-        post: operations["recibirSocio"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/SICANETSC/PLD/{tenantId}/v1/evaluaciones": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Ejecutar una evaluación de riesgo
-         * @description tipo EVALUACION_SOCIO toma los datos del socio y su crédito vigente desde la Matriz; EVALUACION_DATOS usa los datos enviados. Síncrona: puede tardar hasta 20 s.
-         */
-        post: operations["evaluar"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/SICANETSC/PLD/{tenantId}/usuarios": {
         parameters: {
             query?: never;
@@ -1636,7 +1596,7 @@ export interface paths {
          *
          *     Los ejemplos con socio bloqueado requieren dar de alta antes en personas-bloqueadas a JUAN PRUEBA BLOQUEADO (RFC PUBJ800101AB1, alias N). Cambie folioOperacion en cada intento: un folio repetido no vuelve a generar las mismas alertas.
          */
-        post: operations["evaluar_1"];
+        post: operations["evaluar"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2643,7 +2603,7 @@ export interface paths {
         head?: never;
         /**
          * Activar o desactivar usuario
-         * @description Cambia el estado del usuario: A (activo) o B (inactivo). Un usuario inactivo no puede iniciar sesion
+         * @description Cambia el estado del usuario: A (activo) o I (inactivo). Un usuario inactivo no puede iniciar sesion
          */
         patch: operations["cambiarEstado"];
         trace?: never;
@@ -2821,83 +2781,6 @@ export interface paths {
          * @description Ruta alternativa para obtener las claves públicas en formato JWKS
          */
         get: operations["getJwks"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/SICANETSC/PLD/{tenantId}/v1/socios/{socioRef}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Consultar un socio
-         * @description Identidad, estatus y última evaluación de riesgo del socio.
-         */
-        get: operations["obtener"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/SICANETSC/PLD/{tenantId}/v1/integrations/requests/{requestId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Consultar el estado de una solicitud
-         * @description Solo las del propio sistema.
-         */
-        get: operations["consultar_1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/SICANETSC/PLD/{tenantId}/v1/health": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Disponibilidad de la API de integración */
-        get: operations["health"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/SICANETSC/PLD/{tenantId}/v1/evaluaciones/{evaluacionId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Consultar una evaluación
-         * @description Refleja la revisión del oficial: estado actual y nivel manual si lo asignó.
-         */
-        get: operations["consultar_2"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3226,7 +3109,7 @@ export interface paths {
          * Coincidencias de un socio
          * @description Estado de la revisión de las coincidencias del socio.
          */
-        get: operations["obtener_2"];
+        get: operations["obtener_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -4018,6 +3901,22 @@ export interface components {
              */
             observaciones: string;
         };
+        ProblemDetailsResponse: {
+            type?: string;
+            title?: string;
+            /** Format: int32 */
+            status?: number;
+            detail?: string;
+            instance?: string;
+            /** Format: date-time */
+            timestamp?: string;
+            invalidParams?: {
+                [key: string]: string;
+            };
+            coincidencias?: {
+                [key: string]: string;
+            }[];
+        };
         DesglosePuntuacion: {
             factores?: components["schemas"]["PuntajeFactor"][];
         };
@@ -4062,22 +3961,6 @@ export interface components {
             valor?: number;
             ponderacion?: number;
             puntaje?: number;
-        };
-        ProblemDetailsResponse: {
-            type?: string;
-            title?: string;
-            /** Format: int32 */
-            status?: number;
-            detail?: string;
-            instance?: string;
-            /** Format: date-time */
-            timestamp?: string;
-            invalidParams?: {
-                [key: string]: string;
-            };
-            coincidencias?: {
-                [key: string]: string;
-            }[];
         };
         ConfiguracionAlertaRequest: {
             alertaAcronimo: string;
@@ -5223,13 +5106,6 @@ export interface components {
             /** Format: date-time */
             updatedAt?: string;
         };
-        JsonNode: Record<string, never>;
-        Aceptada: {
-            request_id?: string;
-            status?: string;
-            status_url?: string;
-            correlation_id?: string;
-        };
         CrearUsuarioRequest: {
             username: string;
             password: string;
@@ -6231,76 +6107,6 @@ export interface components {
         };
         TenantNombrePublicoResponse: {
             nombreComercial?: string;
-        };
-        Catalogo: {
-            /** Format: int64 */
-            id?: number;
-            nombre?: string;
-        };
-        SocioIntegracionResponse: {
-            referencia?: string;
-            nombre?: string;
-            apellido_p?: string;
-            apellido_m?: string;
-            rfc?: string;
-            curp?: string;
-            /** Format: date */
-            fecha_nacimiento?: string;
-            tipo_persona?: components["schemas"]["Catalogo"];
-            nacionalidad?: components["schemas"]["Catalogo"];
-            actividad_economica?: components["schemas"]["Catalogo"];
-            sucursal_id?: string;
-            es_pep?: boolean;
-            estatus?: string;
-            ultima_evaluacion?: components["schemas"]["UltimaEvaluacion"];
-        };
-        UltimaEvaluacion: {
-            /** Format: int64 */
-            evaluacion_id?: number;
-            nivel_riesgo?: string;
-            nivel_riesgo_manual?: string;
-            /** Format: date-time */
-            fecha_evaluacion?: string;
-        };
-        Campo: {
-            code?: string;
-            field?: string;
-            message?: string;
-        };
-        Estado: {
-            request_id?: string;
-            status?: string;
-            event_id?: string;
-            event_type?: string;
-            referencia?: string;
-            /** Format: date-time */
-            received_at?: string;
-            /** Format: date-time */
-            processed_at?: string;
-            errors?: components["schemas"]["Campo"][];
-        };
-        Coincidencias: {
-            lista_negra?: boolean;
-            lista_pep?: boolean;
-            lista_bloqueada?: boolean;
-        };
-        EvaluacionIntegracionResponse: {
-            /** Format: int64 */
-            evaluacion_id?: number;
-            socio_ref?: string;
-            estado?: string;
-            resultado?: components["schemas"]["Resultado"];
-            coincidencias?: components["schemas"]["Coincidencias"];
-            motivo?: string;
-            advertencias?: string[];
-            /** Format: date-time */
-            fecha_evaluacion?: string;
-        };
-        Resultado: {
-            nivel_riesgo?: string;
-            puntuacion?: number;
-            nivel_riesgo_manual?: string;
-            provisional?: boolean;
         };
         TipoAlertaResponse: {
             /** Format: int64 */
@@ -7439,7 +7245,7 @@ export interface operations {
             };
         };
     };
-    obtener_1: {
+    obtener: {
         parameters: {
             query?: never;
             header?: never;
@@ -10516,66 +10322,6 @@ export interface operations {
             };
         };
     };
-    recibirSocio: {
-        parameters: {
-            query?: never;
-            header: {
-                /** @description Igual a event_id */
-                "Idempotency-Key": string;
-            };
-            path: {
-                /** @description Identificador del Tenant */
-                tenantId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["JsonNode"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Aceptada"];
-                };
-            };
-        };
-    };
-    evaluar: {
-        parameters: {
-            query?: never;
-            header: {
-                /** @description Clave única por evaluación */
-                "Idempotency-Key": string;
-            };
-            path: {
-                /** @description Identificador del Tenant */
-                tenantId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["JsonNode"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-        };
-    };
     listar: {
         parameters: {
             query?: never;
@@ -11060,7 +10806,7 @@ export interface operations {
             };
         };
     };
-    evaluar_1: {
+    evaluar: {
         parameters: {
             query?: never;
             header?: never;
@@ -13693,103 +13439,6 @@ export interface operations {
             };
         };
     };
-    obtener: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                socioRef: string;
-                /** @description Identificador del Tenant */
-                tenantId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["SocioIntegracionResponse"];
-                };
-            };
-        };
-    };
-    consultar_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                requestId: string;
-                /** @description Identificador del Tenant */
-                tenantId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Estado"];
-                };
-            };
-        };
-    };
-    health: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Identificador del Tenant */
-                tenantId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": {
-                        [key: string]: string;
-                    };
-                };
-            };
-        };
-    };
-    consultar_2: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                evaluacionId: number;
-                /** @description Identificador del Tenant */
-                tenantId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EvaluacionIntegracionResponse"];
-                };
-            };
-        };
-    };
     listarTipos: {
         parameters: {
             query?: {
@@ -14234,7 +13883,7 @@ export interface operations {
             };
         };
     };
-    obtener_2: {
+    obtener_1: {
         parameters: {
             query?: never;
             header?: never;
