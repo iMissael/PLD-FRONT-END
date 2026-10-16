@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ShieldCheck, X } from "lucide-react";
 import { DataTable, type ColumnDef } from "@/shared/components/organisms/DataTable";
+import { es } from "@/shared/i18n/es";
 import { EmptyState } from "@/shared/components/molecules/EmptyState";
 import { cn } from "@/shared/utils/cn";
 import {
@@ -235,8 +236,8 @@ export function HistorialEvaluacionesPage() {
                 loadingMessage="Cargando historial…"
                 emptyMessage={
                   isError
-                    ? "No se pudo cargar el historial de este socio."
-                    : "Este socio no tiene evaluaciones registradas."
+                    ? es.cliente.historialNoCargo
+                    : es.cliente.sinEvaluaciones
                 }
                 getRowId={(item) => item.id_evaluacion ?? 0}
                 selectedRowId={seleccionada?.id_evaluacion ?? null}
@@ -246,7 +247,7 @@ export function HistorialEvaluacionesPage() {
             ) : (
               <div className="flex-1 flex items-center justify-center p-8 min-h-[320px]">
                 <EmptyState
-                  titulo="Sin socio seleccionado"
+                  titulo={es.cliente.sinSeleccion}
                   descripcion="Utiliza el buscador o la lupa en el panel del Expediente del Cliente para consultar su historial de evaluaciones de riesgo."
                 />
               </div>

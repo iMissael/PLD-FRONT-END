@@ -9,6 +9,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { Button } from "@/shared/components/atoms/Button";
+import { es } from "@/shared/i18n/es";
 import { cn } from "@/shared/utils/cn";
 import {
   EncabezadoDesglose,
@@ -92,8 +93,8 @@ function EstadoSinEvaluacion({
     return (
       <TarjetaEstado
         icono={Loader2}
-        titulo={`Evaluando el riesgo de ${cliente?.nombre ?? "el socio"}…`}
-        descripcion="Se calcula con los datos del socio y su crédito solicitado."
+        titulo={`${es.cliente.evaluandoRiesgoDe} ${cliente?.nombre ?? es.cliente.fallback}…`}
+        descripcion={es.cliente.calculoDesdeDatos}
       />
     );
   }
@@ -115,7 +116,7 @@ function EstadoSinEvaluacion({
       <TarjetaEstado
         icono={AlertTriangle}
         tono="error"
-        titulo="No se pudo evaluar al socio"
+        titulo={es.cliente.noSePudoEvaluar}
         descripcion={estado.mensaje}
       >
         <div className="flex flex-wrap justify-center gap-2">
@@ -137,13 +138,13 @@ function EstadoSinEvaluacion({
       icono={hayCliente ? ClipboardList : Search}
       titulo={
         hayCliente
-          ? "Este socio aún no tiene una evaluación en esta sesión"
-          : "Busca un socio con la lupa"
+          ? es.cliente.sinEvaluacionEnSesion
+          : es.cliente.buscarConLupa
       }
       descripcion={
         hayCliente
           ? "Evalúa su riesgo para calcular su matriz."
-          : "Elige a un socio y su evaluación de riesgo se calcula al instante."
+          : es.cliente.elegirParaEvaluar
       }
     >
       {hayCliente && <Button onClick={onEvaluar}>Evaluar riesgo</Button>}

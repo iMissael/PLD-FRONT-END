@@ -1,6 +1,7 @@
 import { Calendar, ChevronDown, Clipboard, Copy, User } from "lucide-react";
 import { Skeleton } from "@/shared/components/atoms/Skeleton";
 import { StatusBadge } from "@/shared/components/atoms/StatusBadge";
+import { es } from "@/shared/i18n/es";
 import { cn } from "@/shared/utils/cn";
 import { BuscadorSocios } from "@/features/operacion/evaluacion-riesgo/components/BuscadorSocios";
 import type { ClienteMatrizRiesgo } from "@/features/operacion/evaluacion-riesgo/types/evaluacionRiesgo";
@@ -182,7 +183,7 @@ export function ExpedienteClienteAside({
           <BuscadorSocios
             variante="panel"
             valor={valorBuscador}
-            placeholder="Elige un socio…"
+            placeholder={es.cliente.elegir}
             onSeleccionar={onSeleccionarSocio}
           />
         </div>
@@ -195,7 +196,7 @@ export function ExpedienteClienteAside({
           </div>
         )}
         {!cargando && error && (
-          <p className="text-sm text-red-600">No se encontraron datos de este socio.</p>
+          <p className="text-sm text-red-600">{es.cliente.sinDatos}</p>
         )}
         {!cargando && !error && cliente && <ExpedienteDelCliente cliente={cliente} />}
         {!cargando && !error && !cliente && (

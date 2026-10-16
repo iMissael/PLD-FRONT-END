@@ -7,6 +7,7 @@ import {
   FormMessage,
 } from "@/shared/components/molecules/Form";
 import { Input } from "@/shared/components/atoms/Input";
+import { es } from "@/shared/i18n/es";
 import {
   Select,
   SelectContent,
@@ -44,9 +45,9 @@ export function FormSeccionIdentificacion({
 
   return (
     <fieldset className="space-y-4">
-      <legend className="text-sm font-semibold">Socio</legend>
+      <legend className="text-sm font-semibold">{es.cliente.titulo}</legend>
       <div className="space-y-2">
-        <FormLabel>Socio</FormLabel>
+        <FormLabel>{es.cliente.titulo}</FormLabel>
         <SocioBuscadorEvaluacion form={form} socioInicial={socioInicial} />
         <p className="text-muted-foreground text-xs">
           Busca al socio para traer sus datos automáticamente: identidad, actividad
