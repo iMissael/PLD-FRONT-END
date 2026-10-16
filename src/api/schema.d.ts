@@ -3089,7 +3089,7 @@ export interface paths {
                 patch?: never;
                 trace?: never;
             };
-            "/SICANETSC/PLD/{tenantId}/publico/nombre": {
+            "/SICANETSC/PLD/{tenantId}/tenant/publico/nombre": {
                 parameters: {
                     query?: never;
                     header?: never;
