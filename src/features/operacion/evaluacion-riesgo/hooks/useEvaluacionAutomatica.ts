@@ -98,16 +98,10 @@ export function useEvaluacionAutomatica({
   const clave = socio ? `${socio.id}#${intento}` : null;
   const valores = useMemo(() => (perfil ? valoresDesdePerfil(perfil) : null), [perfil]);
 
-  const catalogos = [
-    tiposPersona,
-    paises,
-    peps,
-    actividades,
-    tiposCredito,
-    origenes,
-    destinos,
-    canales,
-  ];
+  const catalogos = useMemo(
+    () => [tiposPersona, paises, peps, actividades, tiposCredito, origenes, destinos, canales],
+    [tiposPersona, paises, peps, actividades, tiposCredito, origenes, destinos, canales],
+  );
   const catalogosConError =
     catalogos.some((catalogo) => catalogo.isError) || localidades.isError;
   const catalogosListos =
@@ -196,7 +190,16 @@ export function useEvaluacionAutomatica({
     localidades.data,
   ]);
 
-  const reintentar = useCallback(() => setIntento((actual) => actual + 1), []);
+  // No basta con reintentar la evaluación: si un catálogo quedó en error, React Query no lo
+  // vuelve a pedir solo (staleTime Infinity), así que "Reintentar" se quedaría mostrando el
+  // mismo error para siempre si no se refresca explícitamente el catálogo que falló.
+  const reintentar = useCallback(() => {
+    for (const catalogo of catalogos) {
+      if (catalogo.isError) void catalogo.refetch();
+    }
+    if (localidades.isError) void localidades.refetch();
+    setIntento((actual) => actual + 1);
+  }, [catalogos, localidades]);
   // Mientras llegan los catálogos (el perfil ya está) se considera en curso, para que el tablero no
   // muestre por un instante que el socio "no tiene evaluación".
   const estado: EstadoEvaluacionAutomatica =

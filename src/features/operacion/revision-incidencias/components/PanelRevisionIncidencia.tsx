@@ -68,6 +68,24 @@ function RiesgoPaisBucket({
   );
 }
 
+/**
+ * Caja de una sección del panel (encabezado + contenido), siempre con la misma estructura para
+ * los 4 tipos de coincidencia (listas, países, nombre similar, personas relacionadas): el panel no
+ * debe cambiar de forma según qué tenga o no tenga el socio, solo el contenido de cada caja.
+ */
+function SeccionPanel({ titulo, children }: { titulo: string; children: React.ReactNode }) {
+  return (
+    <div className="overflow-hidden rounded-lg border">
+      <div className="border-b bg-muted px-4 py-2 text-sm font-semibold">{titulo}</div>
+      {children}
+    </div>
+  );
+}
+
+function SinAplicar({ children }: { children: React.ReactNode }) {
+  return <p className="p-3 text-sm text-muted-foreground">No aplica: {children}</p>;
+}
+
 /** Fila etiqueta/valor del recuadro de confirmación, estilo tabla (como la pantalla legada). */
 function FilaCampo({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -389,6 +407,9 @@ export function PanelRevisionIncidencia({
     : hayCoincidenciaBloqueante
       ? [{ nombreReal: nombreExterno ?? coincidencia.socio?.nombre ?? "—", lista: listaTexto }]
       : [];
+  const hayPais = Boolean(coincidencia.pais_nacimiento?.coincide || coincidencia.nacionalidad?.coincide);
+  const duplicados = coincidencia.duplicados ?? [];
+  const personasRelacionadas = coincidencia.personas_relacionadas ?? [];
 
   return (
     <Card>
@@ -422,162 +443,174 @@ export function PanelRevisionIncidencia({
       </CardHeader>
 
       <CardContent className="space-y-4">
-        {entradas.length ? (
-          <div className="overflow-hidden rounded-lg border">
-            <div className="border-b bg-muted px-4 py-2 text-sm font-semibold">
-              Confirmación de listas bloqueadas (coincidencias: {entradas.length})
-            </div>
-            <div className="divide-y">
-              {entradas.map((entrada, indice) => (
-                <div key={`${entrada.nombreReal}-${indice}`}>
-                  <div className="bg-muted/30 px-3 py-1.5 text-xs font-semibold text-muted-foreground">
-                    Coincidencia {indice + 1}
+        <SeccionPanel
+          titulo={
+            entradas.length
+              ? `Confirmación de listas bloqueadas (coincidencias: ${entradas.length})`
+              : "Confirmación de listas bloqueadas"
+          }
+        >
+          {entradas.length ? (
+            <>
+              <div className="divide-y">
+                {entradas.map((entrada, indice) => (
+                  <div key={`${entrada.nombreReal}-${indice}`}>
+                    <div className="bg-muted/30 px-3 py-1.5 text-xs font-semibold text-muted-foreground">
+                      Coincidencia {indice + 1}
+                    </div>
+                    <div className="border-t">
+                      <FilaCampo label="Nombre">{coincidencia.socio?.nombre ?? "—"}</FilaCampo>
+                      <FilaCampo label="Nombre Real">{entrada.nombreReal}</FilaCampo>
+                      <FilaCampo label="Lista">{entrada.lista}</FilaCampo>
+                    </div>
                   </div>
-                  <div className="border-t">
-                    <FilaCampo label="Nombre">{coincidencia.socio?.nombre ?? "—"}</FilaCampo>
-                    <FilaCampo label="Nombre Real">{entrada.nombreReal}</FilaCampo>
-                    <FilaCampo label="Lista">{entrada.lista}</FilaCampo>
+                ))}
+              </div>
+
+              {coincidencia.estado !== "PENDIENTE_REVISION" ? (
+                <FilaCampo label="Decisión">
+                  {coincidencia.estado === "BLOQUEADO" ? "Confirmado: es la persona" : "Rechazado: no es la persona"}
+                  {coincidencia.revision?.comentario ? ` — ${coincidencia.revision.comentario}` : ""}
+                </FilaCampo>
+              ) : esOficial ? (
+                <div className="border-t">
+                  <FilaCampo label="Riesgo">
+                    <div className="flex items-center gap-4">
+                      <label className="flex items-center gap-1.5">
+                        <input
+                          type="radio"
+                          name="riesgo-lista"
+                          disabled={resolver.isPending}
+                          checked={riesgo === "CONFIRMAR"}
+                          onChange={() => setRiesgo("CONFIRMAR")}
+                        />
+                        Confirmar
+                      </label>
+                      <label className="flex items-center gap-1.5">
+                        <input
+                          type="radio"
+                          name="riesgo-lista"
+                          disabled={resolver.isPending}
+                          checked={riesgo === "RECHAZAR"}
+                          onChange={() => setRiesgo("RECHAZAR")}
+                        />
+                        Rechazar
+                      </label>
+                    </div>
+                  </FilaCampo>
+                  <FilaCampo label="Justificación">
+                    <textarea
+                      value={justificacion}
+                      maxLength={MAX_JUSTIFICACION}
+                      disabled={resolver.isPending}
+                      onChange={(evento) => setJustificacion(evento.target.value)}
+                      rows={2}
+                      placeholder="Sustento de la decisión, p. ej. “RFC y CURP idénticos”."
+                      className="w-full resize-none rounded-md border bg-card px-2 py-1.5 text-sm shadow-xs outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                    />
+                    <p className="pt-1 text-right text-xs text-muted-foreground">
+                      {justificacion.length}/{MAX_JUSTIFICACION}
+                    </p>
+                  </FilaCampo>
+                  <div className="flex justify-end px-3 py-2">
+                    <Button
+                      size="sm"
+                      disabled={resolver.isPending || !riesgo}
+                      onClick={guardarDecisionLista}
+                    >
+                      {resolver.isPending ? "Guardando…" : "Guardar decisión"}
+                    </Button>
                   </div>
                 </div>
-              ))}
-            </div>
+              ) : (
+                <p className="border-t bg-muted p-3 text-sm text-muted-foreground">
+                  Solo el oficial de cumplimiento puede confirmar o rechazar coincidencias.
+                </p>
+              )}
+            </>
+          ) : (
+            <SinAplicar>el socio no tiene coincidencia en lista negra o de personas bloqueadas.</SinAplicar>
+          )}
+        </SeccionPanel>
 
-            {coincidencia.estado !== "PENDIENTE_REVISION" ? (
-              <FilaCampo label="Decisión">
-                {coincidencia.estado === "BLOQUEADO" ? "Confirmado: es la persona" : "Rechazado: no es la persona"}
-                {coincidencia.revision?.comentario ? ` — ${coincidencia.revision.comentario}` : ""}
-              </FilaCampo>
-            ) : esOficial ? (
-              <div className="border-t">
-                <FilaCampo label="Riesgo">
-                  <div className="flex items-center gap-4">
-                    <label className="flex items-center gap-1.5">
-                      <input
-                        type="radio"
-                        name="riesgo-lista"
-                        disabled={resolver.isPending}
-                        checked={riesgo === "CONFIRMAR"}
-                        onChange={() => setRiesgo("CONFIRMAR")}
-                      />
-                      Confirmar
-                    </label>
-                    <label className="flex items-center gap-1.5">
-                      <input
-                        type="radio"
-                        name="riesgo-lista"
-                        disabled={resolver.isPending}
-                        checked={riesgo === "RECHAZAR"}
-                        onChange={() => setRiesgo("RECHAZAR")}
-                      />
-                      Rechazar
-                    </label>
-                  </div>
-                </FilaCampo>
-                <FilaCampo label="Justificación">
-                  <textarea
-                    value={justificacion}
-                    maxLength={MAX_JUSTIFICACION}
-                    disabled={resolver.isPending}
-                    onChange={(evento) => setJustificacion(evento.target.value)}
-                    rows={2}
-                    placeholder="Sustento de la decisión, p. ej. “RFC y CURP idénticos”."
-                    className="w-full resize-none rounded-md border bg-card px-2 py-1.5 text-sm shadow-xs outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+        <SeccionPanel titulo="Confirmación de países">
+          {hayPais ? (
+            <div className="space-y-3 p-4">
+              <div className="grid gap-3 sm:grid-cols-2">
+                {coincidencia.pais_nacimiento?.coincide ? (
+                  <RiesgoPaisBucket
+                    titulo="País de nacimiento"
+                    lista={coincidencia.pais_nacimiento}
+                    valor={decisionPaisNacimiento}
+                    onChange={setDecisionPaisNacimiento}
+                    disabled={!esOficial || resolver.isPending}
                   />
-                  <p className="pt-1 text-right text-xs text-muted-foreground">
-                    {justificacion.length}/{MAX_JUSTIFICACION}
-                  </p>
-                </FilaCampo>
-                <div className="flex justify-end px-3 py-2">
+                ) : null}
+                {coincidencia.nacionalidad?.coincide ? (
+                  <RiesgoPaisBucket
+                    titulo="Nacionalidad"
+                    lista={coincidencia.nacionalidad}
+                    valor={decisionNacionalidad}
+                    onChange={setDecisionNacionalidad}
+                    disabled={!esOficial || resolver.isPending}
+                  />
+                ) : null}
+              </div>
+              {esOficial ? (
+                <div className="flex justify-end">
                   <Button
                     size="sm"
-                    disabled={resolver.isPending || !riesgo}
-                    onClick={guardarDecisionLista}
+                    variant="outline"
+                    disabled={resolver.isPending || (!decisionPaisNacimiento && !decisionNacionalidad)}
+                    onClick={guardarDecisionPais}
                   >
-                    {resolver.isPending ? "Guardando…" : "Guardar decisión"}
+                    Guardar decisión de país
                   </Button>
                 </div>
-              </div>
-            ) : (
-              <p className="border-t bg-muted p-3 text-sm text-muted-foreground">
-                Solo el oficial de cumplimiento puede confirmar o rechazar coincidencias.
-              </p>
-            )}
-          </div>
-        ) : (
-          <p className="text-sm text-muted-foreground">
-            No hay detalle de la persona en la lista para esta coincidencia.
-          </p>
-        )}
-
-        {coincidencia.pais_nacimiento?.coincide || coincidencia.nacionalidad?.coincide ? (
-          <div className="space-y-3 rounded-lg border p-4">
-            <p className="text-sm font-medium">Confirmación de países</p>
-            <div className="grid gap-3 sm:grid-cols-2">
-              {coincidencia.pais_nacimiento?.coincide ? (
-                <RiesgoPaisBucket
-                  titulo="País de nacimiento"
-                  lista={coincidencia.pais_nacimiento}
-                  valor={decisionPaisNacimiento}
-                  onChange={setDecisionPaisNacimiento}
-                  disabled={!esOficial || resolver.isPending}
-                />
-              ) : null}
-              {coincidencia.nacionalidad?.coincide ? (
-                <RiesgoPaisBucket
-                  titulo="Nacionalidad"
-                  lista={coincidencia.nacionalidad}
-                  valor={decisionNacionalidad}
-                  onChange={setDecisionNacionalidad}
-                  disabled={!esOficial || resolver.isPending}
-                />
               ) : null}
             </div>
-            {esOficial ? (
-              <div className="flex justify-end">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  disabled={resolver.isPending || (!decisionPaisNacimiento && !decisionNacionalidad)}
-                  onClick={guardarDecisionPais}
-                >
-                  Guardar decisión de país
-                </Button>
-              </div>
-            ) : null}
-          </div>
-        ) : null}
+          ) : (
+            <SinAplicar>el socio no tiene coincidencia de riesgo-país.</SinAplicar>
+          )}
+        </SeccionPanel>
 
-        {socioRef && coincidencia.duplicados?.length ? (
-          <div className="overflow-hidden rounded-lg border">
-            <div className="border-b bg-muted px-4 py-2 text-sm font-semibold">
-              Socios con nombre similar ({coincidencia.duplicados.length})
-            </div>
-            {coincidencia.duplicados.map((duplicado) => (
+        <SeccionPanel
+          titulo={duplicados.length ? `Socios con nombre similar (${duplicados.length})` : "Socios con nombre similar"}
+        >
+          {duplicados.length && socioRef ? (
+            duplicados.map((duplicado) => (
               <FilaDuplicadoSocio
                 key={duplicado.socio_ref_similar}
                 socioRef={socioRef}
                 duplicado={duplicado}
                 esOficial={esOficial}
               />
-            ))}
-          </div>
-        ) : null}
+            ))
+          ) : (
+            <SinAplicar>no se detectaron socios con nombre parecido a este.</SinAplicar>
+          )}
+        </SeccionPanel>
 
-        {socioRef && coincidencia.personas_relacionadas?.length ? (
-          <div className="overflow-hidden rounded-lg border">
-            <div className="border-b bg-muted px-4 py-2 text-sm font-semibold">
-              Personas relacionadas ({coincidencia.personas_relacionadas.length})
-            </div>
-            {coincidencia.personas_relacionadas.map((persona) => (
+        <SeccionPanel
+          titulo={
+            personasRelacionadas.length
+              ? `Personas relacionadas (${personasRelacionadas.length})`
+              : "Personas relacionadas"
+          }
+        >
+          {personasRelacionadas.length && socioRef ? (
+            personasRelacionadas.map((persona) => (
               <FilaPersonaRelacionada
                 key={persona.id}
                 socioRef={socioRef}
                 persona={persona}
                 esOficial={esOficial}
               />
-            ))}
-          </div>
-        ) : null}
+            ))
+          ) : (
+            <SinAplicar>el socio no tiene personas relacionadas con coincidencia en lista.</SinAplicar>
+          )}
+        </SeccionPanel>
       </CardContent>
     </Card>
   );

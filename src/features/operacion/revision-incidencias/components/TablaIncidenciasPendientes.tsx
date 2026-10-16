@@ -63,36 +63,22 @@ function estatusPais(coincidencia: CoincidenciaSocio): EstatusCombinado | null {
 }
 
 /**
- * Estatus unico de la fila, combinando los 5 tipos de coincidencia que puede tener un socio (lista
- * negra/bloqueadas, riesgo-pais de nacimiento, riesgo-pais de nacionalidad, nombre similar entre
- * socios, persona relacionada): si CUALQUIERA sigue pendiente, la fila es "Pendiente"; si no hay
- * nada pendiente pero algo se confirmo, "Confirmado"; si todo lo que hubo se descarto o se
- * minimizo, "Rechazado". La fila nunca desaparece de la tabla al resolverse, solo cambia este
- * estatus (es una bitacora, no una cola de pendientes).
+ * Estatus de la coincidencia en lista negra/bloqueadas (coincidencia.estado, ver
+ * CoincidenciaListaResponse del backend): null si no hay coincidencia en esas listas (solo PEP o
+ * ninguna), igual que estatusPais null cuando no hay coincidencia de pais. No mezcla aqui el
+ * estatus de duplicados ni de personas relacionadas: esos ya tienen su propia columna/seccion.
  */
-function estatusCombinado(coincidencia: CoincidenciaSocio): EstatusCombinado {
-  const duplicados = coincidencia.duplicados ?? [];
-  const personasRelacionadas = coincidencia.personas_relacionadas ?? [];
-  const confirmacionPais = coincidencia.pais_nacimiento?.confirmacion;
-  const confirmacionNacionalidad = coincidencia.nacionalidad?.confirmacion;
-
-  const hayPendiente =
-    coincidencia.estado === "PENDIENTE_REVISION" ||
-    duplicados.some((d) => d.estado === "PENDIENTE") ||
-    personasRelacionadas.some((p) => p.estado === "PENDIENTE") ||
-    confirmacionPais === "PENDIENTE" ||
-    confirmacionNacionalidad === "PENDIENTE";
-  if (hayPendiente) return "PENDIENTE";
-
-  const hayConfirmado =
-    coincidencia.estado === "BLOQUEADO" ||
-    duplicados.some((d) => d.estado === "CONFIRMADA") ||
-    personasRelacionadas.some((p) => p.estado === "CONFIRMADA") ||
-    confirmacionPais === "CONFIRMADO" ||
-    confirmacionNacionalidad === "CONFIRMADO";
-  if (hayConfirmado) return "CONFIRMADO";
-
-  return "RECHAZADO";
+function estatusLista(coincidencia: CoincidenciaSocio): EstatusCombinado | null {
+  switch (coincidencia.estado) {
+    case "PENDIENTE_REVISION":
+      return "PENDIENTE";
+    case "BLOQUEADO":
+      return "CONFIRMADO";
+    case "DESCARTADA":
+      return "RECHAZADO";
+    default:
+      return null;
+  }
 }
 
 /** La primera persona relacionada con coincidencia (preferimos una pendiente sobre una ya resuelta). */
@@ -187,9 +173,14 @@ export function TablaIncidenciasPendientes({
               })()}
             </TableCell>
             <TableCell>
-              <Badge variant={varianteEstatus(estatusCombinado(coincidencia))}>
-                {textoEstatus(estatusCombinado(coincidencia))}
-              </Badge>
+              {(() => {
+                const estado = estatusLista(coincidencia);
+                return estado ? (
+                  <Badge variant={varianteEstatus(estado)}>{textoEstatus(estado)}</Badge>
+                ) : (
+                  <span className="text-muted-foreground">—</span>
+                );
+              })()}
             </TableCell>
             <TableCell>{nombrePersonaRelacionada(coincidencia)}</TableCell>
             <TableCell className="text-muted-foreground">

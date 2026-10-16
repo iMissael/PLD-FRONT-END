@@ -55,7 +55,6 @@ const TITULOS_RUTAS: Record<string, string> = {
   usuarios: "Usuarios",
   roles: "Roles",
   permisos: "Permisos",
-  integraciones: "Sistemas de integración",
   peps: "Configuración de PEPs",
   "acerca-de": "Acerca de",
   ayuda: "Ayuda",

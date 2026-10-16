@@ -72,7 +72,7 @@ export async function obtenerExpedienteAlerta(id: number): Promise<ExpedienteAle
 }
 
 export async function obtenerMovimientoAlerta(id: number): Promise<MovimientoAlerta> {
-  const { data } = await apiClient.get<MovimientoAlerta>(`${BASE}/alertas/${id}/movimiento`);
+  const { data } = await apiClient.get<MovimientoAlerta>(`/alertas/${id}/movimiento`);
   return data;
 }
 
