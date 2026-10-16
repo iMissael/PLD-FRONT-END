@@ -156,6 +156,20 @@ export interface PaginaAlertas {
   totalPaginas: number;
 }
 
+/**
+ * `MovimientoAlertaResponse`: movimiento de caja vinculado a la alerta (folioOperacion).
+ * Todos los campos null si la alerta no tiene operación asociada (p. ej. alertas de
+ * seguimiento por cambio de perfil del socio, no originadas en un movimiento).
+ */
+export interface MovimientoAlerta {
+  folioOperacion: string | null;
+  fecha: string | null;
+  tipoMovimiento: string | null;
+  importe: number | null;
+  moneda: string | null;
+  formaPago: string | null;
+}
+
 /** `AlertaController.DictamenRequest`. */
 export interface DictamenInput {
   estatus: Extract<EstatusAlerta, "CONFIRMADA" | "RECHAZADA">;

@@ -13,6 +13,7 @@ import {
   listarRazonesAlerta,
   listarTiposAlerta,
   obtenerExpedienteAlerta,
+  obtenerMovimientoAlerta,
 } from "../api/alertasApi";
 import type {
   CrearAlertaManualInput,
@@ -30,6 +31,8 @@ export const alertasKeys = {
     [...alertasKeys.listas(), filtro, pagina, tamanio] as const,
   expedientes: () => [...alertasKeys.all, "expediente"] as const,
   expediente: (id: number) => [...alertasKeys.expedientes(), id] as const,
+  movimientos: () => [...alertasKeys.all, "movimiento"] as const,
+  movimiento: (id: number) => [...alertasKeys.movimientos(), id] as const,
 };
 
 /** Catálogo de tipos de alerta (cambia muy poco). */
@@ -51,10 +54,16 @@ export function useRazonesAlerta(alertaAcronimo?: string, habilitado = true) {
   });
 }
 
-export function useListaAlertas(filtro: FiltroAlertas, pagina: number, tamanio: number) {
+export function useListaAlertas(
+  filtro: FiltroAlertas,
+  pagina: number,
+  tamanio: number,
+  habilitado = true,
+) {
   return useQuery({
     queryKey: alertasKeys.lista(filtro, pagina, tamanio),
     queryFn: () => listarAlertas(filtro, pagina, tamanio),
+    enabled: habilitado,
     placeholderData: keepPreviousData,
   });
 }
@@ -64,6 +73,14 @@ export function useExpedienteAlerta(id: number) {
   return useQuery({
     queryKey: alertasKeys.expediente(id),
     queryFn: () => obtenerExpedienteAlerta(id),
+  });
+}
+
+/** Movimiento de caja vinculado a la alerta ("Revisión de alertas de seguimiento"). */
+export function useMovimientoAlerta(id: number) {
+  return useQuery({
+    queryKey: alertasKeys.movimiento(id),
+    queryFn: () => obtenerMovimientoAlerta(id),
   });
 }
 
