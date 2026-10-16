@@ -232,7 +232,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/coincidencias/{socioRef}/confirmacion": {
+    "/SICANETSC/PLD/{tenantId}/coincidencias/{acreditadoRef}/confirmacion": {
         parameters: {
             query?: never;
             header?: never;
@@ -242,7 +242,7 @@ export interface paths {
         get?: never;
         /**
          * Confirmar o descartar una coincidencia
-         * @description Requiere el permiso coincidencias:confirmar asignado al rol (el administrador no lo tiene por omisión: separación de funciones). es_la_persona=true bloquea al socio (ya no se evalúa); es_la_persona=false descarta la coincidencia y la evaluación corre normalmente.
+         * @description Requiere el permiso coincidencias:confirmar asignado al rol (el administrador no lo tiene por omisión: separación de funciones). es_la_persona=true bloquea al acreditado (ya no se evalúa); es_la_persona=false descarta la coincidencia y la evaluación corre normalmente.
          */
         put: operations["resolver"];
         post?: never;
@@ -373,7 +373,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/coincidencias/{socioRef}/personas-relacionadas/{idCoincidencia}/confirmacion": {
+    "/SICANETSC/PLD/{tenantId}/coincidencias/{acreditadoRef}/personas-relacionadas/{idCoincidencia}/confirmacion": {
         parameters: {
             query?: never;
             header?: never;
@@ -383,7 +383,7 @@ export interface paths {
         get?: never;
         /**
          * Confirmar o descartar una persona relacionada con coincidencia en lista
-         * @description Informativo: nunca bloquea ni modifica al socio, solo deja constancia de la decision. Requiere el permiso coincidencias:confirmar, igual que las demas resoluciones.
+         * @description Informativo: nunca bloquea ni modifica al acreditado, solo deja constancia de la decision. Requiere el permiso coincidencias:confirmar, igual que las demas resoluciones.
          */
         put: operations["resolverPersonaRelacionada"];
         post?: never;
@@ -393,7 +393,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/coincidencias/{socioRef}/duplicados/{socioRefSimilar}/confirmacion": {
+    "/SICANETSC/PLD/{tenantId}/coincidencias/{acreditadoRef}/duplicados/{acreditadoRefSimilar}/confirmacion": {
         parameters: {
             query?: never;
             header?: never;
@@ -402,8 +402,8 @@ export interface paths {
         };
         get?: never;
         /**
-         * Confirmar o descartar un socio con nombre similar
-         * @description Informativo: nunca bloquea ni modifica a ningun socio, solo deja constancia de la decision. Requiere el permiso coincidencias:confirmar, igual que las demas resoluciones.
+         * Confirmar o descartar un acreditado con nombre similar
+         * @description Informativo: nunca bloquea ni modifica a ningun acreditado, solo deja constancia de la decision. Requiere el permiso coincidencias:confirmar, igual que las demas resoluciones.
          */
         put: operations["resolverDuplicado"];
         post?: never;
@@ -413,7 +413,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/coincidencias/{socioRef}/confirmacion": {
+    "/SICANETSC/PLD/{tenantId}/coincidencias/{acreditadoRef}/confirmacion": {
         parameters: {
             query?: never;
             header?: never;
@@ -423,7 +423,7 @@ export interface paths {
         get?: never;
         /**
          * Confirmar o descartar una coincidencia
-         * @description Requiere el permiso coincidencias:confirmar asignado al rol (el administrador no lo tiene por omisión: separación de funciones). es_la_persona=true bloquea al socio (ya no se evalúa); es_la_persona=false descarta la coincidencia y la evaluación corre normalmente.
+         * @description Requiere el permiso coincidencias:confirmar asignado al rol (el administrador no lo tiene por omisión: separación de funciones). es_la_persona=true bloquea al acreditado (ya no se evalúa); es_la_persona=false descarta la coincidencia y la evaluación corre normalmente.
          */
         put: operations["resolver"];
         post?: never;
@@ -1401,7 +1401,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/v1/integrations/socios": {
+    "/SICANETSC/PLD/{tenantId}/v1/integrations/acreditados": {
         parameters: {
             query?: never;
             header?: never;
@@ -1411,10 +1411,10 @@ export interface paths {
         get?: never;
         put?: never;
         /**
-         * Enviar alta o cambio de un socio
+         * Enviar alta o cambio de un acreditado
          * @description Valida la forma, guarda la solicitud y responde 202. El resultado se consulta en status_url.
          */
-        post: operations["recibirSocio"];
+        post: operations["recibiracreditado"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1432,7 +1432,7 @@ export interface paths {
         put?: never;
         /**
          * Ejecutar una evaluación de riesgo
-         * @description tipo EVALUACION_SOCIO toma los datos del socio y su crédito vigente desde la Matriz; EVALUACION_DATOS usa los datos enviados. Síncrona: puede tardar hasta 20 s.
+         * @description tipo EVALUACION_acreditado toma los datos del acreditado y su crédito vigente desde la Matriz; EVALUACION_DATOS usa los datos enviados. Síncrona: puede tardar hasta 20 s.
          */
         post: operations["evaluar"];
         delete?: never;
@@ -1523,19 +1523,19 @@ export interface paths {
             trace?: never;
         };
         "/SICANETSC/PLD/{tenantId}/tenant": {
-            "/SICANETSC/PLD/{tenantId}/socios/{socioReferencia}/perfil-transaccional": {
+            "/SICANETSC/PLD/{tenantId}/acreditados/{acreditadoReferencia}/perfil-transaccional": {
                 parameters: {
                     query?: never;
                     header?: never;
                     path?: never;
                     cookie?: never;
                 };
-                /** Perfil transaccional vigente del socio */
+                /** Perfil transaccional vigente del acreditado */
                 get: operations["vigente_1"];
                 put?: never;
                 /**
                  * Registrar el perfil transaccional declarado
-                 * @description Lo envia el modulo de ejecutivos en el alta del socio y en cada modificacion. Cada envio agrega un registro al historial; el ultimo es el vigente para las alertas de perfil. formasPago: E efectivo, T transferencia, * otras.
+                 * @description Lo envia el modulo de ejecutivos en el alta del acreditado y en cada modificacion. Cada envio agrega un registro al historial; el ultimo es el vigente para las alertas de perfil. formasPago: E efectivo, T transferencia, * otras.
                  */
                 post: operations["registrar"];
                 delete?: never;
@@ -1544,7 +1544,7 @@ export interface paths {
                 patch?: never;
                 trace?: never;
             };
-            "/SICANETSC/PLD/{tenantId}/socios/{referencia}/escaneo": {
+            "/SICANETSC/PLD/{tenantId}/acreditados/{referencia}/escaneo": {
                 parameters: {
                     query?: never;
                     header?: never;
@@ -1705,7 +1705,7 @@ export interface paths {
                  * Evaluar un movimiento de caja
                  * @description Evalua el movimiento contra las reglas vigentes de configuracion_alerta y genera una alerta automatica por cada regla que se cumple. Si alguna es de AUTORIZACION (tipo A) responde requiereAutorizacion = true.
                  *
-                 *     Los ejemplos con socio bloqueado requieren dar de alta antes en personas-bloqueadas a JUAN PRUEBA BLOQUEADO (RFC PUBJ800101AB1, alias N). Cambie folioOperacion en cada intento: un folio repetido no vuelve a generar las mismas alertas.
+                 *     Los ejemplos con acreditado bloqueado requieren dar de alta antes en personas-bloqueadas a JUAN PRUEBA BLOQUEADO (RFC PUBJ800101AB1, alias N). Cambie folioOperacion en cada intento: un folio repetido no vuelve a generar las mismas alertas.
                  */
                 post: operations["evaluar_1"];
                 delete?: never;
@@ -1725,7 +1725,7 @@ export interface paths {
                 put?: never;
                 /**
                  * Evaluar y registrar riesgo de solicitud de crédito
-                 * @description Procesa factores socio, crédito, domicilio e historial crediticio para determinar el score total y nivel de riesgo.
+                 * @description Procesa factores acreditado, crédito, domicilio e historial crediticio para determinar el score total y nivel de riesgo.
                  */
                 post: operations["evaluarYRegistrar"];
                 delete?: never;
@@ -1842,8 +1842,8 @@ export interface paths {
                     cookie?: never;
                 };
                 /**
-                 * Listar Tipos de Persona / Socio (paginado)
-                 * @description Consulta paginada de Tipos de Persona / Socio registrados
+                 * Listar Tipos de Persona / acreditado (paginado)
+                 * @description Consulta paginada de Tipos de Persona / acreditado registrados
                  */
                 get: operations["listarTodos_1"];
                 put?: never;
@@ -2900,7 +2900,7 @@ export interface paths {
                 patch?: never;
                 trace?: never;
             };
-            "/SICANETSC/PLD/{tenantId}/v1/socios/{socioRef}": {
+            "/SICANETSC/PLD/{tenantId}/v1/acreditados/{acreditadoRef}": {
                 parameters: {
                     query?: never;
                     header?: never;
@@ -2908,8 +2908,8 @@ export interface paths {
                     cookie?: never;
                 };
                 /**
-                 * Consultar un socio
-                 * @description Identidad, estatus y última evaluación de riesgo del socio.
+                 * Consultar un acreditado
+                 * @description Identidad, estatus y última evaluación de riesgo del acreditado.
                  */
                 get: operations["obtener"];
                 put?: never;
@@ -3025,7 +3025,7 @@ export interface paths {
                 patch?: never;
                 trace?: never;
             };
-            "/SICANETSC/PLD/{tenantId}/socios/{socioReferencia}/perfil-transaccional/historial": {
+            "/SICANETSC/PLD/{tenantId}/acreditados/{acreditadoReferencia}/perfil-transaccional/historial": {
                 parameters: {
                     query?: never;
                     header?: never;
@@ -3165,7 +3165,7 @@ export interface paths {
                 patch?: never;
                 trace?: never;
             };
-            "/SICANETSC/PLD/{tenantId}/socios/{referencia}/perfil-riesgo": {
+            "/SICANETSC/PLD/{tenantId}/acreditados/{referencia}/perfil-riesgo": {
                 parameters: {
                     query?: never;
                     header?: never;
@@ -3181,7 +3181,7 @@ export interface paths {
                 patch?: never;
                 trace?: never;
             };
-            "/SICANETSC/PLD/{tenantId}/socios/{id}": {
+            "/SICANETSC/PLD/{tenantId}/acreditados/{id}": {
                 parameters: {
                     query?: never;
                     header?: never;
@@ -3197,7 +3197,7 @@ export interface paths {
                 patch?: never;
                 trace?: never;
             };
-            "/SICANETSC/PLD/{tenantId}/socios/buscar": {
+            "/SICANETSC/PLD/{tenantId}/acreditados/buscar": {
                 parameters: {
                     query?: never;
                     header?: never;
@@ -3253,7 +3253,7 @@ export interface paths {
                 patch?: never;
                 trace?: never;
             };
-            "/SICANETSC/PLD/{tenantId}/coincidencias/{socioRef}": {
+            "/SICANETSC/PLD/{tenantId}/coincidencias/{acreditadoRef}": {
                 parameters: {
                     query?: never;
                     header?: never;
@@ -3261,8 +3261,8 @@ export interface paths {
                     cookie?: never;
                 };
                 /**
-                 * Coincidencias de un socio
-                 * @description Estado de la revisión de las coincidencias del socio.
+                 * Coincidencias de un acreditado
+                 * @description Estado de la revisión de las coincidencias del acreditado.
                  */
                 get: operations["obtener"];
                 put?: never;
@@ -3282,7 +3282,7 @@ export interface paths {
                 };
                 /**
                  * Coincidencias pendientes de revisión
-                 * @description Socios con coincidencia en lista negra o bloqueada que el oficial aún no confirma ni descarta.
+                 * @description acreditados con coincidencia en lista negra o bloqueada que el oficial aún no confirma ni descarta.
                  */
                 get: operations["pendientes"];
                 get: operations["listarRazones"];
@@ -3354,7 +3354,7 @@ export interface paths {
                 patch?: never;
                 trace?: never;
             };
-            "/SICANETSC/PLD/{tenantId}/evaluaciones/historial/{socioRef}": {
+            "/SICANETSC/PLD/{tenantId}/evaluaciones/historial/{acreditadoRef}": {
                 parameters: {
                     query?: never;
                     header?: never;
@@ -3362,10 +3362,10 @@ export interface paths {
                     cookie?: never;
                 };
                 /**
-                 * Historial de evaluaciones de un socio
-                 * @description Todas las evaluaciones registradas para ese socio, de la más reciente a la más antigua.
+                 * Historial de evaluaciones de un acreditado
+                 * @description Todas las evaluaciones registradas para ese acreditado, de la más reciente a la más antigua.
                  */
-                get: operations["historialPorSocio"];
+                get: operations["historialPoracreditado"];
                 put?: never;
                 post?: never;
                 delete?: never;
@@ -3454,7 +3454,7 @@ export interface paths {
                 patch?: never;
                 trace?: never;
             };
-            "/SICANETSC/PLD/{tenantId}/coincidencias/{socioRef}": {
+            "/SICANETSC/PLD/{tenantId}/coincidencias/{acreditadoRef}": {
                 parameters: {
                     query?: never;
                     header?: never;
@@ -3462,8 +3462,8 @@ export interface paths {
                     cookie?: never;
                 };
                 /**
-                 * Coincidencias de un socio
-                 * @description Estado de la revisión de las coincidencias del socio.
+                 * Coincidencias de un acreditado
+                 * @description Estado de la revisión de las coincidencias del acreditado.
                  */
                 get: operations["obtener_2"];
                 put?: never;
@@ -3483,7 +3483,7 @@ export interface paths {
                 };
                 /**
                  * Coincidencias pendientes de revisión
-                 * @description Socios con coincidencia en lista negra o bloqueada que el oficial aún no confirma ni descarta.
+                 * @description acreditados con coincidencia en lista negra o bloqueada que el oficial aún no confirma ni descarta.
                  */
                 get: operations["pendientes"];
                 put?: never;
@@ -4281,7 +4281,7 @@ export interface components {
         EvaluacionRiesgoResponseDto: {
             /** Format: int64 */
             id_evaluacion?: number;
-            socio_ref?: string;
+            acreditado_ref?: string;
             metadata?: components["schemas"]["MetadataResponseDto"];
             puntuacion_total?: number;
             nivel_riesgo?: components["schemas"]["NivelRiesgoDto"];
@@ -4363,7 +4363,7 @@ export interface components {
             comentario?: string;
         };
         CoincidenciaListaResponse: {
-            socio_ref?: string;
+            acreditado_ref?: string;
             estado?: string;
             lista_negra?: components["schemas"]["ListaDto"];
             lista_bloqueadas?: components["schemas"]["ListaDto"];
@@ -4376,13 +4376,13 @@ export interface components {
             /** Format: date-time */
             fecha_modificacion?: string;
             revision?: components["schemas"]["RevisionDto"];
-            socio?: components["schemas"]["SocioRevisionDto"];
+            acreditado?: components["schemas"]["acreditadoRevisionDto"];
             personas_en_lista?: components["schemas"]["PersonaEnListaDto"][];
-            duplicados?: components["schemas"]["DuplicadoSocioDto"][];
+            duplicados?: components["schemas"]["DuplicadoacreditadoDto"][];
             personas_relacionadas?: components["schemas"]["PersonaRelacionadaCoincidenciaDto"][];
         };
-        DuplicadoSocioDto: {
-            socio_ref_similar?: string;
+        DuplicadoacreditadoDto: {
+            acreditado_ref_similar?: string;
             nombre_encontrado?: string;
             /** Format: double */
             score?: number;
@@ -4440,7 +4440,7 @@ export interface components {
             fecha_confirmacion?: string;
             comentario?: string;
         };
-        SocioRevisionDto: {
+        acreditadoRevisionDto: {
             nombre?: string;
             tipo_persona?: string;
             rfc?: string;
@@ -4448,7 +4448,7 @@ export interface components {
             /** Format: date */
             fecha_nacimiento?: string;
         };
-        ResolverDuplicadoSocioRequest: {
+        ResolverDuplicadoacreditadoRequest: {
             misma_persona: boolean;
             comentario?: string;
         };
@@ -4583,14 +4583,14 @@ export interface components {
             /** Format: date-time */
             updatedAt?: string;
         };
-        ActualizarCatTipoSocioRequest: {
+        ActualizarCatTipoacreditadoRequest: {
             nombre?: string;
             /** Format: int64 */
             catNivelRiesgoId?: number;
             /** @enum {string} */
             estatus?: "A" | "B" | "I";
         };
-        CatTipoSocioResponse: {
+        CatTipoacreditadoResponse: {
             /** Format: int64 */
             id?: number;
             nombre?: string;
@@ -5571,7 +5571,7 @@ export interface components {
         PerfilTransaccionalResponse: {
             /** Format: int64 */
             id?: number;
-            socioReferencia?: string;
+            acreditadoReferencia?: string;
             /** Format: date-time */
             fechaRegistro?: string;
             disponibilidad?: number;
@@ -5621,7 +5621,7 @@ export interface components {
         OperacionCajaResponse: {
             folioOperacion?: string;
             tipoMovimiento?: string;
-            socioReferencia?: string;
+            acreditadoReferencia?: string;
             importe?: number;
             importeCapital?: number;
             moneda?: string;
@@ -5685,11 +5685,11 @@ export interface components {
         EvaluarOperacionRequest: {
             folioOperacion: string;
             tipoMovimiento?: string;
-            socioReferencia: string;
-            socioNumero?: string;
+            acreditadoReferencia: string;
+            acreditadoNumero?: string;
             referenciaCredito?: string;
-            socioNombre?: string;
-            socioRfc?: string;
+            acreditadoNombre?: string;
+            acreditadoRfc?: string;
             tipoPersona: string;
             aplica?: string;
             importe: number;
@@ -5791,7 +5791,7 @@ export interface components {
         };
         EvaluacionRiesgoSolicitudDto: {
             metadata: components["schemas"]["MetadataDto"];
-            socio: components["schemas"]["SocioDto"];
+            acreditado: components["schemas"]["acreditadoDto"];
             domicilio?: components["schemas"]["DomicilioWrapperDto"];
             credito: components["schemas"]["CreditoDto"];
             historial_crediticio?: components["schemas"]["HistorialCrediticioDto"];
@@ -5811,7 +5811,7 @@ export interface components {
             usuario_verficador_ref?: string;
             tipo_evaluacion?: string;
         };
-        SocioDto: {
+        acreditadoDto: {
             referencia: string;
             nombre: string;
             apellido_p?: string;
@@ -5827,7 +5827,7 @@ export interface components {
             actividad_economica_id: string;
         };
         ConsultaListasRequest: {
-            socioRef?: string;
+            acreditadoRef?: string;
             nombreCompleto?: string;
             curp?: string;
             rfc?: string;
@@ -5843,7 +5843,7 @@ export interface components {
             /** Format: int64 */
             id?: number;
             idLista?: string;
-            socioRef?: string;
+            acreditadoRef?: string;
             porcentajeCoincidencia?: number;
             estatus?: string;
             jsonConsulta?: string;
@@ -5948,7 +5948,7 @@ export interface components {
             /** @enum {string} */
             estatus?: "A" | "B" | "I";
         };
-        CrearCatTipoSocioRequest: {
+        CrearCatTipoacreditadoRequest: {
             nombre: string;
             /** Format: int64 */
             catNivelRiesgoId: number;
@@ -6399,7 +6399,7 @@ export interface components {
             /** Format: int64 */
             razonAlertaId?: number;
             /** @enum {string} */
-            tipoReportado?: "SOCIO" | "EMPLEADO";
+            tipoReportado?: "acreditado" | "EMPLEADO";
             referenciaReportado: string;
             /** Format: date */
             fechaIncidencia: string;
@@ -6478,7 +6478,7 @@ export interface components {
             id?: number;
             nombre?: string;
         };
-        SocioIntegracionResponse: {
+        acreditadoIntegracionResponse: {
             referencia?: string;
             nombre?: string;
             apellido_p?: string;
@@ -6528,7 +6528,7 @@ export interface components {
         EvaluacionIntegracionResponse: {
             /** Format: int64 */
             evaluacion_id?: number;
-            socio_ref?: string;
+            acreditado_ref?: string;
             estado?: string;
             resultado?: components["schemas"]["Resultado"];
             coincidencias?: components["schemas"]["Coincidencias"];
@@ -6586,7 +6586,7 @@ export interface components {
             canalPagoId?: number;
             estatus?: string;
         };
-        DomicilioSocio: {
+        Domicilioacreditado: {
             paisId?: string;
             entidadId?: string;
             municipioId?: string;
@@ -6614,7 +6614,7 @@ export interface components {
             /** Format: date */
             fechaNacimiento?: string;
         };
-        SocioPerfilRiesgoResponse: {
+        acreditadoPerfilRiesgoResponse: {
             referencia?: string;
             nombre?: string;
             nombres?: string;
@@ -6630,7 +6630,7 @@ export interface components {
             paisNacimientoId?: string;
             actividadEconomica?: components["schemas"]["ActividadEconomicaInfo"];
             sucursal?: string;
-            domicilio?: components["schemas"]["DomicilioSocio"];
+            domicilio?: components["schemas"]["Domicilioacreditado"];
             /** Format: int32 */
             antiguedadGiroAnios?: number;
             pepNacionalId?: string;
@@ -6643,7 +6643,7 @@ export interface components {
             id?: number;
             nombre?: string;
         };
-        SocioInfo: {
+        acreditadoInfo: {
             id?: string;
             nombre?: string;
             status?: string;
@@ -6758,8 +6758,8 @@ export interface components {
             /** Format: int32 */
             totalPaginas?: number;
         };
-        PaginaResponseCatTipoSocioResponse: {
-            contenido?: components["schemas"]["CatTipoSocioResponse"][];
+        PaginaResponseCatTipoacreditadoResponse: {
+            contenido?: components["schemas"]["CatTipoacreditadoResponse"][];
             /** Format: int32 */
             pagina?: number;
             /** Format: int32 */
@@ -7966,7 +7966,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                socioRef: string;
+                acreditadoRef: string;
                 idCoincidencia: number;
                 /** @description Identificador del Tenant */
                 tenantId: string;
@@ -7995,8 +7995,8 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                socioRef: string;
-                socioRefSimilar: string;
+                acreditadoRef: string;
+                acreditadoRefSimilar: string;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -8004,7 +8004,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["ResolverDuplicadoSocioRequest"];
+                "application/json": components["schemas"]["ResolverDuplicadoacreditadoRequest"];
             };
         };
         responses: {
@@ -8024,7 +8024,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                socioRef: string;
+                acreditadoRef: string;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -8273,7 +8273,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CatTipoSocioResponse"];
+                    "application/json": components["schemas"]["CatTipoacreditadoResponse"];
                 };
             };
         };
@@ -8292,7 +8292,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["ActualizarCatTipoSocioRequest"];
+                "application/json": components["schemas"]["ActualizarCatTipoacreditadoRequest"];
             };
         };
         responses: {
@@ -8302,7 +8302,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CatTipoSocioResponse"];
+                    "application/json": components["schemas"]["CatTipoacreditadoResponse"];
                 };
             };
         };
@@ -10757,7 +10757,7 @@ export interface operations {
             };
         };
     };
-    recibirSocio: {
+    recibiracreditado: {
         parameters: {
             query?: never;
             header: {
@@ -11003,7 +11003,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                socioReferencia: string;
+                acreditadoReferencia: string;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -11027,7 +11027,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                socioReferencia: string;
+                acreditadoReferencia: string;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -11673,7 +11673,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginaResponseCatTipoSocioResponse"];
+                    "application/json": components["schemas"]["PaginaResponseCatTipoacreditadoResponse"];
                 };
             };
         };
@@ -11690,7 +11690,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CrearCatTipoSocioRequest"];
+                "application/json": components["schemas"]["CrearCatTipoacreditadoRequest"];
             };
         };
         responses: {
@@ -11700,7 +11700,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CatTipoSocioResponse"];
+                    "application/json": components["schemas"]["CatTipoacreditadoResponse"];
                 };
             };
         };
@@ -13939,7 +13939,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                socioRef: string;
+                acreditadoRef: string;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -13953,7 +13953,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["SocioIntegracionResponse"];
+                    "*/*": components["schemas"]["acreditadoIntegracionResponse"];
                 };
             };
         };
@@ -14113,7 +14113,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                socioReferencia: string;
+                acreditadoReferencia: string;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -14151,7 +14151,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["SocioPerfilRiesgoResponse"];
+                    "*/*": components["schemas"]["acreditadoPerfilRiesgoResponse"];
                 };
             };
         };
@@ -14175,7 +14175,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["SocioInfo"];
+                    "*/*": components["schemas"]["acreditadoInfo"];
                 };
             };
         };
@@ -14200,7 +14200,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["SocioInfo"][];
+                    "*/*": components["schemas"]["acreditadoInfo"][];
                 };
             };
         };
@@ -14262,7 +14262,7 @@ export interface operations {
                 rfc?: string;
                 curp?: string;
                 fechaNacimiento?: string;
-                socioRef?: string;
+                acreditadoRef?: string;
                 usuarioRef?: string;
                 sucursalRef?: string;
             };
@@ -14346,16 +14346,16 @@ export interface operations {
             };
         };
     };
-    historialPorSocio: {
+    historialPoracreditado: {
         parameters: {
             query?: never;
             header?: never;
             path: {
                 /**
-                 * @description Referencia del socio
+                 * @description Referencia del acreditado
                  * @example CLI-001
                  */
-                socioRef: string;
+                acreditadoRef: string;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
@@ -14480,7 +14480,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                socioRef: string;
+                acreditadoRef: string;
                 /** @description Identificador del Tenant */
                 tenantId: string;
             };
