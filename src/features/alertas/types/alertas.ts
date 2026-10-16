@@ -170,6 +170,24 @@ export interface DictamenInput {
   justificacion: string;
 }
 
+export type CriterioBusquedaEmpleado = "clave" | "nombre";
+
+export interface BusquedaEmpleados {
+  criterio: CriterioBusquedaEmpleado;
+  valor: string;
+  pagina: number;
+  tamanio: number;
+}
+
+/** `GET /empleados/pagina`. */
+export interface PaginaEmpleados {
+  contenido: EmpleadoExterno[];
+  pagina: number;
+  tamanio: number;
+  totalElementos: number;
+  totalPaginas: number;
+}
+
 /** Empleado del core externo (`EmpleadoExternoDTO`). */
 export interface EmpleadoExterno {
   id: string;

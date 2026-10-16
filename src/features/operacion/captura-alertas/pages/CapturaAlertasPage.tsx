@@ -3,8 +3,8 @@ import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { FuenteInformacionMoral } from "@/features/alertas/components/FuenteInformacionMoral";
-import { TablaClientes } from "@/features/alertas/components/TablaClientes";
-import { TablaEmpleados } from "@/features/alertas/components/TablaEmpleados";
+import { SelectorClienteDialog } from "@/features/alertas/components/SelectorClienteDialog";
+import { SelectorEmpleadoDialog } from "@/features/alertas/components/SelectorEmpleadoDialog";
 import {
   useCapturarAlerta,
   useRazonesAlerta,
@@ -18,12 +18,12 @@ import {
 import { Alert } from "@/shared/components/molecules/Alert";
 import { CalendarioFecha } from "@/shared/components/molecules/CalendarioFecha";
 import { Button } from "@/shared/components/atoms/Button";
-import { Input } from "@/shared/components/atoms/Input";
 import { Card } from "@/shared/components/molecules";
 import { hint, label } from "@/shared/styles/tokens";
 import type { SocioExterno } from "@/features/socios/types/socios";
 import { cn } from "@/shared/utils/cn";
 import { haceAniosIso, hoyIso } from "@/shared/utils/fechas";
+import { Search } from "lucide-react";
 
 const selectStyle =
   "border-border bg-card text-foreground focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full rounded-md border px-3 py-1 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:opacity-50 disabled:cursor-not-allowed";
@@ -115,6 +115,8 @@ export function CapturaAlertasPage() {
   const [creada, setCreada] = useState<Alerta | null>(null);
   const [mensajeError, setMensajeError] = useState<string | null>(null);
   const [intentoGuardar, setIntentoGuardar] = useState(false);
+  /** Ventana de búsqueda abierta: la de clientes o la de empleados, según el tipo de alerta. */
+  const [selectorAbierto, setSelectorAbierto] = useState(false);
   const capturar = useCapturarAlerta();
 
   const tiposCapturables = useMemo(
@@ -342,23 +344,26 @@ export function CapturaAlertasPage() {
                   {ETIQUETA_REPORTADO[tipo.tipoReportado!]} a reportar
                 </label>
                 <div className={marcar("reportado")}>
-                  <Input
+                  <button
                     id="reportado"
-                    readOnly
-                    value={
-                      form.reportado
-                        ? tipo.tipoReportado === "EMPLEADO"
-                          ? `${form.reportado.referencia} · ${form.reportado.nombre}`
-                          : form.reportado.nombre
-                        : ""
-                    }
-                    placeholder={
-                      tipo.tipoReportado === "EMPLEADO"
-                        ? "Seleccione un empleado de la tabla"
-                        : "Seleccione un cliente de la tabla"
-                    }
-                    className="bg-muted/40 w-full"
-                  />
+                    type="button"
+                    onClick={() => setSelectorAbierto(true)}
+                    className="border-border bg-card hover:bg-muted/40 focus-visible:border-ring focus-visible:ring-ring/50 flex h-9 w-full items-center justify-between gap-2 rounded-md border px-3 text-left text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px]"
+                  >
+                    <span
+                      className={cn(
+                        "truncate",
+                        form.reportado ? "text-foreground" : "text-muted-foreground",
+                      )}
+                    >
+                      {form.reportado
+                        ? form.reportado.nombre
+                        : tipo.tipoReportado === "EMPLEADO"
+                          ? "Seleccione un empleado"
+                          : "Seleccione un cliente"}
+                    </span>
+                    <Search className="text-muted-foreground size-4 shrink-0" />
+                  </button>
                 </div>
               </div>
 
@@ -388,7 +393,9 @@ export function CapturaAlertasPage() {
             </div>
 
             {tipo.tipoReportado === "SOCIO" ? (
-              <TablaClientes
+              <SelectorClienteDialog
+                abierto={selectorAbierto}
+                onAbiertoCambiar={setSelectorAbierto}
                 seleccionadoId={form.reportado?.referencia ?? null}
                 onSeleccionar={(s) =>
                   setForm((prev) => ({
@@ -403,7 +410,9 @@ export function CapturaAlertasPage() {
                 }
               />
             ) : (
-              <TablaEmpleados
+              <SelectorEmpleadoDialog
+                abierto={selectorAbierto}
+                onAbiertoCambiar={setSelectorAbierto}
                 seleccionadoId={form.reportado?.referencia ?? null}
                 onSeleccionar={(e) =>
                   setForm((prev) => ({

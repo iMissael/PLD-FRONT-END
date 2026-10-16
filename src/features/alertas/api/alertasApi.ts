@@ -2,6 +2,7 @@ import { apiClient } from "@/api/client";
 
 import type {
   Alerta,
+  BusquedaEmpleados,
   CrearAlertaManualInput,
   DictamenInput,
   EmpleadoExterno,
@@ -9,6 +10,7 @@ import type {
   ExpedienteAlerta,
   FiltroAlertas,
   PaginaAlertas,
+  PaginaEmpleados,
   RazonAlerta,
   TipoAlerta,
 } from "../types/alertas";
@@ -86,6 +88,19 @@ export async function dictaminarAlerta(
 export async function buscarEmpleados(nombre: string): Promise<EmpleadoExterno[]> {
   const { data } = await apiClient.get<EmpleadoExterno[]>("/empleados/buscar", {
     params: nombre ? { nombre } : undefined,
+  });
+  return data;
+}
+
+/** El backend filtra y pagina: el servicio de empleados siempre devuelve la lista completa. */
+export async function buscarEmpleadosPaginados({
+  criterio,
+  valor,
+  pagina,
+  tamanio,
+}: BusquedaEmpleados): Promise<PaginaEmpleados> {
+  const { data } = await apiClient.get<PaginaEmpleados>("/empleados/pagina", {
+    params: { criterio, valor: valor.trim() || undefined, pagina, tamanio },
   });
   return data;
 }

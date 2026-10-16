@@ -1,5 +1,10 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { buscarSocios, obtenerPerfilRiesgoSocio } from "@/features/socios/api/sociosApi";
+import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
+import {
+  buscarSocios,
+  buscarSociosPaginados,
+  obtenerPerfilRiesgoSocio,
+} from "@/features/socios/api/sociosApi";
+import type { BusquedaSocios } from "@/features/socios/types/socios";
 
 export function useBuscarSocios(nombre: string) {
   return useQuery({
@@ -14,6 +19,16 @@ export function useListaSocios(habilitado: boolean) {
     queryKey: ["socios", "lista"],
     queryFn: () => buscarSocios(""),
     enabled: habilitado,
+    staleTime: 60_000,
+  });
+}
+
+export function useSociosPaginados(busqueda: BusquedaSocios, habilitado: boolean) {
+  return useQuery({
+    queryKey: ["socios", "pagina", busqueda],
+    queryFn: () => buscarSociosPaginados(busqueda),
+    enabled: habilitado,
+    placeholderData: keepPreviousData,
     staleTime: 60_000,
   });
 }
