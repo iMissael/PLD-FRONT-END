@@ -12,6 +12,7 @@ import {
   useTiposCredito,
   useTiposPersona,
 } from "@/features/catalogos/hooks/useCatalogos";
+import { useTiposPrestamo } from "@/features/configuraciones/tipos-prestamo/hooks/useTiposPrestamo";
 import { useEvaluarRiesgo } from "@/features/operacion/evaluacion-riesgo/hooks/useEvaluacionRiesgo";
 import type {
   ClienteMatrizRiesgo,
@@ -78,6 +79,7 @@ export function useEvaluacionAutomatica({
   const peps = usePeps();
   const actividades = useActividadesEconomicas();
   const tiposCredito = useTiposCredito();
+  const tiposPrestamo = useTiposPrestamo();
   const origenes = useOrigenesRecurso();
   const destinos = useDestinosRecurso();
   const canales = useCanalesPago();
@@ -160,6 +162,7 @@ export function useEvaluacionAutomatica({
       peps: peps.data,
       actividades: actividades.data,
       tiposCredito: tiposCredito.data,
+      tiposPrestamo: tiposPrestamo.data,
       origenes: origenes.data,
       destinos: destinos.data,
       canales: canales.data,
@@ -190,6 +193,7 @@ export function useEvaluacionAutomatica({
     peps.data,
     actividades.data,
     tiposCredito.data,
+    tiposPrestamo.data,
     origenes.data,
     destinos.data,
     canales.data,

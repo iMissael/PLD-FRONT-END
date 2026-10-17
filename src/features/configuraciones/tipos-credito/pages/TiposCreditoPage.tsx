@@ -65,7 +65,7 @@ export function TiposCreditoPage() {
 
   const handleEliminar = () => {
     if (!seleccionado) return;
-    if (!window.confirm(`¿Estás seguro de que deseas dar de baja el tipo de crédito "${seleccionado.nombre}"?`)) {
+    if (!window.confirm(`¿Estás seguro de que deseas dar de baja el tipo de crédito ${seleccionado.id}?`)) {
       return;
     }
     setMensajeError(null);

@@ -20,6 +20,7 @@ import {
   useTiposPago,
   useTiposPersona,
 } from "@/features/catalogos/hooks/useCatalogos";
+import { useTiposPrestamo } from "@/features/configuraciones/tipos-prestamo/hooks/useTiposPrestamo";
 import { useEvaluarRiesgo } from "@/features/operacion/evaluacion-riesgo/hooks/useEvaluacionRiesgo";
 import type { ClienteMatrizRiesgo } from "@/features/operacion/evaluacion-riesgo/types/evaluacionRiesgo";
 import {
@@ -101,6 +102,7 @@ export function EvaluacionRiesgoForm({
   const { data: entidades } = useEntidades();
   const { data: tiposAsentamiento } = useTiposAsentamiento();
   const { data: tiposCredito } = useTiposCredito();
+  const { data: tiposPrestamo } = useTiposPrestamo();
   const { data: origenesRecurso } = useOrigenesRecurso();
   const { data: destinosRecurso } = useDestinosRecurso();
   const { data: canalesPago } = useCanalesPago();
@@ -160,6 +162,7 @@ export function EvaluacionRiesgoForm({
       peps,
       actividades: actividadesEconomicas,
       tiposCredito,
+      tiposPrestamo,
       origenes: origenesRecurso,
       destinos: destinosRecurso,
       canales: canalesPago,
@@ -208,6 +211,7 @@ export function EvaluacionRiesgoForm({
         <FormSeccionCredito
           form={form}
           tiposCredito={tiposCredito}
+          tiposPrestamo={tiposPrestamo}
           origenesRecurso={origenesRecurso}
           destinosRecurso={destinosRecurso}
           canalesPago={canalesPago}
