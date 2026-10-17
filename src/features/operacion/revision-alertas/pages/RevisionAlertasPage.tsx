@@ -140,7 +140,8 @@ export function RevisionAlertasPage() {
               <DetalleAlerta
                 key={seleccionada.id}
                 alerta={seleccionada}
-                onDictaminada={(alerta) => {
+                onCancelada={() => seleccionar(null)}
+                onActualizada={(alerta) => {
                   setSeleccionada(alerta);
                   setAviso(
                     `La alerta ${alerta.folio} quedó ${alerta.estatus.toLowerCase()}.`,

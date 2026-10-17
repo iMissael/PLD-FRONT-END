@@ -6,6 +6,7 @@
  */
 
 /** Estatus de una alerta (`EstatusAlerta` del backend). */
+/** Las CANCELADAS (botón rojo) no llegan al front: el backend no las lista. */
 export type EstatusAlerta = "PENDIENTE" | "CONFIRMADA" | "RECHAZADA" | "REPORTADA";
 
 /** MANUAL = capturada por un usuario; AUTOMATICA = la generó una operación de cajas. */
@@ -77,8 +78,25 @@ export interface Alerta {
   estatus: EstatusAlerta;
   usuarioCapturaId: string | null;
   reportado: ReportadoAlerta | null;
+  /** Recuadros del dictamen (opcionales); ya no se editan después de dictaminar. */
+  analisisContexto: string | null;
+  determinacionInusualidad: string | null;
+  analisisAlerta: string | null;
+  gestiones: string | null;
+  /** El tipo se reporta a la CNBV (I, I24, IP, R): al confirmarla queda reportada. */
+  seReporta: boolean;
   updatedAt: string;
 }
+
+/** Los 4 recuadros del dictamen de Sicanet, en el orden de la pantalla. */
+export const RECUADROS_ANALISIS = [
+  { campo: "analisisContexto", titulo: "Análisis del contexto" },
+  { campo: "determinacionInusualidad", titulo: "Determinación de la inusualidad" },
+  { campo: "analisisAlerta", titulo: "Análisis de la alerta" },
+  { campo: "gestiones", titulo: "Gestiones" },
+] as const;
+
+export type CampoAnalisis = (typeof RECUADROS_ANALISIS)[number]["campo"];
 
 /** `ExpedienteAlertaResponse`: panel inferior de "Revisión de alertas". */
 export interface ExpedienteAlerta {
@@ -164,11 +182,10 @@ export interface PaginaAlertas {
   totalPaginas: number;
 }
 
-/** `AlertaController.DictamenRequest`. */
-export interface DictamenInput {
+/** `AlertaController.DictamenRequest`: el dictamen es obligatorio; los recuadros, no. */
+export type DictamenInput = {
   estatus: Extract<EstatusAlerta, "CONFIRMADA" | "RECHAZADA">;
-  justificacion: string;
-}
+} & Partial<Record<CampoAnalisis, string>>;
 
 export type CriterioBusquedaEmpleado = "clave" | "nombre";
 

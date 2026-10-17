@@ -8,6 +8,7 @@ import {
 import {
   buscarEmpleados,
   buscarEmpleadosPaginados,
+  cancelarAlerta,
   capturarAlertaManual,
   dictaminarAlerta,
   listarAlertas,
@@ -86,6 +87,14 @@ export function useDictaminarAlerta() {
   return useMutation({
     mutationFn: ({ id, input }: { id: number; input: DictamenInput }) =>
       dictaminarAlerta(id, input),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: alertasKeys.listas() }),
+  });
+}
+
+export function useCancelarAlerta() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => cancelarAlerta(id),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: alertasKeys.listas() }),
   });
 }
