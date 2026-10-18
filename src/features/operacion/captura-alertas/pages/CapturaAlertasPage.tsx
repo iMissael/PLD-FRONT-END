@@ -102,11 +102,14 @@ const ETIQUETA_CAMPO: Record<Campo, string> = {
 
 const MARCA_FALTANTE = "rounded-md ring-2 ring-warning";
 
+/** Relevante (R) no se captura a mano: la genera el sistema por monto. */
+const TIPOS_OCULTOS = ["R"];
+
 /**
- * "Operación › Captura de alertas" (manual Sicanet 4.3.4). Relevante e Inusual se
- * levantan sobre un cliente; Interna preocupante sobre un empleado. Qué tipos se
- * pueden capturar lo decide el catálogo (`tipoReportado`): los que genera solo el
- * sistema (seguimiento, autorización…) no aparecen. La alerta manual nace
+ * "Operación › Captura de alertas" (manual Sicanet 4.3.4). Inusual se levanta sobre
+ * un cliente; Interna preocupante sobre un empleado. Qué tipos se pueden capturar lo
+ * decide el catálogo (`tipoReportado`): los que genera solo el sistema (relevante,
+ * seguimiento, autorización…) no aparecen. La alerta manual nace
  * CONFIRMADA: quien la captura ya la dictaminó.
  */
 export function CapturaAlertasPage() {
@@ -120,7 +123,13 @@ export function CapturaAlertasPage() {
   const capturar = useCapturarAlerta();
 
   const tiposCapturables = useMemo(
-    () => (tipos ?? []).filter((t) => t.tipoReportado !== null && t.estado === "ACTIVO"),
+    () =>
+      (tipos ?? []).filter(
+        (t) =>
+          t.tipoReportado !== null &&
+          t.estado === "ACTIVO" &&
+          !TIPOS_OCULTOS.includes(t.alertaAcronimo),
+      ),
     [tipos],
   );
   const tipo: TipoAlerta | undefined = tiposCapturables.find(
@@ -221,8 +230,8 @@ export function CapturaAlertasPage() {
       <div>
         <h2 className="text-foreground text-xl font-semibold">Captura de alertas</h2>
         <p className="text-muted-foreground text-sm">
-          Alertas manuales de PLD sobre un cliente (relevante, inusual) o un empleado
-          (interna preocupante).
+          Alertas manuales de PLD sobre un cliente (inusual) o un empleado (interna
+          preocupante).
         </p>
       </div>
 

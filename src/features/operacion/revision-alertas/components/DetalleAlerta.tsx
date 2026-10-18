@@ -1,34 +1,42 @@
 import { useEffect, useState } from "react";
+import { Check, FileSpreadsheet, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import {
+  useCancelarAlerta,
   useDictaminarAlerta,
   useExpedienteAlerta,
 } from "@/features/alertas/hooks/useAlertas";
 import {
   ETIQUETA_ESTATUS,
+  RECUADROS_ANALISIS,
   type Alerta,
+  type CampoAnalisis,
   type DictamenInput,
 } from "@/features/alertas/types/alertas";
 import { Alert } from "@/shared/components/molecules/Alert";
 import { Button } from "@/shared/components/atoms/Button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/shared/components/organisms/AlertDialog";
 import { hint } from "@/shared/styles/tokens";
 
 import { formatearFecha, formatearMoneda } from "../utils/formato";
 
-/** Campos de Sicanet que todavía no tienen fuente de datos en el sistema. */
-const SIN_INFORMACION = (
-  <span className="text-muted-foreground italic">Sin información</span>
-);
-
-/** Textos del dictamen de Sicanet; llegarán del endpoint que se pedirá a la empresa. */
-const ANALISIS_SICANET = [
-  "Análisis del contexto",
-  "Determinación de la inusualidad",
-  "Análisis de la alerta",
-  "Gestiones",
-];
+const ANALISIS_VACIO: Record<CampoAnalisis, string> = {
+  analisisContexto: "",
+  determinacionInusualidad: "",
+  analisisAlerta: "",
+  gestiones: "",
+};
 
 function Dato({ titulo, children }: { titulo: string; children: React.ReactNode }) {
   const vacio = children === null || children === undefined || children === "";
@@ -62,22 +70,31 @@ function Seccion({
 
 interface DetalleAlertaProps {
   alerta: Alerta;
-  onDictaminada: (alerta: Alerta) => void;
+  /** Después de dictaminar, con la alerta ya actualizada. */
+  onActualizada: (alerta: Alerta) => void;
+  /** Después de cancelarla: ya no se lista, así que se cierra el detalle. */
+  onCancelada: () => void;
 }
 
 /**
  * Detalle de la alerta y dictamen (manual Sicanet 4.3.5), con los mismos bloques que
  * Sicanet: evaluado, perfil transaccional, resumen del periodo e información de la
- * alerta. Lo que aún no tiene fuente de datos se muestra como "Sin información".
- * Solo las PENDIENTES se dictaminan: las automáticas nacen pendientes; las
- * manuales, ya confirmadas. El folio, el tipo y el estatus los muestra el recuadro
- * que lo contiene (RevisionAlertasPage).
+ * alerta. Solo las PENDIENTES se dictaminan: las automáticas nacen pendientes; las
+ * manuales, ya confirmadas. Los 4 recuadros del análisis se llenan al dictaminar y
+ * después ya no se editan. Como en Sicanet, el botón verde guarda el dictamen: una
+ * confirmada de un tipo que se envía a la CNBV (I, I24, IP, R) queda REPORTADA y pasa
+ * al apartado de control; una rechazada solo queda RECHAZADA. El botón rojo cancela la
+ * alerta. El folio, el tipo y el estatus los muestra el recuadro que lo contiene
+ * (RevisionAlertasPage).
  */
-export function DetalleAlerta({ alerta, onDictaminada }: DetalleAlertaProps) {
+export function DetalleAlerta({ alerta, onActualizada, onCancelada }: DetalleAlertaProps) {
   const [dictamen, setDictamen] = useState<DictamenInput["estatus"] | "">("");
-  const [justificacion, setJustificacion] = useState("");
+  const [analisis, setAnalisis] = useState(ANALISIS_VACIO);
   const [mensajeError, setMensajeError] = useState<string | null>(null);
+  const [accion, setAccion] = useState<"guardar" | "cancelar" | null>(null);
   const dictaminar = useDictaminarAlerta();
+  const cancelar = useCancelarAlerta();
+  const ocupado = dictaminar.isPending || cancelar.isPending;
   const {
     data: expediente,
     isLoading: cargandoExpediente,
@@ -86,9 +103,20 @@ export function DetalleAlerta({ alerta, onDictaminada }: DetalleAlertaProps) {
 
   useEffect(() => {
     setDictamen("");
-    setJustificacion("");
+    setAnalisis(ANALISIS_VACIO);
     setMensajeError(null);
+    setAccion(null);
   }, [alerta.id]);
+
+  const pendiente = alerta.estatus === "PENDIENTE";
+  const resultado =
+    accion === "cancelar"
+      ? "cancelada"
+      : dictamen === "RECHAZADA"
+        ? "rechazada"
+        : alerta.seReporta
+          ? "reportada"
+          : "confirmada";
 
   const reportado = alerta.reportado;
   const esEmpleado = reportado?.tipoReportado === "EMPLEADO";
@@ -104,31 +132,48 @@ export function DetalleAlerta({ alerta, onDictaminada }: DetalleAlertaProps) {
   const resumen = expediente?.resumenPeriodo;
   const perfil = expediente?.perfilTransaccional ?? null;
 
-  const handleDictaminar = (event: React.FormEvent) => {
+  /** Botón verde: primero pide el dictamen y luego la confirmación. */
+  const handleGuardar = (event: React.FormEvent) => {
     event.preventDefault();
     if (dictamen === "")
       return setMensajeError("Seleccione si confirma o rechaza la alerta.");
     setMensajeError(null);
-    dictaminar.mutate(
-      {
-        id: alerta.id,
-        input: {
-          estatus: dictamen,
-          justificacion: justificacion.trim().toLocaleUpperCase("es-MX"),
+    setAccion("guardar");
+  };
+
+  const alFallar = (error: unknown) => {
+    setAccion(null);
+    const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
+    setMensajeError(msg);
+    toast.error(msg);
+  };
+
+  const aplicarAccion = () => {
+    if (accion === "cancelar") {
+      return cancelar.mutate(alerta.id, {
+        onSuccess: () => {
+          setAccion(null);
+          toast.success(`Alerta ${alerta.folio} cancelada.`);
+          onCancelada();
         },
-      },
+        onError: alFallar,
+      });
+    }
+    if (dictamen === "") return;
+    const input: DictamenInput = { estatus: dictamen };
+    for (const { campo } of RECUADROS_ANALISIS) {
+      const texto = analisis[campo].trim();
+      if (texto) input[campo] = texto.toLocaleUpperCase("es-MX");
+    }
+    dictaminar.mutate(
+      { id: alerta.id, input },
       {
         onSuccess: (res) => {
-          toast.success(
-            `Alerta ${alerta.folio} dictaminada como ${ETIQUETA_ESTATUS[dictamen]}.`,
-          );
-          onDictaminada(res);
+          setAccion(null);
+          toast.success(`Alerta ${alerta.folio} ${ETIQUETA_ESTATUS[res.estatus].toLowerCase()}.`);
+          onActualizada(res);
         },
-        onError: (error) => {
-          const msg = isAppError(error) ? error.message : "Ocurrió un error inesperado.";
-          setMensajeError(msg);
-          toast.error(msg);
-        },
+        onError: alFallar,
       },
     );
   };
@@ -296,19 +341,75 @@ export function DetalleAlerta({ alerta, onDictaminada }: DetalleAlertaProps) {
             </Seccion>
           ) : null}
 
-          {esManual ? null : (
+          {esManual ? null : pendiente ? (
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {RECUADROS_ANALISIS.map(({ campo, titulo }) => (
+                <div key={campo} className="flex flex-col gap-1.5">
+                  <label htmlFor={campo} className="text-xs font-semibold text-foreground">
+                    {titulo}
+                  </label>
+                  <textarea
+                    id={campo}
+                    rows={3}
+                    value={analisis[campo]}
+                    onChange={(e) =>
+                      setAnalisis((previo) => ({ ...previo, [campo]: e.target.value }))
+                    }
+                    className="border-border bg-card text-foreground focus-visible:border-ring focus-visible:ring-ring/50 w-full rounded-xl border p-3 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] uppercase"
+                  />
+                </div>
+              ))}
+            </div>
+          ) : (
             <dl className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              {ANALISIS_SICANET.map((titulo) => (
-                <Dato key={titulo} titulo={titulo}>{SIN_INFORMACION}</Dato>
+              {RECUADROS_ANALISIS.map(({ campo, titulo }) => (
+                <Dato key={campo} titulo={titulo}>
+                  {alerta[campo] ? (
+                    <span className="whitespace-pre-line">{alerta[campo]}</span>
+                  ) : null}
+                </Dato>
               ))}
             </dl>
           )}
         </div>
       </div>
 
-      {alerta.estatus === "PENDIENTE" ? (
+      <AlertDialog
+        open={accion !== null}
+        onOpenChange={(abierto) => !abierto && !ocupado && setAccion(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmación</AlertDialogTitle>
+            <AlertDialogDescription>
+              La alerta seleccionada será {resultado}. ¿Desea continuar?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="rounded-full" disabled={ocupado}>
+              No
+            </AlertDialogCancel>
+            <AlertDialogAction
+              className={
+                accion === "cancelar"
+                  ? "rounded-full bg-destructive text-white hover:bg-destructive-hover"
+                  : "rounded-full"
+              }
+              disabled={ocupado}
+              onClick={(evento) => {
+                evento.preventDefault();
+                aplicarAccion();
+              }}
+            >
+              {ocupado ? "Guardando…" : "Sí"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {pendiente ? (
         <form
-          onSubmit={handleDictaminar}
+          onSubmit={handleGuardar}
           className="rounded-xl border border-border/80 bg-muted/15 p-4 flex flex-col gap-4"
         >
           <h4 className="text-xs font-bold uppercase tracking-wider text-foreground">Dictamen</h4>
@@ -327,29 +428,52 @@ export function DetalleAlerta({ alerta, onDictaminada }: DetalleAlertaProps) {
               </label>
             ))}
           </div>
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="justificacion" className="text-xs font-semibold text-foreground">
-              Justificación
-            </label>
-            <textarea
-              id="justificacion"
-              required
-              rows={3}
-              value={justificacion}
-              onChange={(e) => setJustificacion(e.target.value)}
-              className="border-border bg-card text-foreground focus-visible:border-ring focus-visible:ring-ring/50 w-full rounded-md border p-3 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:opacity-50 disabled:cursor-not-allowed uppercase"
-            />
-            <p className={hint}>
-              Queda en el historial de la alerta junto con su usuario.
-            </p>
-          </div>
-          <div className="flex justify-end">
-            <Button type="submit" variant="default" disabled={dictaminar.isPending}>
-              {dictaminar.isPending ? "Guardando..." : "Guardar dictamen"}
+          <p className={hint}>
+            {alerta.seReporta
+              ? "Confirmada: pasa como reportada al apartado de control para el reporte a la CNBV. Rechazada: solo cambia su estatus."
+              : "El dictamen queda en el historial de la alerta junto con su usuario."}
+            {esManual ? "" : " Los recuadros del análisis son opcionales y ya no se podrán editar."}
+          </p>
+          <div className="flex justify-center gap-4">
+            <Button
+              type="submit"
+              aria-label="Guardar dictamen"
+              title="Guardar dictamen"
+              disabled={ocupado}
+              className="size-11 rounded-full bg-emerald-600 p-0 text-white hover:bg-emerald-700"
+            >
+              <Check className="size-6" />
+            </Button>
+            <Button
+              type="button"
+              aria-label="Cancelar alerta"
+              title="Cancelar alerta"
+              disabled={ocupado}
+              onClick={() => {
+                setMensajeError(null);
+                setAccion("cancelar");
+              }}
+              className="bg-destructive hover:bg-destructive-hover size-11 rounded-full p-0 text-white"
+            >
+              <X className="size-6" />
             </Button>
           </div>
         </form>
-      ) : null}
+      ) : (
+        // Como en Sicanet, ya dictaminada se muestra el botón de Excel; su contenido se define después
+        <div className="flex justify-center">
+          <Button
+            type="button"
+            variant="outline"
+            aria-label="Exportar a Excel"
+            title="Exportar a Excel"
+            className="size-11 rounded-full p-0 text-emerald-700"
+            onClick={() => toast.info("La exportación a Excel todavía no está disponible.")}
+          >
+            <FileSpreadsheet className="size-6" />
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

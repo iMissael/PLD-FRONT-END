@@ -91,6 +91,11 @@ export async function dictaminarAlerta(
   return data;
 }
 
+/** Botón rojo de la revisión: cancela una alerta pendiente; ya no se vuelve a listar. */
+export async function cancelarAlerta(id: number): Promise<void> {
+  await apiClient.patch(`/alertas/${id}/cancelacion`);
+}
+
 export async function buscarEmpleados(nombre: string): Promise<EmpleadoExterno[]> {
   const { data } = await apiClient.get<EmpleadoExterno[]>("/empleados/buscar", {
     params: nombre ? { nombre } : undefined,
