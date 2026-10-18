@@ -23,9 +23,8 @@ import {
 } from "@/shared/components/molecules/Select";
 import {
   useCrearPermisosEnLote,
-  usePermisos,
+  useTodosPermisos,
 } from "@/features/configuraciones/administracion/permisos/hooks/usePermisos";
-import type { PermisoResponse } from "@/features/configuraciones/administracion/permisos/types/permisos";
 import {
   ACCIONES_PERMISO,
   crearPermisosPorMenuSchema,
@@ -35,14 +34,11 @@ import {
 } from "@/features/configuraciones/administracion/permisos/types/permisoSchema";
 
 export function PermisoForm() {
-  const { data: permisos } = usePermisos();
+  const { data: permisos } = useTodosPermisos();
   const crearPermisosEnLote = useCrearPermisosEnLote();
 
   const existentes = useMemo(() => {
-    const lista: PermisoResponse[] = Array.isArray(permisos)
-      ? permisos
-      : (permisos as unknown as { contenido?: PermisoResponse[] })?.contenido ?? [];
-    return new Set(lista.map((p) => `${p.recurso}:${p.accion}`));
+    return new Set((permisos ?? []).map((p) => `${p.recurso}:${p.accion}`));
   }, [permisos]);
 
   const form = useForm<CrearPermisosPorMenuFormValues>({

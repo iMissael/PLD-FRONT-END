@@ -4,7 +4,7 @@ import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Badge } from "@/shared/components/atoms/Badge";
 import { Button } from "@/shared/components/atoms/Button";
 import { Checkbox } from "@/shared/components/atoms/Checkbox";
-import { usePermisos } from "@/features/configuraciones/administracion/permisos/hooks/usePermisos";
+import { useTodosPermisos } from "@/features/configuraciones/administracion/permisos/hooks/usePermisos";
 import type { PermisoResponse } from "@/features/configuraciones/administracion/permisos/types/permisos";
 import {
   useAsignarPermisosEnLote,
@@ -25,7 +25,7 @@ function agruparPorRecurso(permisos: PermisoResponse[]) {
 
 export function RolPermisosManager({ rolId }: { rolId: string }) {
   const { data: permisosAsignados, isLoading } = useRolPermisos(rolId);
-  const { data: todosPermisos } = usePermisos();
+  const { data: todosPermisos } = useTodosPermisos();
   const asignarPermisos = useAsignarPermisosEnLote(rolId);
   const revocarPermiso = useRevocarPermiso(rolId);
   const [seleccionados, setSeleccionados] = useState<Set<number>>(new Set());
