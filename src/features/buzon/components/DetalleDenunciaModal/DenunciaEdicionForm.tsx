@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { EditIcon, InfoIcon, SearchIcon, UserCheckIcon, XIcon } from "@/shared/components/atoms/icons";
+import { es } from "@/shared/i18n/es";
 import {
   Table,
   TableBody,
@@ -193,7 +194,7 @@ export function DenunciaEdicionForm({
                 <TableRow className="border-b border-border bg-muted/50 text-muted-foreground font-semibold text-[11px]">
                   <TableHead className="px-3 py-2">Ref</TableHead>
                   <TableHead className="px-3 py-2">Nombre</TableHead>
-                  <TableHead className="px-3 py-2">Empleado / Socio</TableHead>
+                  <TableHead className="px-3 py-2">{es.cliente.empleadoO}</TableHead>
                   <TableHead className="px-3 py-2 text-right">Acción</TableHead>
                 </TableRow>
               </TableHeader>
@@ -263,7 +264,7 @@ export function DenunciaEdicionForm({
                 onFocus={() => {
                   if (searchResults.length > 0) setShowDropdown(true);
                 }}
-                placeholder="Buscar empleado o socio por nombre, RFC o número..."
+                placeholder={es.cliente.buscarEmpleadoO}
                 className="w-full rounded-lg border border-border bg-background pl-8 pr-8 py-2 text-xs text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               />
               {isSearchingPersons && (

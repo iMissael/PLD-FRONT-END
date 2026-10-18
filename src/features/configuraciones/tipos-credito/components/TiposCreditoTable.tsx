@@ -58,12 +58,8 @@ export function TiposCreditoTable({
         cell: (_, __, globalIndex) => globalIndex + 1,
       },
       {
-        header: "Nombre",
-        accessorKey: "nombre",
-        className: "font-semibold text-foreground",
-      },
-      {
         header: "Tipo de préstamo",
+        className: "font-semibold text-foreground",
         cell: (item) => {
           if (!item.catTipoPrestamoId) return "— sin asignar —";
           return mapaTiposPrestamo.get(item.catTipoPrestamoId) ?? item.catTipoPrestamoId;
@@ -102,11 +98,11 @@ export function TiposCreditoTable({
       onRowDoubleClick={onDoubleClick}
       doubleClickTitle="Doble clic para modificar este registro"
       search={{
-        placeholder: "Buscar tipo de crédito o tipo de préstamo...",
+        placeholder: "Buscar por tipo de préstamo...",
         filterFn: (item, term) => {
           const t = term.toLowerCase().trim();
           const nombrePrestamo = (mapaTiposPrestamo.get(item.catTipoPrestamoId) ?? "").toLowerCase();
-          return item.nombre.toLowerCase().includes(t) || nombrePrestamo.includes(t);
+          return nombrePrestamo.includes(t);
         },
       }}
       pagination={{

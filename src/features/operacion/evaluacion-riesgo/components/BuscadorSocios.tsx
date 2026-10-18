@@ -1,6 +1,7 @@
 import { Search } from "lucide-react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { cn } from "@/shared/utils/cn";
+import { es } from "@/shared/i18n/es";
 import { useBuscarSocios, useListaSocios } from "@/features/socios/hooks/useSocios";
 import { useDebounce } from "@/shared/hooks/useDebounce";
 import type { SocioExterno } from "@/features/socios/types/socios";
@@ -102,7 +103,7 @@ export function BuscadorSocios({
           aria-expanded={abierto}
           aria-controls={idLista}
           aria-label={
-            enEncabezado ? "Buscar socio" : "Referencia, número de cliente o nombre"
+            enEncabezado ? es.cliente.buscar : "Referencia, número de cliente o nombre"
           }
           autoComplete="off"
           className={cn(
@@ -116,7 +117,7 @@ export function BuscadorSocios({
           <button
             type="button"
             onClick={abrir}
-            aria-label="Ver los socios del sistema"
+            aria-label={es.cliente.verDelSistema}
             className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground transition hover:text-primary"
           >
             {lupa}
@@ -128,13 +129,13 @@ export function BuscadorSocios({
         <div
           id={idLista}
           role="listbox"
-          aria-label="Socios del sistema"
+          aria-label={es.cliente.delSistema}
           className="absolute top-full right-0 left-0 z-40 mt-1 max-h-80 overflow-y-auto rounded-lg border border-border bg-popover text-popover-foreground shadow-xl"
         >
           <p className="sticky top-0 border-b border-border bg-popover px-3 py-2 text-[11px] font-semibold tracking-wide text-muted-foreground uppercase">
             {isFetching
-              ? "Cargando socios…"
-              : `${coincidencias.length} ${coincidencias.length === 1 ? "socio" : "socios"} ${
+              ? es.cliente.cargando
+              : `${coincidencias.length} ${coincidencias.length === 1 ? es.cliente.singular : es.cliente.plural} ${
                   buscaEnServidor ? (coincidencias.length === 1 ? "encontrado" : "encontrados") : "en el sistema"
                 }`}
           </p>

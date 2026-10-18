@@ -67,7 +67,9 @@ interface CatalogosDetalle {
   paises?: { idPais?: string | number; nombre?: string }[];
   peps?: { id?: string | number; nombre?: string }[];
   actividades?: { id?: string | number; descripcion?: string }[];
-  tiposCredito?: { id?: string | number; nombre?: string }[];
+  /** `cat_tipo_credito` ya no tiene nombre: se identifica por su tipo de préstamo. */
+  tiposCredito?: { id?: string | number; catTipoPrestamoId?: string | number }[];
+  tiposPrestamo?: { id?: string | number; nombre?: string }[];
   origenes?: { id?: string | number; nombre?: string }[];
   destinos?: { id?: string | number; nombre?: string }[];
   canales?: { id?: string | number; nombre?: string }[];
@@ -76,6 +78,14 @@ interface CatalogosDetalle {
 
 function nombreDe(lista: { id?: string | number; nombre?: string }[] | undefined, id: string) {
   return id ? lista?.find((item) => String(item.id) === id)?.nombre : undefined;
+}
+
+/** Encadena tipo de crédito → tipo de préstamo para obtener un texto legible. */
+function nombreTipoCredito(catalogos: CatalogosDetalle, id: string) {
+  if (!id) return undefined;
+  const credito = catalogos.tiposCredito?.find((item) => String(item.id) === id);
+  if (!credito?.catTipoPrestamoId) return undefined;
+  return nombreDe(catalogos.tiposPrestamo, String(credito.catTipoPrestamoId));
 }
 
 function montoConFormato(monto: string, moneda: string | undefined) {
@@ -116,7 +126,7 @@ export function construirDetalles(
     "es pep nacional":
       nombreDe(catalogos.peps, values.pepNacionalId ?? "") ?? "No es PEP nacional",
     "actividad economica": actividad?.descripcion,
-    "tipo credito": nombreDe(catalogos.tiposCredito, values.creditoTipo),
+    "tipo credito": nombreTipoCredito(catalogos, values.creditoTipo),
     historial:
       values.creditosAnteriores.length > 0
         ? "Cliente con historial"

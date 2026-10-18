@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import {
   FormControl,
@@ -22,6 +23,7 @@ import type {
   TipoCreditoResponse,
   TipoPagoResponse,
 } from "@/features/catalogos/types/catalogos";
+import type { TipoPrestamoResponse } from "@/features/configuraciones/tipos-prestamo/types/tipoPrestamo";
 
 const EBR_OPCIONES = [
   { value: "BAJO", label: "Bajo" },
@@ -34,6 +36,8 @@ const EBR_OPCIONES = [
 interface FormSeccionCreditoProps {
   form: UseFormReturn<EvaluacionRiesgoFormValues>;
   tiposCredito?: TipoCreditoResponse[];
+  /** `cat_tipo_credito` ya no tiene nombre: el texto del select sale de aquí. */
+  tiposPrestamo?: TipoPrestamoResponse[];
   origenesRecurso?: OrigenRecursoResponse[];
   destinosRecurso?: DestinoRecursoResponse[];
   canalesPago?: CanalPagoResponse[];
@@ -43,12 +47,20 @@ interface FormSeccionCreditoProps {
 export function FormSeccionCredito({
   form,
   tiposCredito,
+  tiposPrestamo,
   origenesRecurso,
   destinosRecurso,
   canalesPago,
   tiposPagoDelCanal,
 }: FormSeccionCreditoProps) {
   const { control } = form;
+
+  const nombrePrestamo = useMemo(() => {
+    const mapa = new Map<string, string>();
+    tiposPrestamo?.forEach((tp) => mapa.set(String(tp.id), tp.nombre));
+    return (tipo: TipoCreditoResponse) =>
+      mapa.get(String(tipo.catTipoPrestamoId ?? "")) ?? `Tipo ${tipo.id}`;
+  }, [tiposPrestamo]);
 
   return (
     <fieldset className="space-y-4">
@@ -82,7 +94,7 @@ export function FormSeccionCredito({
                 <SelectContent>
                   {tiposCredito?.map((tipo) => (
                     <SelectItem key={tipo.id} value={String(tipo.id)}>
-                      {tipo.nombre}
+                      {nombrePrestamo(tipo)}
                     </SelectItem>
                   ))}
                 </SelectContent>

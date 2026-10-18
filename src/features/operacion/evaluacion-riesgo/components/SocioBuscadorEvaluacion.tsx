@@ -3,6 +3,7 @@ import type { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
 import { Badge } from "@/shared/components/atoms/Badge";
 import { Input } from "@/shared/components/atoms/Input";
+import { es } from "@/shared/i18n/es";
 import type { EvaluacionRiesgoFormValues } from "@/features/operacion/evaluacion-riesgo/types/evaluacionRiesgoSchema";
 import {
   useActividadesEconomicas,
@@ -211,8 +212,8 @@ export function SocioBuscadorEvaluacion({
       }
       toast.success(
         perfil.creditoSolicitado
-          ? "Datos del socio y de su crédito cargados. Revisa y ajusta lo que haga falta."
-          : "Datos del socio cargados. Completa lo que falte.",
+          ? es.cliente.datosYCreditoCargados
+          : es.cliente.datosCargados,
       );
     },
     [form],
@@ -224,7 +225,7 @@ export function SocioBuscadorEvaluacion({
         onSuccess: aplicarPerfil,
         onError: () => {
           toast.error(
-            "No se encontraron datos adicionales de este socio; completa el resto a mano.",
+            es.cliente.sinDatosAdicionales,
           );
         },
       });
@@ -291,7 +292,7 @@ export function SocioBuscadorEvaluacion({
   return (
     <div className="relative">
       <Input
-        placeholder="Buscar socio por nombre…"
+        placeholder={es.cliente.buscarPorNombre}
         value={busqueda}
         onChange={(e) => setBusqueda(e.target.value)}
       />
