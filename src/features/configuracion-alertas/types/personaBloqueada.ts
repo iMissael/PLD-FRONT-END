@@ -81,7 +81,7 @@ export interface ConsultaBloqueadosParams {
   rfc?: string;
   curp?: string;
   fechaNacimiento?: string;
-  socioRef?: string;
+  acreditadoRef?: string;
   usuarioRef?: string;
   sucursalRef?: string;
 }

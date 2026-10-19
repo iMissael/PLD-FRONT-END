@@ -1,48 +1,48 @@
 import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
 import {
-  buscarSocios,
-  buscarSociosPaginados,
-  obtenerPerfilRiesgoSocio,
-} from "@/features/socios/api/sociosApi";
-import type { BusquedaSocios } from "@/features/socios/types/socios";
+  buscarAcreditados,
+  buscarAcreditadosPaginados,
+  obtenerPerfilRiesgoAcreditado,
+} from "@/features/acreditados/api/acreditadosApi";
+import type { BusquedaAcreditados } from "@/features/acreditados/types/acreditados";
 
-export function useBuscarSocios(nombre: string) {
+export function useBuscarAcreditados(nombre: string) {
   return useQuery({
-    queryKey: ["socios", "buscar", nombre],
-    queryFn: () => buscarSocios(nombre),
+    queryKey: ["acreditados", "buscar", nombre],
+    queryFn: () => buscarAcreditados(nombre),
     enabled: nombre.trim().length >= 2,
   });
 }
 
-export function useListaSocios(habilitado: boolean) {
+export function useListaAcreditados(habilitado: boolean) {
   return useQuery({
-    queryKey: ["socios", "lista"],
-    queryFn: () => buscarSocios(""),
+    queryKey: ["acreditados", "lista"],
+    queryFn: () => buscarAcreditados(""),
     enabled: habilitado,
     staleTime: 60_000,
   });
 }
 
-export function useSociosPaginados(busqueda: BusquedaSocios, habilitado: boolean) {
+export function useAcreditadosPaginados(busqueda: BusquedaAcreditados, habilitado: boolean) {
   return useQuery({
-    queryKey: ["socios", "pagina", busqueda],
-    queryFn: () => buscarSociosPaginados(busqueda),
+    queryKey: ["acreditados", "pagina", busqueda],
+    queryFn: () => buscarAcreditadosPaginados(busqueda),
     enabled: habilitado,
     placeholderData: keepPreviousData,
     staleTime: 60_000,
   });
 }
 
-export function usePerfilRiesgoSocio() {
+export function usePerfilRiesgoAcreditado() {
   return useMutation({
-    mutationFn: obtenerPerfilRiesgoSocio,
+    mutationFn: obtenerPerfilRiesgoAcreditado,
   });
 }
 
-export function usePerfilSocio(referencia: string | undefined) {
+export function usePerfilAcreditado(referencia: string | undefined) {
   return useQuery({
-    queryKey: ["socios", "perfil", referencia ?? null],
-    queryFn: () => obtenerPerfilRiesgoSocio(referencia ?? ""),
+    queryKey: ["acreditados", "perfil", referencia ?? null],
+    queryFn: () => obtenerPerfilRiesgoAcreditado(referencia ?? ""),
     enabled: Boolean(referencia),
     staleTime: 60_000,
   });

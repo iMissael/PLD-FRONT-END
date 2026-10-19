@@ -178,7 +178,7 @@ export function DetalleAlerta({ alerta, onDictaminada }: DetalleAlertaProps) {
             >
               {!cargandoExpediente && !perfil ? (
                 <p className="text-muted-foreground text-sm italic">
-                  El socio no tiene perfil transaccional declarado.
+                  El acreditado no tiene perfil transaccional declarado.
                 </p>
               ) : (
                 <dl className="grid grid-cols-1 gap-3 sm:grid-cols-4">

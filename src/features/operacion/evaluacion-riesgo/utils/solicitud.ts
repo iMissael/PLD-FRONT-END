@@ -6,7 +6,7 @@ import type {
   ClienteMatrizRiesgo,
   EvaluacionRiesgoSolicitud,
 } from "@/features/operacion/evaluacion-riesgo/types/evaluacionRiesgo";
-import type { SocioPerfilRiesgo } from "@/features/socios/types/socios";
+import type { AcreditadoPerfilRiesgo } from "@/features/acreditados/types/acreditados";
 
 /** Moneda con la que se evalúa cuando el crédito no trae otra: el crédito solicitado no la guarda. */
 export const MONEDA_POR_DEFECTO = "MXN";
@@ -36,21 +36,21 @@ export function fechaHoraActual(ahora = new Date()) {
 }
 
 /**
- * Lo que el perfil del socio ya sabe, con la forma del formulario de evaluación: identidad,
+ * Lo que el perfil del acreditado ya sabe, con la forma del formulario de evaluación: identidad,
  * actividad, domicilio, crédito solicitado e historial crediticio. Lo que no trae queda vacío.
  */
 export function valoresDesdePerfil(
-  perfil: SocioPerfilRiesgo,
+  perfil: AcreditadoPerfilRiesgo,
 ): EvaluacionRiesgoFormValues {
   const domicilio = perfil.domicilio;
   const credito = perfil.creditoSolicitado;
 
   return {
-    socioReferencia: aTexto(perfil.referencia),
-    socioNombre: aTexto(perfil.nombre),
-    socioNombres: aTexto(perfil.nombres),
-    socioApellidoP: aTexto(perfil.apellidoPaterno),
-    socioApellidoM: aTexto(perfil.apellidoMaterno),
+    acreditadoReferencia: aTexto(perfil.referencia),
+    acreditadoNombre: aTexto(perfil.nombre),
+    acreditadoNombres: aTexto(perfil.nombres),
+    acreditadoApellidoP: aTexto(perfil.apellidoPaterno),
+    acreditadoApellidoM: aTexto(perfil.apellidoMaterno),
     rfc: aTexto(perfil.rfc),
     curp: aTexto(perfil.curp),
     tipoPersonaId: aTexto(perfil.tipoPersona?.id),
@@ -94,8 +94,8 @@ export function valoresDesdePerfil(
 }
 
 const ETIQUETAS_CAMPO: Partial<Record<keyof EvaluacionRiesgoFormValues, string>> = {
-  socioReferencia: "Socio",
-  socioNombre: "Nombre del socio",
+  acreditadoReferencia: "Acreditado",
+  acreditadoNombre: "Nombre del acreditado",
   tipoPersonaId: "Tipo de persona",
   nacionalidadId: "Nacionalidad",
   fechaNacimiento: "Fecha de nacimiento o constitución",
@@ -135,11 +135,11 @@ export function construirSolicitud(
       sucursal_id: contexto.sucursalId,
       usuario_verficador_ref: contexto.verificadoPor,
     },
-    socio: {
-      referencia: values.socioReferencia,
-      nombre: values.socioNombres || values.socioNombre,
-      apellido_p: aTextoOIndefinido(values.socioApellidoP),
-      apellido_m: aTextoOIndefinido(values.socioApellidoM),
+    acreditado: {
+      referencia: values.acreditadoReferencia,
+      nombre: values.acreditadoNombres || values.acreditadoNombre,
+      apellido_p: aTextoOIndefinido(values.acreditadoApellidoP),
+      apellido_m: aTextoOIndefinido(values.acreditadoApellidoM),
       rfc: aTextoOIndefinido(values.rfc),
       curp: aTextoOIndefinido(values.curp),
       tipo_persona_id: values.tipoPersonaId,
@@ -193,7 +193,7 @@ export function construirSolicitud(
   };
 }
 
-/** Expediente que el tablero muestra del socio recién evaluado. */
+/** Expediente que el tablero muestra del acreditado recién evaluado. */
 export function construirCliente(
   values: EvaluacionRiesgoFormValues,
   nombreTipoPersona: string | undefined,
@@ -202,9 +202,9 @@ export function construirCliente(
 ): ClienteMatrizRiesgo {
   const tipoPersona = nombreTipoPersona ?? "—";
   return {
-    nombre: values.socioNombre,
-    numero: values.socioReferencia,
-    referencia: values.socioReferencia,
+    nombre: values.acreditadoNombre,
+    numero: values.acreditadoReferencia,
+    referencia: values.acreditadoReferencia,
     rfc: values.rfc || "—",
     curp: values.curp || "—",
     persona: /moral/i.test(tipoPersona) ? "MORAL" : "FISICA",

@@ -163,7 +163,7 @@ export function DetalleDenunciaModal({ denunciaId, onClose }: DetalleDenunciaMod
             <h2 className="text-base font-bold text-foreground">Denuncia #{denunciaId}</h2>
             <p className="text-xs text-muted-foreground mt-0.5">
               Registrada el: {denuncia?.createdAt ? new Date(denuncia.createdAt).toLocaleString("es-MX") : "-"}
-            </p>
+            </p> 
           </div>
           <button
             type="button"

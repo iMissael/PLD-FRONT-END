@@ -92,7 +92,7 @@ export function CanalesPagoPage() {
         <div>
           <h2 className="text-xl font-semibold text-foreground">Canales de pago</h2>
           <p className="text-sm text-muted-foreground">
-            Medios por los que el socio realiza sus pagos y el nivel de riesgo PLD
+            Medios por los que el acreditado realiza sus pagos y el nivel de riesgo PLD
             asociado.
           </p>
         </div>

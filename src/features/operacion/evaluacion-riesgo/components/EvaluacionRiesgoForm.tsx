@@ -44,11 +44,11 @@ import { FormSeccionCredito } from "./form/FormSeccionCredito";
 import { FormSeccionHistorial } from "./form/FormSeccionHistorial";
 
 const valoresPorDefecto: EvaluacionRiesgoFormValues = {
-  socioReferencia: "",
-  socioNombre: "",
-  socioNombres: "",
-  socioApellidoP: "",
-  socioApellidoM: "",
+  acreditadoReferencia: "",
+  acreditadoNombre: "",
+  acreditadoNombres: "",
+  acreditadoApellidoP: "",
+  acreditadoApellidoM: "",
   rfc: "",
   curp: "",
   tipoPersonaId: "",
@@ -82,14 +82,14 @@ const valoresPorDefecto: EvaluacionRiesgoFormValues = {
 
 export function EvaluacionRiesgoForm({
   onResultado,
-  socioInicial,
+  acreditadoInicial,
 }: {
   onResultado: (
     resultado: EvaluacionRiesgoResultado,
     cliente: ClienteMatrizRiesgo,
     detalles: DetallesSubfactor,
   ) => void;
-  socioInicial?: { id: string; nombre: string };
+  acreditadoInicial?: { id: string; nombre: string };
 }) {
   const [enviando, setEnviando] = useState(false);
   const evaluarRiesgo = useEvaluarRiesgo();
@@ -189,7 +189,7 @@ export function EvaluacionRiesgoForm({
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormSeccionIdentificacion
           form={form}
-          socioInicial={socioInicial}
+          acreditadoInicial={acreditadoInicial}
           tiposPersona={tiposPersona}
           paises={paises}
           peps={peps}

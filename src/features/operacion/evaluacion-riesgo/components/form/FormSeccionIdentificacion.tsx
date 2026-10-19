@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/molecules/Select";
-import { SocioBuscadorEvaluacion } from "@/features/operacion/evaluacion-riesgo/components/SocioBuscadorEvaluacion";
+import { AcreditadoBuscadorEvaluacion } from "@/features/operacion/evaluacion-riesgo/components/AcreditadoBuscadorEvaluacion";
 import type { EvaluacionRiesgoFormValues } from "@/features/operacion/evaluacion-riesgo/types/evaluacionRiesgoSchema";
 import type {
   CatActividadEconomicaResponse,
@@ -26,7 +26,7 @@ import type {
 
 interface FormSeccionIdentificacionProps {
   form: UseFormReturn<EvaluacionRiesgoFormValues>;
-  socioInicial?: { id: string; nombre: string };
+  acreditadoInicial?: { id: string; nombre: string };
   tiposPersona?: TipoPersonaResponse[];
   paises?: PaisResponse[];
   peps?: PepResponse[];
@@ -35,7 +35,7 @@ interface FormSeccionIdentificacionProps {
 
 export function FormSeccionIdentificacion({
   form,
-  socioInicial,
+  acreditadoInicial,
   tiposPersona,
   paises,
   peps,
@@ -48,9 +48,9 @@ export function FormSeccionIdentificacion({
       <legend className="text-sm font-semibold">{es.cliente.titulo}</legend>
       <div className="space-y-2">
         <FormLabel>{es.cliente.titulo}</FormLabel>
-        <SocioBuscadorEvaluacion form={form} socioInicial={socioInicial} />
+        <AcreditadoBuscadorEvaluacion form={form} acreditadoInicial={acreditadoInicial} />
         <p className="text-muted-foreground text-xs">
-          Busca al socio para traer sus datos automáticamente: identidad, actividad
+          Busca al acreditado para traer sus datos automáticamente: identidad, actividad
           económica, domicilio, antigüedad en el giro y su crédito solicitado con su
           historial. Captura solo lo que falte.
         </p>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { SocioPerfilRiesgo } from "@/features/socios/types/socios";
+import type { AcreditadoPerfilRiesgo } from "@/features/acreditados/types/acreditados";
 import {
   construirCliente,
   construirSolicitud,
@@ -7,7 +7,7 @@ import {
   valoresDesdePerfil,
 } from "@/features/operacion/evaluacion-riesgo/utils/solicitud";
 
-const perfilCompleto: SocioPerfilRiesgo = {
+const perfilCompleto: AcreditadoPerfilRiesgo = {
   referencia: "CLI-001",
   nombre: "LUCÍA MARTÍNEZ HERRERA",
   nombres: "LUCÍA",
@@ -62,8 +62,8 @@ describe("valoresDesdePerfil", () => {
   it("pasa el perfil completo a los campos del formulario", () => {
     const valores = valoresDesdePerfil(perfilCompleto);
     expect(valores).toMatchObject({
-      socioReferencia: "CLI-001",
-      socioNombres: "LUCÍA",
+      acreditadoReferencia: "CLI-001",
+      acreditadoNombres: "LUCÍA",
       tipoPersonaId: "1",
       nacionalidadId: "165",
       fechaNacimiento: "1990-05-14",
@@ -93,7 +93,7 @@ describe("valoresDesdePerfil", () => {
   });
 
   it("deja vacío lo que el perfil no trae", () => {
-    const valores = valoresDesdePerfil({ referencia: "EXT-1", nombre: "Socio externo" });
+    const valores = valoresDesdePerfil({ referencia: "EXT-1", nombre: "Acreditado externo" });
     expect(valores.antiguedadGiroAnios).toBe("");
     expect(valores.creditoTipo).toBe("");
     expect(valores.localidadId).toBe("");
@@ -106,11 +106,11 @@ describe("datosFaltantes", () => {
     expect(datosFaltantes(valoresDesdePerfil(perfilCompleto))).toEqual([]);
   });
 
-  it("nombra lo que falta cuando solo hay identidad (socio del sistema externo)", () => {
+  it("nombra lo que falta cuando solo hay identidad (acreditado del sistema externo)", () => {
     const faltantes = datosFaltantes(
       valoresDesdePerfil({
         referencia: "CLI-CORP-001",
-        nombre: "Socio Alpha",
+        nombre: "Acreditado Alpha",
         rfc: "CALP850101XYZ",
       }),
     );
@@ -164,8 +164,8 @@ describe("construirSolicitud", () => {
     });
   });
 
-  it("arma el socio con su identidad, actividad y antigüedad", () => {
-    expect(solicitud.socio).toEqual({
+  it("arma el acreditado con su identidad, actividad y antigüedad", () => {
+    expect(solicitud.acreditado).toEqual({
       referencia: "CLI-001",
       nombre: "LUCÍA",
       apellido_p: "MARTÍNEZ",

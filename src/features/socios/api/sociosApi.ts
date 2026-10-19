@@ -1,35 +1,35 @@
 import { apiClient } from "@/api/client";
 import type {
-  BusquedaSocios,
-  PaginaSocios,
-  SocioExterno,
-  SocioPerfilRiesgo,
-} from "@/features/socios/types/socios";
+  BusquedaAcreditados,
+  PaginaAcreditados,
+  AcreditadoExterno,
+  AcreditadoPerfilRiesgo,
+} from "@/features/acreditados/types/acreditados";
 
-export async function buscarSocios(nombre: string) {
-  const { data } = await apiClient.get<SocioExterno[]>("/acreditados/buscar", {
+export async function buscarAcreditados(nombre: string) {
+  const { data } = await apiClient.get<AcreditadoExterno[]>("/acreditados/buscar", {
     params: nombre ? { nombre } : undefined,
   });
   return data;
 }
 
 /** El backend filtra y pagina: PLD-SOCIOS siempre devuelve la lista completa. */
-export async function buscarSociosPaginados({
+export async function buscarAcreditadosPaginados({
   criterio,
   valor,
   tipoPersona,
   pagina,
   tamanio,
-}: BusquedaSocios) {
-  const { data } = await apiClient.get<PaginaSocios>("/socios/pagina", {
+}: BusquedaAcreditados) {
+  const { data } = await apiClient.get<PaginaAcreditados>("/acreditados/pagina", {
     params: { criterio, valor: valor.trim() || undefined, tipoPersona, pagina, tamanio },
   });
   return data;
 }
 
-export async function obtenerPerfilRiesgoSocio(referencia: string) {
-  const { data } = await apiClient.get<SocioPerfilRiesgo>(
-    `/socios/${encodeURIComponent(referencia)}/perfil-riesgo`,
+export async function obtenerPerfilRiesgoAcreditado(referencia: string) {
+  const { data } = await apiClient.get<AcreditadoPerfilRiesgo>(
+    `/acreditados/${encodeURIComponent(referencia)}/perfil-riesgo`,
   );
   return data;
 }

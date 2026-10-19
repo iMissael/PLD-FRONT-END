@@ -1,10 +1,10 @@
 import type { ClienteMatrizRiesgo } from "@/features/operacion/evaluacion-riesgo/types/evaluacionRiesgo";
-import type { SocioPerfilRiesgo } from "@/features/socios/types/socios";
+import type { AcreditadoPerfilRiesgo } from "@/features/acreditados/types/acreditados";
 
 const PREFIJO_PERSONA = "PERS-";
 
-/** Expediente que se muestra al elegir un socio que todavía no tiene una evaluación en la sesión. */
-export function clienteDesdePerfil(perfil: SocioPerfilRiesgo): ClienteMatrizRiesgo {
+/** Expediente que se muestra al elegir un acreditado que todavía no tiene una evaluación en la sesión. */
+export function clienteDesdePerfil(perfil: AcreditadoPerfilRiesgo): ClienteMatrizRiesgo {
   const referencia = perfil.referencia ?? "—";
   return {
     nombre: perfil.nombre ?? "—",

@@ -21,10 +21,10 @@ import type { ClienteMatrizRiesgo } from "@/features/operacion/evaluacion-riesgo
 import type { EvaluacionRiesgoResultado } from "@/features/operacion/evaluacion-riesgo/types/evaluacionRiesgo";
 import type { DetallesSubfactor } from "@/features/operacion/evaluacion-riesgo/utils/detalleSubfactor";
 import { nivelPorDescripcion, nivelPorValorEntero } from "@/features/operacion/evaluacion-riesgo/utils/nivelRiesgo";
-import type { SocioExterno } from "@/features/socios/types/socios";
+import type { AcreditadoExterno } from "@/features/acreditados/types/acreditados";
 
 /**
- * Tablero "Matriz de Riesgo Integral": encabezado con búsqueda de socios, expediente
+ * Tablero "Matriz de Riesgo Integral": encabezado con búsqueda de acreditados, expediente
  * del cliente a la izquierda y matriz de factores a la derecha. Adaptado con tokens semánticos
  * para soporte completo de modo claro y oscuro.
  */
@@ -154,25 +154,25 @@ function EstadoSinEvaluacion({
 
 export function MatrizRiesgoDashboard({
   cliente,
-  cargandoSocio,
-  errorSocio,
+  cargandoAcreditado,
+  errorAcreditado,
   evaluacion,
   estadoEvaluacion,
-  onSeleccionarSocio,
+  onSeleccionarAcreditado,
   onEvaluar,
   onReintentar,
   onReevaluar,
 }: {
   cliente: ClienteMatrizRiesgo | null;
-  cargandoSocio: boolean;
-  errorSocio: boolean;
+  cargandoAcreditado: boolean;
+  errorAcreditado: boolean;
   evaluacion: EvaluacionMostrada | null;
   estadoEvaluacion: EstadoEvaluacionAutomatica;
-  onSeleccionarSocio: (socio: SocioExterno) => void;
-  /** Abre el formulario de evaluación (con los datos del socio ya cargados). */
+  onSeleccionarAcreditado: (acreditado: AcreditadoExterno) => void;
+  /** Abre el formulario de evaluación (con los datos del acreditado ya cargados). */
   onEvaluar: () => void;
   onReintentar: () => void;
-  /** Vuelve a evaluar al socio mostrado con sus datos actuales, sin abrir el formulario. */
+  /** Vuelve a evaluar al acreditado mostrado con sus datos actuales, sin abrir el formulario. */
   onReevaluar: () => void;
 }) {
   const resultado = evaluacion?.resultado;
@@ -261,10 +261,10 @@ export function MatrizRiesgoDashboard({
       <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
         <ExpedienteClienteAside
           cliente={cliente}
-          cargando={cargandoSocio}
-          error={errorSocio}
+          cargando={cargandoAcreditado}
+          error={errorAcreditado}
           valorBuscador={cliente?.referencia ?? ""}
-          onSeleccionarSocio={onSeleccionarSocio}
+          onSeleccionarAcreditado={onSeleccionarAcreditado}
         />
 
         <section className="flex min-h-0 min-w-0 flex-1 flex-col bg-muted/10 lg:rounded-br-lg">

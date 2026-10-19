@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
   listarIncidenciasPendientes,
-  resolverDuplicadoSocio,
+  resolverDuplicadoAcreditado,
   resolverIncidencia,
   resolverPersonaRelacionada,
 } from "../api/incidenciasApi";
@@ -27,29 +27,29 @@ export function useResolverIncidencia() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({
-      socioRef,
+      acreditadoRef,
       payload,
     }: {
-      socioRef: string;
+      acreditadoRef: string;
       payload: ResolverIncidenciaPayload;
-    }) => resolverIncidencia(socioRef, payload),
+    }) => resolverIncidencia(acreditadoRef, payload),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: incidenciasKeys.pendientes }),
   });
 }
 
-export function useResolverDuplicadoSocio() {
+export function useResolverDuplicadoAcreditado() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({
-      socioRef,
-      socioRefSimilar,
+      acreditadoRef,
+      acreditadoRefSimilar,
       payload,
     }: {
-      socioRef: string;
-      socioRefSimilar: string;
+      acreditadoRef: string;
+      acreditadoRefSimilar: string;
       payload: ResolverDuplicadoPayload;
-    }) => resolverDuplicadoSocio(socioRef, socioRefSimilar, payload),
+    }) => resolverDuplicadoAcreditado(acreditadoRef, acreditadoRefSimilar, payload),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: incidenciasKeys.pendientes }),
   });
@@ -59,14 +59,14 @@ export function useResolverPersonaRelacionada() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({
-      socioRef,
+      acreditadoRef,
       idCoincidencia,
       payload,
     }: {
-      socioRef: string;
+      acreditadoRef: string;
       idCoincidencia: number;
       payload: ResolverPersonaRelacionadaPayload;
-    }) => resolverPersonaRelacionada(socioRef, idCoincidencia, payload),
+    }) => resolverPersonaRelacionada(acreditadoRef, idCoincidencia, payload),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: incidenciasKeys.pendientes }),
   });

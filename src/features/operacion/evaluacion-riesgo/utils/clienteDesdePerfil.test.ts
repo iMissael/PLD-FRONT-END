@@ -23,7 +23,7 @@ describe("clienteDesdePerfil", () => {
   it("marca persona moral y usa guiones para lo que no hay", () => {
     const cliente = clienteDesdePerfil({
       referencia: "CLI-CORP-001",
-      nombre: "Socio Alpha",
+      nombre: "Acreditado Alpha",
       tipoPersona: { id: 2, nombre: "Persona Moral Nacional" },
     });
     expect(cliente.persona).toBe("MORAL");

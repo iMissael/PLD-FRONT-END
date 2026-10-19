@@ -14,8 +14,8 @@ import type { EvaluacionRiesgoResultado } from "@/features/operacion/evaluacion-
 import { useHistorialEvaluaciones } from "@/features/operacion/evaluacion-riesgo/hooks/useEvaluacionRiesgo";
 import { clienteDesdePerfil } from "@/features/operacion/evaluacion-riesgo/utils/clienteDesdePerfil";
 import { nivelPorDescripcion, nivelPorValorEntero } from "@/features/operacion/evaluacion-riesgo/utils/nivelRiesgo";
-import { usePerfilSocio } from "@/features/socios/hooks/useSocios";
-import type { SocioExterno } from "@/features/socios/types/socios";
+import { usePerfilAcreditado } from "@/features/acreditados/hooks/useAcreditados";
+import type { AcreditadoExterno } from "@/features/acreditados/types/acreditados";
 
 function numero(valor: number | undefined, decimales = 2) {
   return valor === undefined ? "—" : valor.toFixed(decimales);
@@ -133,17 +133,17 @@ function DetalleEvaluacion({
 }
 
 /**
- * "Historial de evaluaciones": cada vez que se evalúa a un socio queda una fila nueva en
+ * "Historial de evaluaciones": cada vez que se evalúa a un acreditado queda una fila nueva en
  * evaluacion_riesgo_pld (no se sobreescribe), así que esta pantalla solo lista esas filas por
- * socio — a diferencia de "Evaluación de riesgo", que solo muestra/opera sobre la más reciente.
+ * acreditado — a diferencia de "Evaluación de riesgo", que solo muestra/opera sobre la más reciente.
  * Al elegir una fila se ve, debajo, la matriz de factores de esa evaluación puntual.
  */
 export function HistorialEvaluacionesPage() {
-  const [socio, setSocio] = useState<{ id: string; nombre: string } | null>(null);
+  const [acreditado, setAcreditado] = useState<{ id: string; nombre: string } | null>(null);
   const [seleccionada, setSeleccionada] = useState<EvaluacionRiesgoResultado | null>(null);
-  const perfil = usePerfilSocio(socio?.id);
+  const perfil = usePerfilAcreditado(acreditado?.id);
   const cliente = perfil.data ? clienteDesdePerfil(perfil.data) : null;
-  const { data: historial, isLoading, isError } = useHistorialEvaluaciones(socio?.id ?? null);
+  const { data: historial, isLoading, isError } = useHistorialEvaluaciones(acreditado?.id ?? null);
 
   const detalleRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -152,8 +152,8 @@ export function HistorialEvaluacionesPage() {
     }
   }, [seleccionada]);
 
-  function seleccionarSocio(elegido: SocioExterno) {
-    setSocio({ id: elegido.id ?? "", nombre: elegido.nombre ?? "" });
+  function seleccionarAcreditado(elegido: AcreditadoExterno) {
+    setAcreditado({ id: elegido.id ?? "", nombre: elegido.nombre ?? "" });
     setSeleccionada(null);
   }
 
@@ -202,10 +202,10 @@ export function HistorialEvaluacionesPage() {
       <div className="flex min-h-[420px] shrink-0 flex-col rounded-lg border border-border bg-card shadow-sm lg:flex-row">
         <ExpedienteClienteAside
           cliente={cliente}
-          cargando={Boolean(socio) && perfil.isPending}
-          error={Boolean(socio) && perfil.isError}
-          valorBuscador={cliente?.referencia ?? socio?.nombre ?? ""}
-          onSeleccionarSocio={seleccionarSocio}
+          cargando={Boolean(acreditado) && perfil.isPending}
+          error={Boolean(acreditado) && perfil.isError}
+          valorBuscador={cliente?.referencia ?? acreditado?.nombre ?? ""}
+          onSeleccionarAcreditado={seleccionarAcreditado}
         />
 
         <div className="flex min-h-0 min-w-0 flex-1 flex-col lg:rounded-br-lg">
@@ -228,7 +228,7 @@ export function HistorialEvaluacionesPage() {
           </header>
 
           <section className="flex min-h-0 flex-1 flex-col overflow-x-auto bg-card">
-            {socio ? (
+            {acreditado ? (
               <DataTable
                 data={historial}
                 columns={columns}

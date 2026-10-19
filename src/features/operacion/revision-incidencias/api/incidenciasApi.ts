@@ -1,49 +1,49 @@
 import { apiClient } from "@/api/client";
 
 import type {
-  CoincidenciaSocio,
+  CoincidenciaAcreditado,
   ResolverDuplicadoPayload,
   ResolverIncidenciaPayload,
   ResolverPersonaRelacionadaPayload,
 } from "../types/incidencias";
 
 export async function listarIncidenciasPendientes() {
-  const { data } = await apiClient.get<CoincidenciaSocio[]>(
+  const { data } = await apiClient.get<CoincidenciaAcreditado[]>(
     "/coincidencias/pendientes",
   );
   return data;
 }
 
 export async function resolverIncidencia(
-  socioRef: string,
+  acreditadoRef: string,
   payload: ResolverIncidenciaPayload,
 ) {
-  const { data } = await apiClient.put<CoincidenciaSocio>(
-    `/coincidencias/${encodeURIComponent(socioRef)}/confirmacion`,
+  const { data } = await apiClient.put<CoincidenciaAcreditado>(
+    `/coincidencias/${encodeURIComponent(acreditadoRef)}/confirmacion`,
     payload,
   );
   return data;
 }
 
-export async function resolverDuplicadoSocio(
-  socioRef: string,
-  socioRefSimilar: string,
+export async function resolverDuplicadoAcreditado(
+  acreditadoRef: string,
+  acreditadoRefSimilar: string,
   payload: ResolverDuplicadoPayload,
 ) {
-  const { data } = await apiClient.put<CoincidenciaSocio>(
-    `/coincidencias/${encodeURIComponent(socioRef)}/duplicados/${encodeURIComponent(socioRefSimilar)}/confirmacion`,
+  const { data } = await apiClient.put<CoincidenciaAcreditado>(
+    `/coincidencias/${encodeURIComponent(acreditadoRef)}/duplicados/${encodeURIComponent(acreditadoRefSimilar)}/confirmacion`,
     payload,
   );
   return data;
 }
 
 export async function resolverPersonaRelacionada(
-  socioRef: string,
+  acreditadoRef: string,
   idCoincidencia: number,
   payload: ResolverPersonaRelacionadaPayload,
 ) {
-  const { data } = await apiClient.put<CoincidenciaSocio>(
-    `/coincidencias/${encodeURIComponent(socioRef)}/personas-relacionadas/${idCoincidencia}/confirmacion`,
+  const { data } = await apiClient.put<CoincidenciaAcreditado>(
+    `/coincidencias/${encodeURIComponent(acreditadoRef)}/personas-relacionadas/${idCoincidencia}/confirmacion`,
     payload,
   );
   return data;

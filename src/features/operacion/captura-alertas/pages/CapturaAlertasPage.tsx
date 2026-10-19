@@ -20,7 +20,7 @@ import { CalendarioFecha } from "@/shared/components/molecules/CalendarioFecha";
 import { Button } from "@/shared/components/atoms/Button";
 import { Card } from "@/shared/components/molecules";
 import { hint, label } from "@/shared/styles/tokens";
-import type { SocioExterno } from "@/features/socios/types/socios";
+import type { AcreditadoExterno } from "@/features/acreditados/types/acreditados";
 import { cn } from "@/shared/utils/cn";
 import { haceAniosIso, hoyIso } from "@/shared/utils/fechas";
 import { Search } from "lucide-react";
@@ -35,13 +35,13 @@ const textareaStyle =
 const ANIOS_ATRAS_INCIDENCIA = 5;
 
 /**
- * Manda el tipo de persona que trae el socio. El largo del RFC (12 = moral) solo
+ * Manda el tipo de persona que trae el acreditado. El largo del RFC (12 = moral) solo
  * se usa si no viene: hay físicas con RFC de 12 caracteres (sin homoclave completa).
  */
-function esPersonaMoral(socio: SocioExterno): boolean {
-  const tipo = socio.tipoPersona?.trim().toUpperCase();
+function esPersonaMoral(acreditado: AcreditadoExterno): boolean {
+  const tipo = acreditado.tipoPersona?.trim().toUpperCase();
   if (tipo) return tipo === "MORAL" || tipo === "M";
-  return (socio.rfc?.trim().length ?? 0) === 12;
+  return (acreditado.rfc?.trim().length ?? 0) === 12;
 }
 
 interface Reportado {

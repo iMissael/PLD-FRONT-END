@@ -52,7 +52,7 @@ export const MOCK_PERSONAS: PersonaItem[] = [
     nombreCompleto: "Inversiones del Norte S.A. de C.V.",
     tipo: "SOCIO",
     identificador: "INO120304999",
-    puesto: "Persona Moral (Socio Inversionista)",
+    puesto: "Persona Moral (Acreditado Inversionista)",
     departamento: "Sector Inmobiliario y Construcción",
     email: "contacto@inversionesnorte.com",
     telefono: "+52 81 8345 6789",
@@ -132,14 +132,14 @@ export async function buscarEmpleados(q: string, signal?: AbortSignal): Promise<
 }
 
 /**
- * Busca socios registrados en el sistema mediante /socios con fallback a datos simulados
+ * Busca acreditados registrados en el sistema mediante /acreditados con fallback a datos simulados
  */
-export async function buscarSocios(q: string, signal?: AbortSignal): Promise<PersonaItem[]> {
+export async function buscarAcreditados(q: string, signal?: AbortSignal): Promise<PersonaItem[]> {
   if (!q || !q.trim()) return [];
   const term = q.trim().toLowerCase();
 
   try {
-    const { data } = await apiClient.get<unknown>("/socios", {
+    const { data } = await apiClient.get<unknown>("/acreditados", {
       params: { q: q.trim(), busqueda: q.trim(), nombre: q.trim() },
       signal,
     });
@@ -151,9 +151,9 @@ export async function buscarSocios(q: string, signal?: AbortSignal): Promise<Per
       return items.map((item) => {
         const nombre = [item.nombre, item.primerApellido, item.segundoApellido, item.apellidoPaterno, item.apellidoMaterno]
           .filter(Boolean)
-          .join(" ") || String(item.razonSocial || item.nombreCompleto || item.nombre || `Socio #${item.id}`);
+          .join(" ") || String(item.razonSocial || item.nombreCompleto || item.nombre || `Acreditado #${item.id}`);
 
-        const ref = String(item.numeroSocio || item.referencia || item.id || "");
+        const ref = String(item.numeroAcreditado || item.referencia || item.id || "");
 
         return {
           id: (item.id as string | number) ?? ref,
@@ -167,7 +167,7 @@ export async function buscarSocios(q: string, signal?: AbortSignal): Promise<Per
           estatus: (item.estatus || item.estado || "ACTIVO") as string | undefined,
           sucursal: (item.sucursal || item.sucursalRegistro) as string | undefined,
           fechaIngreso: (item.fechaIngreso || item.fechaAlta) as string | undefined,
-          identificador: (item.rfc || item.curp || item.numeroSocio) as string | undefined,
+          identificador: (item.rfc || item.curp || item.numeroAcreditado) as string | undefined,
           detallesExtra: item,
         };
       });
@@ -176,7 +176,7 @@ export async function buscarSocios(q: string, signal?: AbortSignal): Promise<Per
     // Si falla, se filtra de MOCK_PERSONAS
   }
 
-  // Filtrado local de mock socios
+  // Filtrado local de mock acreditados
   return MOCK_PERSONAS.filter(
     (p) =>
       p.tipo === "SOCIO" &&
@@ -187,20 +187,20 @@ export async function buscarSocios(q: string, signal?: AbortSignal): Promise<Per
 }
 
 /**
- * Conecta ambos endpoints (empleados y socios) en paralelo para sugerir coincidencias
+ * Conecta ambos endpoints (empleados y acreditados) en paralelo para sugerir coincidencias
  */
 export async function buscarPersonasDenunciadas(
   termino: string,
   signal?: AbortSignal,
 ): Promise<PersonaItem[]> {
   if (!termino || termino.trim().length < 1) return [];
-  const [empleados, socios] = await Promise.all([
+  const [empleados, acreditados] = await Promise.all([
     buscarEmpleados(termino, signal),
-    buscarSocios(termino, signal),
+    buscarAcreditados(termino, signal),
   ]);
 
   const map = new Map<string, PersonaItem>();
-  [...empleados, ...socios].forEach((item) => map.set(item.referencia, item));
+  [...empleados, ...acreditados].forEach((item) => map.set(item.referencia, item));
   return Array.from(map.values());
 }
 

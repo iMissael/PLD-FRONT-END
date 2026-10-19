@@ -18,16 +18,16 @@ import {
   useTiposCredito,
   useTiposPersona,
 } from "@/features/catalogos/hooks/useCatalogos";
-import { useBuscarSocios, usePerfilRiesgoSocio } from "@/features/socios/hooks/useSocios";
+import { useBuscarAcreditados, usePerfilRiesgoAcreditado } from "@/features/acreditados/hooks/useAcreditados";
 import { MONEDA_POR_DEFECTO } from "@/features/operacion/evaluacion-riesgo/utils/solicitud";
-import type { SocioPerfilRiesgo } from "@/features/socios/types/socios";
+import type { AcreditadoPerfilRiesgo } from "@/features/acreditados/types/acreditados";
 
-// Campos del fieldset "Socio": pertenecen al socio elegido, no a la evaluación.
+// Campos del fieldset "Acreditado": pertenecen al acreditado elegido, no a la evaluación.
 const CAMPOS_DEL_SOCIO = [
-  "socioNombre",
-  "socioNombres",
-  "socioApellidoP",
-  "socioApellidoM",
+  "acreditadoNombre",
+  "acreditadoNombres",
+  "acreditadoApellidoP",
+  "acreditadoApellidoM",
   "rfc",
   "curp",
   "tipoPersonaId",
@@ -49,7 +49,7 @@ const CAMPOS_DEL_SOCIO = [
   "asentamientoNombre",
 ] as const;
 
-// Campos del crédito solicitado: también salen del socio (credito_solicitado).
+// Campos del crédito solicitado: también salen del acreditado (credito_solicitado).
 const CAMPOS_DEL_CREDITO = [
   "creditoReferencia",
   "creditoTipo",
@@ -63,12 +63,12 @@ function aTexto(valor: string | number | undefined | null) {
   return valor === undefined || valor === null ? "" : String(valor);
 }
 
-export function SocioBuscadorEvaluacion({
+export function AcreditadoBuscadorEvaluacion({
   form,
-  socioInicial,
+  acreditadoInicial,
 }: {
   form: UseFormReturn<EvaluacionRiesgoFormValues>;
-  socioInicial?: { id: string; nombre: string };
+  acreditadoInicial?: { id: string; nombre: string };
 }) {
   const [busqueda, setBusqueda] = useState("");
   const yaPreseleccionado = useRef(false);
@@ -79,10 +79,10 @@ export function SocioBuscadorEvaluacion({
     municipioId?: string;
     localidadId?: string;
   } | null>(null);
-  const socioReferencia = form.watch("socioReferencia");
-  const socioNombre = form.watch("socioNombre");
-  const { data: socios, isFetching } = useBuscarSocios(busqueda);
-  const perfilRiesgo = usePerfilRiesgoSocio();
+  const acreditadoReferencia = form.watch("acreditadoReferencia");
+  const acreditadoNombre = form.watch("acreditadoNombre");
+  const { data: acreditados, isFetching } = useBuscarAcreditados(busqueda);
+  const perfilRiesgo = usePerfilRiesgoAcreditado();
   const { mutate: cargarPerfil } = perfilRiesgo;
 
   // Los selects del formulario reinician a vacío un valor cuyo catálogo aún no llegó, así que
@@ -132,7 +132,7 @@ export function SocioBuscadorEvaluacion({
     domicilioPendiente.current = null;
   }, [localidades, form]);
 
-  function limpiarDatosDelSocio() {
+  function limpiarDatosDelAcreditado() {
     domicilioPendiente.current = null;
     CAMPOS_DEL_SOCIO.forEach((campo) => form.setValue(campo, ""));
     CAMPOS_DEL_CREDITO.forEach((campo) => form.setValue(campo, ""));
@@ -140,12 +140,12 @@ export function SocioBuscadorEvaluacion({
   }
 
   const aplicarPerfil = useCallback(
-    (perfil: SocioPerfilRiesgo) => {
+    (perfil: AcreditadoPerfilRiesgo) => {
       if (perfil.nombre)
-        form.setValue("socioNombre", perfil.nombre, { shouldValidate: true });
-      form.setValue("socioNombres", perfil.nombres ?? "");
-      form.setValue("socioApellidoP", perfil.apellidoPaterno ?? "");
-      form.setValue("socioApellidoM", perfil.apellidoMaterno ?? "");
+        form.setValue("acreditadoNombre", perfil.nombre, { shouldValidate: true });
+      form.setValue("acreditadoNombres", perfil.nombres ?? "");
+      form.setValue("acreditadoApellidoP", perfil.apellidoPaterno ?? "");
+      form.setValue("acreditadoApellidoM", perfil.apellidoMaterno ?? "");
       form.setValue("rfc", perfil.rfc ?? "");
       form.setValue("curp", perfil.curp ?? "");
       form.setValue("fechaNacimiento", perfil.fechaNacimiento ?? "");
@@ -240,11 +240,11 @@ export function SocioBuscadorEvaluacion({
     pedirPerfil(id);
   }, [catalogosListos, pedirPerfil]);
 
-  function elegirSocio(id: string, nombre: string) {
+  function elegirAcreditado(id: string, nombre: string) {
     setBusqueda("");
-    limpiarDatosDelSocio();
-    form.setValue("socioReferencia", id, { shouldValidate: true });
-    form.setValue("socioNombre", nombre, { shouldValidate: true });
+    limpiarDatosDelAcreditado();
+    form.setValue("acreditadoReferencia", id, { shouldValidate: true });
+    form.setValue("acreditadoNombre", nombre, { shouldValidate: true });
 
     if (catalogosListos) {
       pedirPerfil(id);
@@ -254,25 +254,25 @@ export function SocioBuscadorEvaluacion({
   }
 
   useEffect(() => {
-    if (!socioInicial || yaPreseleccionado.current) return;
+    if (!acreditadoInicial || yaPreseleccionado.current) return;
     yaPreseleccionado.current = true;
-    elegirSocio(socioInicial.id, socioInicial.nombre);
-    // Solo al montar: el socio inicial no cambia mientras el formulario está abierto.
+    elegirAcreditado(acreditadoInicial.id, acreditadoInicial.nombre);
+    // Solo al montar: el acreditado inicial no cambia mientras el formulario está abierto.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function cambiarSocio() {
+  function cambiarAcreditado() {
     perfilPendiente.current = null;
     perfilRiesgo.reset();
-    limpiarDatosDelSocio();
-    form.setValue("socioReferencia", "", { shouldValidate: true });
+    limpiarDatosDelAcreditado();
+    form.setValue("acreditadoReferencia", "", { shouldValidate: true });
   }
 
-  if (socioReferencia) {
+  if (acreditadoReferencia) {
     return (
       <div className="flex flex-wrap items-center gap-2">
         <Badge variant="secondary" className="text-sm">
-          {socioNombre || socioReferencia}
+          {acreditadoNombre || acreditadoReferencia}
         </Badge>
         {perfilRiesgo.data?.esPep && <Badge variant="destructive">PEP</Badge>}
         {perfilRiesgo.isPending && (
@@ -280,10 +280,10 @@ export function SocioBuscadorEvaluacion({
         )}
         <button
           type="button"
-          onClick={cambiarSocio}
+          onClick={cambiarAcreditado}
           className="text-muted-foreground text-xs underline underline-offset-2"
         >
-          Cambiar socio
+          Cambiar acreditado
         </button>
       </div>
     );
@@ -299,27 +299,27 @@ export function SocioBuscadorEvaluacion({
       {busqueda.trim().length >= 2 && (
         <div className="bg-popover absolute z-10 mt-1 w-full rounded-md border shadow-md">
           {isFetching && <p className="text-muted-foreground p-2 text-sm">Buscando…</p>}
-          {!isFetching && socios?.length === 0 && (
+          {!isFetching && acreditados?.length === 0 && (
             <p className="text-muted-foreground p-2 text-sm">Sin resultados.</p>
           )}
-          {socios?.map((socio) => (
+          {acreditados?.map((acreditado) => (
             <button
-              key={socio.id}
+              key={acreditado.id}
               type="button"
-              onClick={() => elegirSocio(socio.id ?? "", socio.nombre ?? "")}
+              onClick={() => elegirAcreditado(acreditado.id ?? "", acreditado.nombre ?? "")}
               className="hover:bg-accent flex w-full flex-col items-start px-3 py-2 text-left text-sm"
             >
-              <span className="font-medium">{socio.nombre}</span>
+              <span className="font-medium">{acreditado.nombre}</span>
               <span className="text-muted-foreground text-xs">
-                {socio.id} · {socio.rfc}
+                {acreditado.id} · {acreditado.rfc}
               </span>
             </button>
           ))}
         </div>
       )}
-      {form.formState.errors.socioReferencia && (
+      {form.formState.errors.acreditadoReferencia && (
         <p className="text-destructive mt-1 text-sm">
-          {form.formState.errors.socioReferencia.message}
+          {form.formState.errors.acreditadoReferencia.message}
         </p>
       )}
     </div>

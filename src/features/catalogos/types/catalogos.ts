@@ -12,7 +12,7 @@ export type PaginaLocalidadesResponse =
   components["schemas"]["PaginaResponseCatLocalidadResponse"];
 export type CatActividadEconomicaResponse =
   components["schemas"]["CatActividadEconomicaResponse"];
-export type TipoPersonaResponse = components["schemas"]["CatTipoSocioResponse"];
+export type TipoPersonaResponse = components["schemas"]["CatTipoAcreditadoResponse"];
 /**
  * Condición de PEP (`cat_peps`), que es el catálogo con el que el backend
  * puntúa el subfactor 6 de la matriz de riesgo. No confundir con

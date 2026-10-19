@@ -15,7 +15,7 @@ export function cambiaElRiesgo(metodo: string | undefined, url: string | undefin
 
 /**
  * Tras guardar un cambio en un catálogo o publicar una matriz, las evaluaciones recordadas en la
- * pestaña ya no reflejan el riesgo actual: se descartan para que el socio se evalúe de nuevo.
+ * pestaña ya no reflejan el riesgo actual: se descartan para que el acreditado se evalúe de nuevo.
  */
 export function registrarInvalidacionDeEvaluaciones(cliente: AxiosInstance) {
   cliente.interceptors.response.use((respuesta) => {

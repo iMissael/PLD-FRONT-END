@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@/shared/components/atoms/Table";
 
-import type { CoincidenciaSocio } from "../types/incidencias";
+import type { CoincidenciaAcreditado } from "../types/incidencias";
 
 function formatearFecha(valor: string | undefined) {
   if (!valor) return "—";
@@ -48,10 +48,10 @@ function varianteEstatus(estado: EstatusCombinado): "outline" | "destructive" | 
 
 /**
  * Estatus combinado de los 2 buckets de riesgo-pais (nacimiento y nacionalidad); null si ninguno
- * coincide con una lista. Es informativo (nunca bloquea al socio), pero la columna muestra su
+ * coincide con una lista. Es informativo (nunca bloquea al acreditado), pero la columna muestra su
  * estatus de revision igual que las demas: Pendiente/Confirmado/Rechazado, no de que tipo es.
  */
-function estatusPais(coincidencia: CoincidenciaSocio): EstatusCombinado | null {
+function estatusPais(coincidencia: CoincidenciaAcreditado): EstatusCombinado | null {
   const coincide = coincidencia.pais_nacimiento?.coincide || coincidencia.nacionalidad?.coincide;
   if (!coincide) return null;
 
@@ -63,14 +63,14 @@ function estatusPais(coincidencia: CoincidenciaSocio): EstatusCombinado | null {
 }
 
 /**
- * Estatus unico de la fila, combinando los 5 tipos de coincidencia que puede tener un socio (lista
+ * Estatus unico de la fila, combinando los 5 tipos de coincidencia que puede tener un acreditado (lista
  * negra/bloqueadas, riesgo-pais de nacimiento, riesgo-pais de nacionalidad, nombre similar entre
- * socios, persona relacionada): si CUALQUIERA sigue pendiente, la fila es "Pendiente"; si no hay
+ * acreditados, persona relacionada): si CUALQUIERA sigue pendiente, la fila es "Pendiente"; si no hay
  * nada pendiente pero algo se confirmo, "Confirmado"; si todo lo que hubo se descarto o se
  * minimizo, "Rechazado". La fila nunca desaparece de la tabla al resolverse, solo cambia este
  * estatus (es una bitacora, no una cola de pendientes).
  */
-function estatusCombinado(coincidencia: CoincidenciaSocio): EstatusCombinado {
+function estatusCombinado(coincidencia: CoincidenciaAcreditado): EstatusCombinado {
   const duplicados = coincidencia.duplicados ?? [];
   const personasRelacionadas = coincidencia.personas_relacionadas ?? [];
   const confirmacionPais = coincidencia.pais_nacimiento?.confirmacion;
@@ -96,30 +96,30 @@ function estatusCombinado(coincidencia: CoincidenciaSocio): EstatusCombinado {
 }
 
 /** La primera persona relacionada con coincidencia (preferimos una pendiente sobre una ya resuelta). */
-function primeraPersonaRelacionada(coincidencia: CoincidenciaSocio) {
+function primeraPersonaRelacionada(coincidencia: CoincidenciaAcreditado) {
   const personas = coincidencia.personas_relacionadas ?? [];
   return personas.find((p) => p.estado === "PENDIENTE") ?? personas[0];
 }
 
-function nombrePersonaRelacionada(coincidencia: CoincidenciaSocio) {
+function nombrePersonaRelacionada(coincidencia: CoincidenciaAcreditado) {
   return primeraPersonaRelacionada(coincidencia)?.nombre ?? "—";
 }
 
-function tipoRelacion(coincidencia: CoincidenciaSocio) {
+function tipoRelacion(coincidencia: CoincidenciaAcreditado) {
   return primeraPersonaRelacionada(coincidencia)?.relacion ?? "—";
 }
 
 interface TablaIncidenciasPendientesProps {
-  coincidencias: CoincidenciaSocio[] | undefined;
+  coincidencias: CoincidenciaAcreditado[] | undefined;
   isLoading: boolean;
-  socioRefSeleccionado?: string;
-  onRevisar: (coincidencia: CoincidenciaSocio) => void;
+  acreditadoRefSeleccionado?: string;
+  onRevisar: (coincidencia: CoincidenciaAcreditado) => void;
 }
 
 export function TablaIncidenciasPendientes({
   coincidencias,
   isLoading,
-  socioRefSeleccionado,
+  acreditadoRefSeleccionado,
   onRevisar,
 }: TablaIncidenciasPendientesProps) {
   if (isLoading) {
@@ -156,10 +156,10 @@ export function TablaIncidenciasPendientes({
       <TableBody>
         {coincidencias.map((coincidencia, indice) => (
           <TableRow
-            key={coincidencia.socio_ref}
+            key={coincidencia.acreditado_ref}
             onDoubleClick={() => onRevisar(coincidencia)}
             className={
-              coincidencia.socio_ref === socioRefSeleccionado
+              coincidencia.acreditado_ref === acreditadoRefSeleccionado
                 ? "cursor-pointer bg-muted hover:bg-muted"
                 : "cursor-pointer"
             }
@@ -171,9 +171,9 @@ export function TablaIncidenciasPendientes({
               )}
             </TableCell>
             <TableCell>
-              <div className="font-medium">{coincidencia.socio?.nombre ?? "—"}</div>
+              <div className="font-medium">{coincidencia.acreditado?.nombre ?? "—"}</div>
               <div className="text-xs text-muted-foreground">
-                {coincidencia.socio_ref}
+                {coincidencia.acreditado_ref}
               </div>
             </TableCell>
             <TableCell>

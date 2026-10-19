@@ -11,7 +11,7 @@ function sinAcentos(texto: string | undefined) {
 }
 
 /**
- * Igual que `BuscadorSocios`, pero sobre los empleados del core: al abrirlo lista
+ * Igual que `BuscadorAcreditados`, pero sobre los empleados del core: al abrirlo lista
  * todos y se filtra escribiendo (nombre, clave o RFC). Se usa en alertas
  * "Interna preocupante", que se levantan sobre empleados.
  */

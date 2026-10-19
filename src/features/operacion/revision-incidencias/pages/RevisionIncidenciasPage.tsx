@@ -8,12 +8,12 @@ import { Card, CardContent } from "@/shared/components/molecules/Card";
 import { PanelRevisionIncidencia } from "../components/PanelRevisionIncidencia";
 import { TablaIncidenciasPendientes } from "../components/TablaIncidenciasPendientes";
 import { useIncidenciasPendientes } from "../hooks/useIncidencias";
-import type { CoincidenciaSocio } from "../types/incidencias";
+import type { CoincidenciaAcreditado } from "../types/incidencias";
 
 export function RevisionIncidenciasPage() {
   const { data, isLoading, isError, error, refetch, isFetching } =
     useIncidenciasPendientes();
-  const [seleccionada, setSeleccionada] = useState<CoincidenciaSocio | null>(null);
+  const [seleccionada, setSeleccionada] = useState<CoincidenciaAcreditado | null>(null);
 
   return (
     <div className="space-y-6">
@@ -21,8 +21,8 @@ export function RevisionIncidenciasPage() {
         <div>
           <h1 className="text-2xl font-semibold">Revisión de Incidencias</h1>
           <p className="text-muted-foreground">
-            Socios con alguna coincidencia detectada: en lista negra o de personas bloqueadas,
-            en riesgo-país, con otro socio de nombre parecido, o con una persona relacionada.
+            Acreditados con alguna coincidencia detectada: en lista negra o de personas bloqueadas,
+            en riesgo-país, con otro acreditado de nombre parecido, o con una persona relacionada.
             Confirma o descarta cada una; el registro se queda en la tabla con su estatus.
           </p>
         </div>
@@ -44,7 +44,7 @@ export function RevisionIncidenciasPage() {
             <TablaIncidenciasPendientes
               coincidencias={data}
               isLoading={isLoading}
-              socioRefSeleccionado={seleccionada?.socio_ref}
+              acreditadoRefSeleccionado={seleccionada?.acreditado_ref}
               onRevisar={setSeleccionada}
             />
           )}
