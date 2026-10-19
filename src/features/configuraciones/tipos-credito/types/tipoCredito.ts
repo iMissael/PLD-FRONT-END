@@ -15,7 +15,6 @@ export type EstatusTipoCredito = "A" | "I" | "B";
  * no un null.
  */
 export interface CrearTipoCreditoInput {
-  nombre: string;
   catNivelRiesgoId: number;
   catTipoPrestamoId: string;
   estatus: EstatusTipoCredito;
@@ -27,7 +26,6 @@ export type ActualizarTipoCreditoInput = CrearTipoCreditoInput;
 /** Igual a `CatTipoCreditoResponse`. */
 export interface TipoCreditoResponse {
   id: string;
-  nombre: string;
   catNivelRiesgoId: number;
   catTipoPrestamoId: string;
   estatus: EstatusTipoCredito;

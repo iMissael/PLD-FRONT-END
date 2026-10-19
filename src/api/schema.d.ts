@@ -4,54 +4,6 @@
  */
 
 export interface paths {
-    "/mensaje-denuncia": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Consultar mensaje HTML de cabecera de denuncia (Administración)
-         * @description Consulta la configuración actual del mensaje HTML (versión cruda y sanitizada) para el tenant.
-         */
-        get: operations["obtenerMensajeAdmin"];
-        /**
-         * Actualizar mensaje HTML de cabecera de denuncia (Administración)
-         * @description Actualiza el mensaje HTML del tenant. Valida límites de tamaño (50 KB), sanitiza la entrada y guarda ambas versiones.
-         */
-        put: operations["actualizarMensajeAdmin"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/tenants/mensaje-denuncia": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Consultar mensaje HTML de cabecera de denuncia (Administración)
-         * @description Consulta la configuración actual del mensaje HTML (versión cruda y sanitizada) para el tenant.
-         */
-        get: operations["obtenerMensajeAdmin_1"];
-        /**
-         * Actualizar mensaje HTML de cabecera de denuncia (Administración)
-         * @description Actualiza el mensaje HTML del tenant. Valida límites de tamaño (50 KB), sanitiza la entrada y guarda ambas versiones.
-         */
-        put: operations["actualizarMensajeAdmin_1"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/SICANETSC/PLD/{tenantId}/usuarios/{id}": {
         parameters: {
             query?: never;
@@ -156,7 +108,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/mensaje-denuncia": {
+    "/SICANETSC/PLD/{tenantId}/tenant/mensaje-denuncia": {
         parameters: {
             query?: never;
             header?: never;
@@ -180,7 +132,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/tenant/mensaje-denuncia": {
+    "/SICANETSC/PLD/{tenantId}/mensaje-denuncia": {
         parameters: {
             query?: never;
             header?: never;
@@ -197,6 +149,30 @@ export interface paths {
          * @description Actualiza el mensaje HTML del tenant. Valida límites de tamaño (50 KB), sanitiza la entrada y guarda ambas versiones.
          */
         put: operations["actualizarMensajeAdmin_1"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/tenants/mensaje-denuncia": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Consultar mensaje HTML de cabecera de denuncia (Administración)
+         * @description Consulta la configuración actual del mensaje HTML (versión cruda y sanitizada) para el tenant.
+         */
+        get: operations["obtenerMensajeAdmin_2"];
+        /**
+         * Actualizar mensaje HTML de cabecera de denuncia (Administración)
+         * @description Actualiza el mensaje HTML del tenant. Valida límites de tamaño (50 KB), sanitiza la entrada y guarda ambas versiones.
+         */
+        put: operations["actualizarMensajeAdmin_2"];
         post?: never;
         delete?: never;
         options?: never;
@@ -1341,7 +1317,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/aprovisionar": {
+    "/SICANETSC/PLD/{tenantId}/tenant/aprovisionar": {
         parameters: {
             query?: never;
             header?: never;
@@ -1361,7 +1337,67 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/": {
+    "/SICANETSC/PLD/{tenantId}/aprovisionar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Re-aprovisionar esquema del tenant
+         * @description Ejecuta de forma manual las migraciones Liquibase para el esquema del tenant
+         */
+        post: operations["reAprovisionarEsquema_2"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/aprovisionar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Re-aprovisionar esquema del tenant
+         * @description Ejecuta de forma manual las migraciones Liquibase para el esquema del tenant
+         */
+        post: operations["reAprovisionarEsquema_3"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/aprovisionar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Re-aprovisionar esquema del tenant
+         * @description Ejecuta de forma manual las migraciones Liquibase para el esquema del tenant
+         */
+        post: operations["reAprovisionarEsquema_4"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/nuevo": {
         parameters: {
             query?: never;
             header?: never;
@@ -1381,7 +1417,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/tenants": {
+    "/SICANETSC/PLD/{tenantId}/tenants": {
         parameters: {
             query?: never;
             header?: never;
@@ -1398,10 +1434,11 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        patch?: never;
+        patch?: never; 
         trace?: never;
     };
     "/SICANETSC/PLD/{tenantId}/v1/integrations/acreditados": {
+    "/tenants": {
         parameters: {
             query?: never;
             header?: never;
@@ -1411,16 +1448,37 @@ export interface paths {
         get?: never;
         put?: never;
         /**
-         * Enviar alta o cambio de un acreditado
-         * @description Valida la forma, guarda la solicitud y responde 202. El resultado se consulta en status_url.
+         * Crear nuevo tenant
+         * @description Registra un nuevo tenant y aprovisiona atómicamente su esquema PostgreSQL y datos iniciales
          */
-        post: operations["recibiracreditado"];
+        post: operations["crearTenant_2"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
+    "/SICANETSC/PLD/{tenantId}/tenant/nuevo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Crear nuevo tenant
+         * @description Registra un nuevo tenant y aprovisiona atómicamente su esquema PostgreSQL y datos iniciales
+         */
+        post: operations["crearTenant_3"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+   
     "/SICANETSC/PLD/{tenantId}/v1/evaluaciones": {
         parameters: {
             query?: never;
@@ -1463,7 +1521,7 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
-        trace?: never; 
+        trace?: never;
     };
     "/SICANETSC/PLD/{tenantId}/usuarios/{id}/excepciones-permiso": {
         parameters: {
@@ -1489,38 +1547,28 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/SICANETSC/PLD/{tenantId}/tenant/aprovisionar": {
-        "/SICANETSC/PLD/{tenantId}/tipo-cambio": {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            get: operations["listar_1"];
-            put?: never;
-            post: operations["registrarManual"];
-            delete?: never;
-            options?: never;
-            head?: never;
-            patch?: never;
-            trace?: never;
+    "/SICANETSC/PLD/{tenantId}/tipo-cambio": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        "/SICANETSC/PLD/{tenantId}/tipo-cambio/sincronizar": {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            get?: never;
-            put?: never;
-            post: operations["sincronizar"];
-            delete?: never;
-            options?: never;
-            head?: never;
-            patch?: never;
-            trace?: never;
+        get: operations["listar_1"];
+        put?: never;
+        post: operations["registrarManual"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/tipo-cambio/sincronizar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
         "/SICANETSC/PLD/{tenantId}/tenant": {
             "/SICANETSC/PLD/{tenantId}/acreditados/{acreditadoReferencia}/perfil-transaccional": {
@@ -4001,20 +4049,3282 @@ export interface paths {
             };
         }
     }
+        get?: never;
+        put?: never;
+        post: operations["sincronizar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/socios/{socioReferencia}/perfil-transaccional": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Perfil transaccional vigente del socio */
+        get: operations["vigente_1"];
+        put?: never;
+        /**
+         * Registrar el perfil transaccional declarado
+         * @description Lo envia el modulo de ejecutivos en el alta del socio y en cada modificacion. Cada envio agrega un registro al historial; el ultimo es el vigente para las alertas de perfil. formasPago: E efectivo, T transferencia, * otras.
+         */
+        post: operations["registrar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/socios/{referencia}/escaneo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["reescanear"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/roles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar roles
+         * @description Consulta el catálogo completo de roles registrados
+         */
+        get: operations["listar_2"];
+        put?: never;
+        /**
+         * Crear rol
+         * @description Registra un nuevo rol en el catálogo
+         */
+        post: operations["crear_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/roles/{rolId}/permisos/{permisoId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Asignar permiso a un rol
+         * @description Otorga un permiso del catálogo a un rol
+         */
+        post: operations["asignarPermiso"];
+        /**
+         * Revocar permiso de un rol
+         * @description Quita un permiso previamente asignado a un rol
+         */
+        delete: operations["revocarPermiso"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/personas-bloqueadas/carga-masiva": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Carga masiva de personas bloqueadas
+         * @description Procesa un archivo .xlsx o .csv (encabezado en la fila 1, datos desde la fila 2) con instrucción Insertar/Actualizar/Eliminar por fila; las filas con error no detienen el resto
+         */
+        post: operations["cargaMasiva"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/permisos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar permisos
+         * @description Consulta el catálogo completo de permisos registrados
+         */
+        get: operations["listar_3"];
+        put?: never;
+        /**
+         * Crear permiso
+         * @description Registra un nuevo permiso (recurso + acción) en el catálogo
+         */
+        post: operations["crear_3"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/operaciones/{folioOperacion}/cancelar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Cancelar un movimiento de caja
+         * @description Marca como cancelado un movimiento ya evaluado para que deje de sumar en las alertas acumuladas. Las alertas que ya genero no se borran. Si ya estaba cancelado lo devuelve sin cambios.
+         */
+        post: operations["cancelar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/operaciones/{folioOperacion}/autorizacion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Registrar el resultado de la autorizacion en caja
+         * @description Caja lo envia despues de que el movimiento pidio autorizacion (requiereAutorizacion = true). AUTORIZADO confirma la alerta de autorizacion; RECHAZADO o CANCELADO la rechaza y cancela la operacion para que no sume en los acumulados. Reenviar el mismo estatus no duplica el registro.
+         */
+        post: operations["registrar_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/operaciones/evaluar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Evaluar un movimiento de caja
+         * @description Evalua el movimiento contra las reglas vigentes de configuracion_alerta y genera una alerta automatica por cada regla que se cumple. Si alguna es de AUTORIZACION (tipo A) responde requiereAutorizacion = true.
+         *
+         *     Los ejemplos con socio bloqueado requieren dar de alta antes en personas-bloqueadas a JUAN PRUEBA BLOQUEADO (RFC PUBJ800101AB1, alias N). Cambie folioOperacion en cada intento: un folio repetido no vuelve a generar las mismas alertas.
+         */
+        post: operations["evaluar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/evaluaciones": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Evaluar y registrar riesgo de solicitud de crédito
+         * @description Procesa factores socio, crédito, domicilio e historial crediticio para determinar el score total y nivel de riesgo.
+         */
+        post: operations["evaluarYRegistrar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/evaluacion/externo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Ejecutar una evaluación de riesgo
+         * @description tipo EVALUACION_SOCIO toma los datos del socio y su crédito vigente desde la Matriz; EVALUACION_DATOS usa los datos enviados. Retorna el estado resumido de la petición.
+         */
+        post: operations["evaluar_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/consulta-listas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["consultar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/configuracion-matriz": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar todas las configuraciones de matriz
+         * @description Lista el historial completo de versiones de matrices de riesgo
+         */
+        get: operations["listarTodas"];
+        put?: never;
+        /**
+         * Crear nueva versión de matriz de riesgo
+         * @description Crea una nueva versión parametrizada de pesos y rangos de riesgo
+         */
+        post: operations["crearNuevaVersion"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/configuracion-alertas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["listar_4"];
+        put?: never;
+        post: operations["crear_4"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/zonas-geograficas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar zonas de riesgo (paginado)
+         * @description Consulta paginada de la lista de zonas de riesgo geográfico
+         */
+        get: operations["listarZonas"];
+        put?: never;
+        /**
+         * Crear zona de riesgo
+         * @description Define una nueva zona de riesgo geográfico con su ponderación
+         */
+        post: operations["crearZona"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/tipos-prestamo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar Tipos de Préstamo (paginado)
+         * @description Consulta paginada de Tipos de Préstamo registrados
+         */
+        get: operations["listarTodos"];
+        put?: never;
+        post: operations["crear_5"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/tipos-persona": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar Tipos de Persona / Socio (paginado)
+         * @description Consulta paginada de Tipos de Persona / Socio registrados
+         */
+        get: operations["listarTodos_1"];
+        put?: never;
+        /**
+         * Crear tipo de persona
+         * @description Registra un nuevo tipo de persona en el catálogo
+         */
+        post: operations["crear_6"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/tipos-credito": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar Tipos de Crédito (paginado)
+         * @description Consulta paginada de Tipos de Crédito registrados
+         */
+        get: operations["listarTodos_2"];
+        put?: never;
+        /**
+         * Crear tipo de crédito
+         * @description Registra un nuevo tipo de crédito en el catálogo
+         */
+        post: operations["crear_7"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/tipos-alerta": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar tipos de alerta (paginado)
+         * @description Lista paginada de tipos de alerta activos, con opción de filtrar por buzon ('S' o 'N')
+         */
+        get: operations["listarTodos_3"];
+        put?: never;
+        /**
+         * Crear tipo de alerta
+         * @description Registra un nuevo tipo de alerta en el catálogo PLD
+         */
+        post: operations["crear_8"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/tiempos-constitucion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar Tiempos de Constitución (paginado)
+         * @description Consulta paginada de Tiempos de Constitución registrados
+         */
+        get: operations["listarTodos_4"];
+        put?: never;
+        /**
+         * Crear rango de tiempo de constitución
+         * @description Registra un nuevo rango de tiempo de constitución en el catálogo
+         */
+        post: operations["crear_9"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/razones-alerta": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar razones de alerta (paginado)
+         * @description Lista paginada de razones de alerta activas o filtradas por tipo de alerta
+         */
+        get: operations["listarTodos_5"];
+        put?: never;
+        /**
+         * Crear razón de alerta
+         * @description Registra una nueva razón de alerta en el catálogo PLD
+         */
+        post: operations["crear_10"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/puestos-peps": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar PEPs (paginado)
+         * @description Consulta paginada de PEPs registrados
+         */
+        get: operations["listarTodos_6"];
+        put?: never;
+        /**
+         * Crear categoría PEP
+         * @description Registra una nueva categoría PEP en el catálogo
+         */
+        post: operations["crear_11"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/prestamos-monto": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar Montos de Préstamo (paginado)
+         * @description Consulta paginada de Montos de Préstamo registrados
+         */
+        get: operations["listarTodos_7"];
+        put?: never;
+        /**
+         * Crear rango de monto de préstamo
+         * @description Registra un nuevo rango de monto de préstamo en el catálogo
+         */
+        post: operations["crear_12"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/peps": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar PEPs (paginado)
+         * @description Consulta paginada del catálogo de PEPs
+         */
+        get: operations["listarTodos_8"];
+        put?: never;
+        /**
+         * Crear PEP
+         * @description Registra un nuevo registro en el catálogo de PEPs
+         */
+        post: operations["crear_13"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/paises": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar países (paginado)
+         * @description Consulta paginada de la lista de países con filtro opcional de búsqueda
+         */
+        get: operations["listarPaises"];
+        put?: never;
+        /**
+         * Crear país
+         * @description Registra un nuevo país y opcionalmente le asigna zonas de riesgo
+         */
+        post: operations["crearPais"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/paises/masivo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Carga masiva de países
+         * @description Registra un lote de países en una sola operación
+         */
+        post: operations["crearPaisesMasivo"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/paises/batch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Carga masiva de países
+         * @description Registra un lote de países en una sola operación
+         */
+        post: operations["crearPaisesMasivo_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/origenes-recurso": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar Orígenes de Recurso (paginado)
+         * @description Consulta paginada de Orígenes de Recurso registrados
+         */
+        get: operations["listarTodos_9"];
+        put?: never;
+        /**
+         * Crear origen de recurso
+         * @description Registra un nuevo origen de recurso en el catálogo
+         */
+        post: operations["crear_14"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/niveles-riesgo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar Niveles de Riesgo (paginado)
+         * @description Consulta paginada de Niveles de Riesgo registrados
+         */
+        get: operations["listarTodos_10"];
+        put?: never;
+        /**
+         * Crear nivel de riesgo
+         * @description Registra un nuevo nivel de riesgo en el catálogo
+         */
+        post: operations["crear_15"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/municipios": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar municipios (paginado)
+         * @description Consulta paginada de municipios con opción a filtrar por entidad federativa
+         */
+        get: operations["listarMunicipios"];
+        put?: never;
+        /**
+         * Crear municipio
+         * @description Registra un nuevo municipio asignado a una entidad federativa
+         */
+        post: operations["create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/localidades": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar localidades (paginado)
+         * @description Consulta paginada de localidades con filtros opcionales de municipio y nivel de riesgo
+         */
+        get: operations["listarLocalidades"];
+        put?: never;
+        /**
+         * Crear localidad
+         * @description Registra una nueva localidad asociada a un municipio
+         */
+        post: operations["crearLocalidad"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/localidades/masivo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Carga masiva de localidades
+         * @description Registra múltiples localidades en un solo lote
+         */
+        post: operations["crearLocalidadesMasivo"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/localidades/batch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Carga masiva de localidades
+         * @description Registra múltiples localidades en un solo lote
+         */
+        post: operations["crearLocalidadesMasivo_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/listas-restrictivas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar Listas Restrictivas (paginado)
+         * @description Consulta paginada de Listas Restrictivas registrados
+         */
+        get: operations["listarTodos_11"];
+        put?: never;
+        /**
+         * Crear lista restrictiva
+         * @description Registra una nueva lista restrictiva en el catálogo
+         */
+        post: operations["crear_16"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/listas-paises": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar listas de países (paginado)
+         * @description Consulta paginada de listas de países de riesgo
+         */
+        get: operations["listarListas"];
+        put?: never;
+        /**
+         * Crear lista de países
+         * @description Define una nueva lista de países de riesgo con su nivel asociado
+         */
+        post: operations["crearLista"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/historias-crediticias": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar Historiales Crediticios (paginado)
+         * @description Consulta paginada de Historiales Crediticios registrados
+         */
+        get: operations["listarTodos_12"];
+        put?: never;
+        post: operations["crear_17"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/tipos-pago": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar Formas de Pago (paginado)
+         * @description Consulta paginada de Formas de Pago registradas
+         */
+        get: operations["listarTodos_13"];
+        put?: never;
+        /**
+         * Crear forma de pago
+         * @description Registra una nueva forma de pago en el catálogo
+         */
+        post: operations["crear_18"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/formas-pago": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar Formas de Pago (paginado)
+         * @description Consulta paginada de Formas de Pago registradas
+         */
+        get: operations["listarTodos_14"];
+        put?: never;
+        /**
+         * Crear forma de pago
+         * @description Registra una nueva forma de pago en el catálogo
+         */
+        post: operations["crear_19"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/experiencias-actividad": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar Experiencias en Actividades (paginado)
+         * @description Consulta paginada de Experiencias en Actividades registrados
+         */
+        get: operations["listarTodos_15"];
+        put?: never;
+        /**
+         * Crear rango de experiencia en la actividad
+         * @description Registra un nuevo rango de experiencia en el catálogo
+         */
+        post: operations["crear_20"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/entidades": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar entidades federativas (paginado)
+         * @description Consulta paginada de la lista de entidades federativas con sus zonas asignadas
+         */
+        get: operations["listarEntidades"];
+        put?: never;
+        /**
+         * Crear entidad federativa
+         * @description Registra una nueva entidad federativa y opcionalmente le asigna zonas de riesgo (múltiples especiales y una sola no especial)
+         */
+        post: operations["crearEntidad"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/edades": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar Rangos de Edad (paginado)
+         * @description Consulta paginada de Rangos de Edad registrados
+         */
+        get: operations["listarTodos_16"];
+        put?: never;
+        /**
+         * Crear rango de edad
+         * @description Registra un nuevo rango de edad en el catálogo
+         */
+        post: operations["crear_21"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/destinos-recurso": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar destinos de recurso (paginado)
+         * @description Consulta paginada de destinos de recurso registrados
+         */
+        get: operations["listarTodos_17"];
+        put?: never;
+        /**
+         * Crear destino de recurso
+         * @description Registra un nuevo destino de recurso en el catálogo
+         */
+        post: operations["crear_22"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/canales-pago": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar canales de pago (paginado)
+         * @description Consulta paginada de canales de pago registrados
+         */
+        get: operations["listarTodos_18"];
+        put?: never;
+        /**
+         * Crear canal de pago
+         * @description Registra un nuevo canal de pago en el catálogo
+         */
+        post: operations["crear_23"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/auxiliares-geograficos/tipos-calle": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar tipos de calle
+         * @description Consulta el catálogo de tipos de calle
+         */
+        get: operations["listarTiposCalle"];
+        put?: never;
+        /**
+         * Crear tipo de calle
+         * @description Registra un nuevo tipo de calle en el catálogo
+         */
+        post: operations["crearTipoCalle"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/auxiliares-geograficos/tipos-asentamiento": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar tipos de asentamiento
+         * @description Consulta el catálogo de tipos de asentamiento (colonia, fraccionamiento, etc.)
+         */
+        get: operations["listarTiposAsentamiento_1"];
+        put?: never;
+        /**
+         * Crear tipo de asentamiento
+         * @description Registra un nuevo tipo de asentamiento en el catálogo
+         */
+        post: operations["crearTipoAsentamiento"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/actividades-economicas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar actividades económicas (paginado)
+         * @description Consulta paginada de actividades económicas registradas
+         */
+        get: operations["listarTodos_19"];
+        put?: never;
+        /**
+         * Crear actividad económica
+         * @description Registra una nueva actividad económica en el catálogo
+         */
+        post: operations["crear_24"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/buzon/denuncias": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar denuncias del buzón
+         * @description Retorna lista paginada de denuncias aplicando filtros opcionales
+         */
+        get: operations["listarDenuncias"];
+        put?: never;
+        /**
+         * Crear denuncia anónima (JSON)
+         * @description Registra una denuncia anónima sin autenticación con verificación Turnstile
+         */
+        post: operations["crearDenunciaJson_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/buzon/denuncias/{denunciaId}/observaciones": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar observaciones de una denuncia
+         * @description Retorna el historial completo de observaciones asociadas a una denuncia ordenadas por fecha de creación
+         */
+        get: operations["listarObservaciones"];
+        put?: never;
+        /**
+         * Agregar observación a una denuncia
+         * @description Registra una nueva observación en el historial de la denuncia únicamente si esta se encuentra en estado de REVISION (V). El campo verifico_ref se extrae automáticamente del token JWT activo del usuario logueado.
+         */
+        post: operations["agregarObservacion"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/buzon/denuncias/{denunciaId}/evidencias": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar evidencias de una denuncia
+         * @description Retorna la lista de evidencias asociadas a la denuncia especificada
+         */
+        get: operations["listarEvidencias"];
+        put?: never;
+        /** Adjuntar evidencia a denuncia */
+        post: operations["adjuntarEvidencia"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/buzon/denuncias/url-subida": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Generar URL prefirmada de subida a Amazon S3
+         * @description Genera una URL PUT prefirmada (válida por 15 minutos) para que el frontend suba archivos directamente a Amazon S3 sin requerir autenticación.
+         */
+        post: operations["obtenerUrlSubidaS3"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/auth/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Iniciar sesión
+         * @description Valida usuario/contraseña contra el esquema del tenant de la ruta y emite un JWT (Bearer) para el resto de los endpoints. Es la única ruta del tenant que no requiere token.
+         */
+        post: operations["login"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/alertas-manuales": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["capturarManual"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/admin/usuarios/{usuarioId}/desbloquear": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Desbloquear cuenta de usuario
+         * @description Desbloquea manualmente la cuenta de un usuario restableciendo is_locked a false, intentos_fallidos a 0 y registrando la auditoría correspondiente.
+         */
+        post: operations["desbloquear"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/usuarios/{id}/rol": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Asignar rol a un usuario
+         * @description Cambia el rol asignado a un usuario
+         */
+        patch: operations["asignarRol"];
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/usuarios/{id}/estado": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Activar o desactivar usuario
+         * @description Cambia el estado del usuario: A (activo) o B (inactivo). Un usuario inactivo no puede iniciar sesion
+         */
+        patch: operations["cambiarEstado"];
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/configuracion-alertas/{id}/estado": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["cambiarEstado_1"];
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/zonas-geograficas/{id}/estatus": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["cambiarEstatus"];
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/listas-paises/{id}/estatus": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["cambiarEstatus_1"];
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/buzon/denuncias/{id}/estatus": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Cambiar estatus de denuncia
+         * @description Gestiona las transiciones del ciclo de vida (R->V, V->A, V->D) y dispara creación de alerta en A
+         */
+        patch: operations["cambiarEstatus_2"];
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/alertas/{id}/dictamen": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["dictaminar"];
+        trace?: never;
+    };
+    "/auth/public-key": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Obtener clave pública en formato PEM
+         * @description Retorna la clave pública RSA en formato PEM (X.509) para clientes externos
+         */
+        get: operations["getPublicKeyPem"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/jwks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Obtener JWKS
+         * @description Ruta alternativa para obtener las claves públicas en formato JWKS
+         */
+        get: operations["getJwks"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/v1/socios/{socioRef}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Consultar un socio
+         * @description Identidad, estatus y última evaluación de riesgo del socio.
+         */
+        get: operations["obtener"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/v1/integrations/requests/{requestId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Consultar el estado de una solicitud
+         * @description Solo las del propio sistema.
+         */
+        get: operations["consultar_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/v1/health": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Disponibilidad de la API de integración */
+        get: operations["health"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/tipos-alerta": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["listarTipos"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/tipo-cambio/vigente": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["vigente"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/tipo-cambio/convertir": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["convertir"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/tenant/publico/nombre": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Obtener nombre comercial del tenant (público) */
+        get: operations["obtenerNombrePublico"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/publico/nombre": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Obtener nombre comercial del tenant (público) */
+        get: operations["obtenerNombrePublico_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/tenant/nombre": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Obtener nombre comercial del tenant (público) */
+        get: operations["obtenerNombrePublico_2"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/tenants/publico/nombre": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Obtener nombre comercial del tenant (público) */
+        get: operations["obtenerNombrePublico_3"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/tenant/publico/mensaje-denuncia": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Consultar mensaje HTML de cabecera de denuncia (Público)
+         * @description Consulta la configuración actual del mensaje HTML para el tenant.
+         */
+        get: operations["obtenerMensajePublico"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/publico/mensaje-denuncia": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Consultar mensaje HTML de cabecera de denuncia (Público)
+         * @description Consulta la configuración actual del mensaje HTML para el tenant.
+         */
+        get: operations["obtenerMensajePublico_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/tenants/publico/mensaje-denuncia": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Consultar mensaje HTML de cabecera de denuncia (Público)
+         * @description Consulta la configuración actual del mensaje HTML para el tenant.
+         */
+        get: operations["obtenerMensajePublico_2"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/socios/{socioReferencia}/perfil-transaccional/historial": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Historial del perfil transaccional declarado, del mas reciente al mas antiguo */
+        get: operations["historial"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/socios/{referencia}/perfil-riesgo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["obtenerPerfilRiesgo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/socios/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["buscarPorId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/socios/buscar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["buscarPorNombre"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/roles/{rolId}/permisos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar permisos de un rol
+         * @description Consulta los permisos actualmente asignados a un rol
+         */
+        get: operations["listarPermisos"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/razones-alerta": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["listarRazones"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/personas-bloqueadas/consulta-bloqueados": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Buscar coincidencias en la lista local
+         * @description Busca personas en la lista local de bloqueados por nombre, RFC, CURP y/o fecha de nacimiento; registra siempre la consulta en bitácora y, si hay coincidencias, también la coincidencia
+         */
+        get: operations["consultaBloqueados"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/permisos/recursos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar recursos
+         * @description Recursos que protegen los endpoints del sistema; son las opciones para el recurso de un permiso
+         */
+        get: operations["listarRecursos"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/evaluaciones/seguimiento/{llaveSeguimiento}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Consultar evaluación por llave de seguimiento
+         * @description Obtiene el desglose detallado de factores y nivel de riesgo asignado.
+         */
+        get: operations["consultarPorLlaveSeguimiento"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/evaluaciones/historial/{socioRef}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Historial de evaluaciones de un socio
+         * @description Todas las evaluaciones registradas para ese socio, de la más reciente a la más antigua.
+         */
+        get: operations["historialPorSocio"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/evaluacion/externo/{evaluacionId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Consultar una evaluación
+         * @description Refleja la revisión del oficial: estado actual y nivel manual si lo asignó.
+         */
+        get: operations["consultar_2"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/empleados/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Obtener empleado por ID
+         * @description Consulta un empleado del sistema externo por su identificador
+         */
+        get: operations["buscarPorId_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/empleados/buscar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Buscar empleados por nombre
+         * @description Sin el parámetro nombre lista todos los empleados; con él, devuelve las coincidencias
+         */
+        get: operations["buscarPorNombre_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/configuracion-matriz/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Obtener matriz de riesgo por ID
+         * @description Consulta la configuración de matriz por su identificador único
+         */
+        get: operations["obtenerPorId_3"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/configuracion-matriz/activa": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Obtener matriz de riesgo activa
+         * @description Obtiene la versión vigente de la matriz de riesgo utilizada en evaluaciones
+         */
+        get: operations["obtenerConfiguracionActiva"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/coincidencias/{socioRef}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Coincidencias de un socio
+         * @description Estado de la revisión de las coincidencias del socio.
+         */
+        get: operations["obtener_2"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/coincidencias/pendientes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Coincidencias pendientes de revisión
+         * @description Socios con coincidencia en lista negra o bloqueada que el oficial aún no confirma ni descarta.
+         */
+        get: operations["pendientes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/zonas-geograficas/entidades": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["listarTodasLasEntidades"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/zonas-geograficas/catalogos/entidades": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["listarTodasLasEntidades_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/tipos-alerta/buzon": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar tipos de alerta habilitados para buzón
+         * @description Obtiene exclusivamente los tipos de alerta configurados con buzon='S'
+         */
+        get: operations["listarParaBuzon"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/sucursales": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar sucursales (paginado)
+         * @description Consulta de sucursales activas paginadas
+         */
+        get: operations["listarActivas"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/razones-alerta/tipo-alerta/{tipoAlertaId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar razones de alerta por tipo de alerta
+         * @description Obtiene las razones de alerta asociadas a un ID de tipo de alerta específico para selección en formularios
+         */
+        get: operations["listarPorTipoAlerta"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/listas-paises/paises/{idPais}/listas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["obtenerListasDePais"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/listas-paises/catalogos/paises": {
+        parameters: {
+            query?: never;
+            header?: never;
+        post: operations["crear_21"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/destinos-recurso": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar destinos de recurso (paginado)
+         * @description Consulta paginada de destinos de recurso registrados
+         */
+        get: operations["listarTodos_17"];
+        put?: never;
+        /**
+         * Crear destino de recurso
+         * @description Registra un nuevo destino de recurso en el catálogo
+         */
+        post: operations["crear_22"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/canales-pago": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar canales de pago (paginado)
+         * @description Consulta paginada de canales de pago registrados
+         */
+        get: operations["listarTodos_18"];
+        put?: never;
+        /**
+         * Crear canal de pago
+         * @description Registra un nuevo canal de pago en el catálogo
+         */
+        post: operations["crear_23"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/auxiliares-geograficos/tipos-calle": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar tipos de calle
+         * @description Consulta el catálogo de tipos de calle
+         */
+        get: operations["listarTiposCalle"];
+        put?: never;
+        /**
+         * Crear tipo de calle
+         * @description Registra un nuevo tipo de calle en el catálogo
+         */
+        post: operations["crearTipoCalle"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/auxiliares-geograficos/tipos-asentamiento": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar tipos de asentamiento
+         * @description Consulta el catálogo de tipos de asentamiento (colonia, fraccionamiento, etc.)
+         */
+        get: operations["listarTiposAsentamiento_1"];
+        put?: never;
+        /**
+         * Crear tipo de asentamiento
+         * @description Registra un nuevo tipo de asentamiento en el catálogo
+         */
+        post: operations["crearTipoAsentamiento"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/actividades-economicas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar actividades económicas (paginado)
+         * @description Consulta paginada de actividades económicas registradas
+         */
+        get: operations["listarTodos_19"];
+        put?: never;
+        /**
+         * Crear actividad económica
+         * @description Registra una nueva actividad económica en el catálogo
+         */
+        post: operations["crear_24"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/buzon/denuncias": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar denuncias del buzón
+         * @description Retorna lista paginada de denuncias aplicando filtros opcionales
+         */
+        get: operations["listarDenuncias"];
+        put?: never;
+        /**
+         * Crear denuncia anónima (JSON)
+         * @description Registra una denuncia anónima sin autenticación con verificación Turnstile
+         */
+        post: operations["crearDenunciaJson_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/buzon/denuncias/{denunciaId}/observaciones": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar observaciones de una denuncia
+         * @description Retorna el historial completo de observaciones asociadas a una denuncia ordenadas por fecha de creación
+         */
+        get: operations["listarObservaciones"];
+        put?: never;
+        /**
+         * Agregar observación a una denuncia
+         * @description Registra una nueva observación en el historial de la denuncia únicamente si esta se encuentra en estado de REVISION (V). El campo verifico_ref se extrae automáticamente del token JWT activo del usuario logueado.
+         */
+        post: operations["agregarObservacion"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/buzon/denuncias/{denunciaId}/evidencias": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar evidencias de una denuncia
+         * @description Retorna la lista de evidencias asociadas a la denuncia especificada
+         */
+        get: operations["listarEvidencias"];
+        put?: never;
+        /** Adjuntar evidencia a denuncia */
+        post: operations["adjuntarEvidencia"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/buzon/denuncias/url-subida": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Generar URL prefirmada de subida a Amazon S3
+         * @description Genera una URL PUT prefirmada (válida por 15 minutos) para que el frontend suba archivos directamente a Amazon S3 sin requerir autenticación.
+         */
+        post: operations["obtenerUrlSubidaS3"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/auth/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Iniciar sesión
+         * @description Valida usuario/contraseña contra el esquema del tenant de la ruta y emite un JWT (Bearer) para el resto de los endpoints. Es la única ruta del tenant que no requiere token.
+         */
+        post: operations["login"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/alertas-manuales": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["capturarManual"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/admin/usuarios/{usuarioId}/desbloquear": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Desbloquear cuenta de usuario
+         * @description Desbloquea manualmente la cuenta de un usuario restableciendo is_locked a false, intentos_fallidos a 0 y registrando la auditoría correspondiente.
+         */
+        post: operations["desbloquear"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/usuarios/{id}/rol": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Asignar rol a un usuario
+         * @description Cambia el rol asignado a un usuario
+         */
+        patch: operations["asignarRol"];
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/usuarios/{id}/estado": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Activar o desactivar usuario
+         * @description Cambia el estado del usuario: A (activo) o B (inactivo). Un usuario inactivo no puede iniciar sesion
+         */
+        patch: operations["cambiarEstado"];
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/configuracion-alertas/{id}/estado": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["cambiarEstado_1"];
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/zonas-geograficas/{id}/estatus": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["cambiarEstatus"];
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/listas-paises/{id}/estatus": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["cambiarEstatus_1"];
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/buzon/denuncias/{id}/estatus": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Cambiar estatus de denuncia
+         * @description Gestiona las transiciones del ciclo de vida (R->V, V->A, V->D) y dispara creación de alerta en A
+         */
+        patch: operations["cambiarEstatus_2"];
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/alertas/{id}/dictamen": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["dictaminar"];
+        trace?: never;
+    };
+    "/auth/public-key": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Obtener clave pública en formato PEM
+         * @description Retorna la clave pública RSA en formato PEM (X.509) para clientes externos
+         */
+        get: operations["getPublicKeyPem"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/jwks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Obtener JWKS
+         * @description Ruta alternativa para obtener las claves públicas en formato JWKS
+         */
+        get: operations["getJwks"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/v1/socios/{socioRef}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Consultar un socio
+         * @description Identidad, estatus y última evaluación de riesgo del socio.
+         */
+        get: operations["obtener"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/v1/integrations/requests/{requestId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Consultar el estado de una solicitud
+         * @description Solo las del propio sistema.
+         */
+        get: operations["consultar_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/v1/health": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Disponibilidad de la API de integración */
+        get: operations["health"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/tipos-alerta": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["listarTipos"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/tipo-cambio/vigente": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["vigente"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/tipo-cambio/convertir": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["convertir"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/tenant/publico/nombre": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Obtener nombre comercial del tenant (público) */
+        get: operations["obtenerNombrePublico"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/publico/nombre": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Obtener nombre comercial del tenant (público) */
+        get: operations["obtenerNombrePublico_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/tenant/nombre": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Obtener nombre comercial del tenant (público) */
+        get: operations["obtenerNombrePublico_2"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/tenants/publico/nombre": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Obtener nombre comercial del tenant (público) */
+        get: operations["obtenerNombrePublico_3"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/tenant/publico/mensaje-denuncia": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Consultar mensaje HTML de cabecera de denuncia (Público)
+         * @description Consulta la configuración actual del mensaje HTML para el tenant.
+         */
+        get: operations["obtenerMensajePublico"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/publico/mensaje-denuncia": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Consultar mensaje HTML de cabecera de denuncia (Público)
+         * @description Consulta la configuración actual del mensaje HTML para el tenant.
+         */
+        get: operations["obtenerMensajePublico_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/tenants/publico/mensaje-denuncia": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Consultar mensaje HTML de cabecera de denuncia (Público)
+         * @description Consulta la configuración actual del mensaje HTML para el tenant.
+         */
+        get: operations["obtenerMensajePublico_2"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/socios/{socioReferencia}/perfil-transaccional/historial": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Historial del perfil transaccional declarado, del mas reciente al mas antiguo */
+        get: operations["historial"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/socios/{referencia}/perfil-riesgo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["obtenerPerfilRiesgo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/socios/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["buscarPorId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/socios/buscar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["buscarPorNombre"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/roles/{rolId}/permisos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar permisos de un rol
+         * @description Consulta los permisos actualmente asignados a un rol
+         */
+        get: operations["listarPermisos"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/razones-alerta": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["listarRazones"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/personas-bloqueadas/consulta-bloqueados": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Buscar coincidencias en la lista local
+         * @description Busca personas en la lista local de bloqueados por nombre, RFC, CURP y/o fecha de nacimiento; registra siempre la consulta en bitácora y, si hay coincidencias, también la coincidencia
+         */
+        get: operations["consultaBloqueados"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/permisos/recursos": {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar recursos
+         * @description Recursos que protegen los endpoints del sistema; son las opci
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar recursos
+         * @description Recursos que protegen los endpoints del sistema; son las opciones para el recurso de un permiso
+         */
+        get: operations["listarRecursos"];
+        put?: never;        head?: never;
+
+        post?: never;
+
+        head?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/listas-paises/catalogos/paises": {
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/listas-paises/catalogos/paises": {
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/listas-paises/catalogos/paises": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["listarTodosLosPaisesConListas"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/listas-paises/paises": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["listarTodosLosPaisesConListas_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/identidad/tipos-vialidad": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["listarTodosLosPaisesConListas"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/listas-paises/paises": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["listarTodosLosPaisesConListas_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/identidad/tipos-vialidad": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar tipos de vialidad
+         * @description Catálogo de tipos de vialidad para el domicilio de usuarios
+         */
+        get: operations["listarTiposVialidad"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/identidad/tipos-identificacion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar tipos de identificación
+         * @description Catálogo de tipos de identificación oficial para el alta de usuarios
+         */
+        get: operations["listarTiposIdentificacion"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/identidad/tipos-comprobante": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar tipos de comprobante
+         * @description Catálogo de tipos de comprobante de domicilio para el alta de usuarios
+         */
+        get: operations["listarTiposComprobante"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/identidad/tipos-asentamiento": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar tipos de asentamiento
+         * @description Catálogo de tipos de asentamiento para el domicilio de usuarios
+         */
+        get: operations["listarTiposAsentamiento"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/identidad/posesiones-vivienda": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar posesiones de vivienda
+         * @description Catálogo del tipo de posesión de la vivienda (propia, rentada, etc.) para el domicilio de usuarios
+         */
+        get: operations["listarPosesionesVivienda"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/identidad/niveles-estudios": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar niveles de estudios
+         * @description Catálogo de niveles de estudios para el alta de usuarios
+         */
+        get: operations["listarNivelesEstudios"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/identidad/nacionalidades": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar nacionalidades
+         * @description Catálogo de nacionalidades para el alta de usuarios
+         */
+        get: operations["listarNacionalidades"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/catalogos/identidad/estados-civiles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar estados civiles
+         * @description Catálogo de estados civiles para el alta de usuarios
+         */
+        get: operations["listarEstadosCiviles"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/buzon/evidencias/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Obtener evidencia por ID
+         * @description Lee el archivo de evidencia del disco y lo responde con Content-Type y Content-Disposition para visualización inline o descarga.
+         */
+        get: operations["verEvidenciaPorId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/buzon/alertas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar alertas generadas
+         * @description Retorna el listado paginado de las alertas (pld_alerta) generadas a partir de una denuncia
+         */
+        get: operations["listarAlertas"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/buzon/alertas/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Obtener detalle de alerta
+         * @description Retorna una alerta generada a partir de una denuncia
+         */
+        get: operations["verAlertaPorId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/alertas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["listar_5"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/alertas/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["obtenerPorId_27"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/alertas/{id}/expediente": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["expediente"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/alertas-autorizacion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Revision de Alertas de Autorizacion
+         * @description Filtra por fecha de autorizacion (inclusive) y estatus. Sin estatus devuelve todos.
+         */
+        get: operations["listar_6"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/alertas-autorizacion/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Detalle de una alerta de autorizacion, con la CURP del acreditado */
+        get: operations["detalle"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/admin/usuarios/bloqueados": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar usuarios bloqueados
+         * @description Retorna el listado de usuarios que han sido bloqueados permanentemente tras superar los 3 intentos fallidos de autenticación.
+         */
+        get: operations["listarBloqueados"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/.well-known/jwks.json": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Obtener JWKS (JSON Web Key Set)
+         * @description Expone el conjunto de claves públicas para validación de tokens RS256 por clientes externos según RFC 7517
+         */
+        get: operations["getJwksWellKnown"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/SICANETSC/PLD/{tenantId}/usuarios/{id}/excepciones-permiso/{idExcepcion}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Eliminar excepción de permiso
+         * @description Elimina una excepción de permiso de un usuario
+         */
+        delete: operations["eliminarExcepcionPermiso"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        ActualizarMensajeDenunciaRequest: {
-            html: string;
-        };
-        MensajeDenunciaResponse: {
-            sofomId?: string;
-            contenidoHtml?: string;
-            actualizadoPor?: string;
-            /** Format: date-time */
-            actualizadoEn?: string;
-        };
         ActualizarUsuarioRequest: {
             nombre: string;
             primerApellido?: string;
@@ -4113,7 +7423,7 @@ export interface components {
             monedaDeOperacionPrincipal?: string;
             actividadEconomicaId?: string;
             /** @enum {string} */
-            estatus?: "A" | "B" | "I";
+            estatus?: "A" | "B" | "I";so
             /** Format: date-time */
             createdAt?: string;
             /** Format: date-time */
@@ -4172,6 +7482,16 @@ export interface components {
             createdAt?: string;
             /** Format: date-time */
             updatedAt?: string;
+        };
+        ActualizarMensajeDenunciaRequest: {
+            html: string;
+        };
+        MensajeDenunciaResponse: {
+            sofomId?: string;
+            contenidoHtml?: string;
+            actualizadoPor?: string;
+            /** Format: date-time */
+            actualizadoEn?: string;
         };
         ActualizarRolRequest: {
             nombre: string;
@@ -4259,22 +7579,6 @@ export interface components {
              */
             observaciones: string;
         };
-        ProblemDetailsResponse: {
-            type?: string;
-            title?: string;
-            /** Format: int32 */
-            status?: number;
-            detail?: string;
-            instance?: string;
-            /** Format: date-time */
-            timestamp?: string;
-            invalidParams?: {
-                [key: string]: string;
-            };
-            coincidencias?: {
-                [key: string]: string;
-            }[];
-        };
         DesglosePuntuacion: {
             factores?: components["schemas"]["PuntajeFactor"][];
         };
@@ -4319,6 +7623,22 @@ export interface components {
             valor?: number;
             ponderacion?: number;
             puntaje?: number;
+        };
+        ProblemDetailsResponse: {
+            type?: string;
+            title?: string;
+            /** Format: int32 */
+            status?: number;
+            detail?: string;
+            instance?: string;
+            /** Format: date-time */
+            timestamp?: string;
+            invalidParams?: {
+                [key: string]: string;
+            };
+            coincidencias?: {
+                [key: string]: string;
+            }[];
         };
         ConfiguracionAlertaRequest: {
             alertaAcronimo: string;
@@ -4604,7 +7924,6 @@ export interface components {
             updatedAt?: string;
         };
         ActualizarCatTipoCreditoRequest: {
-            nombre?: string;
             /** Format: int64 */
             catNivelRiesgoId?: number;
             /** Format: int64 */
@@ -4614,7 +7933,6 @@ export interface components {
         CatTipoCreditoResponse: {
             /** Format: int64 */
             id?: number;
-            nombre?: string;
             /** Format: int64 */
             catNivelRiesgoId?: number;
             /** Format: int64 */
@@ -5774,6 +9092,12 @@ export interface components {
             ebr_soluciones?: string;
             forma_pago?: components["schemas"]["FormaPagoDto"];
         };
+        DataDto: {
+            socio?: components["schemas"]["SocioDto"];
+            domicilio?: components["schemas"]["DomicilioWrapperDto"];
+            credito?: components["schemas"]["CreditoDto"];
+            historial_crediticio?: components["schemas"]["HistorialCrediticioDto"];
+        };
         DireccionDto: {
             calle?: string;
             tipo_calle?: string;
@@ -5793,8 +9117,9 @@ export interface components {
             metadata: components["schemas"]["MetadataDto"];
             acreditado: components["schemas"]["acreditadoDto"];
             domicilio?: components["schemas"]["DomicilioWrapperDto"];
-            credito: components["schemas"]["CreditoDto"];
+            credito?: components["schemas"]["CreditoDto"];
             historial_crediticio?: components["schemas"]["HistorialCrediticioDto"];
+            data?: components["schemas"]["DataDto"];
         };
         FormaPagoDto: {
             /** Format: int64 */
@@ -5958,7 +9283,6 @@ export interface components {
         CrearCatTipoCreditoRequest: {
             /** Format: int64 */
             id?: number;
-            nombre: string;
             /** Format: int64 */
             catNivelRiesgoId: number;
             /** Format: int64 */
@@ -6470,9 +9794,6 @@ export interface components {
             estatus: "PENDIENTE" | "CONFIRMADA" | "RECHAZADA" | "REPORTADA";
             justificacion: string;
         };
-        TenantNombrePublicoResponse: {
-            nombreComercial?: string;
-        };
         Catalogo: {
             /** Format: int64 */
             id?: number;
@@ -6563,6 +9884,9 @@ export interface components {
             convertido?: number;
             monedaDestino?: string;
             tipoCambio?: components["schemas"]["TipoCambioResponse"];
+        };
+        TenantNombrePublicoResponse: {
+            nombreComercial?: string;
         };
         ActividadEconomicaInfo: {
             id?: string;
@@ -6668,6 +9992,29 @@ export interface components {
             alias?: components["schemas"]["PersonaBloqueadaResponse"][];
             coincidenciaViaAlias?: boolean;
             aliasCoincidentes?: string[];
+        };
+        Coincidencias: {
+            lista_negra?: boolean;
+            lista_pep?: boolean;
+            lista_bloqueada?: boolean;
+        };
+        EvaluacionIntegracionResponse: {
+            /** Format: int64 */
+            evaluacion_id?: number;
+            socio_ref?: string;
+            estado?: string;
+            resultado?: components["schemas"]["Resultado"];
+            coincidencias?: components["schemas"]["Coincidencias"];
+            motivo?: string;
+            advertencias?: string[];
+            /** Format: date-time */
+            fecha_evaluacion?: string;
+        };
+        Resultado: {
+            nivel_riesgo?: string;
+            puntuacion?: number;
+            nivel_riesgo_manual?: string;
+            provisional?: boolean;
         };
         EmpleadoInfo: {
             id?: string;
@@ -7069,8 +10416,8 @@ export interface components {
             /** Format: int64 */
             offset?: number;
             sort?: components["schemas"]["SortObject"];
-            unpaged?: boolean;
             paged?: boolean;
+            unpaged?: boolean;
         };
         SortObject: {
             sorted?: boolean;
@@ -7175,94 +10522,6 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    obtenerMensajeAdmin: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["MensajeDenunciaResponse"];
-                };
-            };
-        };
-    };
-    actualizarMensajeAdmin: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ActualizarMensajeDenunciaRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["MensajeDenunciaResponse"];
-                };
-            };
-        };
-    };
-    obtenerMensajeAdmin_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["MensajeDenunciaResponse"];
-                };
-            };
-        };
-    };
-    actualizarMensajeAdmin_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ActualizarMensajeDenunciaRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["MensajeDenunciaResponse"];
-                };
-            };
-        };
-    };
     obtenerPorId: {
         parameters: {
             query?: never;
@@ -7521,6 +10780,150 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["DomicilioUsuarioResponse"];
+                };
+            };
+        };
+    };
+    obtenerMensajeAdmin: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MensajeDenunciaResponse"];
+                };
+            };
+        };
+    };
+    actualizarMensajeAdmin: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ActualizarMensajeDenunciaRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MensajeDenunciaResponse"];
+                };
+            };
+        };
+    };
+    obtenerMensajeAdmin_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MensajeDenunciaResponse"];
+                };
+            };
+        };
+    };
+    actualizarMensajeAdmin_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ActualizarMensajeDenunciaRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MensajeDenunciaResponse"];
+                };
+            };
+        };
+    };
+    obtenerMensajeAdmin_2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MensajeDenunciaResponse"];
+                };
+            };
+        };
+    };
+    actualizarMensajeAdmin_2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ActualizarMensajeDenunciaRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MensajeDenunciaResponse"];
                 };
             };
         };
@@ -10693,6 +14096,70 @@ export interface operations {
         parameters: {
             query?: never;
             header?: never;
+            path: {
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AprovisionarTenantResponse"];
+                };
+            };
+        };
+    };
+    reAprovisionarEsquema_2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AprovisionarTenantResponse"];
+                };
+            };
+        };
+    };
+    reAprovisionarEsquema_3: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AprovisionarTenantResponse"];
+                };
+            };
+        };
+    };
+    reAprovisionarEsquema_4: {
+        parameters: {
+            query?: never;
+            header?: never;
             path?: never;
             cookie?: never;
         };
@@ -10737,6 +14204,33 @@ export interface operations {
         parameters: {
             query?: never;
             header?: never;
+            path: {
+                /** @description Identificador del Tenant */
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CrearTenantRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TenantResponse"];
+                };
+            };
+        };
+    };
+    crearTenant_2: {
+        parameters: {
+            query?: never;
+            header?: never;
             path?: never;
             cookie?: never;
         };
@@ -10758,6 +14252,34 @@ export interface operations {
         };
     };
     recibiracreditado: {
+    crearTenant_3: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Identificador del Tenant */
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CrearTenantRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TenantResponse"];
+                };
+            };
+        };
+    };
+    recibirSocio: {
         parameters: {
             query?: never;
             header: {
@@ -10783,36 +14305,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Aceptada"];
-                };
-            };
-        };
-    };
-    evaluar: {
-        parameters: {
-            query?: never;
-            header: {
-                /** @description Clave única por evaluación */
-                "Idempotency-Key": string;
-            };
-            path: {
-                /** @description Identificador del Tenant */
-                tenantId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["JsonNode"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
                 };
             };
         };
@@ -11301,7 +14793,7 @@ export interface operations {
             };
         };
     };
-    evaluar_1: {
+    evaluar: {
         parameters: {
             query?: never;
             header?: never;
@@ -11378,6 +14870,36 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ProblemDetailsResponse"];
+                };
+            };
+        };
+    };
+    evaluar_1: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Clave única por evaluación */
+                "Idempotency-Key"?: string;
+            };
+            path: {
+                /** @description Identificador del Tenant */
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["JsonNode"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
                 };
             };
         };
@@ -11708,8 +15230,6 @@ export interface operations {
     listarTodos_2: {
         parameters: {
             query?: {
-                /** @description Búsqueda por nombre o descripción */
-                busqueda?: string;
                 /** @description Criterio de filtrado */
                 filtrarPor?: string;
                 /** @description Página (base 0) */
@@ -13832,66 +17352,6 @@ export interface operations {
             };
         };
     };
-    obtenerMensajePublico: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["MensajeDenunciaResponse"];
-                };
-            };
-        };
-    };
-    obtenerMensajePublico_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["MensajeDenunciaResponse"];
-                };
-            };
-        };
-    };
-    obtenerNombrePublico: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["TenantNombrePublicoResponse"];
-                };
-            };
-        };
-    };
     getPublicKeyPem: {
         parameters: {
             query?: never;
@@ -14007,30 +17467,6 @@ export interface operations {
             };
         };
     };
-    consultar_2: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                evaluacionId: number;
-                /** @description Identificador del Tenant */
-                tenantId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EvaluacionIntegracionResponse"];
-                };
-            };
-        };
-    };
     listarTipos: {
         parameters: {
             query?: {
@@ -14104,6 +17540,160 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ConversionResponse"];
+                };
+            };
+        };
+    };
+    obtenerNombrePublico: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TenantNombrePublicoResponse"];
+                };
+            };
+        };
+    };
+    obtenerNombrePublico_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TenantNombrePublicoResponse"];
+                };
+            };
+        };
+    };
+    obtenerNombrePublico_2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TenantNombrePublicoResponse"];
+                };
+            };
+        };
+    };
+    obtenerNombrePublico_3: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TenantNombrePublicoResponse"];
+                };
+            };
+        };
+    };
+    obtenerMensajePublico: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MensajeDenunciaResponse"];
+                };
+            };
+        };
+    };
+    obtenerMensajePublico_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MensajeDenunciaResponse"];
+                };
+            };
+        };
+    };
+    obtenerMensajePublico_2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MensajeDenunciaResponse"];
                 };
             };
         };
@@ -14370,6 +17960,30 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["EvaluacionRiesgoResponseDto"][];
+                };
+            };
+        };
+    };
+    consultar_2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                evaluacionId: number;
+                /** @description Identificador del Tenant */
+                tenantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EvaluacionIntegracionResponse"];
                 };
             };
         };
@@ -15176,4 +18790,5 @@ export interface operations {
             };
         };
     };
+}
 }
