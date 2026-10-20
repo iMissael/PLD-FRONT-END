@@ -3,7 +3,7 @@ import { SlidersHorizontal } from "lucide-react";
 
 import { useTiposAlerta } from "@/features/alertas/hooks/useAlertas";
 import type {
-  EstatusAlerta,
+  EstatusAlertaRevision,
   FiltroAlertas,
   OrigenAlerta,
   TipoAlerta,
@@ -16,16 +16,17 @@ import { field, hint, label } from "@/shared/styles/tokens";
 
 import { formatearFecha } from "../utils/formato";
 
-const ESTATUS: { valor: EstatusAlerta; etiqueta: string }[] = [
+const ESTATUS: { valor: EstatusAlertaRevision; etiqueta: string }[] = [
   { valor: "PENDIENTE", etiqueta: "Pendientes" },
   { valor: "CONFIRMADA", etiqueta: "Confirmadas" },
   { valor: "RECHAZADA", etiqueta: "Rechazadas" },
   { valor: "REPORTADA", etiqueta: "Reportadas" },
+  { valor: "VENCIDA", etiqueta: "Vencidas" },
 ];
 const TODOS_LOS_ESTATUS = ESTATUS.map((e) => e.valor);
 
-/** Tipo -> estatus marcados. Un tipo marcado completo tiene los 4. */
-type Seleccion = Record<string, EstatusAlerta[]>;
+/** Tipo -> estatus marcados. Un tipo marcado completo los tiene todos. */
+type Seleccion = Record<string, EstatusAlertaRevision[]>;
 
 interface FiltrosAlertasProps {
   inicial: FiltroAlertas;
@@ -57,7 +58,7 @@ function seleccionDe(filtro: FiltroAlertas): Seleccion {
 function tiposEstatusDe(seleccion: Seleccion): FiltroAlertas["tiposEstatus"] {
   const entradas = Object.entries(seleccion)
     .filter(([, estatus]) => estatus.length > 0)
-    .map(([tipo, estatus]): [string, EstatusAlerta[]] => [
+    .map(([tipo, estatus]): [string, EstatusAlertaRevision[]] => [
       tipo,
       estatus.length === TODOS_LOS_ESTATUS.length ? [] : estatus,
     ]);
@@ -158,7 +159,7 @@ export function FiltrosAlertas({ inicial, onAplicar }: FiltrosAlertasProps) {
       [tipo]: tipoCompleto(tipo) ? [] : TODOS_LOS_ESTATUS,
     }));
 
-  const alternarEstatus = (tipo: string, estatus: EstatusAlerta) =>
+  const alternarEstatus = (tipo: string, estatus: EstatusAlertaRevision) =>
     setSeleccion((prev) => {
       const actuales = prev[tipo] ?? [];
       return {

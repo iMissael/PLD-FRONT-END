@@ -1,19 +1,22 @@
 import {
   ETIQUETA_ESTATUS,
+  estatusDe,
   type Alerta,
-  type EstatusAlerta,
+  type EstatusAlertaRevision,
 } from "@/features/alertas/types/alertas";
 import { StatusBadge as Badge } from "@/shared/components/atoms/StatusBadge";
 import { emptyState, table } from "@/shared/styles/tokens";
 import { TablePagination } from "@/shared/components/molecules/TablePagination";
 
 import { formatearFecha } from "../utils/formato";
+import { PlazoDictamen } from "./PlazoDictamen";
 
-const TONO: Record<EstatusAlerta, "activo" | "inactivo" | "neutro"> = {
+const TONO: Record<EstatusAlertaRevision, "activo" | "inactivo" | "neutro"> = {
   PENDIENTE: "neutro",
   CONFIRMADA: "activo",
   RECHAZADA: "inactivo",
   REPORTADA: "activo",
+  VENCIDA: "inactivo",
 };
 
 interface AlertasTableProps {
@@ -57,6 +60,7 @@ export function AlertasTable({
               <th className={table.headCell}>Reportado</th>
               <th className={table.headCell}>Origen</th>
               <th className={table.headCell}>Estatus</th>
+              <th className={table.headCell}>Vence</th>
             </tr>
           </thead>
           <tbody className={table.body}>
@@ -77,9 +81,12 @@ export function AlertasTable({
                   {alerta.origen === "AUTOMATICA" ? "Automática" : "Manual"}
                 </td>
                 <td className={table.cell}>
-                  <Badge tono={TONO[alerta.estatus]}>
-                    {ETIQUETA_ESTATUS[alerta.estatus]}
+                  <Badge tono={TONO[estatusDe(alerta)]}>
+                    {ETIQUETA_ESTATUS[estatusDe(alerta)]}
                   </Badge>
+                </td>
+                <td className={table.cell}>
+                  <PlazoDictamen alerta={alerta} />
                 </td>
               </tr>
             ))}
