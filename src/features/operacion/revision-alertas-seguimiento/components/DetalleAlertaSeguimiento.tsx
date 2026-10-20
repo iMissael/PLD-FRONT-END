@@ -47,6 +47,9 @@ export function DetalleAlertaSeguimiento({ alerta }: DetalleAlertaSeguimientoPro
   const reportado = alerta.reportado;
   const esSocio = reportado?.tipoReportado === "SOCIO";
   const curp = esSocio ? (cargandoExpediente ? "…" : (expediente?.evaluado?.curp ?? SIN_INFORMACION)) : SIN_INFORMACION;
+  // RFC vigente del socio (consulta en vivo) si ya cargó; mientras tanto, o si no hay socio
+  // (empleado) o no se encontró, se muestra el RFC capturado en la alerta.
+  const rfc = expediente?.evaluado?.rfc ?? reportado?.rfc;
 
   return (
     <Card className="flex flex-col gap-5 p-4">
@@ -68,7 +71,7 @@ export function DetalleAlertaSeguimiento({ alerta }: DetalleAlertaSeguimientoPro
             <Dato titulo="Nombre de cliente">{reportado?.nombre}</Dato>
           </div>
           <Dato titulo="CURP">{curp}</Dato>
-          <Dato titulo="RFC">{reportado?.rfc}</Dato>
+          <Dato titulo="RFC">{rfc}</Dato>
           <Dato titulo="Teléfonos">{SIN_INFORMACION}</Dato>
         </dl>
       </Seccion>
