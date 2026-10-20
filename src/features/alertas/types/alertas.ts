@@ -9,6 +9,12 @@
 /** Las CANCELADAS (botón rojo) no llegan al front: el backend no las lista. */
 export type EstatusAlerta = "PENDIENTE" | "CONFIRMADA" | "RECHAZADA" | "REPORTADA";
 
+/**
+ * Estatus que se ven en "Revisión de alertas": además, VENCIDA (pendiente que pasó su plazo
+ * de dictamen). Va aparte de EstatusAlerta para no tocar el buzón, que lo usa como llave.
+ */
+export type EstatusAlertaRevision = EstatusAlerta | "VENCIDA";
+
 /** MANUAL = capturada por un usuario; AUTOMATICA = la generó una operación de cajas. */
 export type OrigenAlerta = "MANUAL" | "AUTOMATICA";
 
@@ -86,6 +92,10 @@ export interface Alerta {
   /** El tipo se reporta a la CNBV (I, I24, IP, R): al confirmarla queda reportada. */
   seReporta: boolean;
   updatedAt: string;
+  /** Último día para dictaminar (fecha de la alerta + plazo del tipo); null si el tipo no tiene plazo. */
+  fechaLimiteDictamen: string | null;
+  /** Días naturales que quedan (0 = vence hoy); solo en pendientes con plazo. */
+  diasRestantes: number | null;
 }
 
 /** Los 4 recuadros del dictamen de Sicanet, en el orden de la pantalla. */
@@ -171,7 +181,7 @@ export interface FiltroAlertas {
    * Acrónimo del tipo -> estatus a ver de ese tipo; lista vacía = todos sus estatus.
    * Se combinan con "o" (Inusual pendientes o Relevante confirmadas). Sin tipos = todos.
    */
-  tiposEstatus?: Record<string, EstatusAlerta[]>;
+  tiposEstatus?: Record<string, EstatusAlertaRevision[]>;
 }
 
 export interface PaginaAlertas {
@@ -215,9 +225,15 @@ export interface EmpleadoExterno {
   sucursal?: string;
 }
 
-export const ETIQUETA_ESTATUS: Record<EstatusAlerta, string> = {
+export const ETIQUETA_ESTATUS: Record<EstatusAlertaRevision, string> = {
   PENDIENTE: "Pendiente",
   CONFIRMADA: "Confirmada",
   RECHAZADA: "Rechazada",
   REPORTADA: "Reportada",
+  VENCIDA: "Vencida",
 };
+
+/** El backend puede mandar VENCIDA aunque Alerta.estatus se tipe con EstatusAlerta. */
+export function estatusDe(alerta: Pick<Alerta, "estatus">): EstatusAlertaRevision {
+  return alerta.estatus as EstatusAlertaRevision;
+}

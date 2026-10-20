@@ -6,7 +6,7 @@ import type {
   CrearAlertaManualInput,
   DictamenInput,
   EmpleadoExterno,
-  EstatusAlerta,
+  EstatusAlertaRevision,
   ExpedienteAlerta,
   FiltroAlertas,
   PaginaAlertas,
@@ -19,7 +19,7 @@ import type {
  * { I: ["PENDIENTE"], R: [] } -> "I:PENDIENTE,R". Va separado por comas porque axios
  * manda los arreglos como `tipoEstatus[]=`, que Spring no reconoce.
  */
-function tipoEstatusParam(tiposEstatus: Record<string, EstatusAlerta[]>): string {
+function tipoEstatusParam(tiposEstatus: Record<string, EstatusAlertaRevision[]>): string {
   return Object.entries(tiposEstatus)
     .flatMap(([tipo, estatus]) =>
       estatus.length === 0 ? [tipo] : estatus.map((e) => `${tipo}:${e}`),
