@@ -12,7 +12,7 @@ export type EstatusAlerta = "PENDIENTE" | "CONFIRMADA" | "RECHAZADA" | "REPORTAD
 /** MANUAL = capturada por un usuario; AUTOMATICA = la generó una operación de cajas. */
 export type OrigenAlerta = "MANUAL" | "AUTOMATICA";
 
-/** A quién se reporta: cliente (socio) o empleado. */
+/** A quién se reporta: cliente (acreditado) o empleado. */
 export type TipoReportado = "SOCIO" | "EMPLEADO";
 
 /** `CatalogoAlertaResponses.TipoAlertaResponse`. */
@@ -106,7 +106,7 @@ export interface ExpedienteAlerta {
     referencia: string;
     nombre: string;
     rfc: string | null;
-    /** Solo clientes; se consulta en vivo al servicio de socios. */
+    /** Solo clientes; se consulta en vivo al servicio de acreditados. */
     curp: string | null;
     domicilio: string | null;
     puesto: string | null;
@@ -125,7 +125,7 @@ export interface ExpedienteAlerta {
 
 export interface PerfilTransaccional {
   id: number;
-  socioReferencia: string;
+  acreditadoReferencia: string;
   fechaRegistro: string;
   disponibilidad: number;
   moneda: string;

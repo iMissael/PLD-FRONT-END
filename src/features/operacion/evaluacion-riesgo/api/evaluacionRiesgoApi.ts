@@ -29,10 +29,10 @@ export async function modificarNivelRiesgo(
   return data;
 }
 
-/** Todas las evaluaciones de un socio, de la más reciente a la más antigua. */
-export async function listarHistorialEvaluaciones(socioRef: string) {
+/** Todas las evaluaciones de un acreditado, de la más reciente a la más antigua. */
+export async function listarHistorialEvaluaciones(acreditadoRef: string) {
   const { data } = await apiClient.get<EvaluacionRiesgoResultado[]>(
-    `/evaluaciones/historial/${socioRef}`,
+    `/evaluaciones/historial/${acreditadoRef}`,
   );
   return data;
 }

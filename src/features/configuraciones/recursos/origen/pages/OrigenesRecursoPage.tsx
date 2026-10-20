@@ -84,7 +84,7 @@ export function OrigenesRecursoPage() {
         <div>
           <h2 className="text-xl font-semibold text-foreground">Origen de recursos</h2>
           <p className="text-sm text-muted-foreground">
-            Procedencia de los recursos del socio y el nivel de riesgo PLD asociado.
+            Procedencia de los recursos del acreditado y el nivel de riesgo PLD asociado.
           </p>
         </div>
         <Button

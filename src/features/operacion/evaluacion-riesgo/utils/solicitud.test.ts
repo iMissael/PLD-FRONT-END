@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { SocioPerfilRiesgo } from "@/features/socios/types/socios";
+import type { AcreditadoPerfilRiesgo } from "@/features/acreditados/types/acreditados";
 import {
   construirCliente,
   construirSolicitud,
@@ -7,7 +7,7 @@ import {
   valoresDesdePerfil,
 } from "@/features/operacion/evaluacion-riesgo/utils/solicitud";
 
-const perfilCompleto: SocioPerfilRiesgo = {
+const perfilCompleto: AcreditadoPerfilRiesgo = {
   referencia: "CLI-001",
   nombre: "LUCÍA MARTÍNEZ HERRERA",
   nombres: "LUCÍA",
@@ -19,7 +19,7 @@ const perfilCompleto: SocioPerfilRiesgo = {
   esPep: false,
   tipoPersona: { id: 1, nombre: "Persona Física Nacional" },
   nacionalidad: { id: 165, nombre: "México" },
-  actividadEconomica: { id: "10", descripcion: "CULTIVO DE SOYA" },
+  actividadEconomica: { id: 10, descripcion: "CULTIVO DE SOYA" },
   sucursal: "SUC-001",
   domicilio: {
     paisId: "165",
@@ -28,8 +28,8 @@ const perfilCompleto: SocioPerfilRiesgo = {
     localidadId: "105249",
     calle: "INSURGENTES SUR",
     tipoCalle: "AVENIDA",
-    noExterior: 1234,
-    noInterior: 5,
+    noExterior: "1234",
+    noInterior: "5",
     codigoPostal: "03100",
     tipoAsentamiento: "Colonia",
     nombreAsentamiento: "DEL VALLE CENTRO",
@@ -38,17 +38,17 @@ const perfilCompleto: SocioPerfilRiesgo = {
   pepNacionalId: undefined,
   creditoSolicitado: {
     referencia: "CRED-001",
-    tipo: "1",
+    tipo: 1,
     monto: 50000,
-    origenRecursos: "2",
-    destinoRecursos: "3",
+    origenRecursos: 2,
+    destinoRecursos: 3,
     canalPagoId: 4,
     estatus: "APROBADO",
   },
   historialCrediticio: [
     {
       referencia: "HIST-001-1",
-      tipo: "1",
+      tipo: 1,
       monto: 15000,
       fechaOtorgamiento: "2023-02-10",
       estatus: "PAGADO",
@@ -62,8 +62,8 @@ describe("valoresDesdePerfil", () => {
   it("pasa el perfil completo a los campos del formulario", () => {
     const valores = valoresDesdePerfil(perfilCompleto);
     expect(valores).toMatchObject({
-      socioReferencia: "CLI-001",
-      socioNombres: "LUCÍA",
+      acreditadoReferencia: "CLI-001",
+      acreditadoNombres: "LUCÍA",
       tipoPersonaId: "1",
       nacionalidadId: "165",
       fechaNacimiento: "1990-05-14",
@@ -93,7 +93,7 @@ describe("valoresDesdePerfil", () => {
   });
 
   it("deja vacío lo que el perfil no trae", () => {
-    const valores = valoresDesdePerfil({ referencia: "EXT-1", nombre: "Socio externo" });
+    const valores = valoresDesdePerfil({ referencia: "EXT-1", nombre: "Acreditado externo" });
     expect(valores.antiguedadGiroAnios).toBe("");
     expect(valores.creditoTipo).toBe("");
     expect(valores.localidadId).toBe("");
@@ -106,11 +106,11 @@ describe("datosFaltantes", () => {
     expect(datosFaltantes(valoresDesdePerfil(perfilCompleto))).toEqual([]);
   });
 
-  it("nombra lo que falta cuando solo hay identidad (socio del sistema externo)", () => {
+  it("nombra lo que falta cuando solo hay identidad (acreditado del sistema externo)", () => {
     const faltantes = datosFaltantes(
       valoresDesdePerfil({
         referencia: "CLI-CORP-001",
-        nombre: "Socio Alpha",
+        nombre: "Acreditado Alpha",
         rfc: "CALP850101XYZ",
       }),
     );
@@ -157,27 +157,25 @@ describe("construirSolicitud", () => {
   );
 
   it("lleva el contexto del usuario y la sucursal", () => {
-    expect(solicitud.metadata).toEqual({
-      fecha_solicitud: "2026-09-26T10:00:00.000Z",
+    expect(solicitud.meta).toEqual({
+      timestamp: "2026-09-26T10:00:00.000Z",
       sucursal_id: "SUC-001",
-      usuario_verficador_ref: "uuid-admin",
+      usuario_verificador_ref: "uuid-admin",
     });
   });
 
-  it("arma el socio con su identidad, actividad y antigüedad", () => {
-    expect(solicitud.socio).toEqual({
-      referencia: "CLI-001",
+  it("arma el acreditado con su identidad y actividad", () => {
+    expect(solicitud.acreditado).toEqual({
+      acreditado_ref: "CLI-001",
       nombre: "LUCÍA",
       apellido_p: "MARTÍNEZ",
       apellido_m: "HERRERA",
       rfc: "MAHL9005147K2",
       curp: "MAHL900514MDFRRC05",
-      tipo_persona_id: "1",
-      nacionalidad_id: "165",
+      tipo_acreditado_id: 1,
+      nacionalidad_id: 165,
       fecha_nacimiento: "1990-05-14",
-      antiguedad_giro_anios: "6",
-      pep_nacional_id: undefined,
-      actividad_economica_id: "10",
+      actividad_economica_id: 10,
     });
   });
 
@@ -186,34 +184,31 @@ describe("construirSolicitud", () => {
     expect(solicitud.domicilio?.direccion).toMatchObject({
       calle: "INSURGENTES SUR",
       tipo_calle: "AVENIDA",
-      no_exterior: 1234,
-      no_interior: 5,
+      no_exterior: "1234",
+      no_interior: "5",
       codigo_postal: "03100",
-      asentamiento: { tipo: "Colonia", nombre: "DEL VALLE CENTRO" },
+      tipo: "Colonia",
+      nombre: "DEL VALLE CENTRO",
     });
   });
 
-  it("manda el crédito solicitado con números y la moneda por defecto", () => {
+  it("manda el crédito solicitado con los catálogos como número", () => {
     expect(solicitud.credito).toEqual({
-      referencia: "CRED-001",
-      tipo: "1",
+      credito_ref: "CRED-001",
+      tipo_id: 1,
       monto: 50000,
-      moneda: "MXN",
-      origen_recursos: "2",
-      destino_recursos: "3",
+      origen_recursos: 2,
+      destino_recursos: 3,
       canal_pago_id: 4,
-      forma_pago_id: undefined,
-      ebr_soluciones: undefined,
+      tipo_pago_id: undefined,
     });
   });
 
   it("manda el historial crediticio, y lo omite si no hay créditos anteriores", () => {
     expect(solicitud.historial_crediticio?.creditos_anteriores).toEqual([
       {
-        referencia: "HIST-001-1",
-        tipo: "1",
+        credito_ref: "HIST-001-1",
         monto: 15000,
-        moneda: "MXN",
         fecha_otorgamiento: "2023-02-10",
         estatus: "PAGADO",
       },

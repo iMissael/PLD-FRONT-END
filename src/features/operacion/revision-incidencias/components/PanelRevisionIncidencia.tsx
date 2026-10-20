@@ -9,19 +9,19 @@ import { Button } from "@/shared/components/atoms/Button";
 import { Card, CardContent, CardHeader } from "@/shared/components/molecules/Card";
 
 import {
-  useResolverDuplicadoSocio,
+  useResolverDuplicadoAcreditado,
   useResolverIncidencia,
   useResolverPersonaRelacionada,
 } from "../hooks/useIncidencias";
 import type {
-  CoincidenciaSocio,
+  CoincidenciaAcreditado,
   DecisionRiesgoPais,
-  DuplicadoSocio,
+  DuplicadoAcreditado,
   PersonaRelacionadaCoincidencia,
 } from "../types/incidencias";
 import { listasCoincidentes } from "../utils/comparar";
 
-type ListaPaisDto = NonNullable<CoincidenciaSocio["pais_nacimiento"]>;
+type ListaPaisDto = NonNullable<CoincidenciaAcreditado["pais_nacimiento"]>;
 
 /** Un bucket de riesgo-pais (pais de nacimiento o nacionalidad): es informativo, nunca bloquea. */
 function RiesgoPaisBucket({
@@ -102,31 +102,31 @@ type Riesgo = "CONFIRMAR" | "RECHAZAR";
 const MAX_JUSTIFICACION = 500;
 
 /**
- * Un socio con nombre igual o parecido a este: a diferencia de la lista bloqueada, confirmar o
- * rechazar aquí nunca bloquea ni modifica a ningún socio, solo deja constancia de la decisión del
+ * Un acreditado con nombre igual o parecido a este: a diferencia de la lista bloqueada, confirmar o
+ * rechazar aquí nunca bloquea ni modifica a ningún acreditado, solo deja constancia de la decisión del
  * oficial (ver backend `resolverDuplicado`). Cada candidato resuelve por separado.
  */
-function FilaDuplicadoSocio({
-  socioRef,
+function FilaDuplicadoAcreditado({
+  acreditadoRef,
   duplicado,
   esOficial,
 }: {
-  socioRef: string;
-  duplicado: DuplicadoSocio;
+  acreditadoRef: string;
+  duplicado: DuplicadoAcreditado;
   esOficial: boolean;
 }) {
-  const resolverDuplicado = useResolverDuplicadoSocio();
+  const resolverDuplicado = useResolverDuplicadoAcreditado();
   const [riesgo, setRiesgo] = useState<Riesgo>();
   const [comentario, setComentario] = useState("");
   const pendiente = duplicado.estado === "PENDIENTE";
 
   function guardar() {
-    if (!duplicado.socio_ref_similar || !riesgo) return;
+    if (!duplicado.acreditado_ref_similar || !riesgo) return;
     const mismaPersona = riesgo === "CONFIRMAR";
     resolverDuplicado.mutate(
       {
-        socioRef,
-        socioRefSimilar: duplicado.socio_ref_similar,
+        acreditadoRef,
+        acreditadoRefSimilar: duplicado.acreditado_ref_similar,
         payload: { misma_persona: mismaPersona, comentario: comentario.trim() || undefined },
       },
       {
@@ -153,7 +153,7 @@ function FilaDuplicadoSocio({
               <label className="flex items-center gap-1.5">
                 <input
                   type="radio"
-                  name={`riesgo-duplicado-${duplicado.socio_ref_similar}`}
+                  name={`riesgo-duplicado-${duplicado.acreditado_ref_similar}`}
                   disabled={resolverDuplicado.isPending}
                   checked={riesgo === "CONFIRMAR"}
                   onChange={() => setRiesgo("CONFIRMAR")}
@@ -163,7 +163,7 @@ function FilaDuplicadoSocio({
               <label className="flex items-center gap-1.5">
                 <input
                   type="radio"
-                  name={`riesgo-duplicado-${duplicado.socio_ref_similar}`}
+                  name={`riesgo-duplicado-${duplicado.acreditado_ref_similar}`}
                   disabled={resolverDuplicado.isPending}
                   checked={riesgo === "RECHAZAR"}
                   onChange={() => setRiesgo("RECHAZAR")}
@@ -204,16 +204,16 @@ function FilaDuplicadoSocio({
 }
 
 /**
- * Una persona relacionada del socio (cónyuge, propietario real, etc.) con coincidencia en lista:
- * igual que con "nombre similar", confirmar o rechazar aquí nunca bloquea ni modifica al socio,
+ * Una persona relacionada del acreditado (cónyuge, propietario real, etc.) con coincidencia en lista:
+ * igual que con "nombre similar", confirmar o rechazar aquí nunca bloquea ni modifica al acreditado,
  * solo deja constancia de la decisión (ver backend `resolverPersonaRelacionada`).
  */
 function FilaPersonaRelacionada({
-  socioRef,
+  acreditadoRef,
   persona,
   esOficial,
 }: {
-  socioRef: string;
+  acreditadoRef: string;
   persona: PersonaRelacionadaCoincidencia;
   esOficial: boolean;
 }) {
@@ -227,7 +227,7 @@ function FilaPersonaRelacionada({
     const esLaPersona = riesgo === "CONFIRMAR";
     resolverPersonaRelacionada.mutate(
       {
-        socioRef,
+        acreditadoRef,
         idCoincidencia: persona.id,
         payload: { es_la_persona: esLaPersona, comentario: comentario.trim() || undefined },
       },
@@ -314,7 +314,7 @@ function FilaPersonaRelacionada({
 const PERMISO_CONFIRMAR = { recurso: "coincidencias", accion: "confirmar" } as const;
 
 interface PanelRevisionIncidenciaProps {
-  coincidencia: CoincidenciaSocio | null;
+  coincidencia: CoincidenciaAcreditado | null;
   onClose: () => void;
 }
 
@@ -340,17 +340,17 @@ export function PanelRevisionIncidencia({
     setJustificacion("");
     setDecisionPaisNacimiento(undefined);
     setDecisionNacionalidad(undefined);
-  }, [coincidencia?.socio_ref]);
+  }, [coincidencia?.acreditado_ref]);
 
   function cerrar() {
     onClose();
   }
 
   function guardarDecisionPais() {
-    if (!coincidencia?.socio_ref || (!decisionPaisNacimiento && !decisionNacionalidad)) return;
+    if (!coincidencia?.acreditado_ref || (!decisionPaisNacimiento && !decisionNacionalidad)) return;
     resolver.mutate(
       {
-        socioRef: coincidencia.socio_ref,
+        acreditadoRef: coincidencia.acreditado_ref,
         payload: {
           pais_nacimiento_decision: decisionPaisNacimiento,
           nacionalidad_decision: decisionNacionalidad,
@@ -366,11 +366,11 @@ export function PanelRevisionIncidencia({
   }
 
   function guardarDecisionLista() {
-    if (!coincidencia?.socio_ref || !riesgo) return;
+    if (!coincidencia?.acreditado_ref || !riesgo) return;
     const esLaPersona = riesgo === "CONFIRMAR";
     resolver.mutate(
       {
-        socioRef: coincidencia.socio_ref,
+        acreditadoRef: coincidencia.acreditado_ref,
         payload: {
           es_la_persona: esLaPersona,
           comentario: justificacion.trim() || undefined,
@@ -380,8 +380,8 @@ export function PanelRevisionIncidencia({
         onSuccess: () => {
           toast.success(
             esLaPersona
-              ? `El socio ${coincidencia.socio_ref} quedó bloqueado.`
-              : `Coincidencia rechazada: ${coincidencia.socio_ref} puede evaluarse.`,
+              ? `El acreditado ${coincidencia.acreditado_ref} quedó bloqueado.`
+              : `Coincidencia rechazada: ${coincidencia.acreditado_ref} puede evaluarse.`,
           );
           cerrar();
         },
@@ -394,7 +394,7 @@ export function PanelRevisionIncidencia({
 
   if (!coincidencia) return null;
 
-  const socioRef = coincidencia.socio_ref;
+  const acreditadoRef = coincidencia.acreditado_ref;
   const listaTexto = listasCoincidentes(coincidencia).join(", ") || "—";
   const nombreExterno =
     coincidencia.lista_negra?.coincide ? coincidencia.lista_negra.nombre_encontrado : undefined;
@@ -405,7 +405,7 @@ export function PanelRevisionIncidencia({
   const entradas = personas.length
     ? personas.map((p) => ({ nombreReal: p.nombre || "—", lista: p.lista || listaTexto }))
     : hayCoincidenciaBloqueante
-      ? [{ nombreReal: nombreExterno ?? coincidencia.socio?.nombre ?? "—", lista: listaTexto }]
+      ? [{ nombreReal: nombreExterno ?? coincidencia.acreditado?.nombre ?? "—", lista: listaTexto }]
       : [];
   const hayPais = Boolean(coincidencia.pais_nacimiento?.coincide || coincidencia.nacionalidad?.coincide);
   const duplicados = coincidencia.duplicados ?? [];
@@ -416,10 +416,10 @@ export function PanelRevisionIncidencia({
       <CardHeader className="flex flex-row items-start justify-between gap-4 space-y-0">
         <div className="space-y-1.5">
           <h2 className="text-lg leading-none font-semibold">
-            {coincidencia.socio?.nombre ?? coincidencia.socio_ref}
+            {coincidencia.acreditado?.nombre ?? coincidencia.acreditado_ref}
           </h2>
           <p className="text-sm text-muted-foreground">
-            Socio {coincidencia.socio_ref}
+            Acreditado {coincidencia.acreditado_ref}
             {coincidencia.sucursal ? ` · ${coincidencia.sucursal}` : ""}. Compara sus
             datos con los de la lista y decide si es la misma persona.
           </p>
@@ -459,7 +459,7 @@ export function PanelRevisionIncidencia({
                       Coincidencia {indice + 1}
                     </div>
                     <div className="border-t">
-                      <FilaCampo label="Nombre">{coincidencia.socio?.nombre ?? "—"}</FilaCampo>
+                      <FilaCampo label="Nombre">{coincidencia.acreditado?.nombre ?? "—"}</FilaCampo>
                       <FilaCampo label="Nombre Real">{entrada.nombreReal}</FilaCampo>
                       <FilaCampo label="Lista">{entrada.lista}</FilaCampo>
                     </div>
@@ -577,11 +577,11 @@ export function PanelRevisionIncidencia({
         <SeccionPanel
           titulo={duplicados.length ? `Socios con nombre similar (${duplicados.length})` : "Socios con nombre similar"}
         >
-          {duplicados.length && socioRef ? (
+          {duplicados.length && acreditadoRef ? (
             duplicados.map((duplicado) => (
-              <FilaDuplicadoSocio
-                key={duplicado.socio_ref_similar}
-                socioRef={socioRef}
+              <FilaDuplicadoAcreditado
+                key={duplicado.acreditado_ref_similar}
+                acreditadoRef={acreditadoRef}
                 duplicado={duplicado}
                 esOficial={esOficial}
               />
@@ -598,11 +598,11 @@ export function PanelRevisionIncidencia({
               : "Personas relacionadas"
           }
         >
-          {personasRelacionadas.length && socioRef ? (
+          {personasRelacionadas.length && acreditadoRef ? (
             personasRelacionadas.map((persona) => (
               <FilaPersonaRelacionada
                 key={persona.id}
-                socioRef={socioRef}
+                acreditadoRef={acreditadoRef}
                 persona={persona}
                 esOficial={esOficial}
               />

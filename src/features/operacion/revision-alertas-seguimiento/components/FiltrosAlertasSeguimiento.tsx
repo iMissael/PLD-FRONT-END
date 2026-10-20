@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Search } from "lucide-react";
 
-import { BuscadorSocios } from "@/features/operacion/evaluacion-riesgo/components/BuscadorSocios";
-import type { SocioExterno } from "@/features/socios/types/socios";
+import { BuscadorAcreditados } from "@/features/operacion/evaluacion-riesgo/components/BuscadorAcreditados";
+import type { AcreditadoExterno } from "@/features/acreditados/types/acreditados";
 import { Button } from "@/shared/components/atoms/Button";
 import { Input } from "@/shared/components/atoms/Input";
 import { FormFieldGroup } from "@/shared/components/molecules/FormFieldGroup";
@@ -23,7 +23,7 @@ export function FiltrosAlertasSeguimiento({
   onConsultar,
   onLimpiar,
 }: FiltrosAlertasSeguimientoProps) {
-  const [cliente, setCliente] = useState<SocioExterno | null>(null);
+  const [cliente, setCliente] = useState<AcreditadoExterno | null>(null);
   const [desde, setDesde] = useState("");
   const [hasta, setHasta] = useState("");
 
@@ -43,7 +43,7 @@ export function FiltrosAlertasSeguimiento({
       className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm"
     >
       <FormFieldGroup label="Cliente" htmlFor="cliente-seguimiento">
-        <BuscadorSocios
+        <BuscadorAcreditados
           variante="panel"
           valor={cliente ? `${cliente.id ?? ""} ${cliente.nombre ?? ""}`.trim() : ""}
           placeholder="Referencia, número de cliente o nombre"

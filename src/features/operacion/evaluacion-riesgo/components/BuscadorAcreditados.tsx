@@ -2,9 +2,9 @@ import { Search } from "lucide-react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { cn } from "@/shared/utils/cn";
 import { es } from "@/shared/i18n/es";
-import { useBuscarSocios, useListaSocios } from "@/features/socios/hooks/useSocios";
+import { useBuscarAcreditados, useListaAcreditados } from "@/features/acreditados/hooks/useAcreditados";
 import { useDebounce } from "@/shared/hooks/useDebounce";
-import type { SocioExterno } from "@/features/socios/types/socios";
+import type { AcreditadoExterno } from "@/features/acreditados/types/acreditados";
 
 function sinAcentos(texto: string | undefined) {
   return (texto ?? "").normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
@@ -14,11 +14,11 @@ function sinAcentos(texto: string | undefined) {
 const MINIMO_BUSQUEDA = 2;
 
 /**
- * Campo de búsqueda con lupa: al abrirlo lista los socios del sistema; al escribir busca en el
+ * Campo de búsqueda con lupa: al abrirlo lista los acreditados del sistema; al escribir busca en el
  * servidor (por nombre, referencia o RFC). La lista inicial está limitada y, con el sistema de la
- * SOFOM por /pld/v1, solo trae los socios ya registrados en la Matriz: lo demás solo aparece buscando.
+ * SOFOM por /pld/v1, solo trae los acreditados ya registrados en la Matriz: lo demás solo aparece buscando.
  */
-export function BuscadorSocios({
+export function BuscadorAcreditados({
   variante,
   valor,
   placeholder,
@@ -28,7 +28,7 @@ export function BuscadorSocios({
   variante: "encabezado" | "panel";
   valor: string;
   placeholder: string;
-  onSeleccionar: (socio: SocioExterno) => void;
+  onSeleccionar: (acreditado: AcreditadoExterno) => void;
   className?: string;
 }) {
   const idLista = useId();
@@ -38,9 +38,9 @@ export function BuscadorSocios({
   const campo = useRef<HTMLInputElement>(null);
   const textoBuscado = useDebounce(filtro.trim());
   const buscaEnServidor = textoBuscado.length >= MINIMO_BUSQUEDA;
-  const lista = useListaSocios(abierto && !buscaEnServidor);
-  const busqueda = useBuscarSocios(abierto && buscaEnServidor ? textoBuscado : "");
-  const { data: socios, isFetching, isError } = buscaEnServidor ? busqueda : lista;
+  const lista = useListaAcreditados(abierto && !buscaEnServidor);
+  const busqueda = useBuscarAcreditados(abierto && buscaEnServidor ? textoBuscado : "");
+  const { data: acreditados, isFetching, isError } = buscaEnServidor ? busqueda : lista;
 
   useEffect(() => {
     if (!abierto) return;
@@ -54,19 +54,19 @@ export function BuscadorSocios({
   const coincidencias = useMemo(() => {
     // El servidor ya filtró; aquí solo se refina mientras llega la respuesta de lo último escrito.
     const buscado = sinAcentos(filtro.trim());
-    if (!buscado) return socios ?? [];
-    return (socios ?? []).filter((socio) =>
-      sinAcentos(`${socio.nombre} ${socio.id} ${socio.rfc}`).includes(buscado),
+    if (!buscado) return acreditados ?? [];
+    return (acreditados ?? []).filter((acreditado) =>
+      sinAcentos(`${acreditado.nombre} ${acreditado.id} ${acreditado.rfc}`).includes(buscado),
     );
-  }, [socios, filtro]);
+  }, [acreditados, filtro]);
 
   function abrir() {
     setAbierto(true);
     campo.current?.focus();
   }
 
-  function elegir(socio: SocioExterno) {
-    onSeleccionar(socio);
+  function elegir(acreditado: AcreditadoExterno) {
+    onSeleccionar(acreditado);
     setAbierto(false);
     setFiltro("");
   }
@@ -141,25 +141,25 @@ export function BuscadorSocios({
           </p>
           {isError && (
             <p className="px-3 py-3 text-sm text-destructive">
-              No se pudo cargar la lista de socios.
+              No se pudo cargar la lista de acreditados.
             </p>
           )}
           {!isFetching && !isError && coincidencias.length === 0 && (
             <p className="text-muted-foreground px-3 py-3 text-sm">Sin resultados.</p>
           )}
-          {coincidencias.map((socio) => (
+          {coincidencias.map((acreditado) => (
             <button
-              key={socio.id}
+              key={acreditado.id}
               type="button"
               role="option"
               aria-selected={false}
-              onClick={() => elegir(socio)}
+              onClick={() => elegir(acreditado)}
               className="flex w-full flex-col items-start px-3 py-2 text-left text-sm transition hover:bg-muted/80 focus:bg-muted focus:outline-none"
             >
-              <span className="font-medium text-foreground">{socio.nombre}</span>
+              <span className="font-medium text-foreground">{acreditado.nombre}</span>
               <span className="text-xs text-muted-foreground">
-                {socio.id}
-                {socio.rfc ? ` · ${socio.rfc}` : ""}
+                {acreditado.id}
+                {acreditado.rfc ? ` · ${acreditado.rfc}` : ""}
               </span>
             </button>
           ))}

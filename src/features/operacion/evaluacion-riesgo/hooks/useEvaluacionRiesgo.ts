@@ -24,10 +24,10 @@ export function useModificarNivelRiesgo() {
   });
 }
 
-export function useHistorialEvaluaciones(socioRef: string | null) {
+export function useHistorialEvaluaciones(acreditadoRef: string | null) {
   return useQuery({
-    queryKey: ["evaluacion-riesgo-historial", socioRef],
-    queryFn: () => listarHistorialEvaluaciones(socioRef as string),
-    enabled: socioRef !== null && socioRef !== "",
+    queryKey: ["evaluacion-riesgo-historial", acreditadoRef],
+    queryFn: () => listarHistorialEvaluaciones(acreditadoRef as string),
+    enabled: acreditadoRef !== null && acreditadoRef !== "",
   });
 }

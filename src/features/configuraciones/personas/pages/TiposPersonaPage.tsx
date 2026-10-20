@@ -90,7 +90,7 @@ export function TiposPersonaPage() {
             Configuración de personas
           </h2>
           <p className="text-sm text-muted-foreground">
-            Tipos de persona (socio) y el nivel de riesgo PLD asociado a cada uno.
+            Tipos de persona (acreditado) y el nivel de riesgo PLD asociado a cada uno.
           </p>
         </div>
         <Button

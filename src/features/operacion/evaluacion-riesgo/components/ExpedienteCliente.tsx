@@ -3,9 +3,9 @@ import { Skeleton } from "@/shared/components/atoms/Skeleton";
 import { StatusBadge } from "@/shared/components/atoms/StatusBadge";
 import { es } from "@/shared/i18n/es";
 import { cn } from "@/shared/utils/cn";
-import { BuscadorSocios } from "@/features/operacion/evaluacion-riesgo/components/BuscadorSocios";
+import { BuscadorAcreditados } from "@/features/operacion/evaluacion-riesgo/components/BuscadorAcreditados";
 import type { ClienteMatrizRiesgo } from "@/features/operacion/evaluacion-riesgo/types/evaluacionRiesgo";
-import type { SocioExterno } from "@/features/socios/types/socios";
+import type { AcreditadoExterno } from "@/features/acreditados/types/acreditados";
 
 function copiar(texto: string) {
   navigator.clipboard?.writeText(texto).catch(() => {});
@@ -152,14 +152,14 @@ export function ExpedienteClienteAside({
   cargando,
   error,
   valorBuscador,
-  onSeleccionarSocio,
+  onSeleccionarAcreditado,
 }: {
   titulo?: string;
   cliente: ClienteMatrizRiesgo | null;
   cargando: boolean;
   error: boolean;
   valorBuscador: string;
-  onSeleccionarSocio: (socio: SocioExterno) => void;
+  onSeleccionarAcreditado: (acreditado: AcreditadoExterno) => void;
 }) {
   return (
     <aside className="w-full shrink-0 overflow-y-auto border-b border-border bg-card lg:w-[300px] lg:rounded-bl-lg lg:border-r lg:border-b-0">
@@ -180,11 +180,11 @@ export function ExpedienteClienteAside({
           <p className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
             Referencia / No. Cliente / Nombre
           </p>
-          <BuscadorSocios
+          <BuscadorAcreditados
             variante="panel"
             valor={valorBuscador}
             placeholder={es.cliente.elegir}
-            onSeleccionar={onSeleccionarSocio}
+            onSeleccionar={onSeleccionarAcreditado}
           />
         </div>
 
@@ -201,7 +201,7 @@ export function ExpedienteClienteAside({
         {!cargando && !error && cliente && <ExpedienteDelCliente cliente={cliente} />}
         {!cargando && !error && !cliente && (
           <p className="text-muted-foreground text-sm">
-            Usa la lupa para ver los socios del sistema.
+            Usa la lupa para ver los acreditados del sistema.
           </p>
         )}
       </div>
