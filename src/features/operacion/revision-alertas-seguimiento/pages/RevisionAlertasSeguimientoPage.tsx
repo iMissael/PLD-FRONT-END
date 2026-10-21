@@ -13,12 +13,6 @@ import {
 
 const TIPO_SEGUIMIENTO = "S";
 
-/**
- * "Operación › Revisión de alertas de seguimiento" (pantalla homónima de Sicanet): alertas que
- * solo genera el sistema (cambio de grado de riesgo, ocupación, profesión, actividad, giro del
- * negocio u objeto social de un socio). Hoy no hay nada que las genere todavía, así que la
- * consulta regresa vacío; la pantalla ya queda lista para cuando exista esa detección.
- */
 export function RevisionAlertasSeguimientoPage() {
   const [filtro, setFiltro] = useState<FiltroAlertas | null>(null);
   const [seleccionada, setSeleccionada] = useState<Alerta | null>(null);

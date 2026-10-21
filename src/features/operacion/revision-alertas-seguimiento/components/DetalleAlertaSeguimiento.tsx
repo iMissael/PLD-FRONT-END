@@ -7,7 +7,6 @@ import { etiquetaFormaPago } from "@/features/operacion/revision-autorizaciones/
 import { Card } from "@/shared/components/molecules";
 import { label } from "@/shared/styles/tokens";
 
-/** Campos de Sicanet que todavía no tienen fuente de datos en el sistema. */
 const SIN_INFORMACION = <span className="text-muted-foreground italic">Sin información</span>;
 
 function Dato({ titulo, children }: { titulo: string; children: ReactNode }) {
@@ -35,11 +34,6 @@ interface DetalleAlertaSeguimientoProps {
   alerta: Alerta;
 }
 
-/**
- * Detalle de "Revisión de alertas de seguimiento" (pantalla Sicanet homónima): datos del
- * cliente y del movimiento de caja que originó la alerta, si tiene uno. Es de solo lectura:
- * las alertas de seguimiento no tienen dictamen, solo se consultan.
- */
 export function DetalleAlertaSeguimiento({ alerta }: DetalleAlertaSeguimientoProps) {
   const { data: expediente, isLoading: cargandoExpediente } = useExpedienteAlerta(alerta.id);
   const { data: movimiento, isLoading: cargandoMovimiento } = useMovimientoAlerta(alerta.id);
@@ -47,8 +41,6 @@ export function DetalleAlertaSeguimiento({ alerta }: DetalleAlertaSeguimientoPro
   const reportado = alerta.reportado;
   const esSocio = reportado?.tipoReportado === "SOCIO";
   const curp = esSocio ? (cargandoExpediente ? "…" : (expediente?.evaluado?.curp ?? SIN_INFORMACION)) : SIN_INFORMACION;
-  // RFC vigente del socio (consulta en vivo) si ya cargó; mientras tanto, o si no hay socio
-  // (empleado) o no se encontró, se muestra el RFC capturado en la alerta.
   const rfc = expediente?.evaluado?.rfc ?? reportado?.rfc;
 
   return (

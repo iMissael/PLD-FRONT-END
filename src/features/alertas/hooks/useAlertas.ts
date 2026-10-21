@@ -38,7 +38,6 @@ export const alertasKeys = {
   movimiento: (id: number) => [...alertasKeys.movimientos(), id] as const,
 };
 
-/** Catálogo de tipos de alerta (cambia muy poco). */
 export function useTiposAlerta() {
   return useQuery({
     queryKey: alertasKeys.tipos(),
@@ -47,7 +46,6 @@ export function useTiposAlerta() {
   });
 }
 
-/** Sin acrónimo trae todas las razones. */
 export function useRazonesAlerta(alertaAcronimo?: string, habilitado = true) {
   return useQuery({
     queryKey: alertasKeys.razones(alertaAcronimo),
@@ -71,7 +69,6 @@ export function useListaAlertas(
   });
 }
 
-/** Evaluado y resumen del periodo de la alerta seleccionada en la revisión. */
 export function useExpedienteAlerta(id: number) {
   return useQuery({
     queryKey: alertasKeys.expediente(id),
@@ -79,7 +76,6 @@ export function useExpedienteAlerta(id: number) {
   });
 }
 
-/** Movimiento de caja vinculado a la alerta ("Revisión de alertas de seguimiento"). */
 export function useMovimientoAlerta(id: number) {
   return useQuery({
     queryKey: alertasKeys.movimiento(id),
@@ -93,7 +89,6 @@ export function useCapturarAlerta() {
     mutationFn: (input: CrearAlertaManualInput) => capturarAlertaManual(input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: alertasKeys.listas() });
-      // Una alerta nueva cambia las "Alertas emitidas" del resumen del periodo.
       queryClient.invalidateQueries({ queryKey: alertasKeys.expedientes() });
     },
   });
@@ -126,7 +121,6 @@ export function useEmpleadosPaginados(busqueda: BusquedaEmpleados, habilitado: b
   });
 }
 
-/** Lista de empleados del core; se pide solo cuando se abre el buscador. */
 export function useListaEmpleados(habilitado: boolean) {
   return useQuery({
     queryKey: ["empleados", "lista"],

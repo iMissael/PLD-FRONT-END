@@ -24,15 +24,9 @@ interface ReglasTableProps {
   onCambiarTamanio: (tamanio: number) => void;
 }
 
-/** Celdas compactas: la tabla es un selector, el detalle se ve en el formulario. */
 const celda = "px-3 py-1.5";
 const encabezado = `${table.headCell} sticky top-0 bg-muted py-1.5`;
 
-/**
- * Listado de reglas: #, tipo de alerta, descripción y estatus; el resto se ve en el formulario
- * al seleccionar una. Altura fija con scroll (~7 renglones). No usa `table.wrapper`
- * porque trae `overflow-hidden` y anula el scroll.
- */
 export function ReglasTable({
   reglas,
   isLoading,

@@ -8,15 +8,6 @@ import { ReglasTable } from "../components/ReglasTable";
 import { useReglasAlerta } from "../hooks/useReglasAlerta";
 import type { EstadoRegla, FiltroReglas, ReglaAlerta } from "../types/reglaAlerta";
 
-/**
- * "Configuración de alertas › Configuración de alertas" (manual Sicanet 4.2.1): las
- * reglas con las que se generan las alertas. Las automáticas de una sola operación
- * son las que evalúa cada movimiento de cajas.
- *
- * Por ahora es solo consulta, igual que en Sicanet: las reglas vienen establecidas y
- * no se crean, editan ni eliminan desde aquí. El API y los hooks de escritura
- * (`useCrearRegla`, `useActualizarRegla`, ...) siguen disponibles para cuando se habilite.
- */
 export function ReglasAlertaPage() {
   const [filtro, setFiltroState] = useState<FiltroReglas>({});
   const [pagina, setPagina] = useState(0);

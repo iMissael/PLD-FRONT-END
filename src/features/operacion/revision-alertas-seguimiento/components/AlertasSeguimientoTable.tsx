@@ -16,7 +16,6 @@ interface AlertasSeguimientoTableProps {
   onCambiarTamanio: (tamanio: number) => void;
 }
 
-/** Tabla de resultados de "Revisión de alertas de seguimiento": #, Folio, Fecha, Nombre. */
 export function AlertasSeguimientoTable({
   consultado,
   alertas,

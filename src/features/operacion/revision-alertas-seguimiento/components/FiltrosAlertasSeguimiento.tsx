@@ -18,7 +18,6 @@ interface FiltrosAlertasSeguimientoProps {
   onLimpiar: () => void;
 }
 
-/** "Operación › Revisión de alertas de seguimiento": cliente + rango de fechas. */
 export function FiltrosAlertasSeguimiento({
   onConsultar,
   onLimpiar,

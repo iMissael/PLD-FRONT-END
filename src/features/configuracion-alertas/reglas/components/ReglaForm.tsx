@@ -117,9 +117,7 @@ interface ReglaFormProps {
   onGuardar?: (input: GuardarReglaInput) => void;
   onCancelar: () => void;
   isPending?: boolean;
-  /** Mensaje de validación del propio formulario (se muestra en la página). */
   onInvalido?: (mensaje: string) => void;
-  /** Solo consulta: los campos se muestran deshabilitados y no hay "Guardar". */
   soloLectura?: boolean;
 }
 
@@ -220,7 +218,6 @@ export function ReglaForm({
         </h3>
 
         <fieldset disabled={soloLectura} className="flex min-w-0 flex-col gap-5">
-          {/* Datos de la alerta */}
           <div className="grid grid-cols-1 gap-4">
             <div className="flex flex-col gap-1">
               <label htmlFor="tipoAlerta" className={label}>
@@ -356,14 +353,12 @@ export function ReglaForm({
             </div>
           </div>
 
-          {/* Configuración de monedas (de la operación) */}
           <ReglaMonedasSection
             monedas={form.monedas}
             onChange={(nuevasMonedas) => set("monedas", nuevasMonedas)}
             disabled={soloLectura}
           />
 
-          {/* Forma de pago y a quién aplica */}
           <section className="border-border grid grid-cols-1 gap-4 border-t pt-4 sm:grid-cols-2">
             <fieldset className="flex flex-col gap-2">
               <legend className={label}>Forma de pago</legend>
@@ -410,7 +405,6 @@ export function ReglaForm({
             </div>
           </section>
 
-          {/* Importe acumulativo / Tipo de proceso / Estatus */}
           <section className="border-border grid grid-cols-1 gap-4 border-t pt-4 sm:grid-cols-3">
             <label className="flex items-center gap-2 text-sm">
               <input

@@ -31,13 +31,8 @@ const selectStyle =
 const textareaStyle =
   "border-border bg-card text-foreground focus-visible:border-ring focus-visible:ring-ring/50 w-full rounded-md border p-3 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:opacity-50 disabled:cursor-not-allowed";
 
-/** Antigüedad máxima de una incidencia capturable (hoy es el límite superior). */
 const ANIOS_ATRAS_INCIDENCIA = 5;
 
-/**
- * Manda el tipo de persona que trae el acreditado. El largo del RFC (12 = moral) solo
- * se usa si no viene: hay físicas con RFC de 12 caracteres (sin homoclave completa).
- */
 function esPersonaMoral(acreditado: AcreditadoExterno): boolean {
   const tipo = acreditado.tipoPersona?.trim().toUpperCase();
   if (tipo) return tipo === "MORAL" || tipo === "M";
@@ -102,23 +97,14 @@ const ETIQUETA_CAMPO: Record<Campo, string> = {
 
 const MARCA_FALTANTE = "rounded-md ring-2 ring-warning";
 
-/** Relevante (R) no se captura a mano: la genera el sistema por monto. */
 const TIPOS_OCULTOS = ["R"];
 
-/**
- * "Operación › Captura de alertas" (manual Sicanet 4.3.4). Inusual se levanta sobre
- * un cliente; Interna preocupante sobre un empleado. Qué tipos se pueden capturar lo
- * decide el catálogo (`tipoReportado`): los que genera solo el sistema (relevante,
- * seguimiento, autorización…) no aparecen. La alerta manual nace
- * CONFIRMADA: quien la captura ya la dictaminó.
- */
 export function CapturaAlertasPage() {
   const { data: tipos, isLoading: cargandoTipos } = useTiposAlerta();
   const [form, setForm] = useState<FormState>(VACIO);
   const [creada, setCreada] = useState<Alerta | null>(null);
   const [mensajeError, setMensajeError] = useState<string | null>(null);
   const [intentoGuardar, setIntentoGuardar] = useState(false);
-  /** Ventana de búsqueda abierta: la de clientes o la de empleados, según el tipo de alerta. */
   const [selectorAbierto, setSelectorAbierto] = useState(false);
   const capturar = useCapturarAlerta();
 
@@ -167,7 +153,6 @@ export function CapturaAlertasPage() {
     intentoGuardar && faltantes.includes(campo) ? MARCA_FALTANTE : "";
 
   const elegirTipo = (acronimo: string) => {
-    // Cambiar de tipo puede cambiar a quién se reporta (cliente/empleado): se limpia.
     setForm((prev) => ({
       ...prev,
       alertaAcronimo: acronimo,
@@ -195,8 +180,6 @@ export function CapturaAlertasPage() {
         tipoReportado: tipo.tipoReportado,
         referenciaReportado: form.reportado.referencia,
         fechaIncidencia: form.fechaIncidencia,
-        // Todo el texto del sistema va en mayúsculas; aquí se convierte al guardar para
-        // no perder los saltos de línea ni mover el cursor mientras se escribe.
         actoHecho: aMayusculas(form.actoHecho),
         informacionAdicional: aMayusculas(form.informacionAdicional),
         ...(esMoral

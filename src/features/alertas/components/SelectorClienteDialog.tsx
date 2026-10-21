@@ -33,7 +33,6 @@ const TIPOS_PERSONA: { valor: TipoPersonaBusqueda | undefined; etiqueta: string 
   { valor: "moral", etiqueta: "Moral" },
 ];
 
-/** PLD-SOCIOS manda FISICA, FISICA_ACTIVIDAD_EMPRESARIAL o MORAL. */
 function etiquetaTipoPersona(tipo: string | undefined) {
   switch (tipo?.trim().toUpperCase()) {
     case "MORAL":
@@ -59,11 +58,9 @@ interface SelectorClienteDialogProps {
   abierto: boolean;
   onAbiertoCambiar: (abierto: boolean) => void;
   seleccionadoId: string | null;
-  /** Se llama al elegir un cliente; el diálogo se cierra solo. */
   onSeleccionar: (acreditado: AcreditadoExterno) => void;
 }
 
-/** Búsqueda de clientes paginada en el backend, en una ventana emergente. */
 export function SelectorClienteDialog({
   abierto,
   onAbiertoCambiar,
@@ -93,7 +90,6 @@ export function SelectorClienteDialog({
   );
 }
 
-/** Vive dentro del diálogo: al cerrarlo se desmonta y la búsqueda empieza de cero. */
 function BusquedaClientes({
   seleccionadoId,
   onSeleccionar,

@@ -1,4 +1,3 @@
-/** "2026-09-28" o "2026-09-28T14:03:00-06:00" -> "28/09/2026". */
 export function formatearFecha(valor: string | null | undefined): string {
   if (!valor) return "—";
   const [anio, mes, dia] = valor.slice(0, 10).split("-");
@@ -6,7 +5,6 @@ export function formatearFecha(valor: string | null | undefined): string {
   return `${dia}/${mes}/${anio}`;
 }
 
-/** Qué tan cerca está el último día para dictaminar: 5 días o menos es urgente; 10 o menos, próximo. */
 export type NivelPlazo = "urgente" | "proximo" | "holgado";
 
 export function nivelPlazo(diasRestantes: number): NivelPlazo {
@@ -15,7 +13,6 @@ export function nivelPlazo(diasRestantes: number): NivelPlazo {
   return "holgado";
 }
 
-/** 0 -> "Vence hoy", 1 -> "Queda 1 día", 12 -> "Quedan 12 días". */
 export function textoDiasRestantes(diasRestantes: number): string {
   if (diasRestantes <= 0) return "Vence hoy";
   return diasRestantes === 1 ? "Queda 1 día" : `Quedan ${diasRestantes} días`;

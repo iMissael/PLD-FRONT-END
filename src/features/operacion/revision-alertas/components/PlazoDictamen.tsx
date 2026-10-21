@@ -8,12 +8,6 @@ const COLOR: Record<NivelPlazo, string> = {
   holgado: "bg-muted/40 text-muted-foreground border-border",
 };
 
-/**
- * Columna "Vence" de la revisión: último día para dictaminar y cuántos días quedan, en rojo
- * con 5 días o menos y en ámbar con 10 o menos. Las ya dictaminadas, los tipos sin plazo
- * (Relevante) y, mientras el oficial define qué pasa con ellas (t58), las que ya pasaron su
- * plazo muestran un guion.
- */
 export function PlazoDictamen({ alerta }: { alerta: Alerta }) {
   if (estatusDe(alerta) !== "PENDIENTE" || alerta.diasRestantes === null
       || alerta.diasRestantes === undefined || alerta.diasRestantes < 0) {
