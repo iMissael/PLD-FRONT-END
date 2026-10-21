@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useListaAlertas } from "@/features/alertas/hooks/useAlertas";
 import {
   ETIQUETA_ESTATUS,
+  estatusDe,
   type Alerta,
   type FiltroAlertas,
 } from "@/features/alertas/types/alertas";
@@ -131,7 +132,7 @@ export function RevisionAlertasPage() {
                 {seleccionada.origen === "AUTOMATICA"
                   ? "Generada por cajas"
                   : "Captura manual"}{" "}
-                · {ETIQUETA_ESTATUS[seleccionada.estatus]}
+                · {ETIQUETA_ESTATUS[estatusDe(seleccionada)]}
               </DialogDescription>
             </DialogHeader>
 
@@ -144,7 +145,7 @@ export function RevisionAlertasPage() {
                 onActualizada={(alerta) => {
                   setSeleccionada(alerta);
                   setAviso(
-                    `La alerta ${alerta.folio} quedó ${alerta.estatus.toLowerCase()}.`,
+                    `La alerta ${alerta.folio} quedó ${ETIQUETA_ESTATUS[estatusDe(alerta)].toLowerCase()}.`,
                   );
                 }}
               />

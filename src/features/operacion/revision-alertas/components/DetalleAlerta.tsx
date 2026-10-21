@@ -110,15 +110,8 @@ export function DetalleAlerta({ alerta, onActualizada, onCancelada }: DetalleAle
   }, [alerta.id]);
 
   const pendiente = alerta.estatus === "PENDIENTE";
-  const vencida = estatusDe(alerta) === "VENCIDA";
   const resultado =
-    accion === "cancelar"
-      ? "cancelada"
-      : dictamen === "RECHAZADA"
-        ? "rechazada"
-        : alerta.seReporta
-          ? "reportada"
-          : "confirmada";
+    accion === "cancelar" ? "cancelada" : dictamen === "RECHAZADA" ? "rechazada" : "confirmada";
 
   const reportado = alerta.reportado;
   const esEmpleado = reportado?.tipoReportado === "EMPLEADO";
@@ -172,7 +165,7 @@ export function DetalleAlerta({ alerta, onActualizada, onCancelada }: DetalleAle
       {
         onSuccess: (res) => {
           setAccion(null);
-          toast.success(`Alerta ${alerta.folio} ${ETIQUETA_ESTATUS[res.estatus].toLowerCase()}.`);
+          toast.success(`Alerta ${alerta.folio} ${ETIQUETA_ESTATUS[estatusDe(res)].toLowerCase()}.`);
           onActualizada(res);
         },
         onError: alFallar,
@@ -416,7 +409,7 @@ export function DetalleAlerta({ alerta, onActualizada, onCancelada }: DetalleAle
         >
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h4 className="text-xs font-bold uppercase tracking-wider text-foreground">Dictamen</h4>
-            {alerta.fechaLimiteDictamen && alerta.diasRestantes !== null ? (
+            {alerta.fechaLimiteDictamen && alerta.diasRestantes !== null && alerta.diasRestantes >= 0 ? (
               <span className="text-muted-foreground text-xs font-medium">
                 Último día para dictaminar: {formatearFecha(alerta.fechaLimiteDictamen)} ·{" "}
                 {textoDiasRestantes(alerta.diasRestantes).toLocaleLowerCase("es-MX")}
@@ -469,12 +462,6 @@ export function DetalleAlerta({ alerta, onActualizada, onCancelada }: DetalleAle
             </Button>
           </div>
         </form>
-      ) : vencida ? (
-        <Alert>
-          Esta alerta venció el {formatearFecha(alerta.fechaLimiteDictamen)} sin dictamen: pasaron los
-          días naturales del plazo desde que se generó. Por ahora ya no se puede confirmar, rechazar ni
-          cancelar.
-        </Alert>
       ) : (
         // Como en Sicanet, ya dictaminada se muestra el botón de Excel; su contenido se define después
         <div className="flex justify-center">

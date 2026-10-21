@@ -18,12 +18,17 @@ import type {
 
 /**
  * { I: ["PENDIENTE"], R: [] } -> "I:PENDIENTE,R". Va separado por comas porque axios
- * manda los arreglos como `tipoEstatus[]=`, que Spring no reconoce.
+ * manda los arreglos como `tipoEstatus[]=`, que Spring no reconoce. En la revisión una
+ * REPORTADA se ve como confirmada, así que CONFIRMADA también pide las REPORTADAS.
  */
 function tipoEstatusParam(tiposEstatus: Record<string, EstatusAlertaRevision[]>): string {
   return Object.entries(tiposEstatus)
     .flatMap(([tipo, estatus]) =>
-      estatus.length === 0 ? [tipo] : estatus.map((e) => `${tipo}:${e}`),
+      estatus.length === 0
+        ? [tipo]
+        : estatus
+            .flatMap((e): EstatusAlertaRevision[] => (e === "CONFIRMADA" ? [e, "REPORTADA"] : [e]))
+            .map((e) => `${tipo}:${e}`),
     )
     .join(",");
 }

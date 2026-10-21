@@ -16,12 +16,11 @@ import { field, hint, label } from "@/shared/styles/tokens";
 
 import { formatearFecha } from "../utils/formato";
 
+/** Confirmadas incluye las reportadas (en la revisión se ven igual, ver estatusDe). */
 const ESTATUS: { valor: EstatusAlertaRevision; etiqueta: string }[] = [
   { valor: "PENDIENTE", etiqueta: "Pendientes" },
   { valor: "CONFIRMADA", etiqueta: "Confirmadas" },
   { valor: "RECHAZADA", etiqueta: "Rechazadas" },
-  { valor: "REPORTADA", etiqueta: "Reportadas" },
-  { valor: "VENCIDA", etiqueta: "Vencidas" },
 ];
 const TODOS_LOS_ESTATUS = ESTATUS.map((e) => e.valor);
 

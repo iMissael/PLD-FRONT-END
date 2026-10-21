@@ -247,7 +247,14 @@ export const ETIQUETA_ESTATUS: Record<EstatusAlertaRevision, string> = {
   VENCIDA: "Vencida",
 };
 
-/** El backend puede mandar VENCIDA aunque Alerta.estatus se tipe con EstatusAlerta. */
+/**
+ * Estatus que se muestra en la revisión. Como en Sicanet, una REPORTADA se ve como Confirmada
+ * (reportada solo existe en el apartado de control) y, mientras el oficial define qué pasa con
+ * las vencidas (t58), una VENCIDA se ve como Pendiente.
+ */
 export function estatusDe(alerta: Pick<Alerta, "estatus">): EstatusAlertaRevision {
-  return alerta.estatus as EstatusAlertaRevision;
+  const estatus = alerta.estatus as EstatusAlertaRevision;
+  if (estatus === "REPORTADA") return "CONFIRMADA";
+  if (estatus === "VENCIDA") return "PENDIENTE";
+  return estatus;
 }
