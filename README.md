@@ -51,7 +51,7 @@ src/
     auth/              # login
     sucursales/        # elegir sucursal tras el login
     catalogos/         # hooks de solo lectura de catálogos (para selectores)
-    socios/            # búsqueda de socios y perfil de riesgo
+    acreditados/            # búsqueda de acreditados y perfil de riesgo
     configuracion-alertas/            # personas bloqueadas: consulta y carga masiva
     configuraciones/
       oficial-cumplimiento/           # ficha del oficial (datos, domicilio, parámetros PLD)
@@ -59,7 +59,7 @@ src/
       administracion/{usuarios,roles,permisos}/
       ubicacion-geografica/{zonas-geograficas,entidades,localidades,paises}/
     operacion/
-      evaluacion-riesgo/              # tablero de la matriz de riesgo: al elegir un socio se evalúa solo con su perfil
+      evaluacion-riesgo/              # tablero de la matriz de riesgo: al elegir un acreditado se evalúa solo con su perfil
       consulta-listas/                # consulta de listas de coincidencia
     <feature>/
       api/             # funciones que llaman al backend (<x>Api.ts)
@@ -143,12 +143,12 @@ hover), no el acento de marca. No hay modo oscuro todavía.
 
 ## Evaluación de riesgo automática
 
-Al elegir un socio en `operacion/evaluacion-riesgo`, `useEvaluacionAutomatica` pide su
-perfil (`GET /socios/{ref}/perfil-riesgo`: identidad, actividad, domicilio, antigüedad en el
+Al elegir un acreditado en `operacion/evaluacion-riesgo`, `useEvaluacionAutomatica` pide su
+perfil (`GET /acreditados/{ref}/perfil-riesgo`: identidad, actividad, domicilio, antigüedad en el
 giro, PEP, crédito solicitado e historial crediticio), arma la solicitud con
 `utils/solicitud.ts` (la misma que usa el formulario) y la envía una sola vez por elección.
 Si al perfil le falta algo, no evalúa: el tablero dice qué falta y "Completar y evaluar" abre el
-formulario con lo que ya se sabe. Un socio con evaluación en la sesión no se evalúa de nuevo
+formulario con lo que ya se sabe. Un acreditado con evaluación en la sesión no se evalúa de nuevo
 (el botón "Volver a evaluar" lo hace a propósito). La moneda no se guarda con el crédito y se
 manda como MXN; tipo de pago y EBR son opcionales y no se mandan.
 

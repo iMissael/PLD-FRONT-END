@@ -13,26 +13,26 @@ export interface EvaluacionDeSesion {
 
 interface EvaluacionesSesionState {
   evaluaciones: Record<string, EvaluacionDeSesion>;
-  guardar: (socioRef: string, evaluacion: EvaluacionDeSesion) => void;
+  guardar: (acreditadoRef: string, evaluacion: EvaluacionDeSesion) => void;
   /** Descarta todas: los catálogos o la matriz cambiaron y hay que volver a evaluar. */
   limpiar: () => void;
 }
 
-// No hay endpoint para recuperar la evaluación de un socio, así que las hechas en esta
-// pestaña se recuerdan (por tenant y socio) para poder volver a verlas desde la lupa.
-export function claveEvaluacion(socioRef: string) {
-  return `${getCurrentTenantId()}|${socioRef}`;
+// No hay endpoint para recuperar la evaluación de un acreditado, así que las hechas en esta
+// pestaña se recuerdan (por tenant y acreditado) para poder volver a verlas desde la lupa.
+export function claveEvaluacion(acreditadoRef: string) {
+  return `${getCurrentTenantId()}|${acreditadoRef}`;
 }
 
 export const useEvaluacionesSesionStore = create<EvaluacionesSesionState>()(
   persist(
     (set) => ({
       evaluaciones: {},
-      guardar: (socioRef, evaluacion) =>
+      guardar: (acreditadoRef, evaluacion) =>
         set((estado) => ({
           evaluaciones: {
             ...estado.evaluaciones,
-            [claveEvaluacion(socioRef)]: evaluacion,
+            [claveEvaluacion(acreditadoRef)]: evaluacion,
           },
         })),
       limpiar: () => set({ evaluaciones: {} }),
@@ -46,7 +46,7 @@ export const useEvaluacionesSesionStore = create<EvaluacionesSesionState>()(
 
 /**
  * Una evaluación recordada solo sirve si se calculó con la matriz vigente: si se publicó otra
- * versión, el socio se evalúa de nuevo. Mientras no se conoce la matriz activa se da por vigente.
+ * versión, el acreditado se evalúa de nuevo. Mientras no se conoce la matriz activa se da por vigente.
  */
 export function evaluacionVigente(
   evaluacion: EvaluacionDeSesion | undefined,

@@ -3,8 +3,8 @@
  * a partir de `CatTipoCreditoController` en `denuncias-app`.
  */
 
-/** Valores del enum `Estatus` del backend. El formulario solo ofrece A y B. */
-export type EstatusTipoCredito = "A" | "B" | "S" | "E";
+/** A=Activo, I=Inactivo, B=Baja (borrado lógico). */
+export type EstatusTipoCredito = "A" | "I" | "B";
 
 /**
  * Igual a `CrearCatTipoCreditoRequest`. Sin `id`: lo genera el adaptador como
@@ -15,7 +15,6 @@ export type EstatusTipoCredito = "A" | "B" | "S" | "E";
  * no un null.
  */
 export interface CrearTipoCreditoInput {
-  nombre: string;
   catNivelRiesgoId: number;
   catTipoPrestamoId: string;
   estatus: EstatusTipoCredito;
@@ -27,7 +26,6 @@ export type ActualizarTipoCreditoInput = CrearTipoCreditoInput;
 /** Igual a `CatTipoCreditoResponse`. */
 export interface TipoCreditoResponse {
   id: string;
-  nombre: string;
   catNivelRiesgoId: number;
   catTipoPrestamoId: string;
   estatus: EstatusTipoCredito;

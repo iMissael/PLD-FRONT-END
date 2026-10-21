@@ -65,7 +65,7 @@ export function SeccionDomicilio({ form }: { form: FichaForm }) {
       (paises ?? [])
         .filter((item) => item.idPais)
         .map((item) => ({
-          valor: item.idPais ?? "",
+          valor: String(item.idPais),
           etiqueta: item.nombre ?? "",
           codigo: item.codigoIso,
         })),
@@ -74,7 +74,7 @@ export function SeccionDomicilio({ form }: { form: FichaForm }) {
   const opcionesEntidades = useMemo<OpcionCatalogo[]>(
     () =>
       (entidades ?? [])
-        .filter((item) => !pais || item.idPais === pais)
+        .filter((item) => !pais || String(item.idPais) === pais)
         .map((item) => ({
           valor: String(item.idEntidad),
           etiqueta: item.nombre ?? "",

@@ -12,7 +12,7 @@ export interface ModificarNivelRiesgoInput {
   observaciones: string;
 }
 
-/** Datos del socio que se muestran en el expediente de la matriz de riesgo. */
+/** Datos del acreditado que se muestran en el expediente de la matriz de riesgo. */
 export type ClienteMatrizRiesgo = {
   nombre: string;
   numero: string;

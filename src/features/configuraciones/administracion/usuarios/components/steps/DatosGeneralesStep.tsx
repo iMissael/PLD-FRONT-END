@@ -54,7 +54,7 @@ export function DatosGeneralesStep({
   const entidadesDelPais = useMemo(() => {
     if (!entidades) return [];
     if (!paisSeleccionado) return entidades;
-    return entidades.filter((entidad) => entidad.idPais === paisSeleccionado);
+    return entidades.filter((entidad) => String(entidad.idPais) === paisSeleccionado);
   }, [entidades, paisSeleccionado]);
 
   return (
@@ -252,7 +252,7 @@ export function DatosGeneralesStep({
                   </FormControl>
                   <SelectContent>
                     {paises?.map((pais) => (
-                      <SelectItem key={pais.idPais} value={pais.idPais ?? ""}>
+                      <SelectItem key={pais.idPais} value={String(pais.idPais)}>
                         {pais.nombre}
                       </SelectItem>
                     ))}

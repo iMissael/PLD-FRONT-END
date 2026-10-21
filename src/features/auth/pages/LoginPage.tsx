@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 import { LoginForm } from "@/features/auth/components/LoginForm";
@@ -5,6 +6,15 @@ import { LoginForm } from "@/features/auth/components/LoginForm";
 const anioActual = new Date().getFullYear();
 
 export function LoginPage() {
+  // El login no tiene control de tema (ThemeToggle solo vive en el Header de la app ya
+  // autenticada): si el modo oscuro quedó activo -- por el sistema (tema "auto") o porque el
+  // usuario lo activó antes de cerrar sesión -- nadie lo vuelve a poner en claro, y esta pantalla
+  // se queda oscura indefinidamente. El login siempre se ve igual (claro), sin importar el tema
+  // de la app; al volver a entrar, el Header reaplica la preferencia guardada con normalidad.
+  useEffect(() => {
+    document.documentElement.classList.remove("dark");
+  }, []);
+
   return (
     <div className="flex min-h-svh flex-col">
       <main className="bg-nav-soft flex flex-1 items-center justify-center p-6 sm:p-10">

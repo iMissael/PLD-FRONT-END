@@ -91,9 +91,9 @@ export function sanitizeRichHtml(html: string): string {
   try {
     return DOMPurify.sanitize(html, {
       USE_PROFILES: { html: true },
-      ADD_ATTR: ["target", "rel", "style", "class"],
-      ADD_TAGS: ["mark"],
-      FORBID_TAGS: ["style", "form", "input", "button", "iframe", "object", "embed"],
+      ADD_TAGS: ["mark", "u", "b", "i", "strong", "em", "font"],
+      ADD_ATTR: ["target", "rel", "style", "class", "color"],
+      FORBID_TAGS: ["style", "form", "input", "button", "iframe", "object", "embed", "script"],
     });
   } finally {
     DOMPurify.removeHook("uponSanitizeAttribute");

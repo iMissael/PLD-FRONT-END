@@ -6,7 +6,7 @@ import type {
   ClienteMatrizRiesgo,
   EvaluacionRiesgoSolicitud,
 } from "@/features/operacion/evaluacion-riesgo/types/evaluacionRiesgo";
-import type { SocioPerfilRiesgo } from "@/features/socios/types/socios";
+import type { AcreditadoPerfilRiesgo } from "@/features/acreditados/types/acreditados";
 
 /** Moneda con la que se evalúa cuando el crédito no trae otra: el crédito solicitado no la guarda. */
 export const MONEDA_POR_DEFECTO = "MXN";
@@ -36,21 +36,21 @@ export function fechaHoraActual(ahora = new Date()) {
 }
 
 /**
- * Lo que el perfil del socio ya sabe, con la forma del formulario de evaluación: identidad,
+ * Lo que el perfil del acreditado ya sabe, con la forma del formulario de evaluación: identidad,
  * actividad, domicilio, crédito solicitado e historial crediticio. Lo que no trae queda vacío.
  */
 export function valoresDesdePerfil(
-  perfil: SocioPerfilRiesgo,
+  perfil: AcreditadoPerfilRiesgo,
 ): EvaluacionRiesgoFormValues {
   const domicilio = perfil.domicilio;
   const credito = perfil.creditoSolicitado;
 
   return {
-    socioReferencia: aTexto(perfil.referencia),
-    socioNombre: aTexto(perfil.nombre),
-    socioNombres: aTexto(perfil.nombres),
-    socioApellidoP: aTexto(perfil.apellidoPaterno),
-    socioApellidoM: aTexto(perfil.apellidoMaterno),
+    acreditadoReferencia: aTexto(perfil.referencia),
+    acreditadoNombre: aTexto(perfil.nombre),
+    acreditadoNombres: aTexto(perfil.nombres),
+    acreditadoApellidoP: aTexto(perfil.apellidoPaterno),
+    acreditadoApellidoM: aTexto(perfil.apellidoMaterno),
     rfc: aTexto(perfil.rfc),
     curp: aTexto(perfil.curp),
     tipoPersonaId: aTexto(perfil.tipoPersona?.id),
@@ -94,8 +94,8 @@ export function valoresDesdePerfil(
 }
 
 const ETIQUETAS_CAMPO: Partial<Record<keyof EvaluacionRiesgoFormValues, string>> = {
-  socioReferencia: "Socio",
-  socioNombre: "Nombre del socio",
+  acreditadoReferencia: "Acreditado",
+  acreditadoNombre: "Nombre del acreditado",
   tipoPersonaId: "Tipo de persona",
   nacionalidadId: "Nacionalidad",
   fechaNacimiento: "Fecha de nacimiento o constitución",
@@ -120,7 +120,7 @@ export function datosFaltantes(values: EvaluacionRiesgoFormValues): string[] {
   return [...new Set(etiquetas)];
 }
 
-/** Cuerpo de `POST /pld/evaluaciones` a partir de lo capturado (o cargado del perfil). */
+/** Cuerpo de `POST /evaluaciones` a partir de lo capturado (o cargado del perfil). */
 export function construirSolicitud(
   values: EvaluacionRiesgoFormValues,
   contexto: { sucursalId?: string; verificadoPor: string },
@@ -130,59 +130,54 @@ export function construirSolicitud(
   const tieneHistorial = values.creditosAnteriores.length > 0;
 
   return {
-    metadata: {
-      fecha_solicitud: ahora.toISOString(),
+    meta: {
+      timestamp: ahora.toISOString(),
       sucursal_id: contexto.sucursalId,
-      usuario_verficador_ref: contexto.verificadoPor,
+      usuario_verificador_ref: contexto.verificadoPor,
     },
-    socio: {
-      referencia: values.socioReferencia,
-      nombre: values.socioNombres || values.socioNombre,
-      apellido_p: aTextoOIndefinido(values.socioApellidoP),
-      apellido_m: aTextoOIndefinido(values.socioApellidoM),
+    acreditado: {
+      acreditado_ref: values.acreditadoReferencia,
+      nombre: values.acreditadoNombres || values.acreditadoNombre,
+      apellido_p: aTextoOIndefinido(values.acreditadoApellidoP),
+      apellido_m: aTextoOIndefinido(values.acreditadoApellidoM),
       rfc: aTextoOIndefinido(values.rfc),
       curp: aTextoOIndefinido(values.curp),
-      tipo_persona_id: values.tipoPersonaId,
-      nacionalidad_id: values.nacionalidadId,
+      tipo_acreditado_id: Number(values.tipoPersonaId),
+      nacionalidad_id: Number(values.nacionalidadId),
       fecha_nacimiento: values.fechaNacimiento,
-      antiguedad_giro_anios: values.antiguedadGiroAnios,
-      pep_nacional_id: aTextoOIndefinido(values.pepNacionalId),
-      actividad_economica_id: values.actividadEconomicaId,
+      // pep_nacional_id ya no existe en el contrato: el backend lo quitó y lo ignoraba de todas
+      // formas (el riesgo PEP se resuelve por listas, no por este campo). El selector "PEP
+      // Nacional" del formulario queda pendiente de retirar aparte.
+      actividad_economica_id: Number(values.actividadEconomicaId),
     },
     domicilio: {
       localidad_id: Number(values.localidadId),
       direccion: {
         calle: aTextoOIndefinido(values.calle),
         tipo_calle: aTextoOIndefinido(values.tipoCalle),
-        no_exterior: aNumeroOIndefinido(values.noExterior),
-        no_interior: aNumeroOIndefinido(values.noInterior),
+        no_exterior: aTextoOIndefinido(values.noExterior),
+        no_interior: aTextoOIndefinido(values.noInterior),
         codigo_postal: aTextoOIndefinido(values.codigoPostal),
-        asentamiento: tieneAsentamiento
-          ? {
-              tipo: aTextoOIndefinido(values.asentamientoTipo),
-              nombre: aTextoOIndefinido(values.asentamientoNombre),
-            }
-          : undefined,
+        tipo: tieneAsentamiento ? aTextoOIndefinido(values.asentamientoTipo) : undefined,
+        nombre: tieneAsentamiento ? aTextoOIndefinido(values.asentamientoNombre) : undefined,
       },
     },
     credito: {
-      referencia: aTextoOIndefinido(values.creditoReferencia),
-      tipo: values.creditoTipo,
+      credito_ref: aTextoOIndefinido(values.creditoReferencia),
+      tipo_id: Number(values.creditoTipo),
       monto: Number(values.monto),
-      moneda: aTextoOIndefinido(values.moneda),
-      origen_recursos: values.origenRecursos,
-      destino_recursos: values.destinoRecursos,
+      // moneda_id es un catálogo numérico; el formulario sigue capturando el código (MXN) como
+      // texto libre, no hay con qué mapearlo todavía, así que se omite en vez de mandar un id falso.
+      origen_recursos: aNumeroOIndefinido(values.origenRecursos),
+      destino_recursos: aNumeroOIndefinido(values.destinoRecursos),
       canal_pago_id: Number(values.canalPagoId),
       tipo_pago_id: aNumeroOIndefinido(values.tipoPagoId),
-      ebr_soluciones: aTextoOIndefinido(values.ebrSoluciones),
     },
     historial_crediticio: tieneHistorial
       ? {
           creditos_anteriores: values.creditosAnteriores.map((anterior) => ({
-            referencia: aTextoOIndefinido(anterior.referencia),
-            tipo: aTextoOIndefinido(anterior.tipo),
+            credito_ref: aTextoOIndefinido(anterior.referencia),
             monto: aNumeroOIndefinido(anterior.monto),
-            moneda: aTextoOIndefinido(anterior.moneda),
             fecha_otorgamiento: aTextoOIndefinido(anterior.fechaOtorgamiento),
             estatus: aTextoOIndefinido(anterior.estatus),
           })),
@@ -191,7 +186,7 @@ export function construirSolicitud(
   };
 }
 
-/** Expediente que el tablero muestra del socio recién evaluado. */
+/** Expediente que el tablero muestra del acreditado recién evaluado. */
 export function construirCliente(
   values: EvaluacionRiesgoFormValues,
   nombreTipoPersona: string | undefined,
@@ -200,9 +195,9 @@ export function construirCliente(
 ): ClienteMatrizRiesgo {
   const tipoPersona = nombreTipoPersona ?? "—";
   return {
-    nombre: values.socioNombre,
-    numero: values.socioReferencia,
-    referencia: values.socioReferencia,
+    nombre: values.acreditadoNombre,
+    numero: values.acreditadoReferencia,
+    referencia: values.acreditadoReferencia,
     rfc: values.rfc || "—",
     curp: values.curp || "—",
     persona: /moral/i.test(tipoPersona) ? "MORAL" : "FISICA",

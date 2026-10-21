@@ -9,6 +9,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { Button } from "@/shared/components/atoms/Button";
+import { es } from "@/shared/i18n/es";
 import { cn } from "@/shared/utils/cn";
 import {
   EncabezadoDesglose,
@@ -20,10 +21,10 @@ import type { ClienteMatrizRiesgo } from "@/features/operacion/evaluacion-riesgo
 import type { EvaluacionRiesgoResultado } from "@/features/operacion/evaluacion-riesgo/types/evaluacionRiesgo";
 import type { DetallesSubfactor } from "@/features/operacion/evaluacion-riesgo/utils/detalleSubfactor";
 import { nivelPorDescripcion, nivelPorValorEntero } from "@/features/operacion/evaluacion-riesgo/utils/nivelRiesgo";
-import type { SocioExterno } from "@/features/socios/types/socios";
+import type { AcreditadoExterno } from "@/features/acreditados/types/acreditados";
 
 /**
- * Tablero "Matriz de Riesgo Integral": encabezado con búsqueda de socios, expediente
+ * Tablero "Matriz de Riesgo Integral": encabezado con búsqueda de acreditados, expediente
  * del cliente a la izquierda y matriz de factores a la derecha. Adaptado con tokens semánticos
  * para soporte completo de modo claro y oscuro.
  */
@@ -92,8 +93,8 @@ function EstadoSinEvaluacion({
     return (
       <TarjetaEstado
         icono={Loader2}
-        titulo={`Evaluando el riesgo de ${cliente?.nombre ?? "el socio"}…`}
-        descripcion="Se calcula con los datos del socio y su crédito solicitado."
+        titulo={`${es.cliente.evaluandoRiesgoDe} ${cliente?.nombre ?? es.cliente.fallback}…`}
+        descripcion={es.cliente.calculoDesdeDatos}
       />
     );
   }
@@ -115,7 +116,7 @@ function EstadoSinEvaluacion({
       <TarjetaEstado
         icono={AlertTriangle}
         tono="error"
-        titulo="No se pudo evaluar al socio"
+        titulo={es.cliente.noSePudoEvaluar}
         descripcion={estado.mensaje}
       >
         <div className="flex flex-wrap justify-center gap-2">
@@ -137,13 +138,13 @@ function EstadoSinEvaluacion({
       icono={hayCliente ? ClipboardList : Search}
       titulo={
         hayCliente
-          ? "Este socio aún no tiene una evaluación en esta sesión"
-          : "Busca un socio con la lupa"
+          ? es.cliente.sinEvaluacionEnSesion
+          : es.cliente.buscarConLupa
       }
       descripcion={
         hayCliente
           ? "Evalúa su riesgo para calcular su matriz."
-          : "Elige a un socio y su evaluación de riesgo se calcula al instante."
+          : es.cliente.elegirParaEvaluar
       }
     >
       {hayCliente && <Button onClick={onEvaluar}>Evaluar riesgo</Button>}
@@ -153,25 +154,25 @@ function EstadoSinEvaluacion({
 
 export function MatrizRiesgoDashboard({
   cliente,
-  cargandoSocio,
-  errorSocio,
+  cargandoAcreditado,
+  errorAcreditado,
   evaluacion,
   estadoEvaluacion,
-  onSeleccionarSocio,
+  onSeleccionarAcreditado,
   onEvaluar,
   onReintentar,
   onReevaluar,
 }: {
   cliente: ClienteMatrizRiesgo | null;
-  cargandoSocio: boolean;
-  errorSocio: boolean;
+  cargandoAcreditado: boolean;
+  errorAcreditado: boolean;
   evaluacion: EvaluacionMostrada | null;
   estadoEvaluacion: EstadoEvaluacionAutomatica;
-  onSeleccionarSocio: (socio: SocioExterno) => void;
-  /** Abre el formulario de evaluación (con los datos del socio ya cargados). */
+  onSeleccionarAcreditado: (acreditado: AcreditadoExterno) => void;
+  /** Abre el formulario de evaluación (con los datos del acreditado ya cargados). */
   onEvaluar: () => void;
   onReintentar: () => void;
-  /** Vuelve a evaluar al socio mostrado con sus datos actuales, sin abrir el formulario. */
+  /** Vuelve a evaluar al acreditado mostrado con sus datos actuales, sin abrir el formulario. */
   onReevaluar: () => void;
 }) {
   const resultado = evaluacion?.resultado;
@@ -260,10 +261,10 @@ export function MatrizRiesgoDashboard({
       <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
         <ExpedienteClienteAside
           cliente={cliente}
-          cargando={cargandoSocio}
-          error={errorSocio}
+          cargando={cargandoAcreditado}
+          error={errorAcreditado}
           valorBuscador={cliente?.referencia ?? ""}
-          onSeleccionarSocio={onSeleccionarSocio}
+          onSeleccionarAcreditado={onSeleccionarAcreditado}
         />
 
         <section className="flex min-h-0 min-w-0 flex-1 flex-col bg-muted/10 lg:rounded-br-lg">

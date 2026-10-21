@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import {
   FormControl,
@@ -22,6 +23,7 @@ import type {
   TipoCreditoResponse,
   TipoPagoResponse,
 } from "@/features/catalogos/types/catalogos";
+import type { TipoPrestamoResponse } from "@/features/configuraciones/tipos-prestamo/types/tipoPrestamo";
 
 const EBR_OPCIONES = [
   { value: "BAJO", label: "Bajo" },
@@ -34,6 +36,8 @@ const EBR_OPCIONES = [
 interface FormSeccionCreditoProps {
   form: UseFormReturn<EvaluacionRiesgoFormValues>;
   tiposCredito?: TipoCreditoResponse[];
+  /** `cat_tipo_credito` ya no tiene nombre: el texto del select sale de aquí. */
+  tiposPrestamo?: TipoPrestamoResponse[];
   origenesRecurso?: OrigenRecursoResponse[];
   destinosRecurso?: DestinoRecursoResponse[];
   canalesPago?: CanalPagoResponse[];
@@ -43,12 +47,20 @@ interface FormSeccionCreditoProps {
 export function FormSeccionCredito({
   form,
   tiposCredito,
+  tiposPrestamo,
   origenesRecurso,
   destinosRecurso,
   canalesPago,
   tiposPagoDelCanal,
 }: FormSeccionCreditoProps) {
   const { control } = form;
+
+  const nombrePrestamo = useMemo(() => {
+    const mapa = new Map<string, string>();
+    tiposPrestamo?.forEach((tp) => mapa.set(String(tp.id), tp.nombre));
+    return (tipo: TipoCreditoResponse) =>
+      mapa.get(String(tipo.catTipoPrestamoId ?? "")) ?? `Tipo ${tipo.id}`;
+  }, [tiposPrestamo]);
 
   return (
     <fieldset className="space-y-4">
@@ -81,8 +93,8 @@ export function FormSeccionCredito({
                 </FormControl>
                 <SelectContent>
                   {tiposCredito?.map((tipo) => (
-                    <SelectItem key={tipo.id} value={tipo.id ?? ""}>
-                      {tipo.nombre}
+                    <SelectItem key={tipo.id} value={String(tipo.id)}>
+                      {nombrePrestamo(tipo)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -137,7 +149,7 @@ export function FormSeccionCredito({
                 </FormControl>
                 <SelectContent>
                   {origenesRecurso?.map((origen) => (
-                    <SelectItem key={origen.id} value={origen.id ?? ""}>
+                    <SelectItem key={origen.id} value={String(origen.id)}>
                       {origen.nombre}
                     </SelectItem>
                   ))}
@@ -161,7 +173,7 @@ export function FormSeccionCredito({
                 </FormControl>
                 <SelectContent>
                   {destinosRecurso?.map((destino) => (
-                    <SelectItem key={destino.id} value={destino.id ?? ""}>
+                    <SelectItem key={destino.id} value={String(destino.id)}>
                       {destino.nombre}
                     </SelectItem>
                   ))}

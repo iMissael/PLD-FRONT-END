@@ -9,6 +9,7 @@ import type {
   EstatusAlertaRevision,
   ExpedienteAlerta,
   FiltroAlertas,
+  MovimientoAlerta,
   PaginaAlertas,
   PaginaEmpleados,
   RazonAlerta,
@@ -67,6 +68,11 @@ export async function obtenerExpedienteAlerta(id: number): Promise<ExpedienteAle
   const { data } = await apiClient.get<ExpedienteAlerta>(
     `/alertas/${id}/expediente`,
   );
+  return data;
+}
+
+export async function obtenerMovimientoAlerta(id: number): Promise<MovimientoAlerta> {
+  const { data } = await apiClient.get<MovimientoAlerta>(`/alertas/${id}/movimiento`);
   return data;
 }
 

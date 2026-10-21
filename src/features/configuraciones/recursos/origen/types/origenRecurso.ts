@@ -7,8 +7,8 @@
  * identifica solo por `nombre`.
  */
 
-/** Valores del enum `Estatus` del backend. El formulario solo ofrece A y B. */
-export type EstatusOrigenRecurso = "A" | "B" | "S" | "E";
+/** A=Activo, I=Inactivo, B=Baja (borrado lógico). */
+export type EstatusOrigenRecurso = "A" | "I" | "B";
 
 /**
  * Igual a `CrearCatOrigenRecursoRequest`. Sin `id`: lo genera el adaptador

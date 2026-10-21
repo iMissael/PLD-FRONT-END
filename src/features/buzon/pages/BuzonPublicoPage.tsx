@@ -84,13 +84,13 @@ export function BuzonPublicoPage() {
       tipoDesc.includes("INUSUAL"));
 
   const denunciadoLabel = isInusual
-    ? es.buzon.denouncedSocio
+    ? es.buzon.denouncedAcreditado
     : isInternaPreocupante
     ? es.buzon.denouncedEmpleado
     : es.buzon.denouncedName;
 
   const denunciadoPlaceholder = isInusual
-    ? es.buzon.denouncedSocioPlaceholder
+    ? es.buzon.denouncedAcreditadoPlaceholder
     : isInternaPreocupante
     ? es.buzon.denouncedEmpleadoPlaceholder
     : es.buzon.denouncedNamePlaceholder;

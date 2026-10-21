@@ -12,6 +12,7 @@ import {
   useTiposCredito,
   useTiposPersona,
 } from "@/features/catalogos/hooks/useCatalogos";
+import { useTiposPrestamo } from "@/features/configuraciones/tipos-prestamo/hooks/useTiposPrestamo";
 import { useEvaluarRiesgo } from "@/features/operacion/evaluacion-riesgo/hooks/useEvaluacionRiesgo";
 import type {
   ClienteMatrizRiesgo,
@@ -27,13 +28,13 @@ import {
   datosFaltantes,
   valoresDesdePerfil,
 } from "@/features/operacion/evaluacion-riesgo/utils/solicitud";
-import type { SocioPerfilRiesgo } from "@/features/socios/types/socios";
+import type { AcreditadoPerfilRiesgo } from "@/features/acreditados/types/acreditados";
 import { useAuthStore } from "@/shared/auth/authStore";
 
 export type EstadoEvaluacionAutomatica =
   | { tipo: "inactivo" }
   | { tipo: "evaluando" }
-  /** El perfil del socio no trae todo lo necesario: hay que completarlo en el formulario. */
+  /** El perfil del acreditado no trae todo lo necesario: hay que completarlo en el formulario. */
   | { tipo: "incompleto"; faltantes: string[] }
   | { tipo: "error"; mensaje: string };
 
@@ -42,7 +43,7 @@ const INACTIVO: EstadoEvaluacionAutomatica = { tipo: "inactivo" };
 export function mensajeDeErrorDeEvaluacion(error: unknown) {
   if (isAppError(error)) {
     if (error.status === 409) {
-      return "El socio tiene coincidencias en listas pendientes de revisión del oficial de cumplimiento, por eso la evaluación se detuvo.";
+      return "El acreditado tiene coincidencias en listas pendientes de revisión del oficial de cumplimiento, por eso la evaluación se detuvo.";
     }
     return error.message;
   }
@@ -50,21 +51,21 @@ export function mensajeDeErrorDeEvaluacion(error: unknown) {
 }
 
 /**
- * Evalúa al socio elegido sin pedir datos: si su perfil ya trae identidad, actividad, domicilio y
+ * Evalúa al acreditado elegido sin pedir datos: si su perfil ya trae identidad, actividad, domicilio y
  * crédito solicitado, arma la solicitud y la envía una sola vez por elección. Si falta algo no
  * evalúa: lo informa para completarlo en el formulario.
  *
- * `habilitada` en falso (por ejemplo, el socio ya tiene una evaluación en la sesión) la apaga.
+ * `habilitada` en falso (por ejemplo, el acreditado ya tiene una evaluación en la sesión) la apaga.
  * `reintentar` vuelve a evaluar con el perfil actual.
  */
 export function useEvaluacionAutomatica({
-  socio,
+  acreditado,
   perfil,
   habilitada,
   onResultado,
 }: {
-  socio: { id: string; nombre: string } | null;
-  perfil: SocioPerfilRiesgo | undefined;
+  acreditado: { id: string; nombre: string } | null;
+  perfil: AcreditadoPerfilRiesgo | undefined;
   habilitada: boolean;
   onResultado: (
     resultado: EvaluacionRiesgoResultado,
@@ -78,6 +79,7 @@ export function useEvaluacionAutomatica({
   const peps = usePeps();
   const actividades = useActividadesEconomicas();
   const tiposCredito = useTiposCredito();
+  const tiposPrestamo = useTiposPrestamo();
   const origenes = useOrigenesRecurso();
   const destinos = useDestinosRecurso();
   const canales = useCanalesPago();
@@ -95,19 +97,13 @@ export function useEvaluacionAutomatica({
     alTerminar.current = onResultado;
   });
 
-  const clave = socio ? `${socio.id}#${intento}` : null;
+  const clave = acreditado ? `${acreditado.id}#${intento}` : null;
   const valores = useMemo(() => (perfil ? valoresDesdePerfil(perfil) : null), [perfil]);
 
-  const catalogos = [
-    tiposPersona,
-    paises,
-    peps,
-    actividades,
-    tiposCredito,
-    origenes,
-    destinos,
-    canales,
-  ];
+  const catalogos = useMemo(
+    () => [tiposPersona, paises, peps, actividades, tiposCredito, origenes, destinos, canales],
+    [tiposPersona, paises, peps, actividades, tiposCredito, origenes, destinos, canales],
+  );
   const catalogosConError =
     catalogos.some((catalogo) => catalogo.isError) || localidades.isError;
   const catalogosListos =
@@ -151,7 +147,7 @@ export function useEvaluacionAutomatica({
     const payload = construirSolicitud(valores, { verificadoPor: String(verificadoPor) });
     const cliente = construirCliente(
       valores,
-      tiposPersona.data?.find((tipo) => tipo.id === valores.tipoPersonaId)?.nombre,
+      tiposPersona.data?.find((tipo) => String(tipo.id) === valores.tipoPersonaId)?.nombre,
       undefined,
     );
     const detalles = construirDetalles(valores, {
@@ -160,6 +156,7 @@ export function useEvaluacionAutomatica({
       peps: peps.data,
       actividades: actividades.data,
       tiposCredito: tiposCredito.data,
+      tiposPrestamo: tiposPrestamo.data,
       origenes: origenes.data,
       destinos: destinos.data,
       canales: canales.data,
@@ -190,15 +187,25 @@ export function useEvaluacionAutomatica({
     peps.data,
     actividades.data,
     tiposCredito.data,
+    tiposPrestamo.data,
     origenes.data,
     destinos.data,
     canales.data,
     localidades.data,
   ]);
 
-  const reintentar = useCallback(() => setIntento((actual) => actual + 1), []);
+  // No basta con reintentar la evaluación: si un catálogo quedó en error, React Query no lo
+  // vuelve a pedir solo (staleTime Infinity), así que "Reintentar" se quedaría mostrando el
+  // mismo error para siempre si no se refresca explícitamente el catálogo que falló.
+  const reintentar = useCallback(() => {
+    for (const catalogo of catalogos) {
+      if (catalogo.isError) void catalogo.refetch();
+    }
+    if (localidades.isError) void localidades.refetch();
+    setIntento((actual) => actual + 1);
+  }, [catalogos, localidades]);
   // Mientras llegan los catálogos (el perfil ya está) se considera en curso, para que el tablero no
-  // muestre por un instante que el socio "no tiene evaluación".
+  // muestre por un instante que el acreditado "no tiene evaluación".
   const estado: EstadoEvaluacionAutomatica =
     registro && registro.clave === clave
       ? registro.estado

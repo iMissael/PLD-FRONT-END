@@ -32,7 +32,7 @@ function idsDeZona(entidad: EntidadResponse): string[] {
   return entidad.idZona ? [entidad.idZona] : [];
 }
 
-/** Datos de una zona ya resueltos contra el catálogo. */
+/** Datos de una zona ya resueltos contra el catálogo. Nivel null solo en una zona especial. */
 interface ZonaInfo {
   nombre: string;
   /** Nullable: una zona puede no tener nivel de riesgo resuelto. */
@@ -183,10 +183,13 @@ export function EntidadesPage() {
       {
         header: "Nivel de riesgo",
         cell: (item: EntidadResponse) => {
-          // Sin nivel resuelto no se interpola: daria "null (null)".
-          const niveles = zonasNoEspeciales(item, mapaZonas)
-            .filter((info) => info.nivelRiesgoDescripcion !== null)
-            .map((info) => `${info.nivelRiesgoDescripcion} (${info.nivelRiesgoValor ?? 0})`);
+          // "—" en vez de omitir: mantiene la misma posición/cuenta que la
+          // columna "Zona de riesgo", que lista todas las zonas sin filtrar.
+          const niveles = zonasNoEspeciales(item, mapaZonas).map((info) =>
+            info.nivelRiesgoDescripcion !== null
+              ? `${info.nivelRiesgoDescripcion} (${info.nivelRiesgoValor})`
+              : "—",
+          );
           return niveles.length > 0 ? niveles.join(", ") : "—";
         },
       },

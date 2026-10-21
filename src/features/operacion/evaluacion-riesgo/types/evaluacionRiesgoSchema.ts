@@ -10,13 +10,13 @@ const creditoAnteriorSchema = z.object({
 });
 
 export const evaluacionRiesgoSchema = z.object({
-  // Socio
-  socioReferencia: z.string().min(1, "Selecciona un socio"),
-  socioNombre: z.string().min(1, "Selecciona un socio"),
-  // Los provee el perfil del socio (no se capturan): la consulta de listas los compara por separado.
-  socioNombres: z.string().optional(),
-  socioApellidoP: z.string().optional(),
-  socioApellidoM: z.string().optional(),
+  // Acreditado
+  acreditadoReferencia: z.string().min(1, "Selecciona un acreditado"),
+  acreditadoNombre: z.string().min(1, "Selecciona un acreditado"),
+  // Los provee el perfil del acreditado (no se capturan): la consulta de listas los compara por separado.
+  acreditadoNombres: z.string().optional(),
+  acreditadoApellidoP: z.string().optional(),
+  acreditadoApellidoM: z.string().optional(),
   rfc: z.string().optional(),
   curp: z.string().optional(),
   tipoPersonaId: z.string().min(1, "Selecciona el tipo de persona"),

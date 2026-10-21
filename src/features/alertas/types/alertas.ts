@@ -18,7 +18,7 @@ export type EstatusAlertaRevision = EstatusAlerta | "VENCIDA";
 /** MANUAL = capturada por un usuario; AUTOMATICA = la generó una operación de cajas. */
 export type OrigenAlerta = "MANUAL" | "AUTOMATICA";
 
-/** A quién se reporta: cliente (socio) o empleado. */
+/** A quién se reporta: cliente (acreditado) o empleado. */
 export type TipoReportado = "SOCIO" | "EMPLEADO";
 
 /** `CatalogoAlertaResponses.TipoAlertaResponse`. */
@@ -116,7 +116,7 @@ export interface ExpedienteAlerta {
     referencia: string;
     nombre: string;
     rfc: string | null;
-    /** Solo clientes; se consulta en vivo al servicio de socios. */
+    /** Solo clientes; se consulta en vivo al servicio de acreditados. */
     curp: string | null;
     domicilio: string | null;
     puesto: string | null;
@@ -135,7 +135,7 @@ export interface ExpedienteAlerta {
 
 export interface PerfilTransaccional {
   id: number;
-  socioReferencia: string;
+  acreditadoReferencia: string;
   fechaRegistro: string;
   disponibilidad: number;
   moneda: string;
@@ -190,6 +190,20 @@ export interface PaginaAlertas {
   tamanio: number;
   totalElementos: number;
   totalPaginas: number;
+}
+
+/**
+ * `MovimientoAlertaResponse`: movimiento de caja vinculado a la alerta (folioOperacion).
+ * Todos los campos null si la alerta no tiene operación asociada (p. ej. alertas de
+ * seguimiento por cambio de perfil del socio, no originadas en un movimiento).
+ */
+export interface MovimientoAlerta {
+  folioOperacion: string | null;
+  fecha: string | null;
+  tipoMovimiento: string | null;
+  importe: number | null;
+  moneda: string | null;
+  formaPago: string | null;
 }
 
 /** `AlertaController.DictamenRequest`: el dictamen es obligatorio; los recuadros, no. */

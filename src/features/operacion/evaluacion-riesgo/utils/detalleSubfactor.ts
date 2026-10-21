@@ -61,20 +61,31 @@ export function etiquetaSubfactor(descripcion: string | undefined) {
   );
 }
 
+/** Los ids de catálogo son numéricos en el contrato; el formulario los guarda como texto. */
 interface CatalogosDetalle {
-  tiposPersona?: { id?: string; nombre?: string }[];
-  paises?: { idPais?: string; nombre?: string }[];
-  peps?: { id?: string; nombre?: string }[];
-  actividades?: { id?: string; descripcion?: string }[];
-  tiposCredito?: { id?: string; nombre?: string }[];
-  origenes?: { id?: string; nombre?: string }[];
-  destinos?: { id?: string; nombre?: string }[];
-  canales?: { id?: string; nombre?: string }[];
+  tiposPersona?: { id?: string | number; nombre?: string }[];
+  paises?: { idPais?: string | number; nombre?: string }[];
+  peps?: { id?: string | number; nombre?: string }[];
+  actividades?: { id?: string | number; descripcion?: string }[];
+  /** `cat_tipo_credito` ya no tiene nombre: se identifica por su tipo de préstamo. */
+  tiposCredito?: { id?: string | number; catTipoPrestamoId?: string | number }[];
+  tiposPrestamo?: { id?: string | number; nombre?: string }[];
+  origenes?: { id?: string | number; nombre?: string }[];
+  destinos?: { id?: string | number; nombre?: string }[];
+  canales?: { id?: string | number; nombre?: string }[];
   nombreLocalidad?: string;
 }
 
-function nombreDe(lista: { id?: string; nombre?: string }[] | undefined, id: string) {
+function nombreDe(lista: { id?: string | number; nombre?: string }[] | undefined, id: string) {
   return id ? lista?.find((item) => String(item.id) === id)?.nombre : undefined;
+}
+
+/** Encadena tipo de crédito → tipo de préstamo para obtener un texto legible. */
+function nombreTipoCredito(catalogos: CatalogosDetalle, id: string) {
+  if (!id) return undefined;
+  const credito = catalogos.tiposCredito?.find((item) => String(item.id) === id);
+  if (!credito?.catTipoPrestamoId) return undefined;
+  return nombreDe(catalogos.tiposPrestamo, String(credito.catTipoPrestamoId));
 }
 
 function montoConFormato(monto: string, moneda: string | undefined) {
@@ -106,15 +117,16 @@ export function construirDetalles(
       : undefined,
     "tipo persona": nombreDe(catalogos.tiposPersona, values.tipoPersonaId),
     edad: edad === null ? undefined : `${edad} años`,
-    nacionalidad: catalogos.paises?.find((pais) => pais.idPais === values.nacionalidadId)
-      ?.nombre,
+    nacionalidad: catalogos.paises?.find(
+      (pais) => String(pais.idPais) === values.nacionalidadId,
+    )?.nombre,
     "antiguedad giro anios": values.antiguedadGiroAnios
       ? `${values.antiguedadGiroAnios} años`
       : undefined,
     "es pep nacional":
       nombreDe(catalogos.peps, values.pepNacionalId ?? "") ?? "No es PEP nacional",
     "actividad economica": actividad?.descripcion,
-    "tipo credito": nombreDe(catalogos.tiposCredito, values.creditoTipo),
+    "tipo credito": nombreTipoCredito(catalogos, values.creditoTipo),
     historial:
       values.creditosAnteriores.length > 0
         ? "Cliente con historial"

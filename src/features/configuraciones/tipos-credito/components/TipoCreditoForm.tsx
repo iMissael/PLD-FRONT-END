@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
 import { Button } from "@/shared/components/atoms/Button";
-import { Input } from "@/shared/components/atoms/Input";
 import { Card } from "@/shared/components/molecules";
 import { hint, label } from "@/shared/styles/tokens";
 
@@ -21,14 +20,12 @@ interface TipoCreditoFormProps {
 }
 
 interface FormState {
-  nombre: string;
   catNivelRiesgoId: number | "";
   catTipoPrestamoId: string;
   estatus: EstatusTipoCredito;
 }
 
 const VACIO: FormState = {
-  nombre: "",
   catNivelRiesgoId: "",
   catTipoPrestamoId: "",
   estatus: "A",
@@ -37,7 +34,6 @@ const VACIO: FormState = {
 function aFormState(tipo: TipoCreditoResponse | null): FormState {
   if (!tipo) return VACIO;
   return {
-    nombre: tipo.nombre,
     catNivelRiesgoId: tipo.catNivelRiesgoId,
     catTipoPrestamoId: tipo.catTipoPrestamoId,
     estatus: tipo.estatus,
@@ -69,7 +65,6 @@ export function TipoCreditoForm({
     event.preventDefault();
     if (form.catNivelRiesgoId === "") return;
     onGuardar({
-      nombre: form.nombre.trim(),
       catNivelRiesgoId: form.catNivelRiesgoId,
       catTipoPrestamoId: form.catTipoPrestamoId,
       estatus: form.estatus,
@@ -80,26 +75,10 @@ export function TipoCreditoForm({
     <Card className="p-4">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <h3 className="text-sm font-semibold text-foreground">
-          {esNuevo ? "Nuevo tipo de crédito" : `Editar tipo: ${tipo.nombre}`}
+          {esNuevo ? "Nuevo tipo de crédito" : `Editar tipo de crédito ${tipo.id}`}
         </h3>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div className="flex flex-col gap-1">
-            <label htmlFor="nombre" className={label}>
-              Nombre
-            </label>
-            <Input
-              id="nombre"
-              type="text"
-              required
-              maxLength={150}
-              value={form.nombre}
-              onChange={(event) =>
-                setForm((prev) => ({ ...prev, nombre: event.target.value }))
-              }
-            />
-          </div>
-
           <div className="flex flex-col gap-1">
             <label htmlFor="tipoPrestamo" className={label}>
               Tipo de préstamo
@@ -140,7 +119,7 @@ export function TipoCreditoForm({
               className="border-border bg-card text-foreground focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full rounded-md border px-3 py-1 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <option value="A">Activo</option>
-              <option value="B">Baja</option>
+              <option value="I">Inactivo</option>
             </select>
           </div>
         </div>

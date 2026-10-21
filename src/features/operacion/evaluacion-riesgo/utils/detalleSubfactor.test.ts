@@ -49,7 +49,9 @@ describe("construirDetalles", () => {
     tiposPersona: [{ id: "1", nombre: "Persona Física Nacional" }],
     paises: [{ idPais: "165", nombre: "México" }],
     actividades: [{ id: "10", descripcion: "CULTIVO DE SOYA" }],
-    tiposCredito: [{ id: "2", nombre: "CREDINOMINA" }],
+    // El tipo de crédito ya no tiene nombre: se identifica por su tipo de préstamo.
+    tiposCredito: [{ id: "2", catTipoPrestamoId: "7" }],
+    tiposPrestamo: [{ id: "7", nombre: "CREDINOMINA" }],
     origenes: [{ id: "3", nombre: "SUELDO" }],
     destinos: [{ id: "4", nombre: "CONSUMO" }],
     canales: [{ id: "1", nombre: "SUCURSAL" }],

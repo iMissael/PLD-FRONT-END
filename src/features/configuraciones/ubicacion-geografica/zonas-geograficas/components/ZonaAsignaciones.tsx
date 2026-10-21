@@ -83,7 +83,7 @@ export function ZonaAsignaciones({ zona, onCerrar }: ZonaAsignacionesProps) {
             return (
               (entidad.nombre?.toLowerCase().includes(t) ?? false) ||
               (entidad.claveCurp?.toLowerCase().includes(t) ?? false) ||
-              (entidad.id?.toLowerCase().includes(t) ?? false)
+              String(entidad.id ?? "").toLowerCase().includes(t)
             );
           },
         }}

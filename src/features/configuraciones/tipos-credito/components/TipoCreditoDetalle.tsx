@@ -39,7 +39,7 @@ export function TipoCreditoDetalle({ tipo, onEditar }: TipoCreditoDetalleProps) 
     <Card className="flex flex-col gap-4 p-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-foreground">
-          Detalle del tipo de crédito: {tipo.nombre}
+          Detalle del tipo de crédito: {tipoPrestamo}
         </h3>
         <Button onClick={onEditar}>Editar tipo</Button>
       </div>
@@ -48,11 +48,6 @@ export function TipoCreditoDetalle({ tipo, onEditar }: TipoCreditoDetalleProps) 
         <div className="flex flex-col gap-0.5">
           <span className="text-xs font-medium text-muted-foreground">Clave</span>
           <span className="font-mono text-sm font-semibold text-foreground">{tipo.id}</span>
-        </div>
-
-        <div className="flex flex-col gap-0.5">
-          <span className="text-xs font-medium text-muted-foreground">Nombre</span>
-          <span className="text-sm font-medium text-foreground">{tipo.nombre}</span>
         </div>
 
         <div className="flex flex-col gap-0.5">

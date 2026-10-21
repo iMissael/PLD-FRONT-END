@@ -20,6 +20,7 @@ import {
   useTiposPago,
   useTiposPersona,
 } from "@/features/catalogos/hooks/useCatalogos";
+import { useTiposPrestamo } from "@/features/configuraciones/tipos-prestamo/hooks/useTiposPrestamo";
 import { useEvaluarRiesgo } from "@/features/operacion/evaluacion-riesgo/hooks/useEvaluacionRiesgo";
 import type { ClienteMatrizRiesgo } from "@/features/operacion/evaluacion-riesgo/types/evaluacionRiesgo";
 import {
@@ -44,11 +45,11 @@ import { FormSeccionCredito } from "./form/FormSeccionCredito";
 import { FormSeccionHistorial } from "./form/FormSeccionHistorial";
 
 const valoresPorDefecto: EvaluacionRiesgoFormValues = {
-  socioReferencia: "",
-  socioNombre: "",
-  socioNombres: "",
-  socioApellidoP: "",
-  socioApellidoM: "",
+  acreditadoReferencia: "",
+  acreditadoNombre: "",
+  acreditadoNombres: "",
+  acreditadoApellidoP: "",
+  acreditadoApellidoM: "",
   rfc: "",
   curp: "",
   tipoPersonaId: "",
@@ -82,14 +83,14 @@ const valoresPorDefecto: EvaluacionRiesgoFormValues = {
 
 export function EvaluacionRiesgoForm({
   onResultado,
-  socioInicial,
+  acreditadoInicial,
 }: {
   onResultado: (
     resultado: EvaluacionRiesgoResultado,
     cliente: ClienteMatrizRiesgo,
     detalles: DetallesSubfactor,
   ) => void;
-  socioInicial?: { id: string; nombre: string };
+  acreditadoInicial?: { id: string; nombre: string };
 }) {
   const [enviando, setEnviando] = useState(false);
   const evaluarRiesgo = useEvaluarRiesgo();
@@ -101,6 +102,7 @@ export function EvaluacionRiesgoForm({
   const { data: entidades } = useEntidades();
   const { data: tiposAsentamiento } = useTiposAsentamiento();
   const { data: tiposCredito } = useTiposCredito();
+  const { data: tiposPrestamo } = useTiposPrestamo();
   const { data: origenesRecurso } = useOrigenesRecurso();
   const { data: destinosRecurso } = useDestinosRecurso();
   const { data: canalesPago } = useCanalesPago();
@@ -125,7 +127,7 @@ export function EvaluacionRiesgoForm({
   const entidadesDelPais = useMemo(() => {
     if (!entidades) return [];
     if (!paisSeleccionado) return entidades;
-    return entidades.filter((entidad) => entidad.idPais === paisSeleccionado);
+    return entidades.filter((entidad) => String(entidad.idPais) === paisSeleccionado);
   }, [entidades, paisSeleccionado]);
 
   const { data: municipios } = useMunicipios(aNumeroOIndefinido(entidadSeleccionada));
@@ -150,7 +152,7 @@ export function EvaluacionRiesgoForm({
     const payload = construirSolicitud(values, { verificadoPor: String(verificadoPor) });
 
     const tipoPersonaSeleccionado = tiposPersona?.find(
-      (t) => t.id === values.tipoPersonaId,
+      (t) => String(t.id) === values.tipoPersonaId,
     );
     const cliente = construirCliente(values, tipoPersonaSeleccionado?.nombre, undefined);
 
@@ -160,6 +162,7 @@ export function EvaluacionRiesgoForm({
       peps,
       actividades: actividadesEconomicas,
       tiposCredito,
+      tiposPrestamo,
       origenes: origenesRecurso,
       destinos: destinosRecurso,
       canales: canalesPago,
@@ -189,7 +192,7 @@ export function EvaluacionRiesgoForm({
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormSeccionIdentificacion
           form={form}
-          socioInicial={socioInicial}
+          acreditadoInicial={acreditadoInicial}
           tiposPersona={tiposPersona}
           paises={paises}
           peps={peps}
@@ -208,6 +211,7 @@ export function EvaluacionRiesgoForm({
         <FormSeccionCredito
           form={form}
           tiposCredito={tiposCredito}
+          tiposPrestamo={tiposPrestamo}
           origenesRecurso={origenesRecurso}
           destinosRecurso={destinosRecurso}
           canalesPago={canalesPago}

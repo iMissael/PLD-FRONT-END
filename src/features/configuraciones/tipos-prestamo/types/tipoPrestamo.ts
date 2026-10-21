@@ -7,8 +7,8 @@
  * pendiente; cuando se haga, aquí se agregan los tipos que falten.
  */
 
-/** Valores del enum `Estatus` del backend. */
-export type EstatusTipoPrestamo = "A" | "B" | "S" | "E";
+/** A=Activo, I=Inactivo, B=Baja (borrado lógico). */
+export type EstatusTipoPrestamo = "A" | "I" | "B";
 
 /**
  * Subconjunto de `CatTipoPrestamoResponse`: solo lo que necesita el select.

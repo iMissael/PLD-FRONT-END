@@ -4,12 +4,8 @@
  * `denuncias-app`.
  */
 
-/**
- * Valores del enum `Estatus` del backend: A=Activa, B=Baja, S=Suspendido,
- * E=Eliminado. El formulario solo ofrece A y B — `E` lo escribe el
- * soft-delete del backend y `S` no se usa en este catálogo.
- */
-export type EstatusTiempoConstitucion = "A" | "B" | "S" | "E";
+/** A=Activo, I=Inactivo, B=Baja (borrado lógico). */
+export type EstatusTiempoConstitucion = "A" | "I" | "B";
 
 /**
  * Igual a `CrearCatTiempoConstitucionRequest`.

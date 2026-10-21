@@ -1,11 +1,11 @@
 import { useState } from "react";
 
-import { useSociosPaginados } from "@/features/socios/hooks/useSocios";
+import { useAcreditadosPaginados } from "@/features/acreditados/hooks/useAcreditados";
 import type {
-  CriterioBusquedaSocio,
-  SocioExterno,
+  CriterioBusquedaAcreditado,
+  AcreditadoExterno,
   TipoPersonaBusqueda,
-} from "@/features/socios/types/socios";
+} from "@/features/acreditados/types/acreditados";
 import { Input } from "@/shared/components/atoms/Input";
 import { StatusBadge as Badge } from "@/shared/components/atoms/StatusBadge";
 import { TablePagination } from "@/shared/components/molecules/TablePagination";
@@ -21,7 +21,7 @@ import { useDebounce } from "@/shared/hooks/useDebounce";
 import { emptyState, table } from "@/shared/styles/tokens";
 import { cn } from "@/shared/utils/cn";
 
-const CRITERIOS: { valor: CriterioBusquedaSocio; etiqueta: string; placeholder: string }[] = [
+const CRITERIOS: { valor: CriterioBusquedaAcreditado; etiqueta: string; placeholder: string }[] = [
   { valor: "referencia", etiqueta: "Referencia Cliente", placeholder: "Buscar por referencia" },
   { valor: "nombre", etiqueta: "Cliente", placeholder: "Buscar por nombre" },
   { valor: "rfc", etiqueta: "RFC", placeholder: "Buscar por RFC" },
@@ -60,7 +60,7 @@ interface SelectorClienteDialogProps {
   onAbiertoCambiar: (abierto: boolean) => void;
   seleccionadoId: string | null;
   /** Se llama al elegir un cliente; el diálogo se cierra solo. */
-  onSeleccionar: (socio: SocioExterno) => void;
+  onSeleccionar: (acreditado: AcreditadoExterno) => void;
 }
 
 /** Búsqueda de clientes paginada en el backend, en una ventana emergente. */
@@ -82,8 +82,8 @@ export function SelectorClienteDialog({
         <DialogBody className="flex flex-col gap-3">
           <BusquedaClientes
             seleccionadoId={seleccionadoId}
-            onSeleccionar={(socio) => {
-              onSeleccionar(socio);
+            onSeleccionar={(acreditado) => {
+              onSeleccionar(acreditado);
               onAbiertoCambiar(false);
             }}
           />
@@ -98,14 +98,14 @@ function BusquedaClientes({
   seleccionadoId,
   onSeleccionar,
 }: Pick<SelectorClienteDialogProps, "seleccionadoId" | "onSeleccionar">) {
-  const [criterio, setCriterio] = useState<CriterioBusquedaSocio>("nombre");
+  const [criterio, setCriterio] = useState<CriterioBusquedaAcreditado>("nombre");
   const [valor, setValor] = useState("");
   const [tipoPersona, setTipoPersona] = useState<TipoPersonaBusqueda | undefined>();
   const [pagina, setPagina] = useState(0);
   const [tamanio, setTamanio] = useState(TAMANIO_INICIAL);
   const valorBuscado = useDebounce(valor);
 
-  const { data, isLoading, isError, isFetching } = useSociosPaginados(
+  const { data, isLoading, isError, isFetching } = useAcreditadosPaginados(
     { criterio, valor: valorBuscado, tipoPersona, pagina, tamanio },
     true,
   );
@@ -187,21 +187,21 @@ function BusquedaClientes({
             </tr>
           </thead>
           <tbody className={table.body}>
-            {clientes.map((socio) => (
+            {clientes.map((acreditado) => (
               <tr
-                key={socio.id}
-                onClick={() => onSeleccionar(socio)}
-                className={table.row(socio.id === seleccionadoId)}
+                key={acreditado.id}
+                onClick={() => onSeleccionar(acreditado)}
+                className={table.row(acreditado.id === seleccionadoId)}
               >
-                <td className={`${celda} text-muted-foreground`}>{socio.id}</td>
-                <td className={`${celda} text-foreground font-medium`}>{socio.nombre}</td>
-                <td className={`${celda} text-muted-foreground`}>{socio.rfc ?? "—"}</td>
+                <td className={`${celda} text-muted-foreground`}>{acreditado.id}</td>
+                <td className={`${celda} text-foreground font-medium`}>{acreditado.nombre}</td>
+                <td className={`${celda} text-muted-foreground`}>{acreditado.rfc ?? "—"}</td>
                 <td className={`${celda} text-muted-foreground`}>
-                  {etiquetaTipoPersona(socio.tipoPersona)}
+                  {etiquetaTipoPersona(acreditado.tipoPersona)}
                 </td>
                 <td className={celda}>
-                  <Badge tono={socio.status === "I" ? "inactivo" : "activo"}>
-                    {socio.status === "I" ? "Inactivo" : "Activo"}
+                  <Badge tono={acreditado.status === "I" ? "inactivo" : "activo"}>
+                    {acreditado.status === "I" ? "Inactivo" : "Activo"}
                   </Badge>
                 </td>
               </tr>

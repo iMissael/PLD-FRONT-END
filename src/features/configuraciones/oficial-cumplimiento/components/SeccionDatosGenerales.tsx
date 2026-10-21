@@ -58,13 +58,13 @@ export function SeccionDatosGenerales({
     () =>
       (paises ?? [])
         .filter((pais) => pais.idPais)
-        .map((pais) => ({ valor: pais.idPais ?? "", etiqueta: pais.nombre ?? "" })),
+        .map((pais) => ({ valor: String(pais.idPais), etiqueta: pais.nombre ?? "" })),
     [paises],
   );
   const opcionesEntidades = useMemo<OpcionCatalogo[]>(
     () =>
       (entidades ?? [])
-        .filter((entidad) => !paisNacimiento || entidad.idPais === paisNacimiento)
+        .filter((entidad) => !paisNacimiento || String(entidad.idPais) === paisNacimiento)
         .map((entidad) => ({
           valor: String(entidad.idEntidad),
           etiqueta: entidad.nombre ?? "",

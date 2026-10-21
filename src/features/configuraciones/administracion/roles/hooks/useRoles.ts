@@ -50,10 +50,20 @@ export function useRolPermisos(rolId: string) {
   });
 }
 
-export function useAsignarPermiso(rolId: string) {
+/**
+ * Asigna varios permisos de una sola vez: el backend solo tiene POST /roles/{rolId}/permisos/
+ * {permisoId} de a uno, así que se manda una petición por permiso y se sigue aunque alguna falle.
+ */
+export function useAsignarPermisosEnLote(rolId: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (permisoId: number) => asignarPermisoARol(Number(rolId), permisoId),
+    mutationFn: async (permisoIds: number[]) => {
+      const resultados = await Promise.allSettled(
+        permisoIds.map((permisoId) => asignarPermisoARol(Number(rolId), permisoId)),
+      );
+      const asignados = resultados.filter((r) => r.status === "fulfilled").length;
+      return { asignados, fallidos: resultados.length - asignados };
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: rolesKeys.permisos(rolId) });
     },

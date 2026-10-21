@@ -12,11 +12,8 @@
  * matriz de riesgo, así que no se expone alta ni baja.
  */
 
-/**
- * Valores del enum `Estatus` del backend. No se edita desde esta pantalla,
- * pero llega en la respuesta.
- */
-export type EstatusHistorialCrediticio = "A" | "B" | "S" | "E";
+/** A=Activo, I=Inactivo, B=Baja (borrado lógico). */
+export type EstatusHistorialCrediticio = "A" | "I" | "B";
 
 /**
  * Subconjunto de `ActualizarCatHistorialCrediticioRequest`.

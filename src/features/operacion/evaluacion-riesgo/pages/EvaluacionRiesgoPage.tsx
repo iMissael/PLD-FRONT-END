@@ -21,26 +21,26 @@ import type { EvaluacionRiesgoResultado } from "@/features/operacion/evaluacion-
 import { clienteDesdePerfil } from "@/features/operacion/evaluacion-riesgo/utils/clienteDesdePerfil";
 import type { DetallesSubfactor } from "@/features/operacion/evaluacion-riesgo/utils/detalleSubfactor";
 import { useConfiguracionActiva } from "@/features/configuraciones/matriz-riesgo/hooks/useMatrizRiesgo";
-import { usePerfilSocio } from "@/features/socios/hooks/useSocios";
-import type { SocioExterno } from "@/features/socios/types/socios";
+import { usePerfilAcreditado } from "@/features/acreditados/hooks/useAcreditados";
+import type { AcreditadoExterno } from "@/features/acreditados/types/acreditados";
 
 export function EvaluacionRiesgoPage() {
-  const [socio, setSocio] = useState<{ id: string; nombre: string } | null>(null);
+  const [acreditado, setAcreditado] = useState<{ id: string; nombre: string } | null>(null);
   const [formularioAbierto, setFormularioAbierto] = useState(false);
-  // Socio al que se pidió "Volver a evaluar": se evalúa de nuevo aunque ya tenga una evaluación.
+  // Acreditado al que se pidió "Volver a evaluar": se evalúa de nuevo aunque ya tenga una evaluación.
   const [reevaluando, setReevaluando] = useState<string | null>(null);
 
   const evaluacionRecordada = useEvaluacionesSesionStore((estado) =>
-    socio ? estado.evaluaciones[claveEvaluacion(socio.id)] : undefined,
+    acreditado ? estado.evaluaciones[claveEvaluacion(acreditado.id)] : undefined,
   );
   // Si se publicó otra versión de la matriz, la evaluación recordada ya no cuenta.
   const matrizActiva = useConfiguracionActiva();
   const evaluacionGuardada = evaluacionVigente(evaluacionRecordada, matrizActiva.data?.id);
   // Sin evaluación vigente en la sesión (o si se pide otra), se consulta su perfil y se evalúa solo.
-  const debeEvaluar = !evaluacionGuardada || reevaluando === socio?.id;
-  const perfil = usePerfilSocio(debeEvaluar ? socio?.id : undefined);
+  const debeEvaluar = !evaluacionGuardada || reevaluando === acreditado?.id;
+  const perfil = usePerfilAcreditado(debeEvaluar ? acreditado?.id : undefined);
   const { estado: estadoEvaluacion, reintentar } = useEvaluacionAutomatica({
-    socio,
+    acreditado,
     perfil: perfil.data,
     habilitada: debeEvaluar,
     onResultado: alTerminarEvaluacion,
@@ -49,8 +49,8 @@ export function EvaluacionRiesgoPage() {
   const cliente =
     evaluacionGuardada?.cliente ?? (perfil.data ? clienteDesdePerfil(perfil.data) : null);
 
-  function seleccionarSocio(elegido: SocioExterno) {
-    setSocio({ id: elegido.id ?? "", nombre: elegido.nombre ?? "" });
+  function seleccionarAcreditado(elegido: AcreditadoExterno) {
+    setAcreditado({ id: elegido.id ?? "", nombre: elegido.nombre ?? "" });
   }
 
   function alTerminarEvaluacion(
@@ -63,14 +63,14 @@ export function EvaluacionRiesgoPage() {
       cliente: clienteEvaluado,
       detalles,
     });
-    setSocio({ id: clienteEvaluado.referencia, nombre: clienteEvaluado.nombre });
+    setAcreditado({ id: clienteEvaluado.referencia, nombre: clienteEvaluado.nombre });
     setReevaluando(null);
     setFormularioAbierto(false);
   }
 
-  function reevaluarSocio() {
-    if (!socio) return;
-    setReevaluando(socio.id);
+  function reevaluarAcreditado() {
+    if (!acreditado) return;
+    setReevaluando(acreditado.id);
     reintentar();
   }
 
@@ -79,14 +79,14 @@ export function EvaluacionRiesgoPage() {
       <div className="min-h-0 flex-1">
         <MatrizRiesgoDashboard
           cliente={cliente}
-          cargandoSocio={Boolean(socio) && debeEvaluar && perfil.isPending}
-          errorSocio={Boolean(socio) && debeEvaluar && perfil.isError}
+          cargandoAcreditado={Boolean(acreditado) && debeEvaluar && perfil.isPending}
+          errorAcreditado={Boolean(acreditado) && debeEvaluar && perfil.isError}
           evaluacion={evaluacionGuardada ?? null}
           estadoEvaluacion={estadoEvaluacion}
-          onSeleccionarSocio={seleccionarSocio}
+          onSeleccionarAcreditado={seleccionarAcreditado}
           onEvaluar={() => setFormularioAbierto(true)}
           onReintentar={reintentar}
-          onReevaluar={reevaluarSocio}
+          onReevaluar={reevaluarAcreditado}
         />
       </div>
 
@@ -99,7 +99,7 @@ export function EvaluacionRiesgoPage() {
             <PanelModificacionRiesgo evaluacion={evaluacionGuardada} cliente={cliente} />
           ) : (
             <p className="text-muted-foreground text-sm">
-              Elige y evalúa a un socio para poder modificar su nivel de riesgo.
+              Elige y evalúa a un acreditado para poder modificar su nivel de riesgo.
             </p>
           )}
         </CardContent>
@@ -110,13 +110,13 @@ export function EvaluacionRiesgoPage() {
           <SheetHeader>
             <SheetTitle>Evaluar riesgo</SheetTitle>
             <SheetDescription>
-              Los datos del socio y de su crédito se cargan al elegirlo; revisa y ajusta
+              Los datos del acreditado y de su crédito se cargan al elegirlo; revisa y ajusta
               lo que haga falta.
             </SheetDescription>
           </SheetHeader>
           <div className="px-4 pb-6">
             <EvaluacionRiesgoForm
-              socioInicial={socio ?? undefined}
+              acreditadoInicial={acreditado ?? undefined}
               onResultado={alTerminarEvaluacion}
             />
           </div>

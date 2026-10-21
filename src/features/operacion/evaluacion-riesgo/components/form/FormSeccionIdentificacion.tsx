@@ -7,6 +7,7 @@ import {
   FormMessage,
 } from "@/shared/components/molecules/Form";
 import { Input } from "@/shared/components/atoms/Input";
+import { es } from "@/shared/i18n/es";
 import {
   Select,
   SelectContent,
@@ -14,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/molecules/Select";
-import { SocioBuscadorEvaluacion } from "@/features/operacion/evaluacion-riesgo/components/SocioBuscadorEvaluacion";
+import { AcreditadoBuscadorEvaluacion } from "@/features/operacion/evaluacion-riesgo/components/AcreditadoBuscadorEvaluacion";
 import type { EvaluacionRiesgoFormValues } from "@/features/operacion/evaluacion-riesgo/types/evaluacionRiesgoSchema";
 import type {
   CatActividadEconomicaResponse,
@@ -25,7 +26,7 @@ import type {
 
 interface FormSeccionIdentificacionProps {
   form: UseFormReturn<EvaluacionRiesgoFormValues>;
-  socioInicial?: { id: string; nombre: string };
+  acreditadoInicial?: { id: string; nombre: string };
   tiposPersona?: TipoPersonaResponse[];
   paises?: PaisResponse[];
   peps?: PepResponse[];
@@ -34,7 +35,7 @@ interface FormSeccionIdentificacionProps {
 
 export function FormSeccionIdentificacion({
   form,
-  socioInicial,
+  acreditadoInicial,
   tiposPersona,
   paises,
   peps,
@@ -44,12 +45,12 @@ export function FormSeccionIdentificacion({
 
   return (
     <fieldset className="space-y-4">
-      <legend className="text-sm font-semibold">Socio</legend>
+      <legend className="text-sm font-semibold">{es.cliente.titulo}</legend>
       <div className="space-y-2">
-        <FormLabel>Socio</FormLabel>
-        <SocioBuscadorEvaluacion form={form} socioInicial={socioInicial} />
+        <FormLabel>{es.cliente.titulo}</FormLabel>
+        <AcreditadoBuscadorEvaluacion form={form} acreditadoInicial={acreditadoInicial} />
         <p className="text-muted-foreground text-xs">
-          Busca al socio para traer sus datos automáticamente: identidad, actividad
+          Busca al acreditado para traer sus datos automáticamente: identidad, actividad
           económica, domicilio, antigüedad en el giro y su crédito solicitado con su
           historial. Captura solo lo que falte.
         </p>
@@ -95,7 +96,7 @@ export function FormSeccionIdentificacion({
                 </FormControl>
                 <SelectContent>
                   {tiposPersona?.map((tipo) => (
-                    <SelectItem key={tipo.id} value={tipo.id ?? ""}>
+                    <SelectItem key={tipo.id} value={String(tipo.id)}>
                       {tipo.nombre}
                     </SelectItem>
                   ))}
@@ -119,7 +120,7 @@ export function FormSeccionIdentificacion({
                 </FormControl>
                 <SelectContent>
                   {paises?.map((pais) => (
-                    <SelectItem key={pais.idPais} value={pais.idPais ?? ""}>
+                    <SelectItem key={pais.idPais} value={String(pais.idPais)}>
                       {pais.nombre}
                     </SelectItem>
                   ))}
@@ -169,7 +170,7 @@ export function FormSeccionIdentificacion({
                 </FormControl>
                 <SelectContent>
                   {peps?.map((pep) => (
-                    <SelectItem key={pep.id} value={pep.id ?? ""}>
+                    <SelectItem key={pep.id} value={String(pep.id)}>
                       {pep.nombre}
                     </SelectItem>
                   ))}

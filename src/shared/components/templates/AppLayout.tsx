@@ -148,6 +148,7 @@ const NAV_ITEMS: NavNode[] = [
         label: "Revisión de alertas de seguimiento en operación",
         to: "operacion/revision-alertas-seguimiento",
       },
+      { label: "Revisión de incidencias", to: "operacion/coincidencias" },
     ],
   },
   {
@@ -156,7 +157,6 @@ const NAV_ITEMS: NavNode[] = [
     children: [
       { label: "Resumen", to: "control" },
       { label: "Quien es quien", to: "control/quienesquien" },
-      { label: "Revisión de coincidencias", to: "control/coincidencias" },
       { label: "Control dólar", to: "control-dolar" },
     ],
   },
@@ -167,7 +167,6 @@ const NAV_ITEMS: NavNode[] = [
       { label: "Usuarios", to: "configuraciones/administracion/usuarios" },
       { label: "Roles", to: "configuraciones/administracion/roles" },
       { label: "Permisos", to: "configuraciones/administracion/permisos" },
-      { label: "Sistemas de integración", to: "configuraciones/administracion/integraciones" },
     ],
   },
   { label: "Acerca de", to: "acerca-de", icon: InfoIcon },

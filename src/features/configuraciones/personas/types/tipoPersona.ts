@@ -1,21 +1,17 @@
 /**
  * Tipos del feature `personas` (menú: "Configuración de personas"), a partir
- * de `CatTipoSocioController` en `denuncias-app`.
+ * de `CatTipoAcreditadoController` en `denuncias-app`.
  *
  * Ojo con los nombres: el endpoint es `/catalogos/tipos-persona` mientras que
- * las clases del backend se llaman `CatTipoSocio*`. Aquí se sigue el nombre
+ * las clases del backend se llaman `CatTipoAcreditado*`. Aquí se sigue el nombre
  * del endpoint y del menú.
  */
 
-/**
- * Valores del enum `Estatus` del backend: A=Activa, B=Baja, S=Suspendido,
- * E=Eliminado. El formulario solo ofrece A y B — `E` lo escribe el
- * soft-delete del backend y `S` no se usa en este catálogo.
- */
-export type EstatusTipoPersona = "A" | "B" | "S" | "E";
+/** A=Activo, I=Inactivo, B=Baja (borrado lógico). */
+export type EstatusTipoPersona = "A" | "I" | "B";
 
 /**
- * Igual a `CrearCatTipoSocioRequest`. No lleva `id`: el backend lo genera
+ * Igual a `CrearCatTipoAcreditadoRequest`. No lleva `id`: el backend lo genera
  * como consecutivo (`siguienteId()` en el adaptador JDBC).
  */
 export interface CrearTipoPersonaInput {
@@ -24,10 +20,10 @@ export interface CrearTipoPersonaInput {
   estatus: EstatusTipoPersona;
 }
 
-/** Igual a `ActualizarCatTipoSocioRequest` (mismo shape que Crear). */
+/** Igual a `ActualizarCatTipoAcreditadoRequest` (mismo shape que Crear). */
 export type ActualizarTipoPersonaInput = CrearTipoPersonaInput;
 
-/** Igual a `CatTipoSocioResponse`. */
+/** Igual a `CatTipoAcreditadoResponse`. */
 export interface TipoPersonaResponse {
   id: string;
   nombre: string;

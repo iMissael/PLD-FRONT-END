@@ -10,7 +10,7 @@ import type { ClienteMatrizRiesgo } from "@/features/operacion/evaluacion-riesgo
 
 /**
  * Panel "Modificación de riesgo" (formato de la captura de referencia): opera sobre la
- * evaluación que está mostrando la Matriz de Riesgo Integral (el socio elegido con la lupa).
+ * evaluación que está mostrando la Matriz de Riesgo Integral (el acreditado elegido con la lupa).
  * Permite asignarle un nivel de riesgo distinto al calculado, con una observación que
  * justifique el cambio. El nivel calculado original no se pierde.
  */

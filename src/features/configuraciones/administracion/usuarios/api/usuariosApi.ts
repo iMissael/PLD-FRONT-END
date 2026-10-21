@@ -44,7 +44,7 @@ export async function cambiarRolUsuario(id: number, rolId: number) {
 }
 
 /** A = activo, B = inactivo: un usuario inactivo no puede iniciar sesión. */
-export async function cambiarEstadoUsuario(id: number, estado: "A" | "B") {
+export async function cambiarEstadoUsuario(id: number, estado: "A" | "I") {
   const { data } = await apiClient.patch<UsuarioResponse>(`/usuarios/${id}/estado`, { estado });
   return data;
 }
