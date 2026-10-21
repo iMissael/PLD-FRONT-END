@@ -39,6 +39,7 @@ const TITULOS_RUTAS: Record<string, string> = {
   "canales-pago": "Canales de pago",
   "configuracion-alertas": "Configuración de alertas",
   reglas: "Reglas de alerta",
+  parametros: "Parámetros de alertas",
   "carga-masiva": "Carga masiva",
   operacion: "Operación",
   "evaluacion-riesgo": "Evaluación de riesgo",

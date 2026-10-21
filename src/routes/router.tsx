@@ -45,6 +45,11 @@ const ConsultaBloqueadosPage = lazy(() =>
 const ReglasAlertaPage = lazy(() =>
   import("@/features/configuracion-alertas/reglas/pages/ReglasAlertaPage").then((m) => ({ default: m.ReglasAlertaPage })),
 );
+const ParametrosAlertaPage = lazy(() =>
+  import("@/features/configuracion-alertas/parametros/pages/ParametrosAlertaPage").then((m) => ({
+    default: m.ParametrosAlertaPage,
+  })),
+);
 
 // Configuraciones generales
 const ActividadesEconomicasPage = lazy(() =>
@@ -233,6 +238,10 @@ export const router = createBrowserRouter([
                   {
                     path: "configuracion-alertas/reglas",
                     element: <ReglasAlertaPage />,
+                  },
+                  {
+                    path: "configuracion-alertas/parametros",
+                    element: <ParametrosAlertaPage />,
                   },
                   // Sin ancho acotado: la lista y el detalle de la alerta van lado a lado.
                   {

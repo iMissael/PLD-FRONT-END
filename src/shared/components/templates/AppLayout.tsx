@@ -127,6 +127,7 @@ const NAV_ITEMS: NavNode[] = [
     icon: BellIcon,
     children: [
       { label: "Configuración de alertas", to: "configuracion-alertas/reglas" },
+      { label: "Parámetros de alertas", to: "configuracion-alertas/parametros" },
       { label: "Consulta Personas bloqueados", to: "configuracion-alertas" },
       { label: "Carga de Personas Bloqueadas", to: "configuracion-alertas/carga-masiva" },
     ],
