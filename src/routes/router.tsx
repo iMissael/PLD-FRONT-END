@@ -2,6 +2,7 @@ import { lazy } from "react";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import { RequireAuth } from "@/shared/auth/RequireAuth";
+import { CampanaNotificaciones } from "@/features/notificaciones/components/CampanaNotificaciones";
 import { RequierePermiso } from "@/shared/auth/RequierePermiso";
 import { PlaceholderPage } from "@/shared/components/templates/PlaceholderPage";
 import {
@@ -131,6 +132,11 @@ const ControlDolarPage = lazy(() =>
 const ControlPage = lazy(() =>
   import("@/features/control/pages/ControlPage").then((m) => ({ default: m.ControlPage })),
 );
+const NotificacionesPage = lazy(() =>
+  import("@/features/notificaciones/pages/NotificacionesPage").then((m) => ({
+    default: m.NotificacionesPage,
+  })),
+);
 const ReporteAlertasCnbvPage = lazy(() =>
   import("@/features/control/reporte-cnbv/pages/ReporteAlertasCnbvPage").then((m) => ({
     default: m.ReporteAlertasCnbvPage,
@@ -183,7 +189,7 @@ export const router = createBrowserRouter([
           {
             children: [
               {
-                element: <AppLayout />,
+                element: <AppLayout accionesHeader={<CampanaNotificaciones />} />,
                 errorElement: <RouteErrorPage />,
                 children: [
                   {
@@ -365,6 +371,14 @@ export const router = createBrowserRouter([
                       {
                         path: "control/quienesquien",
                         element: <ConsultaListasPage />,
+                      },
+                      {
+                        path: "notificaciones",
+                        element: (
+                          <RequierePermiso recurso="alertas" accion="ver">
+                            <NotificacionesPage />
+                          </RequierePermiso>
+                        ),
                       },
                       {
                         path: "control/reporte-cnbv",

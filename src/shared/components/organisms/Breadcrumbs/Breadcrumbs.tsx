@@ -51,6 +51,7 @@ const TITULOS_RUTAS: Record<string, string> = {
   control: "Control",
   quienesquien: "Quién es quién",
   "reporte-cnbv": "Reporte de alertas CNBV",
+  notificaciones: "Notificaciones",
   coincidencias: "Revisión de incidencias",
   "control-dolar": "Control dólar",
   administracion: "Administración",
