@@ -1,5 +1,8 @@
+import { Eye } from "lucide-react";
+
 import type { Alerta } from "@/features/alertas/types/alertas";
 import { formatearFecha } from "@/features/operacion/revision-alertas/utils/formato";
+import { Button } from "@/shared/components/atoms/Button";
 import { emptyState, table } from "@/shared/styles/tokens";
 
 import {
@@ -35,7 +38,12 @@ function PlazoReporte({ alerta }: { alerta: Alerta }) {
   );
 }
 
-export function AlertasPorReportarTable({ alertas }: { alertas: Alerta[] }) {
+interface AlertasPorReportarTableProps {
+  alertas: Alerta[];
+  onPrevisualizar: (alertaId: number) => void;
+}
+
+export function AlertasPorReportarTable({ alertas, onPrevisualizar }: AlertasPorReportarTableProps) {
   if (alertas.length === 0) {
     return <div className={emptyState}>No hay alertas por reportar con este filtro.</div>;
   }
@@ -52,6 +60,7 @@ export function AlertasPorReportarTable({ alertas }: { alertas: Alerta[] }) {
               <th className={table.headCell}>Dictamen</th>
               <th className={table.headCell}>Descripción</th>
               <th className={table.headCell}>Reportar antes de</th>
+              <th className={table.headCell}>Reporte CNBV</th>
             </tr>
           </thead>
           <tbody className={table.body}>
@@ -88,6 +97,18 @@ export function AlertasPorReportarTable({ alertas }: { alertas: Alerta[] }) {
                 </td>
                 <td className={table.cell}>
                   <PlazoReporte alerta={alerta} />
+                </td>
+                <td className={table.cell}>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon-sm"
+                    aria-label="Previsualizar reporte CNBV"
+                    title="Previsualizar reporte CNBV"
+                    onClick={() => onPrevisualizar(alerta.id)}
+                  >
+                    <Eye className="size-4" />
+                  </Button>
                 </td>
               </tr>
             ))}

@@ -7,6 +7,7 @@ import { emptyState, hint, label } from "@/shared/styles/tokens";
 
 import type { TipoReporteCnbv } from "../api/reporteCnbvApi";
 import { AlertasPorReportarTable } from "../components/AlertasPorReportarTable";
+import { PrevisualizacionReporteCnbvDialog } from "../components/PrevisualizacionReporteCnbvDialog";
 import { useAlertasPorReportar } from "../hooks/useReporteCnbv";
 import { filtrarPorReportado, reportadosDe } from "../utils/plazoReporte";
 
@@ -39,6 +40,7 @@ export function ReporteAlertasCnbvPage() {
   const [acreditado, setAcreditado] = useState("");
   const [empleado, setEmpleado] = useState("");
   const [mostrar, setMostrar] = useState(false);
+  const [alertaPrevisualizada, setAlertaPrevisualizada] = useState<number | null>(null);
   const { data, isLoading, isError } = useAlertasPorReportar(tipo);
 
   const alertas = useMemo(() => data ?? [], [data]);
@@ -178,7 +180,14 @@ export function ReporteAlertasCnbvPage() {
       {!esRelevante && !isLoading && !isError && alertas.length === 0 ? (
         <div className={emptyState}>No hay alertas por reportar.</div>
       ) : null}
-      {mostrar && !esRelevante ? <AlertasPorReportarTable alertas={visibles} /> : null}
+      {mostrar && !esRelevante ? (
+        <AlertasPorReportarTable alertas={visibles} onPrevisualizar={setAlertaPrevisualizada} />
+      ) : null}
+
+      <PrevisualizacionReporteCnbvDialog
+        alertaId={alertaPrevisualizada}
+        onOpenChange={(abierto) => !abierto && setAlertaPrevisualizada(null)}
+      />
     </div>
   );
 }
