@@ -32,7 +32,7 @@ describe("construirDetalles", () => {
     tipoPersonaId: "1",
     nacionalidadId: "165",
     fechaNacimiento: "1985-03-12",
-    antiguedadGiroAnios: "12",
+    fechaInicioActividad: "2014-03-01",
     pepNacionalId: "",
     actividadEconomicaId: "10",
     creditoTipo: "2",
@@ -64,7 +64,7 @@ describe("construirDetalles", () => {
     expect(detalles["tipo persona"]).toBe("Persona Física Nacional");
     expect(detalles.edad).toBe("41 años");
     expect(detalles.nacionalidad).toBe("México");
-    expect(detalles["antiguedad giro anios"]).toBe("12 años");
+    expect(detalles["antiguedad empleado"]).toBe("12 años (desde 01/03/2014)");
     expect(detalles["es pep nacional"]).toBe("No es PEP nacional");
     expect(detalles["actividad economica"]).toBe("CULTIVO DE SOYA");
     expect(detalles["tipo credito"]).toBe("CREDINOMINA");

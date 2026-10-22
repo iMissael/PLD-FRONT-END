@@ -1,5 +1,6 @@
 import { RefreshCw } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 import { isAppError } from "@/api/interceptors/errorInterceptor";
 import { Button } from "@/shared/components/atoms/Button";
@@ -7,13 +8,28 @@ import { Card, CardContent } from "@/shared/components/molecules/Card";
 
 import { PanelRevisionIncidencia } from "../components/PanelRevisionIncidencia";
 import { TablaIncidenciasPendientes } from "../components/TablaIncidenciasPendientes";
-import { useIncidenciasPendientes } from "../hooks/useIncidencias";
+import { useIncidenciasPendientes, useSincronizarAcreditados } from "../hooks/useIncidencias";
+import type { ResultadoSincronizacion } from "../api/incidenciasApi";
 import type { CoincidenciaAcreditado } from "../types/incidencias";
 
 export function RevisionIncidenciasPage() {
-  const { data, isLoading, isError, error, refetch, isFetching } =
+  const { data, isLoading, isError, error, isFetching } =
     useIncidenciasPendientes();
   const [seleccionada, setSeleccionada] = useState<CoincidenciaAcreditado | null>(null);
+  const sincronizacion = useSincronizarAcreditados();
+  const actualizando = isFetching || sincronizacion.isPending;
+
+  // Antes de recargar se buscan acreditados nuevos en el sistema externo y se escanean; si eso falla
+  // (sin permiso o servicio caido) igual se recarga lo que ya hay.
+  function actualizar() {
+    sincronizacion.mutate(undefined, {
+      onSuccess: (resultado) => toast.info(resumenSincronizacion(resultado)),
+      onError: (e) =>
+        toast.warning(
+          `No se pudieron revisar acreditados nuevos${isAppError(e) ? `: ${e.message}` : ""}. Se muestran las incidencias que ya hay.`,
+        ),
+    });
+  }
 
   return (
     <div className="space-y-6">
@@ -26,8 +42,8 @@ export function RevisionIncidenciasPage() {
             Confirma o descarta cada una; el registro se queda en la tabla con su estatus.
           </p>
         </div>
-        <Button variant="outline" onClick={() => refetch()} disabled={isFetching}>
-          <RefreshCw className={isFetching ? "animate-spin" : undefined} />
+        <Button variant="outline" onClick={actualizar} disabled={actualizando}>
+          <RefreshCw className={actualizando ? "animate-spin" : undefined} />
           Actualizar
         </Button>
       </div>
@@ -57,4 +73,13 @@ export function RevisionIncidenciasPage() {
       />
     </div>
   );
+}
+
+function resumenSincronizacion(r: ResultadoSincronizacion) {
+  if (!r.disponible) return "El sistema de acreditados no respondió; se muestran las incidencias que ya hay.";
+  const partes = [`${r.total} acreditados revisados`];
+  if (r.nuevos) partes.push(`${r.nuevos} nuevos`);
+  if (r.escaneados) partes.push(`${r.escaneados} escaneados contra listas`);
+  if (r.errores) partes.push(`${r.errores} con error`);
+  return partes.join(", ") + ".";
 }

@@ -9,10 +9,13 @@ import type {
   EstatusAlertaRevision,
   ExpedienteAlerta,
   FiltroAlertas,
+  HistorialAlerta,
   MovimientoAlerta,
+  ObservacionInput,
   PaginaAlertas,
   PaginaEmpleados,
   RazonAlerta,
+  ReclasificacionInput,
   TipoAlerta,
 } from "../types/alertas";
 
@@ -94,6 +97,29 @@ export async function dictaminarAlerta(
 /** Botón rojo de la revisión: cancela una alerta pendiente; ya no se vuelve a listar. */
 export async function cancelarAlerta(id: number): Promise<void> {
   await apiClient.patch(`/alertas/${id}/cancelacion`);
+}
+
+/** "Revisión de alertas de seguimiento": reclasifica una alerta de seguimiento como inusual. */
+export async function reclasificarAlertaComoInusual(
+  id: number,
+  input: ReclasificacionInput,
+): Promise<Alerta> {
+  const { data } = await apiClient.patch<Alerta>(`/alertas/${id}/reclasificacion`, input);
+  return data;
+}
+
+/** Agrega una observación libre a la alerta; no cambia su estatus. */
+export async function agregarObservacionAlerta(
+  id: number,
+  input: ObservacionInput,
+): Promise<void> {
+  await apiClient.post(`/alertas/${id}/observaciones`, input);
+}
+
+/** Historial de cambios de estatus y observaciones de una alerta, más reciente primero. */
+export async function obtenerHistorialAlerta(id: number): Promise<HistorialAlerta[]> {
+  const { data } = await apiClient.get<HistorialAlerta[]>(`/alertas/${id}/historial`);
+  return data;
 }
 
 export async function buscarEmpleados(nombre: string): Promise<EmpleadoExterno[]> {

@@ -8,6 +8,7 @@ import {
 } from "@/shared/components/molecules/Form";
 import { Input } from "@/shared/components/atoms/Input";
 import { es } from "@/shared/i18n/es";
+import { hoyIso } from "@/shared/utils/fechas";
 import {
   Select,
   SelectContent,
@@ -145,12 +146,12 @@ export function FormSeccionIdentificacion({
         />
         <FormField
           control={control}
-          name="antiguedadGiroAnios"
+          name="fechaInicioActividad"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Antigüedad en el giro (años)</FormLabel>
+              <FormLabel>Fecha de inicio de actividad</FormLabel>
               <FormControl>
-                <Input type="number" min={0} placeholder="5" {...field} />
+                <Input type="date" max={hoyIso()} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -6981,6 +6981,8 @@ export interface components {
             domicilio?: components["schemas"]["DomicilioAcreditado"];
             /** Format: int32 */
             antiguedadGiroAnios?: number;
+            /** Format: date */
+            fechaInicioActividad?: string;
             pepNacionalId?: string;
             creditoSolicitado?: components["schemas"]["CreditoSolicitadoInfo"];
             historialCrediticio?: components["schemas"]["CreditoAnteriorInfo"][];

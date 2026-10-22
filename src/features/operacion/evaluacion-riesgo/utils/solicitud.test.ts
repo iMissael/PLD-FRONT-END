@@ -34,7 +34,7 @@ const perfilCompleto: AcreditadoPerfilRiesgo = {
     tipoAsentamiento: "Colonia",
     nombreAsentamiento: "DEL VALLE CENTRO",
   },
-  antiguedadGiroAnios: 6,
+  fechaInicioActividad: "2020-01-15",
   pepNacionalId: undefined,
   creditoSolicitado: {
     referencia: "CRED-001",
@@ -67,7 +67,7 @@ describe("valoresDesdePerfil", () => {
       tipoPersonaId: "1",
       nacionalidadId: "165",
       fechaNacimiento: "1990-05-14",
-      antiguedadGiroAnios: "6",
+      fechaInicioActividad: "2020-01-15",
       pepNacionalId: "",
       actividadEconomicaId: "10",
       localidadId: "105249",
@@ -94,7 +94,7 @@ describe("valoresDesdePerfil", () => {
 
   it("deja vacío lo que el perfil no trae", () => {
     const valores = valoresDesdePerfil({ referencia: "EXT-1", nombre: "Acreditado externo" });
-    expect(valores.antiguedadGiroAnios).toBe("");
+    expect(valores.fechaInicioActividad).toBe("");
     expect(valores.creditoTipo).toBe("");
     expect(valores.localidadId).toBe("");
     expect(valores.creditosAnteriores).toEqual([]);
@@ -118,7 +118,7 @@ describe("datosFaltantes", () => {
       "Tipo de persona",
       "Nacionalidad",
       "Fecha de nacimiento o constitución",
-      "Antigüedad en el giro",
+      "Fecha de inicio de actividad",
       "Actividad económica",
       "Domicilio (localidad)",
       "Tipo de crédito",
@@ -140,10 +140,10 @@ describe("datosFaltantes", () => {
     ]);
   });
 
-  it("sin antigüedad en el giro no se puede evaluar", () => {
-    const sinAntiguedad = { ...perfilCompleto, antiguedadGiroAnios: undefined };
-    expect(datosFaltantes(valoresDesdePerfil(sinAntiguedad))).toEqual([
-      "Antigüedad en el giro",
+  it("sin fecha de inicio de actividad no se puede evaluar", () => {
+    const sinFecha = { ...perfilCompleto, fechaInicioActividad: undefined };
+    expect(datosFaltantes(valoresDesdePerfil(sinFecha))).toEqual([
+      "Fecha de inicio de actividad",
     ]);
   });
 });
@@ -175,6 +175,7 @@ describe("construirSolicitud", () => {
       tipo_acreditado_id: 1,
       nacionalidad_id: 165,
       fecha_nacimiento: "1990-05-14",
+      fecha_inicio_actividad_economica: "2020-01-15",
       actividad_economica_id: 10,
     });
   });
@@ -208,6 +209,7 @@ describe("construirSolicitud", () => {
     expect(solicitud.historial_crediticio?.creditos_anteriores).toEqual([
       {
         credito_ref: "HIST-001-1",
+        tipo_credito_id: 1,
         monto: 15000,
         fecha_otorgamiento: "2023-02-10",
         estatus: "PAGADO",

@@ -14,6 +14,21 @@ export async function listarIncidenciasPendientes() {
   return data;
 }
 
+/** Resultado de traer a todos los acreditados del sistema externo y escanear a los nuevos. */
+export interface ResultadoSincronizacion {
+  disponible: boolean;
+  total: number;
+  nuevos: number;
+  actualizados: number;
+  escaneados: number;
+  errores: number;
+}
+
+export async function sincronizarAcreditados() {
+  const { data } = await apiClient.post<ResultadoSincronizacion>("/acreditados/sincronizacion");
+  return data;
+}
+
 export async function resolverIncidencia(
   acreditadoRef: string,
   payload: ResolverIncidenciaPayload,

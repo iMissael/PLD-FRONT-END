@@ -211,6 +211,27 @@ export type DictamenInput = {
   estatus: Extract<EstatusAlerta, "CONFIRMADA" | "RECHAZADA">;
 } & Partial<Record<CampoAnalisis, string>>;
 
+/** `AlertaController.ReclasificacionRequest`: reclasifica una alerta de seguimiento como inusual. */
+export interface ReclasificacionInput {
+  razonAlertaId?: number;
+  comentario?: string;
+}
+
+/** `AlertaController.ObservacionRequest`. */
+export interface ObservacionInput {
+  comentario: string;
+}
+
+/** `HistorialAlertaResponse`: una fila de pld_alerta_historial (cambio de estatus u observación libre). */
+export interface HistorialAlerta {
+  id: number;
+  estatusAnterior: string | null;
+  estatusNuevo: string;
+  justificacion: string | null;
+  usuarioId: number | null;
+  fecha: string;
+}
+
 export type CriterioBusquedaEmpleado = "clave" | "nombre";
 
 export interface BusquedaEmpleados {

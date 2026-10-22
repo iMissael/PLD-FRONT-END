@@ -6,6 +6,7 @@ import {
 } from "@tanstack/react-query";
 
 import {
+  agregarObservacionAlerta,
   buscarEmpleados,
   buscarEmpleadosPaginados,
   cancelarAlerta,
@@ -15,13 +16,17 @@ import {
   listarRazonesAlerta,
   listarTiposAlerta,
   obtenerExpedienteAlerta,
+  obtenerHistorialAlerta,
   obtenerMovimientoAlerta,
+  reclasificarAlertaComoInusual,
 } from "../api/alertasApi";
 import type {
   BusquedaEmpleados,
   CrearAlertaManualInput,
   DictamenInput,
   FiltroAlertas,
+  ObservacionInput,
+  ReclasificacionInput,
 } from "../types/alertas";
 
 export const alertasKeys = {
@@ -36,6 +41,8 @@ export const alertasKeys = {
   expediente: (id: number) => [...alertasKeys.expedientes(), id] as const,
   movimientos: () => [...alertasKeys.all, "movimiento"] as const,
   movimiento: (id: number) => [...alertasKeys.movimientos(), id] as const,
+  historiales: () => [...alertasKeys.all, "historial"] as const,
+  historial: (id: number) => [...alertasKeys.historiales(), id] as const,
 };
 
 /** Catálogo de tipos de alerta (cambia muy poco). */
@@ -113,6 +120,38 @@ export function useCancelarAlerta() {
   return useMutation({
     mutationFn: (id: number) => cancelarAlerta(id),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: alertasKeys.listas() }),
+  });
+}
+
+/** Historial de estatus y observaciones de la alerta seleccionada. */
+export function useHistorialAlerta(id: number) {
+  return useQuery({
+    queryKey: alertasKeys.historial(id),
+    queryFn: () => obtenerHistorialAlerta(id),
+  });
+}
+
+/** "Revisión de alertas de seguimiento": reclasifica una alerta de seguimiento como inusual. */
+export function useReclasificarAlerta() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, input }: { id: number; input: ReclasificacionInput }) =>
+      reclasificarAlertaComoInusual(id, input),
+    onSuccess: (_, { id }) => {
+      queryClient.invalidateQueries({ queryKey: alertasKeys.listas() });
+      queryClient.invalidateQueries({ queryKey: alertasKeys.historial(id) });
+    },
+  });
+}
+
+/** Observación libre sobre una alerta; no cambia su estatus. */
+export function useAgregarObservacionAlerta() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, input }: { id: number; input: ObservacionInput }) =>
+      agregarObservacionAlerta(id, input),
+    onSuccess: (_, { id }) =>
+      queryClient.invalidateQueries({ queryKey: alertasKeys.historial(id) }),
   });
 }
 

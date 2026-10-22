@@ -20,6 +20,7 @@ const ETIQUETAS_SUBFACTOR: Record<string, string> = {
   edad: "Edad",
   nacionalidad: "Nacionalidad",
   "antiguedad giro anios": "Antigüedad de empleo o en el giro mercantil",
+  "antiguedad empleado": "Antigüedad de empleo o en el giro mercantil",
   "es pep nacional": "PEPs Nacionales",
   "actividad economica": "Giro o Actividad Económica / Oficios",
   "tipo credito": "Tipo de Crédito",
@@ -107,6 +108,11 @@ export function construirDetalles(
   hoy = new Date(),
 ): DetallesSubfactor {
   const edad = calcularEdad(values.fechaNacimiento, hoy);
+  const aniosActividad = calcularEdad(values.fechaInicioActividad, hoy);
+  const antiguedad =
+    aniosActividad === null
+      ? undefined
+      : `${aniosActividad} ${aniosActividad === 1 ? "año" : "años"} (desde ${values.fechaInicioActividad.split("-").reverse().join("/")})`;
   const actividad = catalogos.actividades?.find(
     (item) => String(item.id) === values.actividadEconomicaId,
   );
@@ -120,9 +126,8 @@ export function construirDetalles(
     nacionalidad: catalogos.paises?.find(
       (pais) => String(pais.idPais) === values.nacionalidadId,
     )?.nombre,
-    "antiguedad giro anios": values.antiguedadGiroAnios
-      ? `${values.antiguedadGiroAnios} años`
-      : undefined,
+    "antiguedad giro anios": antiguedad,
+    "antiguedad empleado": antiguedad,
     "es pep nacional":
       nombreDe(catalogos.peps, values.pepNacionalId ?? "") ?? "No es PEP nacional",
     "actividad economica": actividad?.descripcion,

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { hoyIso } from "@/shared/utils/fechas";
 
 const creditoAnteriorSchema = z.object({
   referencia: z.string().optional(),
@@ -22,7 +23,11 @@ export const evaluacionRiesgoSchema = z.object({
   tipoPersonaId: z.string().min(1, "Selecciona el tipo de persona"),
   nacionalidadId: z.string().min(1, "Selecciona la nacionalidad"),
   fechaNacimiento: z.string().min(1, "La fecha de nacimiento es obligatoria"),
-  antiguedadGiroAnios: z.string().min(1, "La antigüedad es obligatoria"),
+  // La matriz calcula con ella la antigüedad en el giro (fecha_inicio_actividad_economica).
+  fechaInicioActividad: z
+    .string()
+    .min(1, "La fecha de inicio de actividad es obligatoria")
+    .refine((fecha) => fecha <= hoyIso(), "No puede ser una fecha futura"),
   pepNacionalId: z.string().optional(),
   actividadEconomicaId: z.string().min(1, "Selecciona la actividad económica"),
 

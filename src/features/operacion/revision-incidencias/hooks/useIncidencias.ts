@@ -5,6 +5,7 @@ import {
   resolverDuplicadoAcreditado,
   resolverIncidencia,
   resolverPersonaRelacionada,
+  sincronizarAcreditados,
 } from "../api/incidenciasApi";
 import type {
   ResolverDuplicadoPayload,
@@ -16,10 +17,24 @@ const incidenciasKeys = {
   pendientes: ["incidencias", "pendientes"] as const,
 };
 
+/** El backend escanea solo cada 5 minutos; con esto lo nuevo aparece sin tocar "Actualizar". */
+const REFRESCO_AUTOMATICO_MS = 60_000;
+
 export function useIncidenciasPendientes() {
   return useQuery({
     queryKey: incidenciasKeys.pendientes,
     queryFn: listarIncidenciasPendientes,
+    refetchInterval: REFRESCO_AUTOMATICO_MS,
+  });
+}
+
+/** Trae a los acreditados del sistema externo y escanea a los nuevos; despues se recarga la lista. */
+export function useSincronizarAcreditados() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: sincronizarAcreditados,
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: incidenciasKeys.pendientes }),
   });
 }
 

@@ -33,7 +33,7 @@ const CAMPOS_DEL_SOCIO = [
   "tipoPersonaId",
   "nacionalidadId",
   "fechaNacimiento",
-  "antiguedadGiroAnios",
+  "fechaInicioActividad",
   "pepNacionalId",
   "actividadEconomicaId",
   "paisId",
@@ -164,8 +164,8 @@ export function AcreditadoBuscadorEvaluacion({
           shouldValidate: true,
         });
       }
-      form.setValue("antiguedadGiroAnios", aTexto(perfil.antiguedadGiroAnios), {
-        shouldValidate: perfil.antiguedadGiroAnios != null,
+      form.setValue("fechaInicioActividad", perfil.fechaInicioActividad ?? "", {
+        shouldValidate: perfil.fechaInicioActividad != null,
       });
       form.setValue("pepNacionalId", aTexto(perfil.pepNacionalId));
       const credito = perfil.creditoSolicitado;

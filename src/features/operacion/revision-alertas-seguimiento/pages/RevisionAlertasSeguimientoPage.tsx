@@ -65,7 +65,12 @@ export function RevisionAlertasSeguimientoPage() {
         }}
       />
 
-      {seleccionada ? <DetalleAlertaSeguimiento alerta={seleccionada} /> : null}
+      {seleccionada ? (
+        <DetalleAlertaSeguimiento
+          alerta={seleccionada}
+          onReclasificada={() => setSeleccionada(null)}
+        />
+      ) : null}
     </DashboardListaTemplate>
   );
 }

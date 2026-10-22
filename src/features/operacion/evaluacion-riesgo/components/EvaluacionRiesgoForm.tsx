@@ -55,7 +55,7 @@ const valoresPorDefecto: EvaluacionRiesgoFormValues = {
   tipoPersonaId: "",
   nacionalidadId: "",
   fechaNacimiento: "",
-  antiguedadGiroAnios: "",
+  fechaInicioActividad: "",
   pepNacionalId: "",
   actividadEconomicaId: "",
   paisId: "",

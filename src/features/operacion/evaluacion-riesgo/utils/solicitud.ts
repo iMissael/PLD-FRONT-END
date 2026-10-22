@@ -56,7 +56,7 @@ export function valoresDesdePerfil(
     tipoPersonaId: aTexto(perfil.tipoPersona?.id),
     nacionalidadId: aTexto(perfil.nacionalidad?.id),
     fechaNacimiento: aTexto(perfil.fechaNacimiento),
-    antiguedadGiroAnios: aTexto(perfil.antiguedadGiroAnios),
+    fechaInicioActividad: aTexto(perfil.fechaInicioActividad),
     pepNacionalId: aTexto(perfil.pepNacionalId),
     actividadEconomicaId: aTexto(perfil.actividadEconomica?.id),
 
@@ -99,7 +99,7 @@ const ETIQUETAS_CAMPO: Partial<Record<keyof EvaluacionRiesgoFormValues, string>>
   tipoPersonaId: "Tipo de persona",
   nacionalidadId: "Nacionalidad",
   fechaNacimiento: "Fecha de nacimiento o constitución",
-  antiguedadGiroAnios: "Antigüedad en el giro",
+  fechaInicioActividad: "Fecha de inicio de actividad",
   actividadEconomicaId: "Actividad económica",
   localidadId: "Domicilio (localidad)",
   creditoTipo: "Tipo de crédito",
@@ -145,6 +145,7 @@ export function construirSolicitud(
       tipo_acreditado_id: Number(values.tipoPersonaId),
       nacionalidad_id: Number(values.nacionalidadId),
       fecha_nacimiento: values.fechaNacimiento,
+      fecha_inicio_actividad_economica: values.fechaInicioActividad,
       // pep_nacional_id ya no existe en el contrato: el backend lo quitó y lo ignoraba de todas
       // formas (el riesgo PEP se resuelve por listas, no por este campo). El selector "PEP
       // Nacional" del formulario queda pendiente de retirar aparte.
@@ -177,6 +178,7 @@ export function construirSolicitud(
       ? {
           creditos_anteriores: values.creditosAnteriores.map((anterior) => ({
             credito_ref: aTextoOIndefinido(anterior.referencia),
+            tipo_credito_id: aNumeroOIndefinido(anterior.tipo),
             monto: aNumeroOIndefinido(anterior.monto),
             fecha_otorgamiento: aTextoOIndefinido(anterior.fechaOtorgamiento),
             estatus: aTextoOIndefinido(anterior.estatus),

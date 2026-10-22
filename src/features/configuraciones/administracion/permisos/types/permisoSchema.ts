@@ -60,7 +60,7 @@ export const MENUS_PERMISO: readonly MenuPermiso[] = [
       "alertas",
       "operaciones_caja",
       "coincidencias",
-      "socios",
+      "acreditados",
       "empleados",
     ],
   },
