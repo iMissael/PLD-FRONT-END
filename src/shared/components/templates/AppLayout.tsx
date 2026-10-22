@@ -156,7 +156,7 @@ const NAV_ITEMS: NavNode[] = [
     label: "Control",
     icon: ClipboardCheckIcon,
     children: [
-      { label: "Quien es quien", to: "control/quienesquien" },
+      { label: "Consulta en Listas Peps y Listas Negras", to: "control/quienesquien" },
       { label: "Dashboard de alertas", to: "control/dashboard-alertas" },
       { label: "Reporte de alertas CNBV", to: "control/reporte-alertas-cnbv" },
       { label: "Control dólar", to: "control-dolar" },

@@ -11,7 +11,7 @@ export function ConsultaListasPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold">Consulta de Quien es quien</h1>
+        <h1 className="text-2xl font-semibold">Consulta en Listas Peps y Listas Negras</h1>
         <p className="text-muted-foreground">
           Verifica si una persona coincide con alguna lista peps o negra.
         </p>
