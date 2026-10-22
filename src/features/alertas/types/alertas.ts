@@ -63,9 +63,12 @@ export interface Alerta {
   analisisAlerta: string | null;
   gestiones: string | null;
   seReporta: boolean;
+  fechaDictamen: string | null;
   updatedAt: string;
   fechaLimiteDictamen: string | null;
   diasRestantes: number | null;
+  fechaLimiteReporte: string | null;
+  diasHabilesRestantesReporte: number | null;
 }
 
 export const RECUADROS_ANALISIS = [

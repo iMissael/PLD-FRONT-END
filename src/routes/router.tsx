@@ -131,6 +131,11 @@ const ControlDolarPage = lazy(() =>
 const ControlPage = lazy(() =>
   import("@/features/control/pages/ControlPage").then((m) => ({ default: m.ControlPage })),
 );
+const ReporteAlertasCnbvPage = lazy(() =>
+  import("@/features/control/reporte-cnbv/pages/ReporteAlertasCnbvPage").then((m) => ({
+    default: m.ReporteAlertasCnbvPage,
+  })),
+);
 const CapturaAlertasPage = lazy(() =>
   import("@/features/operacion/captura-alertas/pages/CapturaAlertasPage").then((m) => ({ default: m.CapturaAlertasPage })),
 );
@@ -360,6 +365,14 @@ export const router = createBrowserRouter([
                       {
                         path: "control/quienesquien",
                         element: <ConsultaListasPage />,
+                      },
+                      {
+                        path: "control/reporte-cnbv",
+                        element: (
+                          <RequierePermiso recurso="alertas" accion="ver">
+                            <ReporteAlertasCnbvPage />
+                          </RequierePermiso>
+                        ),
                       },
                       {
                         path: "operacion/coincidencias",
