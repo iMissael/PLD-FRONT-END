@@ -123,6 +123,11 @@ const ZonasGeograficasPage = lazy(() =>
 const ControlDolarPage = lazy(() =>
   import("@/features/control-dolar/pages/ControlDolarPage").then((m) => ({ default: m.ControlDolarPage })),
 );
+const ReporteAlertasCnbvPage = lazy(() =>
+  import("@/features/control/reporte-alertas-cnbv/pages/ReporteAlertasCnbvPage").then((m) => ({
+    default: m.ReporteAlertasCnbvPage,
+  })),
+);
 const ControlPage = lazy(() =>
   import("@/features/control/pages/ControlPage").then((m) => ({ default: m.ControlPage })),
 );
@@ -351,6 +356,14 @@ export const router = createBrowserRouter([
                       {
                         path: "control/quienesquien",
                         element: <ConsultaListasPage />,
+                      },
+                      {
+                        path: "control/reporte-alertas-cnbv",
+                        element: (
+                          <RequierePermiso recurso="alertas" accion="ver">
+                            <ReporteAlertasCnbvPage />
+                          </RequierePermiso>
+                        ),
                       },
                       {
                         path: "operacion/coincidencias",

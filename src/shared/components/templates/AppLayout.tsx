@@ -157,6 +157,7 @@ const NAV_ITEMS: NavNode[] = [
     children: [
       { label: "Resumen", to: "control" },
       { label: "Quien es quien", to: "control/quienesquien" },
+      { label: "Reporte de alertas CNBV", to: "control/reporte-alertas-cnbv" },
       { label: "Control dólar", to: "control-dolar" },
     ],
   },
