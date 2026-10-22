@@ -9,6 +9,7 @@ import {
   AppLayout,
   ContenidoAcotado,
   RouteErrorPage,
+  RutaNoEncontrada,
   TenantRequeridoPage,
   TenantRouteLayout,
 } from "@/shared/components/templates";
@@ -129,8 +130,10 @@ const ZonasGeograficasPage = lazy(() =>
 const ControlDolarPage = lazy(() =>
   import("@/features/control-dolar/pages/ControlDolarPage").then((m) => ({ default: m.ControlDolarPage })),
 );
-const ControlPage = lazy(() =>
-  import("@/features/control/pages/ControlPage").then((m) => ({ default: m.ControlPage })),
+const DashboardAlertasPage = lazy(() =>
+  import("@/features/control/dashboard-alertas/pages/DashboardAlertasPage").then((m) => ({
+    default: m.DashboardAlertasPage,
+  })),
 );
 const NotificacionesPage = lazy(() =>
   import("@/features/notificaciones/pages/NotificacionesPage").then((m) => ({
@@ -157,8 +160,10 @@ const EvaluacionRiesgoPage = lazy(() =>
 const HistorialEvaluacionesPage = lazy(() =>
   import("@/features/operacion/evaluacion-riesgo/pages/HistorialEvaluacionesPage").then((m) => ({ default: m.HistorialEvaluacionesPage })),
 );
-const OperacionPage = lazy(() =>
-  import("@/features/operacion/pages/OperacionPage").then((m) => ({ default: m.OperacionPage })),
+const RevisionDenunciasPage = lazy(() =>
+  import("@/features/buzon/pages/GestionDenunciasPage").then((m) => ({
+    default: m.GestionDenunciasPage,
+  })),
 );
 const RevisionAlertasPage = lazy(() =>
   import("@/features/operacion/revision-alertas/pages/RevisionAlertasPage").then((m) => ({ default: m.RevisionAlertasPage })),
@@ -267,14 +272,6 @@ export const router = createBrowserRouter([
                     path: "operacion/revision-alertas-seguimiento",
                     element: <RevisionAlertasSeguimientoPage />,
                   },
-                  {
-                    path: "operacion",
-                    element: <OperacionPage />,
-                  },
-                  {
-                    path: "control",
-                    element: <ControlPage />,
-                  },
                   // Sin ancho acotado: la matriz de riesgo necesita todo el ancho
                   // disponible (expediente del cliente + tabla de factores lado a lado).
                   {
@@ -362,6 +359,14 @@ export const router = createBrowserRouter([
                         path: "operacion/captura-alertas",
                         element: <CapturaAlertasPage />,
                       },
+                      {
+                        path: "operacion/revision-denuncias",
+                        element: (
+                          <RequierePermiso recurso="denuncias" accion="ver">
+                            <RevisionDenunciasPage />
+                          </RequierePermiso>
+                        ),
+                      },
                       // Ruta propia (no "control/..."): su lugar en el menú todavía no
                       // está decidido y así moverlo no cambia la URL.
                       {
@@ -371,6 +376,14 @@ export const router = createBrowserRouter([
                       {
                         path: "control/quienesquien",
                         element: <ConsultaListasPage />,
+                      },
+                      {
+                        path: "control/dashboard-alertas",
+                        element: (
+                          <RequierePermiso recurso="alertas" accion="ver">
+                            <DashboardAlertasPage />
+                          </RequierePermiso>
+                        ),
                       },
                       {
                         path: "notificaciones",
@@ -470,7 +483,7 @@ export const router = createBrowserRouter([
                       },
                       {
                         path: "*",
-                        element: <Navigate to="configuracion-alertas" replace />,
+                        element: <RutaNoEncontrada />,
                       },
                     ],
                   },

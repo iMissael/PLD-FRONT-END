@@ -100,7 +100,7 @@ export function RevisionAlertasPage() {
       >
         {seleccionada ? (
           <DialogContent
-            className="sm:max-w-5xl"
+            className="sm:max-w-6xl"
             onOpenAutoFocus={(e) => {
               e.preventDefault();
               recuadro.current = e.target as HTMLElement;

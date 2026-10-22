@@ -7,3 +7,4 @@ export * from "./ContenidoAcotado";
 export * from "./TenantRequeridoPage";
 export * from "./TenantRouteLayout";
 export * from "./RouteErrorPage";
+export * from "./RutaNoEncontrada";

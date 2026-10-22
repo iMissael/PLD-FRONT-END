@@ -42,15 +42,17 @@ const TITULOS_RUTAS: Record<string, string> = {
   parametros: "Parámetros de alertas",
   "carga-masiva": "Carga masiva",
   operacion: "Operación",
-  "evaluacion-riesgo": "Evaluación de riesgo",
-  "historial-evaluaciones": "Historial de evaluaciones",
+  "evaluacion-riesgo": "Matriz de riesgo",
+  "historial-evaluaciones": "Historial de la Matriz de riesgo",
   "captura-alertas": "Captura de alertas",
+  "revision-denuncias": "Revisión de denuncias",
   "revision-alertas": "Revisión de alertas",
   "revision-alertas-autorizacion": "Revisión de alertas de autorización",
   "revision-alertas-seguimiento": "Revisión de alertas de seguimiento",
   control: "Control",
   quienesquien: "Quién es quién",
   "reporte-alertas-cnbv": "Reporte de alertas CNBV",
+  "dashboard-alertas": "Dashboard de alertas",
   coincidencias: "Revisión de incidencias",
   "control-dolar": "Control dólar",
   administracion: "Administración",
@@ -73,8 +75,6 @@ const RUTAS_INTERMEDIAS: Record<string, string> = {
   "configuraciones/recursos": "configuraciones/recursos/origen",
   "configuraciones/administracion": "configuraciones/administracion/usuarios",
   "configuracion-alertas": "configuracion-alertas/reglas",
-  operacion: "operacion",
-  control: "control",
 };
 
 export function Breadcrumbs() {

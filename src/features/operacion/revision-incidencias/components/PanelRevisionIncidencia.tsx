@@ -23,47 +23,66 @@ import { listasCoincidentes } from "../utils/comparar";
 
 type ListaPaisDto = NonNullable<CoincidenciaAcreditado["pais_nacimiento"]>;
 
-/** Un bucket de riesgo-pais (pais de nacimiento o nacionalidad): es informativo, nunca bloquea. */
+/** Ya tiene una decisión guardada: "CONFIRMADO" o "MINIMIZADO" en `confirmacion` (ListaDto). */
+function decisionGuardada(lista: ListaPaisDto): DecisionRiesgoPais | undefined {
+  return lista.confirmacion === "CONFIRMADO" || lista.confirmacion === "MINIMIZADO"
+    ? lista.confirmacion
+    : undefined;
+}
+
+/**
+ * Un bucket de riesgo-pais (pais de nacimiento o nacionalidad): es informativo, nunca bloquea. Una
+ * vez guardada la decisión (`resuelto`) ya no se puede volver a modificar, igual que las otras 3
+ * secciones del panel.
+ */
 function RiesgoPaisBucket({
   titulo,
   lista,
   valor,
   onChange,
   disabled,
+  resuelto,
 }: {
   titulo: string;
   lista: ListaPaisDto;
   valor: DecisionRiesgoPais | undefined;
   onChange: (valor: DecisionRiesgoPais) => void;
   disabled: boolean;
+  resuelto: DecisionRiesgoPais | undefined;
 }) {
   const nombre = `riesgo-pais-${titulo}`;
   return (
     <div className="space-y-2 rounded-md border p-3">
       <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">{titulo}</p>
       <p className="text-sm">{lista.nombre_encontrado ?? "—"}</p>
-      <div className="flex items-center gap-4 text-sm">
-        <label className="flex items-center gap-1.5">
-          <input
-            type="radio"
-            name={nombre}
-            disabled={disabled}
-            checked={valor === "CONFIRMADO"}
-            onChange={() => onChange("CONFIRMADO")}
-          />
-          Confirmar
-        </label>
-        <label className="flex items-center gap-1.5">
-          <input
-            type="radio"
-            name={nombre}
-            disabled={disabled}
-            checked={valor === "MINIMIZADO"}
-            onChange={() => onChange("MINIMIZADO")}
-          />
-          Minimizar
-        </label>
-      </div>
+      {resuelto ? (
+        <p className="text-sm font-medium">
+          Decisión: {resuelto === "CONFIRMADO" ? "Confirmado" : "Minimizado"}
+        </p>
+      ) : (
+        <div className="flex items-center gap-4 text-sm">
+          <label className="flex items-center gap-1.5">
+            <input
+              type="radio"
+              name={nombre}
+              disabled={disabled}
+              checked={valor === "CONFIRMADO"}
+              onChange={() => onChange("CONFIRMADO")}
+            />
+            Confirmar
+          </label>
+          <label className="flex items-center gap-1.5">
+            <input
+              type="radio"
+              name={nombre}
+              disabled={disabled}
+              checked={valor === "MINIMIZADO"}
+              onChange={() => onChange("MINIMIZADO")}
+            />
+            Minimizar
+          </label>
+        </div>
+      )}
     </div>
   );
 }
@@ -408,6 +427,15 @@ export function PanelRevisionIncidencia({
       ? [{ nombreReal: nombreExterno ?? coincidencia.acreditado?.nombre ?? "—", lista: listaTexto }]
       : [];
   const hayPais = Boolean(coincidencia.pais_nacimiento?.coincide || coincidencia.nacionalidad?.coincide);
+  const resueltoPaisNacimiento = coincidencia.pais_nacimiento
+    ? decisionGuardada(coincidencia.pais_nacimiento)
+    : undefined;
+  const resueltoNacionalidad = coincidencia.nacionalidad
+    ? decisionGuardada(coincidencia.nacionalidad)
+    : undefined;
+  const faltaDecisionDePais =
+    (Boolean(coincidencia.pais_nacimiento?.coincide) && !resueltoPaisNacimiento) ||
+    (Boolean(coincidencia.nacionalidad?.coincide) && !resueltoNacionalidad);
   const duplicados = coincidencia.duplicados ?? [];
   const personasRelacionadas = coincidencia.personas_relacionadas ?? [];
 
@@ -544,6 +572,7 @@ export function PanelRevisionIncidencia({
                     valor={decisionPaisNacimiento}
                     onChange={setDecisionPaisNacimiento}
                     disabled={!esOficial || resolver.isPending}
+                    resuelto={resueltoPaisNacimiento}
                   />
                 ) : null}
                 {coincidencia.nacionalidad?.coincide ? (
@@ -553,10 +582,11 @@ export function PanelRevisionIncidencia({
                     valor={decisionNacionalidad}
                     onChange={setDecisionNacionalidad}
                     disabled={!esOficial || resolver.isPending}
+                    resuelto={resueltoNacionalidad}
                   />
                 ) : null}
               </div>
-              {esOficial ? (
+              {esOficial && faltaDecisionDePais ? (
                 <div className="flex justify-end">
                   <Button
                     size="sm"

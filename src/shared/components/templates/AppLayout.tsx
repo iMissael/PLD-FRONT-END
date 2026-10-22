@@ -136,10 +136,10 @@ const NAV_ITEMS: NavNode[] = [
     label: "Operación",
     icon: ActivityIcon,
     children: [
-      { label: "Resumen", to: "operacion" },
-      { label: "Evaluación de riesgo", to: "operacion/evaluacion-riesgo" },
-      { label: "Historial de evaluaciones", to: "operacion/historial-evaluaciones" },
+      { label: "Matriz de riesgo", to: "operacion/evaluacion-riesgo" },
+      { label: "Historial de la Matriz de riesgo", to: "operacion/historial-evaluaciones" },
       { label: "Captura de alertas", to: "operacion/captura-alertas" },
+      { label: "Revisión de denuncias", to: "operacion/revision-denuncias" },
       { label: "Revisión de alertas", to: "operacion/revision-alertas" },
       {
         label: "Revisión de alertas de autorización",
@@ -156,8 +156,8 @@ const NAV_ITEMS: NavNode[] = [
     label: "Control",
     icon: ClipboardCheckIcon,
     children: [
-      { label: "Resumen", to: "control" },
       { label: "Quien es quien", to: "control/quienesquien" },
+      { label: "Dashboard de alertas", to: "control/dashboard-alertas" },
       { label: "Reporte de alertas CNBV", to: "control/reporte-alertas-cnbv" },
       { label: "Control dólar", to: "control-dolar" },
     ],

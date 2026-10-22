@@ -44,7 +44,7 @@ function Dato({ titulo, children }: { titulo: string; children: React.ReactNode 
   return (
     <div className="flex flex-col gap-1 p-2 rounded-lg bg-muted/25 border border-border/40">
       <dt className="text-[11px] font-medium text-muted-foreground">{titulo}</dt>
-      <dd className="text-foreground text-sm font-semibold truncate">{vacio ? "—" : children}</dd>
+      <dd className="text-foreground text-sm font-semibold break-words">{vacio ? "—" : children}</dd>
     </div>
   );
 }
