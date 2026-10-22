@@ -10,11 +10,6 @@ function sinAcentos(texto: string | undefined) {
   return (texto ?? "").normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
 }
 
-/**
- * Igual que `BuscadorAcreditados`, pero sobre los empleados del core: al abrirlo lista
- * todos y se filtra escribiendo (nombre, clave o RFC). Se usa en alertas
- * "Interna preocupante", que se levantan sobre empleados.
- */
 export function BuscadorEmpleados({
   id,
   valor,

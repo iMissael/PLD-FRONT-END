@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { MenuIcon, X } from "lucide-react";
 import { ThemeToggle } from "@/shared/components/molecules/ThemeToggle";
 
@@ -9,6 +10,7 @@ export interface HeaderProps {
   nombreUsuario?: string;
   nombreEmpresa?: string;
   inicialUsuario?: string;
+  acciones?: ReactNode;
 }
 
 export function Header({
@@ -19,6 +21,7 @@ export function Header({
   nombreUsuario = "Usuario",
   nombreEmpresa = "",
   inicialUsuario = "U",
+  acciones,
 }: HeaderProps) {
   return (
     <header className="bg-card/95 backdrop-blur-sm border-border flex h-16 shrink-0 items-center justify-between border-b px-4 z-30 sticky top-0 transition-colors">
@@ -60,6 +63,7 @@ export function Header({
       </div>
 
       <div className="flex items-center gap-2 sm:gap-3">
+        {acciones}
         <ThemeToggle />
 
         {/* Perfil de usuario */}

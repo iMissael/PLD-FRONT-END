@@ -71,23 +71,10 @@ function Seccion({
 
 interface DetalleAlertaProps {
   alerta: Alerta;
-  /** Después de dictaminar, con la alerta ya actualizada. */
   onActualizada: (alerta: Alerta) => void;
-  /** Después de cancelarla: ya no se lista, así que se cierra el detalle. */
   onCancelada: () => void;
 }
 
-/**
- * Detalle de la alerta y dictamen (manual Sicanet 4.3.5), con los mismos bloques que
- * Sicanet: evaluado, perfil transaccional, resumen del periodo e información de la
- * alerta. Solo las PENDIENTES se dictaminan: las automáticas nacen pendientes; las
- * manuales, ya confirmadas. Los 4 recuadros del análisis se llenan al dictaminar y
- * después ya no se editan. Como en Sicanet, el botón verde guarda el dictamen: una
- * confirmada de un tipo que se envía a la CNBV (I, I24, IP, R) queda REPORTADA y pasa
- * al apartado de control; una rechazada solo queda RECHAZADA. El botón rojo cancela la
- * alerta. El folio, el tipo y el estatus los muestra el recuadro que lo contiene
- * (RevisionAlertasPage).
- */
 export function DetalleAlerta({ alerta, onActualizada, onCancelada }: DetalleAlertaProps) {
   const [dictamen, setDictamen] = useState<DictamenInput["estatus"] | "">("");
   const [analisis, setAnalisis] = useState(ANALISIS_VACIO);
@@ -110,15 +97,8 @@ export function DetalleAlerta({ alerta, onActualizada, onCancelada }: DetalleAle
   }, [alerta.id]);
 
   const pendiente = alerta.estatus === "PENDIENTE";
-  const vencida = estatusDe(alerta) === "VENCIDA";
   const resultado =
-    accion === "cancelar"
-      ? "cancelada"
-      : dictamen === "RECHAZADA"
-        ? "rechazada"
-        : alerta.seReporta
-          ? "reportada"
-          : "confirmada";
+    accion === "cancelar" ? "cancelada" : dictamen === "RECHAZADA" ? "rechazada" : "confirmada";
 
   const reportado = alerta.reportado;
   const esEmpleado = reportado?.tipoReportado === "EMPLEADO";
@@ -134,7 +114,6 @@ export function DetalleAlerta({ alerta, onActualizada, onCancelada }: DetalleAle
   const resumen = expediente?.resumenPeriodo;
   const perfil = expediente?.perfilTransaccional ?? null;
 
-  /** Botón verde: primero pide el dictamen y luego la confirmación. */
   const handleGuardar = (event: React.FormEvent) => {
     event.preventDefault();
     if (dictamen === "")
@@ -172,7 +151,7 @@ export function DetalleAlerta({ alerta, onActualizada, onCancelada }: DetalleAle
       {
         onSuccess: (res) => {
           setAccion(null);
-          toast.success(`Alerta ${alerta.folio} ${ETIQUETA_ESTATUS[res.estatus].toLowerCase()}.`);
+          toast.success(`Alerta ${alerta.folio} ${ETIQUETA_ESTATUS[estatusDe(res)].toLowerCase()}.`);
           onActualizada(res);
         },
         onError: alFallar,
@@ -416,7 +395,7 @@ export function DetalleAlerta({ alerta, onActualizada, onCancelada }: DetalleAle
         >
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h4 className="text-xs font-bold uppercase tracking-wider text-foreground">Dictamen</h4>
-            {alerta.fechaLimiteDictamen && alerta.diasRestantes !== null ? (
+            {alerta.fechaLimiteDictamen && alerta.diasRestantes !== null && alerta.diasRestantes >= 0 ? (
               <span className="text-muted-foreground text-xs font-medium">
                 Último día para dictaminar: {formatearFecha(alerta.fechaLimiteDictamen)} ·{" "}
                 {textoDiasRestantes(alerta.diasRestantes).toLocaleLowerCase("es-MX")}
@@ -469,14 +448,7 @@ export function DetalleAlerta({ alerta, onActualizada, onCancelada }: DetalleAle
             </Button>
           </div>
         </form>
-      ) : vencida ? (
-        <Alert>
-          Esta alerta venció el {formatearFecha(alerta.fechaLimiteDictamen)} sin dictamen: pasaron los
-          días naturales del plazo desde que se generó. Por ahora ya no se puede confirmar, rechazar ni
-          cancelar.
-        </Alert>
       ) : (
-        // Como en Sicanet, ya dictaminada se muestra el botón de Excel; su contenido se define después
         <div className="flex justify-center">
           <Button
             type="button"

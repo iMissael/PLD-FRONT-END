@@ -1,4 +1,4 @@
-import { Suspense, useState } from "react";
+import { Suspense, useState, type ReactNode } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
 import { useAuthStore } from "@/shared/auth/authStore";
@@ -127,6 +127,7 @@ const NAV_ITEMS: NavNode[] = [
     icon: BellIcon,
     children: [
       { label: "Configuración de alertas", to: "configuracion-alertas/reglas" },
+      { label: "Parámetros de alertas", to: "configuracion-alertas/parametros" },
       { label: "Consulta Personas bloqueados", to: "configuracion-alertas" },
       { label: "Carga de Personas Bloqueadas", to: "configuracion-alertas/carga-masiva" },
     ],
@@ -170,13 +171,14 @@ const NAV_ITEMS: NavNode[] = [
       { label: "Permisos", to: "configuraciones/administracion/permisos" },
     ],
   },
+  { label: "Notificaciones", to: "notificaciones", icon: BellIcon },
   { label: "Acerca de", to: "acerca-de", icon: InfoIcon },
 ];
 
 /** Sección "OTROS" del menú: utilidades ajenas al negocio (no catálogos/procesos). */
 const OTHER_ITEMS: NavLeaf[] = [{ label: "Ayuda", to: "ayuda", icon: HelpCircleIcon }];
 
-export function AppLayout() {
+export function AppLayout({ accionesHeader }: { accionesHeader?: ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const navigate = useNavigate();
@@ -203,6 +205,7 @@ export function AppLayout() {
         nombreUsuario={usuario?.nombre ?? "Usuario"}
         nombreEmpresa={nombreEmpresa}
         inicialUsuario={inicial}
+        acciones={accionesHeader}
       />
 
       <div className="flex min-h-0 flex-1 relative">

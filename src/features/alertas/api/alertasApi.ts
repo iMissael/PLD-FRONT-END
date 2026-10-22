@@ -19,14 +19,14 @@ import type {
   TipoAlerta,
 } from "../types/alertas";
 
-/**
- * { I: ["PENDIENTE"], R: [] } -> "I:PENDIENTE,R". Va separado por comas porque axios
- * manda los arreglos como `tipoEstatus[]=`, que Spring no reconoce.
- */
 function tipoEstatusParam(tiposEstatus: Record<string, EstatusAlertaRevision[]>): string {
   return Object.entries(tiposEstatus)
     .flatMap(([tipo, estatus]) =>
-      estatus.length === 0 ? [tipo] : estatus.map((e) => `${tipo}:${e}`),
+      estatus.length === 0
+        ? [tipo]
+        : estatus
+            .flatMap((e): EstatusAlertaRevision[] => (e === "CONFIRMADA" ? [e, "REPORTADA"] : [e]))
+            .map((e) => `${tipo}:${e}`),
     )
     .join(",");
 }
@@ -36,7 +36,6 @@ export async function listarTiposAlerta(): Promise<TipoAlerta[]> {
   return data;
 }
 
-/** Sin acrónimo trae todas las razones. */
 export async function listarRazonesAlerta(
   alertaAcronimo?: string,
 ): Promise<RazonAlerta[]> {
@@ -52,7 +51,6 @@ export async function listarAlertas(
   tamanio: number,
 ): Promise<PaginaAlertas> {
   const { tiposEstatus, ...resto } = filtro;
-  // Se quitan los vacíos para no mandar `?estatus=` (el backend no lo acepta como enum).
   const params = {
     ...Object.fromEntries(
       Object.entries(resto).filter(([, valor]) => valor !== undefined && valor !== ""),
@@ -94,7 +92,6 @@ export async function dictaminarAlerta(
   return data;
 }
 
-/** Botón rojo de la revisión: cancela una alerta pendiente; ya no se vuelve a listar. */
 export async function cancelarAlerta(id: number): Promise<void> {
   await apiClient.patch(`/alertas/${id}/cancelacion`);
 }
@@ -129,7 +126,6 @@ export async function buscarEmpleados(nombre: string): Promise<EmpleadoExterno[]
   return data;
 }
 
-/** El backend filtra y pagina: el servicio de empleados siempre devuelve la lista completa. */
 export async function buscarEmpleadosPaginados({
   criterio,
   valor,

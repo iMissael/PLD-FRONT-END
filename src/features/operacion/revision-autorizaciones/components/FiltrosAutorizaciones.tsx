@@ -33,7 +33,6 @@ export function FiltrosAutorizaciones({ onConsultar }: FiltrosAutorizacionesProp
       }}
       className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm space-y-4"
     >
-      {/* Contenedor adaptativo con flex-wrap para fechas */}
       <div className="flex flex-wrap items-end gap-4">
         <div className="flex-1 min-w-[200px]">
           <FormFieldGroup label="Fecha inicial" htmlFor="fecha-inicial">
@@ -59,7 +58,6 @@ export function FiltrosAutorizaciones({ onConsultar }: FiltrosAutorizacionesProp
           </FormFieldGroup>
         </div>
 
-        {/* Checkboxes de estatus asignado */}
         <fieldset className="flex flex-wrap items-center gap-4 py-2">
           <legend className="sr-only">Estatus asignado</legend>
           {ESTATUS_AUTORIZACION.map((opcion) => (
@@ -74,7 +72,6 @@ export function FiltrosAutorizaciones({ onConsultar }: FiltrosAutorizacionesProp
           ))}
         </fieldset>
 
-        {/* Botón de consulta */}
         <div className="shrink-0">
           <Button type="submit" variant="default" className="gap-2">
             <Search className="h-4 w-4" />

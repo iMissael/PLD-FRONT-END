@@ -20,12 +20,9 @@ const ESTATUS: { valor: EstatusAlertaRevision; etiqueta: string }[] = [
   { valor: "PENDIENTE", etiqueta: "Pendientes" },
   { valor: "CONFIRMADA", etiqueta: "Confirmadas" },
   { valor: "RECHAZADA", etiqueta: "Rechazadas" },
-  { valor: "REPORTADA", etiqueta: "Reportadas" },
-  { valor: "VENCIDA", etiqueta: "Vencidas" },
 ];
 const TODOS_LOS_ESTATUS = ESTATUS.map((e) => e.valor);
 
-/** Tipo -> estatus marcados. Un tipo marcado completo los tiene todos. */
 type Seleccion = Record<string, EstatusAlertaRevision[]>;
 
 interface FiltrosAlertasProps {
@@ -33,10 +30,6 @@ interface FiltrosAlertasProps {
   onAplicar: (filtro: FiltroAlertas) => void;
 }
 
-/**
- * Fuera del filtro: Autorización y Seguimiento tienen su propia revisión, Alerta de
- * sistema no se usa y los tipos inactivos no generan alertas nuevas.
- */
 const TIPOS_FUERA_DEL_FILTRO = ["A", "S", "T"];
 
 function tiposFiltrables(tipos: TipoAlerta[] | undefined): TipoAlerta[] {
@@ -45,7 +38,6 @@ function tiposFiltrables(tipos: TipoAlerta[] | undefined): TipoAlerta[] {
   );
 }
 
-/** En el filtro, una lista vacía es "todos los estatus"; en pantalla se ven todos marcados. */
 function seleccionDe(filtro: FiltroAlertas): Seleccion {
   return Object.fromEntries(
     Object.entries(filtro.tiposEstatus ?? {}).map(([tipo, estatus]) => [
@@ -77,7 +69,6 @@ function nombreTipo(tipos: TipoAlerta[], acronimo: string): string {
   return minusculas.charAt(0).toLocaleUpperCase("es-MX") + minusculas.slice(1);
 }
 
-/** Lo aplicado, en una línea: "Del 01/09/2026 al 13/10/2026 · Inusual (pendientes) · Manuales". */
 function resumenDe(filtro: FiltroAlertas, tipos: TipoAlerta[]): string[] {
   const partes: string[] = [];
   if (filtro.desde && filtro.hasta) {
@@ -100,7 +91,6 @@ function resumenDe(filtro: FiltroAlertas, tipos: TipoAlerta[]): string[] {
   return partes;
 }
 
-/** Cuántos grupos de filtro hay aplicados (fechas, tipo/estatus, origen, persona). */
 function filtrosActivos(filtro: FiltroAlertas): number {
   return [
     filtro.desde || filtro.hasta,
@@ -110,11 +100,6 @@ function filtrosActivos(filtro: FiltroAlertas): number {
   ].filter(Boolean).length;
 }
 
-/**
- * Filtros de "Revisión de alertas", al estilo de Sicanet: rango de fechas y una
- * matriz de tipo de alerta × estatus. Viven en un recuadro que se despliega desde el
- * botón "Filtros" para no ocupar la pantalla; se aplican al presionar el botón.
- */
 export function FiltrosAlertas({ inicial, onAplicar }: FiltrosAlertasProps) {
   const { data } = useTiposAlerta();
   const tipos = tiposFiltrables(data);
@@ -122,7 +107,6 @@ export function FiltrosAlertas({ inicial, onAplicar }: FiltrosAlertasProps) {
   const [filtro, setFiltro] = useState<FiltroAlertas>(inicial);
   const [seleccion, setSeleccion] = useState<Seleccion>(() => seleccionDe(inicial));
 
-  // Al abrir se parte de lo aplicado: si se cierra sin aplicar, los cambios se descartan.
   const abrir = (siguiente: boolean) => {
     if (siguiente) {
       setFiltro(inicial);

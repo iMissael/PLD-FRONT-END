@@ -8,20 +8,9 @@ const COLOR: Record<NivelPlazo, string> = {
   holgado: "bg-muted/40 text-muted-foreground border-border",
 };
 
-/**
- * Columna "Vence" de la revisión: último día para dictaminar y cuántos días quedan, en rojo
- * con 5 días o menos y en ámbar con 10 o menos. Las vencidas muestran el día en que vencieron;
- * las ya dictaminadas y los tipos sin plazo (Relevante), un guion.
- */
 export function PlazoDictamen({ alerta }: { alerta: Alerta }) {
-  if (estatusDe(alerta) === "VENCIDA") {
-    return (
-      <span className="text-xs font-semibold text-red-700 dark:text-red-300">
-        Venció el {formatearFecha(alerta.fechaLimiteDictamen)}
-      </span>
-    );
-  }
-  if (alerta.diasRestantes === null || alerta.diasRestantes === undefined) {
+  if (estatusDe(alerta) !== "PENDIENTE" || alerta.diasRestantes === null
+      || alerta.diasRestantes === undefined || alerta.diasRestantes < 0) {
     return <span className="text-muted-foreground">—</span>;
   }
   return (

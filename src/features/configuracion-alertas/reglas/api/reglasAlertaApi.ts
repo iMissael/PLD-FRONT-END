@@ -49,7 +49,6 @@ export async function cambiarEstadoRegla(
   return data;
 }
 
-/** Baja lógica (estatus E): deja de listarse y de evaluarse. */
 export async function eliminarRegla(id: string): Promise<void> {
   await apiClient.delete(`${BASE_PATH}/${id}`);
 }

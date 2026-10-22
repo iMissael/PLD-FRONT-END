@@ -34,7 +34,6 @@ import {
 import { Card } from "@/shared/components/molecules";
 import { hint, label } from "@/shared/styles/tokens";
 
-/** Campos de Sicanet que todavía no tienen fuente de datos en el sistema. */
 const SIN_INFORMACION = <span className="text-muted-foreground italic">Sin información</span>;
 
 const selectStyle =
@@ -108,8 +107,6 @@ export function DetalleAlertaSeguimiento({ alerta, onReclasificada }: DetalleAle
   const reportado = alerta.reportado;
   const esSocio = reportado?.tipoReportado === "SOCIO";
   const curp = esSocio ? (cargandoExpediente ? "…" : (expediente?.evaluado?.curp ?? SIN_INFORMACION)) : SIN_INFORMACION;
-  // RFC vigente del socio (consulta en vivo) si ya cargó; mientras tanto, o si no hay socio
-  // (empleado) o no se encontró, se muestra el RFC capturado en la alerta.
   const rfc = expediente?.evaluado?.rfc ?? reportado?.rfc;
   const pendiente = alerta.estatus === "PENDIENTE";
   const aInusual = tipoDestino === TIPO_RECLASIFICABLE;

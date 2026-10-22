@@ -37,11 +37,9 @@ interface SelectorEmpleadoDialogProps {
   abierto: boolean;
   onAbiertoCambiar: (abierto: boolean) => void;
   seleccionadoId: string | null;
-  /** Se llama al elegir un empleado; el diálogo se cierra solo. */
   onSeleccionar: (empleado: EmpleadoExterno) => void;
 }
 
-/** Búsqueda de empleados paginada en el backend, en una ventana emergente. */
 export function SelectorEmpleadoDialog({
   abierto,
   onAbiertoCambiar,
@@ -71,7 +69,6 @@ export function SelectorEmpleadoDialog({
   );
 }
 
-/** Vive dentro del diálogo: al cerrarlo se desmonta y la búsqueda empieza de cero. */
 function BusquedaEmpleados({
   seleccionadoId,
   onSeleccionar,

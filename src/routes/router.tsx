@@ -2,6 +2,7 @@ import { lazy } from "react";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import { RequireAuth } from "@/shared/auth/RequireAuth";
+import { CampanaNotificaciones } from "@/features/notificaciones/components/CampanaNotificaciones";
 import { RequierePermiso } from "@/shared/auth/RequierePermiso";
 import { PlaceholderPage } from "@/shared/components/templates/PlaceholderPage";
 import {
@@ -44,6 +45,11 @@ const ConsultaBloqueadosPage = lazy(() =>
 );
 const ReglasAlertaPage = lazy(() =>
   import("@/features/configuracion-alertas/reglas/pages/ReglasAlertaPage").then((m) => ({ default: m.ReglasAlertaPage })),
+);
+const ParametrosAlertaPage = lazy(() =>
+  import("@/features/configuracion-alertas/parametros/pages/ParametrosAlertaPage").then((m) => ({
+    default: m.ParametrosAlertaPage,
+  })),
 );
 
 // Configuraciones generales
@@ -123,13 +129,18 @@ const ZonasGeograficasPage = lazy(() =>
 const ControlDolarPage = lazy(() =>
   import("@/features/control-dolar/pages/ControlDolarPage").then((m) => ({ default: m.ControlDolarPage })),
 );
-const ReporteAlertasCnbvPage = lazy(() =>
-  import("@/features/control/reporte-alertas-cnbv/pages/ReporteAlertasCnbvPage").then((m) => ({
-    default: m.ReporteAlertasCnbvPage,
-  })),
-);
 const ControlPage = lazy(() =>
   import("@/features/control/pages/ControlPage").then((m) => ({ default: m.ControlPage })),
+);
+const NotificacionesPage = lazy(() =>
+  import("@/features/notificaciones/pages/NotificacionesPage").then((m) => ({
+    default: m.NotificacionesPage,
+  })),
+);
+const ReporteAlertasCnbvPage = lazy(() =>
+  import("@/features/control/reporte-cnbv/pages/ReporteAlertasCnbvPage").then((m) => ({
+    default: m.ReporteAlertasCnbvPage,
+  })),
 );
 const CapturaAlertasPage = lazy(() =>
   import("@/features/operacion/captura-alertas/pages/CapturaAlertasPage").then((m) => ({ default: m.CapturaAlertasPage })),
@@ -178,7 +189,7 @@ export const router = createBrowserRouter([
           {
             children: [
               {
-                element: <AppLayout />,
+                element: <AppLayout accionesHeader={<CampanaNotificaciones />} />,
                 errorElement: <RouteErrorPage />,
                 children: [
                   {
@@ -238,6 +249,10 @@ export const router = createBrowserRouter([
                   {
                     path: "configuracion-alertas/reglas",
                     element: <ReglasAlertaPage />,
+                  },
+                  {
+                    path: "configuracion-alertas/parametros",
+                    element: <ParametrosAlertaPage />,
                   },
                   // Sin ancho acotado: la lista y el detalle de la alerta van lado a lado.
                   {
@@ -356,6 +371,14 @@ export const router = createBrowserRouter([
                       {
                         path: "control/quienesquien",
                         element: <ConsultaListasPage />,
+                      },
+                      {
+                        path: "notificaciones",
+                        element: (
+                          <RequierePermiso recurso="alertas" accion="ver">
+                            <NotificacionesPage />
+                          </RequierePermiso>
+                        ),
                       },
                       {
                         path: "control/reporte-alertas-cnbv",
